@@ -1,0 +1,18 @@
+FROM node:6.11.0
+ARG NPM_TOKEN
+WORKDIR /usr/src
+COPY src/package.json src/.npmrc /tmp/
+COPY .cache /tmp/node_modules
+RUN npm i -g torus-cli \
+  && cd /tmp \
+  && npm i \
+  && npm prune \
+  && mkdir -p /usr/src \
+  && ln -s /tmp/node_modules /usr/src/node_modules
+COPY src/lib /usr/src/lib
+COPY src/mocks /usr/src/mocks
+COPY src/test /usr/src/test
+COPY src/nodemon.json src/package.json src/webpack.config.js src/webpack.dll.js /usr/src/
+RUN ./node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules
+EXPOSE 80 81
+CMD ./node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test

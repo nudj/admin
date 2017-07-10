@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= helmet.title.toString() %>
+  <%= helmet.meta.toString() %>
+  <%= helmet.link.toString() %>
+  <script>
+    var intercomSettings = {
+      app_id: <%= intercom_app_id %>,
+      custom_launcher_selector: "#open-intercom"
+    }
+    <% if (fullname) { %>
+    intercomSettings.name = <%= fullname %>
+    <% } %>
+    <% if (!fullname && email) { %>
+    intercomSettings.name = <%= email %>
+    <% } %>
+    <% if (email) { %>
+    intercomSettings.email = <%= email %>
+    <% } %>
+    <% if (created_at) { %>
+    intercomSettings.created_at = <%= created_at %>
+    <% } %>
+    var data = <%= data %>
+    var cssRenderedClassNames = <%= JSON.stringify(css.renderedClassNames) %>
+  </script>
+  <script>
+    (function(){var b=window,a=b.Intercom;if("function"===typeof a)a("reattach_activator"),a("update",intercomSettings);else{var a=document,c=function(){c.c(arguments)};c.q=[];c.c=function(a){c.q.push(a)};b.Intercom=c;b=a.createElement("script");b.type="text/javascript";b.async=!0;b.src="https://widget.intercom.io/widget/fwqdxwzg";a=a.getElementsByTagName("script")[0];a.parentNode.insertBefore(b,a)}})()
+  </script>
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WT43QJJ');
+    var data = <%= data %>
+    var renderedClassNames = <%= JSON.stringify(css.renderedClassNames) %>
+  </script>
+  <style>* { box-sizing: border-box; }</style>
+  <style data-aphrodite><%= css.content %></style>
+</head>
+<body>
+  <div id="app"><%= html %></div>
+  <script src="/assets/js/vendors.js"></script>
+  <script src="/assets/js/app.js"></script>
+</body>
+</html>

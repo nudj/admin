@@ -1,0 +1,52 @@
+version: '1.0'
+
+steps:
+
+  build_test:
+    title: Build Test
+    type: build
+    image_name: nudj/admin-test
+    working_directory: ${{main_clone}}
+    dockerfile: Dockerfile.dev
+    build_arguments:
+      - NPM_TOKEN=${{NPM_TOKEN}}
+
+  test:
+    title: Test
+    image: ${{build_test}}
+    working_directory: 'IMAGE_WORK_DIR'
+
+  build:
+    title: Build
+    type: build
+    image_name: nudj/admin
+    tag: latest
+    dockerfile: Dockerfile
+    build_arguments:
+      - NPM_TOKEN=${{NPM_TOKEN}}
+
+  push_latest:
+    title: Push Latest
+    type: push
+    candidate: '${{build}}'
+    tag: latest
+    credentials:
+      username: '${{dockerUsername}}'
+      password: '${{dockerPassword}}'
+    when:
+      branch:
+        only:
+          - develop
+
+  push_release:
+    title: Push Release
+    type: push
+    candidate: '${{build}}'
+    tag: 1.1.1
+    credentials:
+      username: '${{dockerUsername}}'
+      password: '${{dockerPassword}}'
+    when:
+      branch:
+        only:
+          - master
