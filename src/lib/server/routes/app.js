@@ -6,6 +6,7 @@ let getTime = require('date-fns/get_time')
 const logger = require('../lib/logger')
 const companies = require('../modules/companies')
 const jobs = require('../modules/jobs')
+const people = require('../modules/people')
 const { promiseMap } = require('../lib')
 
 const app = require('../../app/server')
@@ -163,12 +164,10 @@ function companyJobsHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function jobHandler (req, res, next) {
-  // Do we have an issue here with job-slug uniqueness across companies?
-  jobs
-    .get(clone(req.session.data), req.params.jobSlug)
-    .then(data => jobs.getReferrals(data, data.job.id))
+function genericGetJob ({data, req, res, next}) {
+  jobs.getReferrals(data, data.job.id)
     .then(data => jobs.getApplications(data, data.job.id))
+    .then(data => people.getAll(data))
     .then(data => {
       data.activities = jobs.getJobActivities(data, data.job.id)
       return promiseMap(data)
@@ -178,9 +177,37 @@ function jobHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function jobHandler (req, res, next) {
+  // Do we have an issue here with job-slug uniqueness across companies?
+  jobs
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => genericGetJob({data, req, res, next}))
+}
+
+function addPersonThenReferralHandler (req, res, next) {
+  const email = req.body.email
+
+  jobs
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => people.post(data, {email}))
+    .then(data => jobs.addReferral(data, data.job.id, data.newPerson.id))
+    .then(data => genericGetJob({data, req, res, next}))
+}
+
+function addReferralHandler (req, res, next) {
+  const personId = req.params.personId
+
+  jobs
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => jobs.addReferral(data, data.job.id, personId))
+    .then(data => genericGetJob({data, req, res, next}))
+}
+
 router.get('/', ensureLoggedIn, companiesHandler)
 router.get('/:companySlug/jobs', ensureLoggedIn, companyJobsHandler)
 router.get('/:companySlug/jobs/:jobSlug', ensureLoggedIn, jobHandler)
+router.post('/:companySlug/jobs/:jobSlug/referrals', ensureLoggedIn, addPersonThenReferralHandler)
+router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', ensureLoggedIn, addReferralHandler)
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

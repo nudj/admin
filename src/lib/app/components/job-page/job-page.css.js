@@ -44,9 +44,15 @@ module.exports = css(merge(mixins.pageLayout, {
     textDecoration: 'none'
   },
   copyLink: mixins.buttonSecondary,
+  copyLinkNew: merge(mixins.buttonSecondary, {
+    [mixins.breakpoints.l]: {
+      margin: `0 0 0 ${variables.padding.d}`
+    }
+  }),
   nudjLink: merge({
     margin: `0 0 0 ${variables.padding.d}`
   }, mixins.button),
+  pageSubheadline: merge(mixins.pageLayout.pageHeadline, mixins.headings.p),
   pageMain: {},
   pageMainContainer: {
     flexGrow: '1'
@@ -99,6 +105,25 @@ module.exports = css(merge(mixins.pageLayout, {
   resendLink: mixins.button,
   sectionDivider: merge(mixins.sectionDivider, {
     marginTop: variables.padding.c
+  }),
+  missing: cardStyle,
+  missingGroup: {
+    padding: `0 0 ${variables.padding.d} 0`,
+    [mixins.breakpoints.l]: {
+      alignItems: 'flex-start',
+      display: 'flex'
+    }
+  },
+  inputBoxHole: {
+    flexGrow: '1'
+  },
+  inputBox: merge(mixins.formElements.inputBox, {
+    width: '100%'
+  }),
+  copy: mixins.typography.p,
+  suggestion: merge(mixins.headings.p, {
+    color: variables.colors.royalBlue,
+    cursor: 'pointer'
   }),
   jobActivities: {
     display: 'flex'

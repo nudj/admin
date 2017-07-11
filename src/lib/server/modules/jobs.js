@@ -27,6 +27,12 @@ function fetchJobReferrals (data, jobId) {
   return promiseMap(data)
 }
 
+function saveJobReferral (jobId, personId) {
+  const data = {jobId, personId}
+  const method = 'post'
+  return request('referrals', { data, method })
+}
+
 function fetchJobs (data) {
   data.jobs = request(`jobs/filter?companyId=${data.company.id}&status=Published`)
     .then(results => results.sort(common.sortByCreated))
@@ -142,4 +148,9 @@ module.exports.getReferrals = function (data, jobId) {
 
 module.exports.getJobActivities = function (data, jobId) {
   return getJobActivities(data, jobId)
+}
+
+module.exports.addReferral = function (data, jobId, personId) {
+  data.referral = saveJobReferral(jobId, personId)
+  return promiseMap(data)
 }

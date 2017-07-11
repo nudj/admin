@@ -16,6 +16,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    position: 'relative',
     marginTop: variables.padding.e,
     minHeight: variables.padding.b,
     ':first-child': {
@@ -75,6 +76,10 @@ const styles = {
   }, listStyle),
   action: listStyle
 }
+
+styles.rowHighlight = merge(styles.row, {
+  border: `${variables.sizing.baseBorderWidth} solid ${variables.colors.midRed}`
+})
 
 styles.rowSmall = merge(styles.row, {
   margin: `0 0 ${variables.padding.e} ${variables.padding.e}`,
