@@ -20,7 +20,7 @@ module.exports = css({
 
   },
   title: merge(mixins.headings.h6, {
-    color: variables.colors.royalBlue,
+    color: variables.colors.pink,
     padding: `0 0 ${variables.padding.f} 0`
   }),
   subtitle: merge(mixins.headings.h8, {

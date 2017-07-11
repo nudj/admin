@@ -22,7 +22,7 @@ module.exports = css({
     overflow: 'hidden'
   },
   info: {
-    backgroundColor: variables.colors.royalBlueFade
+    backgroundColor: variables.colors.pink
   },
   warn: {
     backgroundColor: variables.colors.lightYellow

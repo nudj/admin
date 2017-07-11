@@ -24,7 +24,7 @@ const styles = {
     }
   }),
   title: merge(mixins.headings.h7, {
-    color: variables.colors.royalBlue,
+    color: variables.colors.pink,
     textDecoration: 'none',
     flex: 1
   }),
@@ -62,7 +62,7 @@ const styles = {
     display: 'block'
   }),
   definitionDescription: merge(mixins.headings.small, {
-    color: variables.colors.royalBlue,
+    color: variables.colors.pink,
     display: 'block',
     margin: 0,
     wordBreak: 'break-word'
@@ -78,7 +78,7 @@ const styles = {
 }
 
 styles.rowHighlight = merge(styles.row, {
-  border: `${variables.sizing.baseBorderWidth} solid ${variables.colors.midRed}`
+  border: `${variables.sizing.baseBorderWidth} solid ${variables.colors.pink}`
 })
 
 styles.rowSmall = merge(styles.row, {

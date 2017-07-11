@@ -9,6 +9,7 @@ const Header = (props) => {
       <div className={style.main}>
         <Link className={style.home} to='/'>
           <img className={style.brand} src='/assets/images/nudj-logo-light.svg' />
+          <p className={style.admin}>Admin</p>
         </Link>
         <ul className={style.menu}>
           <li className={style.menuItem}><Link className={style.jobs} to={'/'}>Companies</Link></li>

@@ -70,7 +70,7 @@ module.exports = css(merge(mixins.pageLayout, {
     }
   }),
   title: merge(mixins.headings.h7, {
-    color: variables.colors.royalBlue,
+    color: variables.colors.pink,
     marginTop: variables.padding.d,
     marginBottom: variables.padding.e
   }),
@@ -122,7 +122,7 @@ module.exports = css(merge(mixins.pageLayout, {
   }),
   copy: mixins.typography.p,
   suggestion: merge(mixins.headings.p, {
-    color: variables.colors.royalBlue,
+    color: variables.colors.pink,
     cursor: 'pointer'
   }),
   jobActivities: {

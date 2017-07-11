@@ -16,7 +16,7 @@ module.exports = css(merge(mixins.pageLayout, {
   jobs: listStyle,
   nudj: mixins.button,
   pageHeadlineHighlight: merge(mixins.pageLayout.pageHeadline, {
-    color: variables.colors.midRed,
+    color: variables.colors.royalBlue,
     padding: '0'
   })
 }))

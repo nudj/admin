@@ -141,23 +141,23 @@ module.exports.headings = headings
 
 module.exports.typography = {
   h1: merge({
-    color: variables.colors.royalBlue,
+    color: variables.colors.pink,
     margin: `0 0 ${variables.padding.d} 0`
   }, headings.h1),
   h2: merge({
-    color: variables.colors.royalBlue,
+    color: variables.colors.pink,
     margin: `0 0 ${variables.padding.d} 0`
   }, headings.h2),
   h3: merge({
-    color: variables.colors.royalBlue,
+    color: variables.colors.pink,
     margin: `0 0 ${variables.padding.d} 0`
   }, headings.h3),
   h4: merge({
-    color: variables.colors.royalBlue,
+    color: variables.colors.pink,
     margin: `0 0 ${variables.padding.d} 0`
   }, headings.h4),
   h5: merge({
-    color: variables.colors.royalBlue,
+    color: variables.colors.pink,
     margin: `0 0 ${variables.padding.d} 0`
   }, headings.h5),
   p: merge({
@@ -186,7 +186,7 @@ module.exports.pageLayout = {
     padding: `${variables.padding.e} ${variables.padding.d}`
   },
   pageHeadline: merge(headings.h5, {
-    color: variables.colors.royalBlue,
+    color: variables.colors.pink,
     padding: `${variables.padding.c} ${variables.padding.d} ${variables.padding.d} ${variables.padding.d}`,
     margin: 0
   }),
@@ -296,7 +296,7 @@ module.exports.deLink = {
 module.exports.button = merge(headings.pBold, {
   border: '0',
   borderRadius: variables.sizing.buttonBorderRadius,
-  backgroundColor: variables.colors.royalBlue,
+  backgroundColor: variables.colors.pink,
   color: variables.colors.white,
   cursor: 'pointer',
   display: 'block',
@@ -306,7 +306,7 @@ module.exports.button = merge(headings.pBold, {
   minWidth: variables.sizing.buttonMinWidth,
   textAlign: 'center',
   ':disabled': {
-    backgroundColor: variables.colors.royalBlueFade,
+    backgroundColor: variables.colors.pinkFade,
     cursor: 'default'
   },
   ':focus': {
@@ -315,12 +315,12 @@ module.exports.button = merge(headings.pBold, {
 })
 
 module.exports.buttonSecondary = merge(module.exports.button, {
-  color: variables.colors.royalBlue,
+  color: variables.colors.pink,
   backgroundColor: variables.colors.white,
-  border: `${variables.sizing.buttonBorderWidth} solid ${variables.colors.royalBlue}`,
+  border: `${variables.sizing.buttonBorderWidth} solid ${variables.colors.pink}`,
   ':disabled': {
-    color: variables.colors.royalBlueFade,
-    borderColor: variables.colors.royalBlueFade,
+    color: variables.colors.pinkFade,
+    borderColor: variables.colors.pinkFade,
     cursor: 'default'
   }
 })
@@ -355,9 +355,9 @@ const inputBox = merge(headings.p, {
     color: variables.colors.midGrey
   },
   ':focus': {
-    borderColor: variables.colors.royalBlue,
+    borderColor: variables.colors.pink,
     boxShadow: `${variables.sizing.genericBoxShadow} ${variables.colors.genericBoxShadow}`,
-    color: variables.colors.royalBlue,
+    color: variables.colors.pink,
     outline: 'none'
   }
 })

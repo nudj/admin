@@ -29,10 +29,10 @@ module.exports = css({
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'stretch',
-    background: '#081f2c',
+    background: variables.colors.pink,
     overflow: 'hidden',
     padding: `${variables.padding.d} 0`,
-    color: '#fff'
+    color: variables.colors.charcoal
   },
   main: {
     display: 'flex',
@@ -44,7 +44,8 @@ module.exports = css({
     display: 'inline-block',
     width: variables.sizing.fixedHeaderButtonSize,
     textAlign: 'center',
-    marginBottom: variables.sizing.fixedHeaderButtonIconSize
+    marginBottom: variables.sizing.fixedHeaderButtonIconSize,
+    textDecoration: 'none'
   },
   brand: {
     maxWidth: '4rem', // ?
@@ -63,20 +64,26 @@ module.exports = css({
       marginTop: 0
     }
   }),
+  admin: merge(mixins.headings.p, {
+    color: variables.colors.white,
+    padding: `${variables.padding.e} 0`,
+    textDecoration: 'none',
+    textTransform: 'uppercase'
+  }),
   jobs: merge(linkStyle, {
-    color: '#fff',
+    color: variables.colors.white,
     ':before': {
       backgroundImage: mixins.linkImage('business-24-px-outline-briefcase-24.svg')
     }
   }),
   candidates: merge(linkStyle, {
-    color: '#fff',
+    color: variables.colors.white,
     ':before': {
       backgroundImage: mixins.linkImage('candidates.svg')
     }
   }),
   help: merge(linkStyle, {
-    color: '#fff',
+    color: variables.colors.white,
     ':before': {
       backgroundImage: mixins.linkImage('ui-24-px-outline-2-alert-circle.svg')
     }
@@ -87,7 +94,7 @@ module.exports = css({
     alignItems: 'center'
   },
   logout: merge(linkStyle, {
-    color: '#fff',
+    color: variables.colors.white,
     ':before': {
       backgroundImage: mixins.linkImage('arrows-24-px-outline-2-circle-out.svg')
     }
