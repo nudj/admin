@@ -139,25 +139,27 @@ headings.p2Bold = merge(headings.p2, {
 
 module.exports.headings = headings
 
+module.exports.mainColor = variables.colors.pink
+
 module.exports.typography = {
   h1: merge({
-    color: variables.colors.pink,
+    color: module.exports.mainColor,
     margin: `0 0 ${variables.padding.d} 0`
   }, headings.h1),
   h2: merge({
-    color: variables.colors.pink,
+    color: module.exports.mainColor,
     margin: `0 0 ${variables.padding.d} 0`
   }, headings.h2),
   h3: merge({
-    color: variables.colors.pink,
+    color: module.exports.mainColor,
     margin: `0 0 ${variables.padding.d} 0`
   }, headings.h3),
   h4: merge({
-    color: variables.colors.pink,
+    color: module.exports.mainColor,
     margin: `0 0 ${variables.padding.d} 0`
   }, headings.h4),
   h5: merge({
-    color: variables.colors.pink,
+    color: module.exports.mainColor,
     margin: `0 0 ${variables.padding.d} 0`
   }, headings.h5),
   p: merge({
@@ -186,7 +188,7 @@ module.exports.pageLayout = {
     padding: `${variables.padding.e} ${variables.padding.d}`
   },
   pageHeadline: merge(headings.h5, {
-    color: variables.colors.pink,
+    color: module.exports.mainColor,
     padding: `${variables.padding.c} ${variables.padding.d} ${variables.padding.d} ${variables.padding.d}`,
     margin: 0
   }),
@@ -296,7 +298,7 @@ module.exports.deLink = {
 module.exports.button = merge(headings.pBold, {
   border: '0',
   borderRadius: variables.sizing.buttonBorderRadius,
-  backgroundColor: variables.colors.pink,
+  backgroundColor: module.exports.mainColor,
   color: variables.colors.white,
   cursor: 'pointer',
   display: 'block',
@@ -306,7 +308,7 @@ module.exports.button = merge(headings.pBold, {
   minWidth: variables.sizing.buttonMinWidth,
   textAlign: 'center',
   ':disabled': {
-    backgroundColor: variables.colors.pinkFade,
+    backgroundColor: module.exports.mainColorFade,
     cursor: 'default'
   },
   ':focus': {
@@ -315,12 +317,12 @@ module.exports.button = merge(headings.pBold, {
 })
 
 module.exports.buttonSecondary = merge(module.exports.button, {
-  color: variables.colors.pink,
+  color: module.exports.mainColor,
   backgroundColor: variables.colors.white,
-  border: `${variables.sizing.buttonBorderWidth} solid ${variables.colors.pink}`,
+  border: `${variables.sizing.buttonBorderWidth} solid ${module.exports.mainColor}`,
   ':disabled': {
-    color: variables.colors.pinkFade,
-    borderColor: variables.colors.pinkFade,
+    color: module.exports.mainColorFade,
+    borderColor: module.exports.mainColorFade,
     cursor: 'default'
   }
 })
@@ -355,14 +357,36 @@ const inputBox = merge(headings.p, {
     color: variables.colors.midGrey
   },
   ':focus': {
-    borderColor: variables.colors.pink,
+    borderColor: module.exports.mainColor,
     boxShadow: `${variables.sizing.genericBoxShadow} ${variables.colors.genericBoxShadow}`,
-    color: variables.colors.pink,
+    color: module.exports.mainColor,
     outline: 'none'
   }
 })
 
+module.exports.formStructure = {
+  formList: merge(module.exports.deList),
+  formListItem: {
+    margin: `0 0 ${variables.padding.d} 0`,
+    [breakpoints.l]: {
+      alignItems: 'center',
+      display: 'flex'
+    }
+  },
+  formListItemHeading: merge(module.exports.pageLayout.pageHeadline, headings.h6, {
+    margin: '0',
+    padding: `${variables.padding.e} 0 0`
+  }),
+  formButtons: {
+    textAlign: 'right'
+  }
+}
+
 module.exports.formElements = {
+  label: merge(headings.p, {
+    flexShrink: '0',
+    width: variables.sizing.squishedSidebarWidth
+  }),
   inputBox: inputBox,
   inputBoxBorderless: merge(inputBox, {
     border: '0',
@@ -372,8 +396,17 @@ module.exports.formElements = {
       border: '0',
       boxShadow: 'none'
     }
-  })
+  }),
+  inputTextarea: merge(inputBox, {
+    width: '100%'
+  }),
+  submitButton: merge(module.exports.button)
 }
+
+module.exports.formElements.errorLabel = merge(module.exports.formElements.label, {
+  color: module.exports.mainColor,
+  padding: `0 0 0 ${variables.padding.e}`
+})
 
 module.exports.sectionDivider = {
   backgroundColor: variables.colors.midGrey,

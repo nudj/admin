@@ -153,6 +153,25 @@ function companiesHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function addCompanyHandler (req, res, next) {
+  const company = req.body
+  const data = clone(req.session.data)
+
+  companies
+    .post(data, company)
+    .then(data => {
+      data.message = {
+        message: `${data.newCompany.name} added`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(companies.getAll)
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
 function companyJobsHandler (req, res, next) {
   const companySlug = req.params.companySlug
 
@@ -204,6 +223,7 @@ function addReferralHandler (req, res, next) {
 }
 
 router.get('/', ensureLoggedIn, companiesHandler)
+router.post('/', ensureLoggedIn, addCompanyHandler)
 router.get('/:companySlug/jobs', ensureLoggedIn, companyJobsHandler)
 router.get('/:companySlug/jobs/:jobSlug', ensureLoggedIn, jobHandler)
 router.post('/:companySlug/jobs/:jobSlug/referrals', ensureLoggedIn, addPersonThenReferralHandler)
