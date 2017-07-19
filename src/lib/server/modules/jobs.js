@@ -6,6 +6,15 @@ let request = require('../../lib/request')
 let { promiseMap } = require('../lib')
 const common = require('./common')
 
+function createJob (data, job) {
+  data.newJob = request(`jobs`, {
+    data: job,
+    method: 'post'
+  })
+
+  return promiseMap(data)
+}
+
 function fetchJob (data, jobSlug) {
   data.job = request(`jobs/${jobSlug}`)
   return promiseMap(data)
@@ -34,7 +43,7 @@ function saveJobReferral (jobId, personId) {
 }
 
 function fetchJobs (data) {
-  data.jobs = request(`jobs/filter?companyId=${data.company.id}&status=Published`)
+  data.jobs = request(`jobs/filter?companyId=${data.company.id}`)
     .then(results => results.sort(common.sortByCreated))
   return promiseMap(data)
 }
@@ -153,4 +162,8 @@ module.exports.getJobActivities = function (data, jobId) {
 module.exports.addReferral = function (data, jobId, personId) {
   data.referral = saveJobReferral(jobId, personId)
   return promiseMap(data)
+}
+
+module.exports.post = function (data, job) {
+  return createJob(data, job)
 }
