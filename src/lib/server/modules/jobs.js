@@ -42,8 +42,20 @@ function saveJobReferral (jobId, personId) {
   return request('referrals', { data, method })
 }
 
-function fetchJobs (data) {
-  data.jobs = request(`jobs/filter?companyId=${data.company.id}`)
+// function fetchAllJobs (data, key = 'jobs') {
+//   data[key] = request(`jobs`)
+//     .then(results => results.sort(common.sortByCreated))
+//   return promiseMap(data)
+// }
+
+function fetchJobs (data, companyId, key = 'jobs') {
+  let url = 'jobs'
+
+  if (companyId) {
+    url = `${url}/filter?companyId=${data.company.id}`
+  }
+
+  data[key] = request(url)
     .then(results => results.sort(common.sortByCreated))
   return promiseMap(data)
 }
@@ -108,8 +120,8 @@ module.exports.get = function (data, jobSlug) {
   return fetchJob(data, jobSlug)
 }
 
-module.exports.getAll = function (data) {
-  return fetchJobs(data)
+module.exports.getAll = function (data, companyId) {
+  return fetchJobs(data, companyId)
 }
 
 module.exports.patch = function (data, jobSlug, patch) {

@@ -6,7 +6,6 @@ const format = require('date-fns/format')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
 const getStyle = require('./companies-page.css')
-const Plural = require('../plural/plural')
 const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')
 const Tooltip = require('../tooltip/tooltip')
@@ -188,7 +187,7 @@ module.exports = class CompaniesPage extends React.Component {
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newCompanyLogo'>Logo</label>
-            <input className={this.style.inputBox} type='uri' placeholder='https://www.company.com/logo.png' id='newCompanyLogo' name='logo' onChange={this.onChangeGeneric.bind(this)} />
+            <input className={this.style.inputBox} type='uri' placeholder='eg: https://www.company.com/logo.png' id='newCompanyLogo' name='logo' onChange={this.onChangeGeneric.bind(this)} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newCompanyDescription'>Description</label>
@@ -200,22 +199,22 @@ module.exports = class CompaniesPage extends React.Component {
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newCompanyUrl'>URL</label>
-            <input className={this.style.inputBox} type='uri' placeholder='https://www.company.com' id='newCompanyUrl' name='url' onChange={this.onChangeGeneric.bind(this)} />
+            <input className={this.style.inputBox} type='uri' placeholder='eg: https://www.company.com' id='newCompanyUrl' name='url' onChange={this.onChangeGeneric.bind(this)} />
           </li>
           <li className={this.style.formListItem}>
             <h4 className={this.style.formListItemHeading}>Social</h4>
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newCompanyFacebook'>Facebook</label>
-            <input className={this.style.inputBox} type='uri' placeholder='https://facebook.com/company' id='newCompanyFacebook' name='facebook' onChange={this.onChangeGeneric.bind(this)} />
+            <input className={this.style.inputBox} type='uri' placeholder='eg: https://facebook.com/company' id='newCompanyFacebook' name='facebook' onChange={this.onChangeGeneric.bind(this)} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newCompanyTwitter'>Twitter</label>
-            <input className={this.style.inputBox} type='uri' placeholder='https://twitter.com/company' id='newCompanyTwitter' name='twitter' onChange={this.onChangeGeneric.bind(this)} />
+            <input className={this.style.inputBox} type='uri' placeholder='eg: https://twitter.com/company' id='newCompanyTwitter' name='twitter' onChange={this.onChangeGeneric.bind(this)} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newCompanyLinkedIn'>LinkedIn</label>
-            <input className={this.style.inputBox} type='uri' placeholder='https://linkedin.com/company' id='newCompanyLinkedIn' name='linkedin' onChange={this.onChangeGeneric.bind(this)} />
+            <input className={this.style.inputBox} type='uri' placeholder='eg: https://linkedin.com/company' id='newCompanyLinkedIn' name='linkedin' onChange={this.onChangeGeneric.bind(this)} />
           </li>
         </ul>
         <div className={this.style.formButtons}>
@@ -238,7 +237,7 @@ module.exports = class CompaniesPage extends React.Component {
           <title>nudj - Companies</title>
         </Helmet>
         <PageHeader title='Companies' />
-        <h3 className={this.style.pageHeadline}>{companies.length} <Plural count={companies.length} singular='company' plural='companies' /> listed on nudj...</h3>
+        <h3 className={this.style.pageHeadline}>Companies listed on nudj <span className={this.style.textHighlight}>({companies.length})</span></h3>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
             <ul className={this.style.jobs}>
@@ -261,7 +260,7 @@ module.exports = class CompaniesPage extends React.Component {
                     description: format(get(company, 'created'), 'DD.MM.YYYY')
                   }]}
                   actions={[
-                    <Link className={this.style.nudj} to={`/${get(company, 'slug')}/jobs`}>Nudjy nudjy nudj nudj</Link>
+                    <Link className={this.style.nudj} to={`/${get(company, 'slug')}/jobs`}>See jobs</Link>
                   ]}
                 />)
               })}

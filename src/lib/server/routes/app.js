@@ -177,7 +177,7 @@ function companyJobsHandler (req, res, next) {
 
   companies
     .get(clone(req.session.data), companySlug)
-    .then(jobs.getAll)
+    .then(data => jobs.getAll(data, data.company.id))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -200,7 +200,7 @@ function addCompanyJobHandler (req, res, next) {
       }
       return promiseMap(data)
     })
-    .then(jobs.getAll)
+    .then(data => jobs.getAll(data, data.company.id))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))

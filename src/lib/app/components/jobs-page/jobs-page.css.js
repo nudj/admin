@@ -1,8 +1,7 @@
 let {
   css,
   merge,
-  mixins,
-  variables
+  mixins
 } = require('../../lib/css')
 
 const listStyle = {
@@ -16,12 +15,8 @@ module.exports = css(merge(mixins.pageLayout, mixins.formStructure, mixins.formE
   jobs: listStyle,
   nudj: mixins.button,
   pageHeadlineHighlight: merge(mixins.pageLayout.pageHeadline, {
-    color: variables.colors.royalBlue,
+    color: mixins.secondaryColor,
     padding: '0'
   }),
-  formCard: mixins.cardStyle,
-  inputBox: merge(mixins.formElements.inputBox, {
-    flexGrow: '1',
-    width: '100%'
-  })
+  formCard: mixins.cardStyle
 }))

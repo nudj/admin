@@ -9,7 +9,6 @@ const getStyle = require('./jobs-page.css')
 const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')
 const Tooltip = require('../tooltip/tooltip')
-const Plural = require('../plural/plural')
 const { postData } = require('../../actions/app')
 
 // To be replaced by the library soon
@@ -24,9 +23,25 @@ module.exports = class JobsPage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
-    // const validation = this.cleanValidation()
+    const validation = this.cleanValidation()
     const job = this.cleanJob()
-    this.state = {job}
+    this.state = {job, validation}
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const isNewJob = !!get(nextProps, 'newJob')
+
+    if (!isNewJob) {
+      return
+    }
+
+    const newJobForm = this.refs.newJobForm
+    newJobForm.reset()
+
+    this.setState({
+      job: this.cleanJob(),
+      validation: this.cleanValidation()
+    })
   }
 
   cleanJob () {
@@ -132,10 +147,11 @@ module.exports = class JobsPage extends React.Component {
     const method = 'post'
     const data = get(this.state, 'job', {})
 
-    this.setState({
-      job: this.cleanJob(),
-      validation: this.cleanValidation()
-    }, () => this.props.dispatch(postData({ url, data, method })))
+    if (data.bonus) {
+      data.bonus = parseInt(data.bonus)
+    }
+
+    this.props.dispatch(postData({ url, data, method }))
   }
 
   updateJob (newStuff) {
@@ -194,7 +210,7 @@ module.exports = class JobsPage extends React.Component {
     //   jobName: Gutmann Ltd
     // }
 
-    return (<form className={this.style.pageMain} onSubmit={this.onSubmit.bind(this)}>
+    return (<form className={this.style.pageMain} onSubmit={this.onSubmit.bind(this)} ref='newJobForm'>
       <div className={this.style.formCard}>
         <ul className={this.style.formList}>
           <li className={this.style.formListItem}>
@@ -209,11 +225,11 @@ module.exports = class JobsPage extends React.Component {
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobUrl'>URL</label>
-            <input className={this.style.inputBox} type='uri' placeholder='https://www.company.com/link-to-job' id='newJobUrl' name='url' onChange={this.onChangeGeneric.bind(this)} />
+            <input className={this.style.inputBox} type='uri' placeholder='eg: https://www.company.com/link-to-job' id='newJobUrl' name='url' onChange={this.onChangeGeneric.bind(this)} />
           </li>
           <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobBonus'>Bonus £</label>
-            <input className={this.style.inputBox} type='number' placeholder='200' id='newJobBonus' name='bonus' required onChange={this.onChangeGeneric.bind(this)} />
+            <label className={this.style.label} htmlFor='newJobBonus'>Bonus (without currency symbol)</label>
+            <input className={this.style.inputBox} type='number' placeholder='eg: 200' id='newJobBonus' name='bonus' required onChange={this.onChangeGeneric.bind(this)} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobType'>Type</label>
@@ -231,10 +247,7 @@ module.exports = class JobsPage extends React.Component {
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobLocation'>Location</label>
-            <input className={this.style.inputBox} type='text' placeholder='London' id='newJobLocation' required name='location' onChange={this.onChangeGeneric.bind(this)} />
-          </li>
-          <li className={this.style.formListItem}>
-            <h4 className={this.style.formListItemHeading}>Related jobs</h4>
+            <input className={this.style.inputBox} type='text' placeholder='eg: London' id='newJobLocation' required name='location' onChange={this.onChangeGeneric.bind(this)} />
           </li>
         </ul>
         <div className={this.style.formButtons}>
@@ -280,7 +293,7 @@ module.exports = class JobsPage extends React.Component {
           description: `£${jobBonus}`
         }]}
         actions={[
-          <Link className={this.style.nudj} to={`/${companySlug}/jobs/${jobSlug}`}>Nudjy nudjy nudj nudj</Link>
+          <Link className={this.style.nudj} to={`/${companySlug}/jobs/${jobSlug}`}>See job</Link>
         ]}
       />)
     })
@@ -309,7 +322,7 @@ module.exports = class JobsPage extends React.Component {
         </Helmet>
         <PageHeader title='Jobs' subtitle={`@ ${companyName}`} />
         <h3 className={this.style.pageHeadline}>
-          <span className={this.style.pageHeadlineHighlight}>{companyName}</span> currently have {publishedJobs.length} published <Plural count={publishedJobs.length} singular='job' plural='jobs' /> listed on nudj, and a total of {jobs.length} <Plural count={jobs.length} singular='job' plural='jobs' /> in our system
+          <span className={this.style.pageHeadlineHighlight}>{companyName}</span> jobs: published <span className={this.style.pageHeadlineHighlight}>({publishedJobs.length})</span> / total <span className={this.style.pageHeadlineHighlight}>({jobs.length})</span>
         </h3>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
