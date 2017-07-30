@@ -10,6 +10,7 @@ const getStyle = require('./job-page.css')
 const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')
 const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
+const JobForm = require('../job-form/job-form')
 const { postData } = require('../../actions/app')
 
 module.exports = class JobsPage extends React.Component {
@@ -186,6 +187,15 @@ module.exports = class JobsPage extends React.Component {
     })
   }
 
+  onSubmitJob (data) {
+    const companySlug = get(this.props, 'company.slug')
+    const jobSlug = get(this.props, 'job.slug')
+    const url = `/${companySlug}/jobs/${jobSlug}`
+    const method = 'put'
+
+    this.props.dispatch(postData({ url, data, method }))
+  }
+
   getSuggestions (value) {
     const matcher = new RegExp(`${value}`, 'i')
     const people = get(this.props, 'people', [])
@@ -276,10 +286,27 @@ module.exports = class JobsPage extends React.Component {
     return { button, info }
   }
 
+  renderJobActivitiyGroup () {
+    const jobStatus = get(this.props, 'job.status')
+
+    if (jobStatus !== 'Published') {
+      return (<span />)
+    }
+
+    const jobActivity = this.renderJobActivities()
+    return (<div>
+      <h3 className={this.style.pageHeadline}>Job activity</h3>
+      <div className={this.style.pageMain}>
+        {jobActivity}
+      </div>
+    </div>)
+  }
+
   render () {
     const applicationsList = this.renderApplicationsList()
     const referralsList = this.renderReferralsList()
-    const jobActivity = this.renderJobActivities()
+
+    const jobActivityGroup = this.renderJobActivitiyGroup()
 
     const { value, suggestions } = this.state
 
@@ -295,6 +322,16 @@ module.exports = class JobsPage extends React.Component {
 
     const { button, info } = this.renderUserActions(value)
 
+    const job = get(this.props, 'job', {})
+    const jobs = get(this.props, 'jobs', [])
+
+    const editJobForm = (<JobForm
+      jobs={jobs}
+      job={job}
+      reset={this.state.resetJobForm}
+      onSubmit={this.onSubmitJob.bind(this)}
+      submitLabel='Save changes' />)
+
     return (
       <div className={this.style.pageBody}>
         <Helmet>
@@ -302,14 +339,14 @@ module.exports = class JobsPage extends React.Component {
         </Helmet>
         <PageHeader
           title={jobTitle}
-          subtitle={<span>@ <Link className={this.style.headerLink} to={`/${companySlug}/jobs`}>{companyName}</Link></span>}
-        />
+          subtitle={<span>@ <Link className={this.style.headerLink} to={`/${companySlug}/jobs`}>{companyName}</Link></span>}>
+          <h4>{get(this.props, 'job.status')}</h4>
+        </PageHeader>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMainContainer}>
-            <h3 className={this.style.pageHeadline}>Job activity</h3>
-            <div className={this.style.pageMain}>
-              {jobActivity}
-            </div>
+            {jobActivityGroup}
+            <h3 className={this.style.pageHeadline}>Edit job details</h3>
+            {editJobForm}
             <hr className={this.style.sectionDivider} />
             <h3 className={this.style.pageHeadline}>Referrals</h3>
             <div className={this.style.pageMain}>

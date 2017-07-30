@@ -15,13 +15,24 @@ function createJob (data, job) {
   return promiseMap(data)
 }
 
+function editJob (data, job) {
+  data.savedJob = request(`jobs/${job.id}`, {
+    data: job,
+    method: 'put'
+  })
+
+  return promiseMap(data)
+}
+
 function fetchJob (data, jobSlug) {
-  data.job = request(`jobs/${jobSlug}`)
+  data.job = request(`jobs/filter?slug=${jobSlug}`)
+    .then(results => results ? results.pop() : results)
   return promiseMap(data)
 }
 
 function fetchJobAndRecipients (data, jobSlug, recipients) {
-  data.job = request(`jobs/${jobSlug}`)
+  data.job = request(`jobs/filter?slug=${jobSlug}`)
+    .then(results => results ? results.pop() : results)
   data.recipients = common.fetchPeopleFromFragments(recipients)
   return promiseMap(data)
 }
@@ -178,4 +189,8 @@ module.exports.addReferral = function (data, jobId, personId) {
 
 module.exports.post = function (data, job) {
   return createJob(data, job)
+}
+
+module.exports.put = function (data, job) {
+  return editJob(data, job)
 }

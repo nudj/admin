@@ -393,6 +393,9 @@ module.exports.formElements = {
     padding: `0 0 ${variables.padding.e} 0`
   }),
   inputBox: inputBox,
+  inputBoxUrl: merge(inputBox, {
+    fontFamily: 'monospace'
+  }),
   inputBoxBorderless: merge(inputBox, {
     border: '0',
     boxShadow: 'none',
