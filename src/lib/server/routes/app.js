@@ -286,6 +286,57 @@ function addReferralHandler (req, res, next) {
     .then(data => genericGetJob({data, req, res, next}))
 }
 
+function peopleHandler (req, res, next) {
+  people
+    .getAll(clone(req.session.data))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function addPersonHandler (req, res, next) {
+  people
+    .post(clone(req.session.data), req.body)
+    .then(data => {
+      data.message = {
+        message: `${data.newPerson.firstName} ${data.newPerson.lastName} added`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(data => people.getAll(data))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function personHandler (req, res, next) {
+  people
+    .getAll(clone(req.session.data))
+    .then(data => people.get(data, req.params.personId))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function editPersonHandler (req, res, next) {
+  people
+    .put(clone(req.session.data), req.body)
+    .then(data => {
+      data.message = {
+        message: `${data.savedPerson.firstName} ${data.savedPerson.lastName} saved`,
+        type: 'success'
+      }
+      console.log(data.savedPerson)
+      data.person = data.savedPerson
+      return promiseMap(data)
+    })
+    .then(data => people.getAll(data))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
 router.get('/', ensureLoggedIn, companiesHandler)
 router.post('/', ensureLoggedIn, addCompanyHandler)
 router.put('/:companySlug', ensureLoggedIn, editCompanyHandler)
@@ -295,6 +346,10 @@ router.get('/:companySlug/jobs/:jobSlug', ensureLoggedIn, jobHandler)
 router.put('/:companySlug/jobs/:jobSlug', ensureLoggedIn, editJobHandler)
 router.post('/:companySlug/jobs/:jobSlug/referrals', ensureLoggedIn, addPersonThenReferralHandler)
 router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', ensureLoggedIn, addReferralHandler)
+router.get('/people', ensureLoggedIn, peopleHandler)
+router.post('/people', ensureLoggedIn, addPersonHandler)
+router.get('/people/:personId', ensureLoggedIn, personHandler)
+router.put('/people/:personId', ensureLoggedIn, editPersonHandler)
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

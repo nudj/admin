@@ -13,6 +13,7 @@ const Header = (props) => {
         </Link>
         <ul className={style.menu}>
           <li className={style.menuItem}><Link className={style.jobs} to={'/'}>Companies</Link></li>
+          <li className={style.menuItem}><Link className={style.candidates} to={'/people'}>People</Link></li>
           <li className={style.menuItem}><a className={style.help} href='http://help.nudj.co'>Help</a></li>
         </ul>
       </div>

@@ -8,6 +8,9 @@ const Notification = require('../notification/notification')
 const CompaniesPage = require('../companies-page/companies-page')
 const JobsPage = require('../jobs-page/jobs-page')
 const JobPage = require('../job-page/job-page')
+const PeoplePage = require('../people-page/people-page')
+const PersonPage = require('../person-page/person-page')
+
 const PageNotFound = require('../404-page/404-page')
 const Overlay = require('../overlay/overlay')
 const Status = require('../status/status')
@@ -46,6 +49,8 @@ const Index = () => {
           <Route exact path='/' component={PageWithState(CompaniesPage)} />
           <Route exact path='/:companySlug/jobs' component={PageWithState(JobsPage)} />
           <Route exact path='/:companySlug/jobs/:jobSlug' component={PageWithState(JobPage)} />
+          <Route exact path='/people' component={PageWithState(PeoplePage)} />
+          <Route exact path='/people/:personId' component={PageWithState(PersonPage)} />
           <Route render={PageWithState((props) => <Status code={404}><PageNotFound {...props} /></Status>)} />
         </Switch>
       </div>
