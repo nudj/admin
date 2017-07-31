@@ -11,8 +11,18 @@ function createCompany (data, company) {
   return promiseMap(data)
 }
 
+function editCompany (data, company) {
+  data.savedCompany = request(`companies/${company.id}`, {
+    data: company,
+    method: 'put'
+  })
+
+  return promiseMap(data)
+}
+
 function fetchCompany (data, companySlug) {
-  data.company = request(`companies/${companySlug}`)
+  data.company = request(`companies/filter?slug=${companySlug}`)
+    .then(results => results.pop())
   return promiseMap(data)
 }
 
@@ -32,4 +42,8 @@ module.exports.getAll = function (data) {
 
 module.exports.post = function (data, company) {
   return createCompany(data, company)
+}
+
+module.exports.put = function (data, company) {
+  return editCompany(data, company)
 }

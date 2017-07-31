@@ -36,25 +36,6 @@ class MockApi {
     next()
   }
 
-  getCompanyById ({req, res, next}) {
-    if (!req.params.cid.match(/^\d+$/)) {
-      let company = find(this.dummyData.companies, {
-        slug: req.params.cid
-      })
-      if (company) {
-        res.json(company)
-      } else {
-        res.json({
-          error: true,
-          code: 404,
-          errorMessage: 'no match'
-        })
-      }
-    } else {
-      next()
-    }
-  }
-
   getFirstOfType ({req, res, next}) {
     let type = req.params.type
     let match = find(this.dummyData[type], req.query)
@@ -66,25 +47,6 @@ class MockApi {
         code: 404,
         errorMessage: 'no match'
       })
-    }
-  }
-
-  getJobById ({req, res, next}) {
-    if (!req.params.jid.match(/^\d+$/)) {
-      let job = find(this.dummyData.jobs, {
-        slug: req.params.jid
-      })
-      if (job) {
-        res.json(job)
-      } else {
-        res.json({
-          error: true,
-          code: 404,
-          errorMessage: 'no match'
-        })
-      }
-    } else {
-      next()
     }
   }
 
@@ -118,8 +80,6 @@ class MockApi {
     this.injectDummyData()
 
     this.server.get('/:type/filter', rewrite('/:type'))
-    this.server.get('/companies/:cid', (req, res, next) => this.getCompanyById({req, res, next}))
-    this.server.get('/jobs/:jid', (req, res, next) => this.getJobById({req, res, next}))
     this.server.get('/:type/first', (req, res, next) => this.getFirstOfType({req, res, next}))
 
     this.server.get('/restart-mock-api', (req, res, next) => this.restartHandler({req, res, next}))

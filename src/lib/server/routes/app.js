@@ -172,12 +172,60 @@ function addCompanyHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function editCompanyHandler (req, res, next) {
+  const companySlug = req.params.companySlug
+  const company = req.body
+  const data = clone(req.session.data)
+
+  companies
+    .put(data, company)
+    .then(data => {
+      data.message = {
+        message: `${data.savedCompany.name} saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(companies.getAll)
+    .then(data => jobs.getAll(data, data.company.id))
+    // This isn't returning the company properly
+    .then(data => companies.get(data, companySlug))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
 function companyJobsHandler (req, res, next) {
   const companySlug = req.params.companySlug
 
   companies
     .get(clone(req.session.data), companySlug)
-    .then(jobs.getAll)
+    .then(companies.getAll)
+    .then(data => jobs.getAll(data, data.company.id))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function addCompanyJobHandler (req, res, next) {
+  const companySlug = req.params.companySlug
+  const job = req.body
+
+  companies
+    .get(clone(req.session.data), companySlug)
+    .then(data => {
+      job.companyId = data.company.id
+      return jobs.post(data, job)
+    })
+    .then(data => {
+      data.message = {
+        message: `${data.newJob.title} added`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(companies.getAll)
+    .then(data => jobs.getAll(data, data.company.id))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -200,6 +248,22 @@ function jobHandler (req, res, next) {
   // Do we have an issue here with job-slug uniqueness across companies?
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
+    .then(jobs.getAll)
+    .then(data => genericGetJob({data, req, res, next}))
+}
+
+function editJobHandler (req, res, next) {
+  jobs
+    .put(clone(req.session.data), req.body)
+    .then(jobs.getAll)
+    .then(data => jobs.get(data, req.params.jobSlug))
+    .then(data => {
+      data.message = {
+        message: `${data.savedJob.title} saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
     .then(data => genericGetJob({data, req, res, next}))
 }
 
@@ -224,8 +288,11 @@ function addReferralHandler (req, res, next) {
 
 router.get('/', ensureLoggedIn, companiesHandler)
 router.post('/', ensureLoggedIn, addCompanyHandler)
+router.put('/:companySlug', ensureLoggedIn, editCompanyHandler)
 router.get('/:companySlug/jobs', ensureLoggedIn, companyJobsHandler)
+router.post('/:companySlug/jobs', ensureLoggedIn, addCompanyJobHandler)
 router.get('/:companySlug/jobs/:jobSlug', ensureLoggedIn, jobHandler)
+router.put('/:companySlug/jobs/:jobSlug', ensureLoggedIn, editJobHandler)
 router.post('/:companySlug/jobs/:jobSlug/referrals', ensureLoggedIn, addPersonThenReferralHandler)
 router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', ensureLoggedIn, addReferralHandler)
 router.get('*', (req, res) => {

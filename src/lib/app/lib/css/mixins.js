@@ -140,6 +140,7 @@ headings.p2Bold = merge(headings.p2, {
 module.exports.headings = headings
 
 module.exports.mainColor = variables.colors.pink
+module.exports.secondaryColor = variables.colors.royalBlue
 
 module.exports.typography = {
   h1: merge({
@@ -215,6 +216,9 @@ module.exports.pageLayout = {
       padding: `0 ${variables.padding.d} 0 calc(${variables.padding.c} + ${variables.padding.d})`,
       width: variables.sizing.sidebarWidth
     }
+  },
+  textHighlight: {
+    color: module.exports.secondaryColor
   }
 }
 
@@ -353,6 +357,10 @@ const inputBox = merge(headings.p, {
   color: variables.colors.charcoal,
   outline: 'none',
   padding: variables.padding.e,
+  [breakpoints.l]: {
+    display: 'inline-block',
+    width: '50%'
+  },
   ':placeholder-shown': {
     color: variables.colors.midGrey
   },
@@ -367,11 +375,7 @@ const inputBox = merge(headings.p, {
 module.exports.formStructure = {
   formList: merge(module.exports.deList),
   formListItem: {
-    margin: `0 0 ${variables.padding.d} 0`,
-    [breakpoints.l]: {
-      alignItems: 'center',
-      display: 'flex'
-    }
+    margin: `0 0 ${variables.padding.d} 0`
   },
   formListItemHeading: merge(module.exports.pageLayout.pageHeadline, headings.h6, {
     margin: '0',
@@ -383,11 +387,15 @@ module.exports.formStructure = {
 }
 
 module.exports.formElements = {
-  label: merge(headings.p, {
-    flexShrink: '0',
-    width: variables.sizing.squishedSidebarWidth
+  label: merge(headings.h6, {
+    color: module.exports.mainColor,
+    display: 'block',
+    padding: `0 0 ${variables.padding.e} 0`
   }),
   inputBox: inputBox,
+  inputBoxUrl: merge(inputBox, {
+    fontFamily: 'monospace'
+  }),
   inputBoxBorderless: merge(inputBox, {
     border: '0',
     boxShadow: 'none',
@@ -398,14 +406,25 @@ module.exports.formElements = {
     }
   }),
   inputTextarea: merge(inputBox, {
-    width: '100%'
+    minHeight: variables.padding.a,
+    [breakpoints.l]: {
+      width: '80%'
+    }
   }),
-  submitButton: merge(module.exports.button)
+  selectBox: inputBox,
+  submitButton: merge(module.exports.button, {
+    [breakpoints.l]: {
+      display: 'inline-block'
+    }
+  })
 }
 
 module.exports.formElements.errorLabel = merge(module.exports.formElements.label, {
   color: module.exports.mainColor,
-  padding: `0 0 0 ${variables.padding.e}`
+  padding: `0 0 0 ${variables.padding.e}`,
+  [breakpoints.l]: {
+    display: 'inline-block'
+  }
 })
 
 module.exports.sectionDivider = {

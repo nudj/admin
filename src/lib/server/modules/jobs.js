@@ -6,13 +6,33 @@ let request = require('../../lib/request')
 let { promiseMap } = require('../lib')
 const common = require('./common')
 
+function createJob (data, job) {
+  data.newJob = request(`jobs`, {
+    data: job,
+    method: 'post'
+  })
+
+  return promiseMap(data)
+}
+
+function editJob (data, job) {
+  data.savedJob = request(`jobs/${job.id}`, {
+    data: job,
+    method: 'put'
+  })
+
+  return promiseMap(data)
+}
+
 function fetchJob (data, jobSlug) {
-  data.job = request(`jobs/${jobSlug}`)
+  data.job = request(`jobs/filter?slug=${jobSlug}`)
+    .then(results => results ? results.pop() : results)
   return promiseMap(data)
 }
 
 function fetchJobAndRecipients (data, jobSlug, recipients) {
-  data.job = request(`jobs/${jobSlug}`)
+  data.job = request(`jobs/filter?slug=${jobSlug}`)
+    .then(results => results ? results.pop() : results)
   data.recipients = common.fetchPeopleFromFragments(recipients)
   return promiseMap(data)
 }
@@ -33,8 +53,20 @@ function saveJobReferral (jobId, personId) {
   return request('referrals', { data, method })
 }
 
-function fetchJobs (data) {
-  data.jobs = request(`jobs/filter?companyId=${data.company.id}&status=Published`)
+// function fetchAllJobs (data, key = 'jobs') {
+//   data[key] = request(`jobs`)
+//     .then(results => results.sort(common.sortByCreated))
+//   return promiseMap(data)
+// }
+
+function fetchJobs (data, companyId, key = 'jobs') {
+  let url = 'jobs'
+
+  if (companyId) {
+    url = `${url}/filter?companyId=${data.company.id}`
+  }
+
+  data[key] = request(url)
     .then(results => results.sort(common.sortByCreated))
   return promiseMap(data)
 }
@@ -99,8 +131,8 @@ module.exports.get = function (data, jobSlug) {
   return fetchJob(data, jobSlug)
 }
 
-module.exports.getAll = function (data) {
-  return fetchJobs(data)
+module.exports.getAll = function (data, companyId) {
+  return fetchJobs(data, companyId)
 }
 
 module.exports.patch = function (data, jobSlug, patch) {
@@ -153,4 +185,12 @@ module.exports.getJobActivities = function (data, jobId) {
 module.exports.addReferral = function (data, jobId, personId) {
   data.referral = saveJobReferral(jobId, personId)
   return promiseMap(data)
+}
+
+module.exports.post = function (data, job) {
+  return createJob(data, job)
+}
+
+module.exports.put = function (data, job) {
+  return editJob(data, job)
 }
