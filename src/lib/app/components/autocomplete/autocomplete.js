@@ -9,10 +9,21 @@ module.exports = class Autocomplete extends React.Component {
     super(props)
     this.style = getStyle()
 
-    const value = get(props, 'value', '')
+    const value = ''
     const suggestions = get(props, 'suggestions', [])
 
     this.state = {value, suggestions}
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const reset = !!get(nextProps, 'reset')
+
+    if (!reset) {
+      return
+    }
+
+    const value = ''
+    this.setState({ value })
   }
 
   onChange (event, {newValue}) {

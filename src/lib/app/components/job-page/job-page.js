@@ -19,8 +19,27 @@ module.exports = class JobsPage extends React.Component {
     this.style = getStyle()
 
     const referralValue = ''
+    const resetReferral = false
 
-    this.state = {referralValue}
+    this.state = {referralValue, resetReferral}
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const resetReferral = !!get(nextProps, 'referral')
+
+    if (resetReferral === this.state.resetReferral) {
+      return
+    }
+
+    if (!resetReferral) {
+      return this.setState({ resetReferral })
+    }
+
+    const referralValue = ''
+    this.setState({ referralValue, resetReferral }, () => {
+      const resetReferral = false
+      this.setState({ resetReferral })
+    })
   }
 
   renderJobActivitiy (activity) {
@@ -198,7 +217,7 @@ module.exports = class JobsPage extends React.Component {
     const companySlug = get(this.props, 'company.slug')
     const jobSlug = get(this.props, 'job.slug', '')
 
-    const person = this.getPersonFromEmail(this.state.value)
+    const person = this.getPersonFromEmail(this.state.referralValue)
     const personId = person.id
 
     const url = `/${companySlug}/jobs/${jobSlug}/referrals/${personId}`
@@ -206,14 +225,14 @@ module.exports = class JobsPage extends React.Component {
     const data = {}
 
     this.setState({
-      value: ''
+      referralValue: ''
     }, () => this.props.dispatch(postData({ url, data, method })))
   }
 
   saveUser (event) {
     const companySlug = get(this.props, 'company.slug')
     const jobSlug = get(this.props, 'job.slug', '')
-    const email = this.state.value.toString()
+    const email = this.state.referralValue.toString()
 
     const url = `/${companySlug}/jobs/${jobSlug}/referrals`
     const method = 'post'
@@ -230,8 +249,6 @@ module.exports = class JobsPage extends React.Component {
 
     let button = (<span />)
     let info = (<span />)
-
-    console.log('renderUserActions', value)
 
     // Check is value an email,
     if (!value || !isEmail(value)) {
@@ -280,7 +297,7 @@ module.exports = class JobsPage extends React.Component {
 
     const jobActivityGroup = this.renderJobActivitiyGroup()
 
-    const { referralValue } = this.state
+    const { referralValue, resetReferral } = this.state
 
     const placeholder = 'Type a name or email'
     const suggestions = get(this.props, 'people', []).map(person => {
@@ -332,6 +349,7 @@ module.exports = class JobsPage extends React.Component {
                   <Autocomplete
                     placeholder={placeholder}
                     suggestions={suggestions}
+                    reset={resetReferral}
                     onChange={this.onChangeReferral.bind(this)} />
                   {button}
                 </div>
