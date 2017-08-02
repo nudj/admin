@@ -2,11 +2,11 @@ const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
-const Autosuggest = require('react-autosuggest')
 const isEmail = require('validator/lib/isEmail')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 
 const getStyle = require('./job-page.css')
+const Autocomplete = require('../autocomplete/autocomplete')
 const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')
 const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
@@ -18,10 +18,9 @@ module.exports = class JobsPage extends React.Component {
     super(props)
     this.style = getStyle()
 
-    const value = ''
-    const suggestions = get(props, 'people', [])
+    const referralValue = ''
 
-    this.state = {value, suggestions}
+    this.state = {referralValue}
   }
 
   renderJobActivitiy (activity) {
@@ -132,6 +131,7 @@ module.exports = class JobsPage extends React.Component {
         const referralId = get(referral, 'referralId')
         const relatedReferral = this.findRelatedReferral(referralId)
         const referralLink = this.generateReferralLink(referral)
+        const personLink = `/people/${referral.personId}`
 
         const minutes = differenceInMinutes(rightNow, get(referral, 'created'))
         const rowClass = minutes < 10 ? 'rowHighlight' : 'row'
@@ -162,6 +162,7 @@ module.exports = class JobsPage extends React.Component {
             }
           ]}
           actions={[
+            <Link className={this.style.nudjLink} to={personLink}>See person</Link>,
             <CopyToClipboard className={this.style.copyLink} data-clipboard-text={referralLink}>Copy link</CopyToClipboard>
           ]}
         />)
@@ -169,22 +170,14 @@ module.exports = class JobsPage extends React.Component {
     </div>)
   }
 
-  onChange (event, {newValue}) {
-    this.setState({
-      value: newValue
-    })
-  }
-
-  onSuggestionsFetchRequested ({value}) {
-    this.setState({
-      suggestions: this.getSuggestions(value)
-    })
-  }
-
-  onSuggestionsClearRequested () {
-    this.setState({
-      suggestions: []
-    })
+  onChangeReferral (value, matches) {
+    let referralValue = value
+    if (!isEmail(referralValue) && matches.length === 1) {
+      // in this case 'id' is the email as put together in `render`
+      const email = get(matches[0], 'id', '')
+      referralValue = value.indexOf(email) === 0 ? email : referralValue
+    }
+    this.setState({referralValue})
   }
 
   onSubmitJob (data) {
@@ -196,32 +189,9 @@ module.exports = class JobsPage extends React.Component {
     this.props.dispatch(postData({ url, data, method }))
   }
 
-  getSuggestions (value) {
-    const matcher = new RegExp(`${value}`, 'i')
-    const people = get(this.props, 'people', [])
-    return people.filter(person => {
-      const emailMatch = matcher.test(person.email)
-      const firstNameMatch = matcher.test(person.firstName)
-      const lastNameMatch = matcher.test(person.lastName)
-      return emailMatch || firstNameMatch || lastNameMatch
-    })
-  }
-
-  getSuggestionValue (suggestion) {
-    return suggestion.email
-  }
-
   getPersonFromEmail (email) {
     const suggestions = get(this.props, 'people', [])
     return suggestions.find(suggestion => suggestion.email === email)
-  }
-
-  renderSuggestion (suggestion) {
-    return (<span className={this.style.suggestion}>{suggestion.email} - {suggestion.firstName} {suggestion.lastName}</span>)
-  }
-
-  renderInputComponent (inputProps) {
-    return (<input {...inputProps} className={this.style.inputBox} />)
   }
 
   saveLink (event) {
@@ -260,6 +230,8 @@ module.exports = class JobsPage extends React.Component {
 
     let button = (<span />)
     let info = (<span />)
+
+    console.log('renderUserActions', value)
 
     // Check is value an email,
     if (!value || !isEmail(value)) {
@@ -308,19 +280,20 @@ module.exports = class JobsPage extends React.Component {
 
     const jobActivityGroup = this.renderJobActivitiyGroup()
 
-    const { value, suggestions } = this.state
+    const { referralValue } = this.state
 
-    const autosuggestInputProps = {
-      placeholder: 'Type a name or email',
-      value: value,
-      onChange: this.onChange.bind(this)
-    }
+    const placeholder = 'Type a name or email'
+    const suggestions = get(this.props, 'people', []).map(person => {
+      const id = person.email
+      const value = `${person.email} - ${person.firstName} ${person.lastName}`
+      return { id, value }
+    })
 
     const companyName = get(this.props, 'company.name')
     const companySlug = get(this.props, 'company.slug')
     const jobTitle = get(this.props, 'job.title')
 
-    const { button, info } = this.renderUserActions(value)
+    const { button, info } = this.renderUserActions(referralValue)
 
     const job = get(this.props, 'job', {})
     const jobs = get(this.props, 'jobs', [])
@@ -356,17 +329,10 @@ module.exports = class JobsPage extends React.Component {
             <div className={this.style.pageMain}>
               <div className={this.style.missing}>
                 <div className={this.style.missingGroup}>
-                  <div className={this.style.inputBoxHole}>
-                    <Autosuggest
-                      className={this.style.inputBox}
-                      suggestions={suggestions}
-                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
-                      onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
-                      getSuggestionValue={this.getSuggestionValue.bind(this)}
-                      renderSuggestion={this.renderSuggestion.bind(this)}
-                      renderInputComponent={this.renderInputComponent.bind(this)}
-                      inputProps={autosuggestInputProps} />
-                  </div>
+                  <Autocomplete
+                    placeholder={placeholder}
+                    suggestions={suggestions}
+                    onChange={this.onChangeReferral.bind(this)} />
                   {button}
                 </div>
                 {info}
