@@ -9,6 +9,7 @@ const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')
 const Tooltip = require('../tooltip/tooltip')
 const CompanyForm = require('../company-form/company-form')
+const Plural = require('../plural/plural')
 const { postData } = require('../../actions/app')
 
 module.exports = class CompaniesPage extends React.Component {
@@ -84,7 +85,7 @@ module.exports = class CompaniesPage extends React.Component {
             {tooltip ? <Tooltip {...tooltip} /> : ''}
           </div>
         </div>
-        <h4 className={this.style.pageHeadline}>Add another company</h4>
+        <h4 className={this.style.pageHeadline}>Add <Plural zero='a' singular='another' count={companies.length} /> company</h4>
         <div className={this.style.pageContent}>
           {addCompanyForm}
           <div className={this.style.pageSidebar} />

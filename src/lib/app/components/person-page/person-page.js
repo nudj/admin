@@ -10,6 +10,7 @@ const Autocomplete = require('../autocomplete/autocomplete')
 const PageHeader = require('../page-header/page-header')
 const PersonForm = require('../person-form/person-form')
 const RowItem = require('../row-item/row-item')
+const Plural = require('../plural/plural')
 const { postData } = require('../../actions/app')
 
 module.exports = class CompaniesPage extends React.Component {
@@ -24,6 +25,7 @@ module.exports = class CompaniesPage extends React.Component {
   componentWillReceiveProps (nextProps) {
     const resetForm = !!get(nextProps, 'savedPerson')
     const resetReferral = !!get(nextProps, 'referral')
+    const resetRecommendation = !!get(nextProps, 'recommendation')
 
     if (resetForm !== this.state.resetForm) {
       this.setState({ resetForm })
@@ -33,6 +35,13 @@ module.exports = class CompaniesPage extends React.Component {
       this.setState({ resetReferral }, () => {
         const resetReferral = false
         this.setState({ resetReferral })
+      })
+    }
+
+    if (resetRecommendation !== this.state.resetRecommendation) {
+      this.setState({ resetRecommendation }, () => {
+        const resetRecommendation = false
+        this.setState({ resetRecommendation })
       })
     }
   }
@@ -216,7 +225,8 @@ module.exports = class CompaniesPage extends React.Component {
     }
 
     this.setState({
-      referralJobId: ''
+      recommendationJobId: '',
+      recommendationHirerId: ''
     }, () => this.props.dispatch(postData({ url, data, method })))
   }
 
@@ -259,7 +269,7 @@ module.exports = class CompaniesPage extends React.Component {
 
     // Does this person already have a recommendation for this job?
     if (recommendation) {
-      info = (<p className={this.style.copy}>This person's already had a recommendation for this job 💅🏼 It should be in the recommendations list above ⬆️.</p>)
+      info = (<p className={this.style.copy}>This person's already had a recommendation created for this job with that person 💅🏼 It should be in the recommendations list above ⬆️.</p>)
     } else if (existingJob) {
       button = (<button className={this.style.copyLinkNew} onClick={this.saveRecommendation.bind(this)}>Generate recommendation</button>)
       info = (<p className={this.style.copy}>That's a job and hirer match! 😎 Click the button above to recommend this person 💅🏼</p>)
@@ -371,7 +381,7 @@ module.exports = class CompaniesPage extends React.Component {
             <div className={this.style.pageMain}>
               {referralsList}
             </div>
-            <h4 className={this.style.pageHeadline}>Add another referral</h4>
+            <h4 className={this.style.pageHeadline}>Add <Plural zero='a' singular='another' count={get(this.props, 'referrals', []).length} /> referral</h4>
             <div className={this.style.pageMain}>
               {referralsAdder}
             </div>
@@ -380,7 +390,7 @@ module.exports = class CompaniesPage extends React.Component {
             <div className={this.style.pageMain}>
               {recommendationsList}
             </div>
-            <h4 className={this.style.pageHeadline}>Add another recommendation</h4>
+            <h4 className={this.style.pageHeadline}>Add <Plural zero='a' singular='another' count={get(this.props, 'recommendations', []).length} /> recommendation</h4>
             <div className={this.style.pageMain}>
               {recommendationsAdder}
             </div>
