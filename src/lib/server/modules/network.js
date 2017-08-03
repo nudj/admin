@@ -121,10 +121,22 @@ function fetchNetworkForJobAndPerson (data, hirerId, jobId, personId) {
   return promiseMap(data)
 }
 
+function fetchNetworksForPerson (data, personId) {
+  data.recommendations = request(`recommendations/filter?personId=${personId}&source=hirer`)
+  return promiseMap(data)
+}
+
 function fetchNetwork (data, hirerId, jobId) {
   data.network = request(`recommendations/filter?hirerId=${hirerId}`)
     .then(common.fetchPeopleFromFragments)
   return promiseMap(data)
+}
+
+function createNetwork (hirerId, jobId, personId) {
+  const type = 'external'
+  const data = {hirerId, jobId, personId, type}
+  const method = 'post'
+  return request('recommendations', { data, method })
 }
 
 module.exports.get = function (data, hirerId, jobId) {
@@ -135,6 +147,15 @@ module.exports.getById = function (data, hirerId, jobId, personId) {
   return fetchNetworkForJobAndPerson(data, hirerId, jobId, personId)
 }
 
+module.exports.getByPerson = function (data, personId) {
+  return fetchNetworksForPerson(data, personId)
+}
+
 module.exports.getAll = function (data, hirerId) {
   return fetchNetwork(data, hirerId)
+}
+
+module.exports.post = function (data, hirerId, jobId, personId) {
+  data.recommendation = createNetwork(hirerId, jobId, personId)
+  return promiseMap(data)
 }

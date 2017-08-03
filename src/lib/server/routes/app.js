@@ -3,9 +3,13 @@ const get = require('lodash/get')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 let getTime = require('date-fns/get_time')
 
+const { merge } = require('../../lib')
+
 const logger = require('../lib/logger')
 const companies = require('../modules/companies')
 const jobs = require('../modules/jobs')
+const hirers = require('../modules/hirers')
+const network = require('../modules/network')
 const people = require('../modules/people')
 const { promiseMap } = require('../lib')
 
@@ -190,9 +194,23 @@ function editCompanyHandler (req, res, next) {
     .then(data => jobs.getAll(data, data.company.id))
     // This isn't returning the company properly
     .then(data => companies.get(data, companySlug))
+    .then(hirerSmooshing)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
+}
+
+function hirerSmooshing (data) {
+  return people.getAll(data)
+    .then(data => hirers.getAllByCompany(data, data.company.id))
+    .then(data => {
+      const expandedHirers = data.hirers.map(hirer => {
+        const person = data.people.find(person => person.id === hirer.personId)
+        return merge({person}, hirer)
+      })
+      data.hirers = expandedHirers
+      return promiseMap(data)
+    })
 }
 
 function companyJobsHandler (req, res, next) {
@@ -202,6 +220,7 @@ function companyJobsHandler (req, res, next) {
     .get(clone(req.session.data), companySlug)
     .then(companies.getAll)
     .then(data => jobs.getAll(data, data.company.id))
+    .then(hirerSmooshing)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -226,9 +245,42 @@ function addCompanyJobHandler (req, res, next) {
     })
     .then(companies.getAll)
     .then(data => jobs.getAll(data, data.company.id))
+    .then(hirerSmooshing)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
+}
+
+function addCompanyHirer (req, res, next, data, companyId, personId) {
+  hirers.post(data, {companyId, personId})
+    .then(data => {
+      data.message = {
+        message: `New hirer added`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(companies.getAll)
+    .then(data => jobs.getAll(data, data.company.id))
+    .then(hirerSmooshing)
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function addCompanyHirerHandler (req, res, next) {
+  companies
+    .get(clone(req.session.data), req.params.companySlug)
+    .then(data => addCompanyHirer(req, res, next, data, data.company.id, req.params.personId))
+}
+
+function addPersonThenCompanyHirerHandler (req, res, next) {
+  const email = req.body.email
+
+  companies
+    .get(clone(req.session.data), req.params.companySlug)
+    .then(data => people.post(data, {email}))
+    .then(data => addCompanyHirer(req, res, next, data, data.company.id, data.newPerson.id))
 }
 
 function genericGetJob ({data, req, res, next}) {
@@ -274,6 +326,13 @@ function addPersonThenReferralHandler (req, res, next) {
     .get(clone(req.session.data), req.params.jobSlug)
     .then(data => people.post(data, {email}))
     .then(data => jobs.addReferral(data, data.job.id, data.newPerson.id))
+    .then(data => {
+      data.message = {
+        message: `${data.referral.id} saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
     .then(data => genericGetJob({data, req, res, next}))
 }
 
@@ -283,6 +342,13 @@ function addReferralHandler (req, res, next) {
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
     .then(data => jobs.addReferral(data, data.job.id, personId))
+    .then(data => {
+      data.message = {
+        message: `${data.referral.id} saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
     .then(data => genericGetJob({data, req, res, next}))
 }
 
@@ -310,13 +376,42 @@ function addPersonHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function personHandler (req, res, next) {
+function smooshJob (data, job) {
+  const relatedCompany = data.companies.find(company => company.id === job.companyId)
+  const relatedHirers = data.hirers.filter(hirer => hirer.companyId === job.companyId)
+  const hirers = relatedHirers.map(hirer => {
+    const person = data.people.find(person => person.id === hirer.personId)
+    return merge({ person }, hirer)
+  })
+  const company = merge({ hirers }, relatedCompany)
+  return merge({ company }, job)
+}
+
+function smooshJobs (data) {
+  data.expandedJobs = data.jobs.map(job => smooshJob(data, job))
+  return promiseMap(data)
+}
+
+function genericPersonHandler (req, res, next, data, personId) {
   people
-    .getAll(clone(req.session.data))
-    .then(data => people.get(data, req.params.personId))
+    .getAll(data)
+    .then(data => people.get(data, personId))
+    // Referrals associated with this person
+    .then(data => jobs.getAll(data))
+    .then(data => companies.getAll(data))
+    .then(data => hirers.getAll(data))
+    .then(data => promiseMap(data)) // Do I need this?
+    .then(data => smooshJobs(data))
+    .then(data => jobs.getReferralsForPerson(data, personId))
+    // Recommendations associated with this person
+    .then(data => network.getByPerson(data, personId))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
+}
+
+function personHandler (req, res, next) {
+  genericPersonHandler(req, res, next, clone(req.session.data), req.params.personId)
 }
 
 function editPersonHandler (req, res, next) {
@@ -327,29 +422,62 @@ function editPersonHandler (req, res, next) {
         message: `${data.savedPerson.firstName} ${data.savedPerson.lastName} saved`,
         type: 'success'
       }
-      console.log(data.savedPerson)
       data.person = data.savedPerson
       return promiseMap(data)
     })
-    .then(data => people.getAll(data))
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
+    .then(data => genericPersonHandler(req, res, next, clone(req.session.data), req.params.personId))
+}
+
+function addPersonReferralHandler (req, res, next) {
+  jobs
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => jobs.addReferral(data, data.job.id, req.params.personId))
+    .then(data => {
+      data.message = {
+        message: `${data.referral.id} saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(data => genericPersonHandler(req, res, next, data, req.params.personId))
+}
+
+function addPersonRecommendationHandler (req, res, next) {
+  const hirerId = req.body.hirerId
+  jobs
+    .get(clone(req.session.data), req.params.jobSlug)
+    .then(data => network.post(data, hirerId, data.job.id, req.params.personId))
+    .then(data => {
+      data.message = {
+        message: `${data.recommendation.id} saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(data => genericPersonHandler(req, res, next, data, req.params.personId))
 }
 
 router.get('/', ensureLoggedIn, companiesHandler)
 router.post('/', ensureLoggedIn, addCompanyHandler)
+
 router.put('/:companySlug', ensureLoggedIn, editCompanyHandler)
 router.get('/:companySlug/jobs', ensureLoggedIn, companyJobsHandler)
 router.post('/:companySlug/jobs', ensureLoggedIn, addCompanyJobHandler)
+router.post('/:companySlug/hirers', ensureLoggedIn, addPersonThenCompanyHirerHandler)
+router.post('/:companySlug/hirers/:personId', ensureLoggedIn, addCompanyHirerHandler)
+
 router.get('/:companySlug/jobs/:jobSlug', ensureLoggedIn, jobHandler)
 router.put('/:companySlug/jobs/:jobSlug', ensureLoggedIn, editJobHandler)
 router.post('/:companySlug/jobs/:jobSlug/referrals', ensureLoggedIn, addPersonThenReferralHandler)
 router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', ensureLoggedIn, addReferralHandler)
+
 router.get('/people', ensureLoggedIn, peopleHandler)
 router.post('/people', ensureLoggedIn, addPersonHandler)
+
 router.get('/people/:personId', ensureLoggedIn, personHandler)
 router.put('/people/:personId', ensureLoggedIn, editPersonHandler)
+router.post('/people/:personId/referrals/:jobSlug', ensureLoggedIn, addPersonReferralHandler)
+router.post('/people/:personId/recommendations/:jobSlug', ensureLoggedIn, addPersonRecommendationHandler)
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

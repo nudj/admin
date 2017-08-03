@@ -22,10 +22,8 @@ let dummyData = dummy({
     schema: schemas.applications,
     count: 2
   },
-  hirers: {
-    schema: schemas.hirers,
-    count: 1
-  }
+  hirers: {},
+  recommendations: {}
 })
 dummyData.jobs = dummyData.jobs.concat([
   {
@@ -100,6 +98,38 @@ dummyData.people = dummyData.people.concat([
     type: 'external',
     company: 'nudj',
     status: 'user'
+  }
+])
+dummyData.hirers = dummyData.hirers.concat([
+  {
+    id: '1',
+    companyId: '1',
+    personId: '21',
+    created: '2017-07-31T14:59:50.150+00:00',
+    modified: '2017-07-31T14:59:50.150+00:00'
+  },
+  {
+    id: '2',
+    companyId: '1',
+    personId: '22',
+    created: '2017-07-31T14:59:50.150+00:00',
+    modified: '2017-07-31T14:59:50.150+00:00'
+  },
+  {
+    id: '3',
+    companyId: '1',
+    personId: '23',
+    created: '2017-07-31T14:59:50.150+00:00',
+    modified: '2017-07-31T14:59:50.150+00:00'
+  }
+])
+dummyData.referrals = dummyData.referrals.concat([
+  {
+    id: 'BALLS',
+    jobId: '38',
+    personId: '24',
+    created: '2017-07-31T14:59:50.150+00:00',
+    modified: '2017-07-31T14:59:50.150+00:00'
   }
 ])
 
