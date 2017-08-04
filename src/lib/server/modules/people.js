@@ -10,6 +10,12 @@ function fetchPerson (personId) {
     .then(results => results.pop())
 }
 
+function fetchPersonByEmail (email) {
+  const encodedEmail = encodeURIComponent(email)
+  return request(`people/filter?email=${encodedEmail}`)
+    .then(results => results.pop())
+}
+
 function savePerson (data) {
   const method = 'post'
   return request('people', { data, method })
@@ -27,6 +33,11 @@ module.exports.getAll = function (data) {
 
 module.exports.get = function (data, personId) {
   data.person = fetchPerson(personId)
+  return promiseMap(data)
+}
+
+module.exports.getByEmail = function (data, email) {
+  data.person = fetchPersonByEmail(email)
   return promiseMap(data)
 }
 
