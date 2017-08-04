@@ -61,7 +61,7 @@ dummyData.people = dummyData.people.concat([
     lastName: 'Collings',
     email: 'nick@nudj.co',
     url: 'http://test.com/',
-    title: 'Tech Lead',
+    title: 'CTO',
     type: 'external',
     company: 'nudj',
     status: 'user'
@@ -95,6 +95,17 @@ dummyData.people = dummyData.people.concat([
     email: 'matt@nudj.co',
     url: 'http://test.com/',
     title: 'Design Wizard',
+    type: 'external',
+    company: 'nudj',
+    status: 'user'
+  },
+  {
+    id: '25',
+    firstName: 'Wayne',
+    lastName: 'Durack',
+    email: 'wayne@nudj.co',
+    url: 'http://www.boobsforqueens.com/',
+    title: 'Developer',
     type: 'external',
     company: 'nudj',
     status: 'user'
