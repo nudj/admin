@@ -48,7 +48,7 @@ module.exports = class CompaniesPage extends React.Component {
 
   findRelatedReferral (referralId) {
     const referrals = get(this.props, 'referrals', [])
-    return referrals.find(referral => referral.referralId === referralId)
+    return referrals.find(referral => referral.parent === referralId)
   }
 
   findRelatedJob (jobId) {
@@ -81,11 +81,11 @@ module.exports = class CompaniesPage extends React.Component {
 
     return (<div>
       {referrals.map(referral => {
-        const referralId = get(referral, 'referralId', '')
-        const relatedReferral = this.findRelatedReferral(referralId)
+        const parent = get(referral, 'parent', '')
+        const relatedReferral = this.findRelatedReferral(parent)
 
-        const jobId = get(referral, 'jobId')
-        const relatedJob = this.findRelatedJob(jobId)
+        const job = get(referral, 'job')
+        const relatedJob = this.findRelatedJob(job)
 
         const {link, slug} = this.generateReferralLink(referral, relatedJob)
 
@@ -142,8 +142,8 @@ module.exports = class CompaniesPage extends React.Component {
 
     return (<div>
       {recommendations.map(recommendation => {
-        const jobId = get(recommendation, 'jobId')
-        const relatedJob = this.findRelatedJob(jobId)
+        const job = get(recommendation, 'job')
+        const relatedJob = this.findRelatedJob(job)
 
         const companyName = get(relatedJob, 'company.name', '')
         const companySlug = get(relatedJob, 'company.slug', '')
@@ -153,9 +153,9 @@ module.exports = class CompaniesPage extends React.Component {
 
         const jobLink = `/${companySlug}/jobs/${jobSlug}`
 
-        const hirerId = get(recommendation, 'hirerId')
+        const hirerId = get(recommendation, 'hirer')
         const hirer = get(this.props, 'hirers', []).find(hirer => hirer.id === hirerId)
-        const person = get(this.props, 'people', []).find(person => person.id === hirer.personId)
+        const person = get(this.props, 'people', []).find(person => person.id === hirer.person)
         const hirerName = `${get(person, 'firstName')} ${get(person, 'lastName')}`
 
         const minutes = differenceInMinutes(rightNow, get(recommendation, 'created'))
@@ -221,7 +221,7 @@ module.exports = class CompaniesPage extends React.Component {
     const url = `/people/${personId}/recommendations/${jobSlug}`
     const method = 'post'
     const data = {
-      hirerId: recommendationHirerId
+      hirer: recommendationHirerId
     }
 
     this.setState({
@@ -238,7 +238,7 @@ module.exports = class CompaniesPage extends React.Component {
       return { button, info }
     }
 
-    const referral = get(this.props, 'referrals', []).find(referral => referral.jobId === referralJobId)
+    const referral = get(this.props, 'referrals', []).find(referral => referral.job === referralJobId)
     const existingJob = get(this.props, 'expandedJobs', []).find(job => job.id === referralJobId)
 
     // Does this person already have a referral for this job?
@@ -263,7 +263,7 @@ module.exports = class CompaniesPage extends React.Component {
     }
 
     const recommendation = get(this.props, 'recommendations', []).find(recommendation => {
-      return recommendation.jobId === recommendationJobId && recommendation.hirerId === recommendationHirerId
+      return recommendation.job === recommendationJobId && recommendation.hirer === recommendationHirerId
     })
     const existingJob = get(this.props, 'expandedJobs', []).find(job => job.id === recommendationJobId)
 

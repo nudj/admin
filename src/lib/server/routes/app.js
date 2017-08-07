@@ -20,15 +20,15 @@ const clone = (obj) => Object.assign({}, obj)
 
 function spoofLoggedIn (req, res, next) {
   req.session.data = {
+    hirer: {
+      id: 'hirer1',
+      company: 'company1',
+      person: 'person5'
+    },
     person: {
-      id: '21',
+      id: 'person5',
       firstName: 'David',
       lastName: 'Platt'
-    },
-    company: {
-      id: '1',
-      name: 'Johns PLC',
-      slug: 'johns-plc'
     }
   }
   return next()
@@ -191,9 +191,9 @@ function editCompanyHandler (req, res, next) {
       return promiseMap(data)
     })
     .then(companies.getAll)
-    .then(data => jobs.getAll(data, data.company.id))
     // This isn't returning the company properly
     .then(data => companies.get(data, companySlug))
+    .then(data => jobs.getAll(data, data.company.id))
     .then(hirerSmooshing)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
@@ -205,8 +205,8 @@ function hirerSmooshing (data) {
     .then(data => hirers.getAllByCompany(data, data.company.id))
     .then(data => {
       const expandedHirers = data.hirers.map(hirer => {
-        const person = data.people.find(person => person.id === hirer.personId)
-        return merge({person}, hirer)
+        const person = data.people.find(person => person.id === hirer.person)
+        return merge({}, hirer, {person})
       })
       data.hirers = expandedHirers
       return promiseMap(data)
@@ -218,8 +218,8 @@ function companyJobsHandler (req, res, next) {
 
   companies
     .get(clone(req.session.data), companySlug)
-    .then(companies.getAll)
     .then(data => jobs.getAll(data, data.company.id))
+    .then(companies.getAll)
     .then(hirerSmooshing)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
@@ -233,7 +233,7 @@ function addCompanyJobHandler (req, res, next) {
   companies
     .get(clone(req.session.data), companySlug)
     .then(data => {
-      job.companyId = data.company.id
+      job.company = data.company.id
       return jobs.post(data, job)
     })
     .then(data => {
@@ -251,8 +251,8 @@ function addCompanyJobHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function addCompanyHirer (req, res, next, data, companyId, personId) {
-  hirers.post(data, {companyId, personId})
+function addCompanyHirer (req, res, next, data, company, person) {
+  hirers.post(data, {company, person})
     .then(data => {
       data.message = {
         message: `New hirer added`,
@@ -271,7 +271,7 @@ function addCompanyHirer (req, res, next, data, companyId, personId) {
 function addCompanyHirerHandler (req, res, next) {
   companies
     .get(clone(req.session.data), req.params.companySlug)
-    .then(data => addCompanyHirer(req, res, next, data, data.company.id, req.params.personId))
+    .then(data => addCompanyHirer(req, res, next, data, data.company.id, req.params.person))
 }
 
 function addPersonThenCompanyHirerHandler (req, res, next) {
@@ -283,9 +283,10 @@ function addPersonThenCompanyHirerHandler (req, res, next) {
     .then(data => addCompanyHirer(req, res, next, data, data.company.id, data.newPerson.id))
 }
 
-function genericGetJob ({data, req, res, next}) {
+function genericGetJob ({data, req, res, next, companySlug}) {
   jobs.getReferrals(data, data.job.id)
     .then(data => jobs.getApplications(data, data.job.id))
+    .then(data => companies.get(data, companySlug))
     .then(data => people.getAll(data))
     .then(data => {
       data.activities = jobs.getJobActivities(data, data.job.id)
@@ -297,14 +298,16 @@ function genericGetJob ({data, req, res, next}) {
 }
 
 function jobHandler (req, res, next) {
+  const companySlug = req.params.companySlug
   // Do we have an issue here with job-slug uniqueness across companies?
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
     .then(jobs.getAll)
-    .then(data => genericGetJob({data, req, res, next}))
+    .then(data => genericGetJob({data, req, res, next, companySlug}))
 }
 
 function editJobHandler (req, res, next) {
+  const companySlug = req.params.companySlug
   jobs
     .put(clone(req.session.data), req.body)
     .then(jobs.getAll)
@@ -316,11 +319,12 @@ function editJobHandler (req, res, next) {
       }
       return promiseMap(data)
     })
-    .then(data => genericGetJob({data, req, res, next}))
+    .then(data => genericGetJob({data, req, res, next, companySlug}))
 }
 
 function addPersonThenReferralHandler (req, res, next) {
   const email = req.body.email
+  const companySlug = req.params.companySlug
 
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
@@ -333,15 +337,16 @@ function addPersonThenReferralHandler (req, res, next) {
       }
       return promiseMap(data)
     })
-    .then(data => genericGetJob({data, req, res, next}))
+    .then(data => genericGetJob({data, req, res, next, companySlug}))
 }
 
 function addReferralHandler (req, res, next) {
-  const personId = req.params.personId
+  const person = req.params.personId
+  const companySlug = req.params.companySlug
 
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
-    .then(data => jobs.addReferral(data, data.job.id, personId))
+    .then(data => jobs.addReferral(data, data.job.id, person))
     .then(data => {
       data.message = {
         message: `${data.referral.id} saved`,
@@ -349,7 +354,7 @@ function addReferralHandler (req, res, next) {
       }
       return promiseMap(data)
     })
-    .then(data => genericGetJob({data, req, res, next}))
+    .then(data => genericGetJob({data, req, res, next, companySlug}))
 }
 
 function peopleHandler (req, res, next) {
@@ -377,14 +382,14 @@ function addPersonHandler (req, res, next) {
 }
 
 function smooshJob (data, job) {
-  const relatedCompany = data.companies.find(company => company.id === job.companyId)
-  const relatedHirers = data.hirers.filter(hirer => hirer.companyId === job.companyId)
+  const relatedCompany = data.companies.find(company => company.id === job.company)
+  const relatedHirers = data.hirers.filter(hirer => hirer.company === job.company)
   const hirers = relatedHirers.map(hirer => {
-    const person = data.people.find(person => person.id === hirer.personId)
-    return merge({ person }, hirer)
+    const person = data.people.find(person => person.id === hirer.person)
+    return merge({}, hirer, { person })
   })
-  const company = merge({ hirers }, relatedCompany)
-  return merge({ company }, job)
+  const company = merge({}, relatedCompany, { hirers })
+  return merge({}, job, { company })
 }
 
 function smooshJobs (data) {
@@ -392,19 +397,19 @@ function smooshJobs (data) {
   return promiseMap(data)
 }
 
-function genericPersonHandler (req, res, next, data, personId) {
+function genericPersonHandler (req, res, next, data, person) {
   people
     .getAll(data)
-    .then(data => people.get(data, personId))
+    .then(data => people.get(data, person))
     // Referrals associated with this person
     .then(data => jobs.getAll(data))
     .then(data => companies.getAll(data))
     .then(data => hirers.getAll(data))
     .then(data => promiseMap(data)) // Do I need this?
     .then(data => smooshJobs(data))
-    .then(data => jobs.getReferralsForPerson(data, personId))
+    .then(data => jobs.getReferralsForPerson(data, person))
     // Recommendations associated with this person
-    .then(data => network.getByPerson(data, personId))
+    .then(data => network.getByPerson(data, person))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -443,10 +448,10 @@ function addPersonReferralHandler (req, res, next) {
 }
 
 function addPersonRecommendationHandler (req, res, next) {
-  const hirerId = req.body.hirerId
+  const hirer = req.body.hirer
   jobs
     .get(clone(req.session.data), req.params.jobSlug)
-    .then(data => network.post(data, hirerId, data.job.id, req.params.personId))
+    .then(data => network.post(data, hirer, data.job.id, req.params.personId))
     .then(data => {
       data.message = {
         message: `${data.recommendation.id} saved`,
@@ -464,7 +469,7 @@ router.put('/:companySlug', ensureLoggedIn, editCompanyHandler)
 router.get('/:companySlug/jobs', ensureLoggedIn, companyJobsHandler)
 router.post('/:companySlug/jobs', ensureLoggedIn, addCompanyJobHandler)
 router.post('/:companySlug/hirers', ensureLoggedIn, addPersonThenCompanyHirerHandler)
-router.post('/:companySlug/hirers/:personId', ensureLoggedIn, addCompanyHirerHandler)
+router.post('/:companySlug/hirers/:person', ensureLoggedIn, addCompanyHirerHandler)
 
 router.get('/:companySlug/jobs/:jobSlug', ensureLoggedIn, jobHandler)
 router.put('/:companySlug/jobs/:jobSlug', ensureLoggedIn, editJobHandler)

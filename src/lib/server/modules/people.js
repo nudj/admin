@@ -5,8 +5,8 @@ function fetchPeople () {
   return request(`people`)
 }
 
-function fetchPerson (personId) {
-  return request(`people/filter?id=${personId}`)
+function fetchPerson (person) {
+  return request(`people/filter?id=${person}`)
     .then(results => results.pop())
 }
 
@@ -31,8 +31,8 @@ module.exports.getAll = function (data) {
   return promiseMap(data)
 }
 
-module.exports.get = function (data, personId) {
-  data.person = fetchPerson(personId)
+module.exports.get = function (data, person) {
+  data.person = fetchPerson(person)
   return promiseMap(data)
 }
 

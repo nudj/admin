@@ -150,7 +150,7 @@ module.exports = class JobsPage extends React.Component {
         const referralId = get(referral, 'referralId')
         const relatedReferral = this.findRelatedReferral(referralId)
         const referralLink = this.generateReferralLink(referral)
-        const personLink = `/people/${referral.personId}`
+        const personLink = `/people/${referral.person}`
 
         const minutes = differenceInMinutes(rightNow, get(referral, 'created'))
         const rowClass = minutes < 10 ? 'rowHighlight' : 'row'
@@ -278,7 +278,7 @@ module.exports = class JobsPage extends React.Component {
   renderJobActivitiyGroup () {
     const jobStatus = get(this.props, 'job.status')
 
-    if (jobStatus !== 'Published') {
+    if (jobStatus !== 'PUBLISHED') {
       return (<span />)
     }
 
@@ -306,8 +306,10 @@ module.exports = class JobsPage extends React.Component {
       return { id, value }
     })
 
-    const companyName = get(this.props, 'company.name')
-    const companySlug = get(this.props, 'company.slug')
+    const company = get(this.props, 'company')
+
+    const companyName = get(company, 'name')
+    const companySlug = get(company, 'slug')
     const jobTitle = get(this.props, 'job.title')
 
     const { button, info } = this.renderUserActions(referralValue)
