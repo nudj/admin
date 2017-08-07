@@ -186,7 +186,7 @@ module.exports = class JobsPage extends React.Component {
 
     const person = this.getPersonFromEmail(value)
     const personId = get(person, 'id')
-    const hirer = hirers.find(hirer => hirer.personId === personId)
+    const hirer = hirers.find(hirer => hirer.person === personId)
 
     // if so is it already in the referrals?
     if (hirer) {
@@ -207,12 +207,13 @@ module.exports = class JobsPage extends React.Component {
     const hirers = get(this.props, 'hirers', [])
 
     const hirersList = hirers.map(hirer => {
-      const personId = get(hirer, 'personId')
+      const id = get(hirer, 'id')
       const person = get(hirer, 'person')
+      const personId = get(person, 'id')
       const personTitle = `${get(person, 'firstName')} ${get(person, 'lastName')} (${get(person, 'email')})`
 
       return (<RowItem
-        rowKey={personId}
+        rowKey={id}
         rowClass='rowSmall'
         title={personTitle}
         details={[]}
@@ -254,7 +255,7 @@ module.exports = class JobsPage extends React.Component {
       onSubmit={this.onSubmitJob.bind(this)}
       submitLabel='Add job' />)
 
-    const publishedJobs = jobs.filter(job => job.status === 'Published')
+    const publishedJobs = jobs.filter(job => job.status === 'PUBLISHED')
 
     return (
       <div className={this.style.pageBody}>

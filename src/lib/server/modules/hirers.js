@@ -6,23 +6,23 @@ function fetchHirers () {
     .then(results => results || [])
 }
 
-function fetchHirer (hirerId) {
-  return request(`hirers/filter?id=${hirerId}`)
+function fetchHirer (hirer) {
+  return request(`hirers/filter?id=${hirer}`)
     .then(results => results.pop())
 }
 
-function fetchHirersByCompany (companyId) {
-  return request(`hirers/filter?companyId=${companyId}`)
+function fetchHirersByCompany (company) {
+  return request(`hirers/filter?company=${company}`)
     .then(results => results || [])
 }
 
-function fetchHirersByCompanyAndPerson (companyId, personId) {
-  return request(`hirers/filter?companyId=${companyId}&personId=${personId}`)
+function fetchHirersByCompanyAndPerson (company, person) {
+  return request(`hirers/filter?company=${company}&person=${person}`)
     .then(results => results || [])
 }
 
-function fetchHirersByPerson (companyId) {
-  return request(`hirers/filter?id=${companyId}`)
+function fetchHirersByPerson (company) {
+  return request(`hirers/filter?id=${company}`)
     .then(results => results || [])
 }
 
@@ -36,23 +36,23 @@ module.exports.getAll = function (data) {
   return promiseMap(data)
 }
 
-module.exports.getAllByCompany = function (data, companyId) {
-  data.hirers = fetchHirersByCompany(companyId)
+module.exports.getAllByCompany = function (data, company) {
+  data.hirers = fetchHirersByCompany(company)
   return promiseMap(data)
 }
 
-module.exports.getAllByCompanyAndPerson = function (data, companyId, personId) {
-  data.hirers = fetchHirersByCompanyAndPerson(companyId, personId)
+module.exports.getAllByCompanyAndPerson = function (data, company, person) {
+  data.hirers = fetchHirersByCompanyAndPerson(company, person)
   return promiseMap(data)
 }
 
-module.exports.getAllByPerson = function (data, personId) {
-  data.hirers = fetchHirersByPerson(personId)
+module.exports.getAllByPerson = function (data, person) {
+  data.hirers = fetchHirersByPerson(person)
   return promiseMap(data)
 }
 
-module.exports.get = function (data, hirerId) {
-  data.hirer = fetchHirer(hirerId)
+module.exports.get = function (data, hirer) {
+  data.hirer = fetchHirer(hirer)
   return promiseMap(data)
 }
 

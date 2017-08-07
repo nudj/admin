@@ -38,10 +38,10 @@ module.exports = class CompaniesPage extends React.Component {
       title: '',
       slug: '',
       url: '',
-      status: 'Draft', // 'Published', 'Archived'
+      status: 'DRAFT', // 'Published', 'Archived'
       bonus: 0,
       description: '',
-      type: 'Permanent', // 'Contract', 'Freelance'
+      type: 'PERMANENT', // 'Contract', 'Freelance'
       remuneration: '',
       tags: [],
       location: '',
@@ -203,8 +203,8 @@ module.exports = class CompaniesPage extends React.Component {
       submitButton = (<button className={this.style.submitButton} disabled>{submitLabel}</button>)
     }
 
-    const statuses = ['Draft', 'Published', 'Archived']
-    const types = ['Permanent', 'Contract', 'Freelance']
+    const statuses = ['DRAFT', 'PUBLISHED', 'ARCHIVED']
+    const types = ['PERMANENT', 'CONTRACT', 'FREELANCE']
 
     return (<form className={this.style.pageMain} onSubmit={this.onSubmit.bind(this)} ref='jobForm'>
       <div className={this.style.formCard}>
