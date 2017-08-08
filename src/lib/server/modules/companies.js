@@ -27,7 +27,7 @@ function fetchCompany (data, companySlug) {
 }
 
 function fetchCompanies (data) {
-  data.companies = request(`companies/`)
+  data.companies = request(`companies`)
     .then(results => results.sort(common.sortByCreated))
   return promiseMap(data)
 }
