@@ -18,7 +18,7 @@ function createJob (data, job) {
 function editJob (data, job) {
   data.savedJob = request(`jobs/${job.id}`, {
     data: job,
-    method: 'put'
+    method: 'patch'
   })
 
   return promiseMap(data)
