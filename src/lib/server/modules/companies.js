@@ -14,7 +14,7 @@ function createCompany (data, company) {
 function editCompany (data, company) {
   data.savedCompany = request(`companies/${company.id}`, {
     data: company,
-    method: 'put'
+    method: 'patch'
   })
 
   return promiseMap(data)

@@ -22,7 +22,7 @@ function savePerson (data) {
 }
 
 function editPerson (data) {
-  const method = 'put'
+  const method = 'patch'
   return request(`people/${data.id}`, { data, method })
 }
 
