@@ -5,8 +5,14 @@ function fetchPeople () {
   return request(`people`)
 }
 
-function fetchPerson (personId) {
-  return request(`people/filter?id=${personId}`)
+function fetchPerson (person) {
+  return request(`people/filter?id=${person}`)
+    .then(results => results.pop())
+}
+
+function fetchPersonByEmail (email) {
+  const encodedEmail = encodeURIComponent(email)
+  return request(`people/filter?email=${encodedEmail}`)
     .then(results => results.pop())
 }
 
@@ -16,7 +22,7 @@ function savePerson (data) {
 }
 
 function editPerson (data) {
-  const method = 'put'
+  const method = 'patch'
   return request(`people/${data.id}`, { data, method })
 }
 
@@ -25,8 +31,13 @@ module.exports.getAll = function (data) {
   return promiseMap(data)
 }
 
-module.exports.get = function (data, personId) {
-  data.person = fetchPerson(personId)
+module.exports.get = function (data, person) {
+  data.person = fetchPerson(person)
+  return promiseMap(data)
+}
+
+module.exports.getByEmail = function (data, email) {
+  data.person = fetchPersonByEmail(email)
   return promiseMap(data)
 }
 

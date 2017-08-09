@@ -1,8 +1,8 @@
-let express = require('express')
-let passport = require('passport')
-let request = require('../../lib/request')
-let logger = require('../lib/logger')
-let { promiseMap } = require('../lib')
+const express = require('express')
+const passport = require('passport')
+const logger = require('../lib/logger')
+const { promiseMap } = require('../lib')
+const people = require('../modules/people')
 
 function cacheReturnTo (req, res, next) {
   if (!req.session.returnTo) {
@@ -12,44 +12,13 @@ function cacheReturnTo (req, res, next) {
 }
 
 function fetchPerson (email) {
-  let person = request(`people/first?email=${encodeURIComponent(email)}`)
-  .then((person) => {
-    if (!person) {
-      person = request(`people`, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email
-        })
-      })
-    }
-    if (person.error) throw new Error('Unable to fetch person')
-    return person
-  })
-  .then((person) => {
-    if (person.error) throw new Error('Unable to create new person')
-    return person
-  })
+  const data = {}
+  people.getByEmail(data, email)
+    .then(data => {
+      if (data.person.error) throw new Error('Unable to fetch person')
+      return data
+    })
 
-  return promiseMap({
-    person
-  })
-}
-
-function fetchCompany (data) {
-  data.company = request(`hirers/first?personId=${data.person.id}`)
-  .then((hirer) => {
-    if (!hirer) throw new Error('Not a registered hirer')
-    if (hirer.error) throw new Error('Error fetching hirer')
-    return request(`companies/${hirer.companyId}`)
-  })
-  .then((company) => {
-    if (!company) throw new Error('Company not found')
-    if (company.error) throw new Error('Error fetching company')
-    return company
-  })
   return promiseMap(data)
 }
 
@@ -79,15 +48,14 @@ router.get('/callback',
     }
 
     fetchPerson(req.user._json.email)
-    .then(fetchCompany)
-    .then((data) => {
-      req.session.data = data
-      res.redirect(req.session.returnTo || '/')
-    })
-    .catch((error) => {
-      logger.log('error', error)
-      next('Unable to login')
-    })
+      .then((data) => {
+        req.session.data = data
+        res.redirect(req.session.returnTo || '/')
+      })
+      .catch((error) => {
+        logger.log('error', error)
+        next('Unable to login')
+      })
   }
 )
 

@@ -14,7 +14,7 @@ function createCompany (data, company) {
 function editCompany (data, company) {
   data.savedCompany = request(`companies/${company.id}`, {
     data: company,
-    method: 'put'
+    method: 'patch'
   })
 
   return promiseMap(data)
@@ -27,7 +27,7 @@ function fetchCompany (data, companySlug) {
 }
 
 function fetchCompanies (data) {
-  data.companies = request(`companies/`)
+  data.companies = request(`companies`)
     .then(results => results.sort(common.sortByCreated))
   return promiseMap(data)
 }

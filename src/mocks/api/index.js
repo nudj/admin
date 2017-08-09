@@ -50,6 +50,14 @@ class MockApi {
     }
   }
 
+  noPuts ({req, res, next}) {
+    res.json({
+      error: true,
+      code: 405,
+      errorMessage: 'no PUTs please, use PATCH'
+    })
+  }
+
   listen (port, callback) {
     if (!this.serverUp) {
       this.start()
@@ -83,6 +91,8 @@ class MockApi {
     this.server.get('/:type/first', (req, res, next) => this.getFirstOfType({req, res, next}))
 
     this.server.get('/restart-mock-api', (req, res, next) => this.restartHandler({req, res, next}))
+
+    this.server.put('/*', (req, res, next) => this.noPuts({req, res, next}))
 
     this.server.use(jsonServer.bodyParser)
     this.server.use((req, res, next) => this.injectDate({req, res, next}))
