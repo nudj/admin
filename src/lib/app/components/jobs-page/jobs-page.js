@@ -173,6 +173,49 @@ module.exports = class JobsPage extends React.Component {
     </ul>)
   }
 
+  renderSurveyEmailsList () {
+    const emails = get(this.props, 'surveyMessages', [])
+    const companySlug = get(this.props, 'company.slug')
+
+    const emailsList = emails.map((email) => {
+      const id = get(email, 'id')
+      const hirer = get(email, 'hirer')
+      const subject = get(email, 'subject')
+      const body = get(email, 'body')
+      const sendDate = format(get(email, 'created'), 'DD.MM.YYYY')
+      const recipient = get(email, 'recipient')
+      const recipientList = recipient.join(', ')
+      const amountSent = recipient.length
+
+      return (
+        <RowItem
+          key={id}
+          title={hirer}
+          details={[{
+            term: 'Date',
+            description: sendDate
+          }, {
+            term: 'Subject',
+            description: subject
+          }, {
+            term: 'Sent To',
+            description: recipientList
+          }, {
+            term: 'No. Sent',
+            description: amountSent
+          }]}
+          actions={[
+            <Link className={this.style.nudj} to={`/${companySlug}/jobs`}>View email</Link>
+          ]}
+        />
+      )
+    })
+
+    return (<ul className={this.style.jobs}>
+      {emailsList}
+    </ul>)
+  }
+
   renderHirerActions (value) {
     const hirers = get(this.props, 'hirers', [])
 
@@ -248,6 +291,7 @@ module.exports = class JobsPage extends React.Component {
     const addHirerForm = this.addHirerForm()
 
     const jobsList = this.renderJobsList()
+    const surveyEmailsList = this.renderSurveyEmailsList()
 
     const addJobForm = (<JobForm
       jobs={jobs}
@@ -298,6 +342,13 @@ module.exports = class JobsPage extends React.Component {
         <h4 className={this.style.pageHeadline}>Add <Plural zero='a' singular='another' count={jobs.length} /> job</h4>
         <div className={this.style.pageContent}>
           {addJobForm}
+          <div className={this.style.pageSidebar} />
+        </div>
+        <h4 className={this.style.pageHeadline}>Survey Emails</h4>
+        <div className={this.style.pageContent}>
+          <div className={this.style.pageMain}>
+            {surveyEmailsList}
+          </div>
           <div className={this.style.pageSidebar} />
         </div>
       </div>
