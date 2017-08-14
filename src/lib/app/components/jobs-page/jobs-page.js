@@ -175,21 +175,19 @@ module.exports = class JobsPage extends React.Component {
 
   renderSurveyEmailsList () {
     const emails = get(this.props, 'surveyMessages', [])
-    const companySlug = get(this.props, 'company.slug')
 
     const emailsList = emails.map((email) => {
       const id = get(email, 'id')
       const hirer = get(email, 'hirer')
       const subject = get(email, 'subject')
-      const body = get(email, 'body')
-      const sendDate = format(get(email, 'created'), 'DD.MM.YYYY')
+      const sendDate = format(get(email, 'created'), 'DD.MM.YYYY - HH:mm')
       const recipient = get(email, 'recipient')
       const recipientList = recipient.join(', ')
       const amountSent = recipient.length
 
       return (
         <RowItem
-          key={id}
+          rowKey={id}
           title={hirer}
           details={[{
             term: 'Date',
@@ -205,7 +203,7 @@ module.exports = class JobsPage extends React.Component {
             description: amountSent
           }]}
           actions={[
-            <Link className={this.style.nudj} to={`/${companySlug}/jobs`}>View email</Link>
+            <Link className={this.style.nudj} to={`/message/${id}/`}>View email</Link>
           ]}
         />
       )

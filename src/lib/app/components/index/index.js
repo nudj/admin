@@ -7,6 +7,7 @@ const Message = require('../message/message')
 const Notification = require('../notification/notification')
 const CompaniesPage = require('../companies-page/companies-page')
 const JobsPage = require('../jobs-page/jobs-page')
+const SurveyEmailsPage = require('../survey-emails-page/survey-emails-page')
 const JobPage = require('../job-page/job-page')
 const PeoplePage = require('../people-page/people-page')
 const PersonPage = require('../person-page/person-page')
@@ -51,6 +52,7 @@ const Index = () => {
           <Route exact path='/:companySlug/jobs/:jobSlug' component={PageWithState(JobPage)} />
           <Route exact path='/people' component={PageWithState(PeoplePage)} />
           <Route exact path='/people/:personId' component={PageWithState(PersonPage)} />
+          <Route exact path='/message/:surveyMessageId' component={PageWithState(SurveyEmailsPage)} />
           <Route render={PageWithState((props) => <Status code={404}><PageNotFound {...props} /></Status>)} />
         </Switch>
       </div>
