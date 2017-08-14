@@ -424,7 +424,7 @@ function personHandler (req, res, next) {
 function surveyMessageHandler (req, res, next) {
   const companySlug = req.params.companySlug
   const surveyMessageId = req.params.surveyMessageId
-console.log('surveyMessageId', surveyMessageId)
+
   companies
     .get(clone(req.session.data), companySlug)
     .then(data => messages.getOneById(data, surveyMessageId))
@@ -484,23 +484,21 @@ router.post('/', addCompanyHandler)
 router.get('/:companySlug', companyHandler)
 router.put('/:companySlug', editCompanyHandler)
 router.post('/:companySlug/jobs', addCompanyJobHandler)
-router.post('/:companySlug/hirers', addPersonThenCompanyHirerHandler)
-router.post('/:companySlug/hirers/:person', addCompanyHirerHandler)
-router.get('/:companySlug/messages/:surveyMessageId', surveyMessageHandler)
-
 router.get('/:companySlug/jobs/:jobSlug', jobHandler)
 router.put('/:companySlug/jobs/:jobSlug', editJobHandler)
 router.post('/:companySlug/jobs/:jobSlug/referrals', addPersonThenReferralHandler)
 router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', addReferralHandler)
+router.post('/:companySlug/hirers', addPersonThenCompanyHirerHandler)
+router.post('/:companySlug/hirers/:person', addCompanyHirerHandler)
+router.get('/:companySlug/messages/:surveyMessageId', surveyMessageHandler)
 
 router.get('/people', peopleHandler)
 router.post('/people', addPersonHandler)
-
-
 router.get('/people/:personId', personHandler)
 router.put('/people/:personId', editPersonHandler)
 router.post('/people/:personId/referrals/:jobSlug', addPersonReferralHandler)
 router.post('/people/:personId/recommendations/:jobSlug', addPersonRecommendationHandler)
+
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

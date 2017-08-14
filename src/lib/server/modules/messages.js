@@ -2,11 +2,6 @@ const request = require('../../lib/request')
 const { promiseMap } = require('../lib')
 const flatten = require('lodash/flatten')
 
-function fetchSurveyMessage (surveyMessageId) {
-  return request(`surveyMessages?id=${surveyMessageId}`)
-    .then(results => results.pop())
-}
-
 module.exports.getAllFor = function getAllFor (data, companyId) {
   data.surveyMessages = request(`hirers?company=${companyId}`)
     .then(hirers => {
