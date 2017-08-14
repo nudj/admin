@@ -23,9 +23,8 @@
     ]
   },
   "dependencies": {
-    "@nudj/dummy": "0.6.0",
+    "@nudj/components": "0.1.2",
     "@nudj/react-router-redux": "0.1.1--5.0.0-alpha.6",
-    "@nudj/schemas": "0.11.1",
     "aphrodite": "^1.2.0",
     "axios": "^0.16.1",
     "babel-preset-env": "^1.1.10",

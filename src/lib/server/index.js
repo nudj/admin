@@ -1,5 +1,11 @@
 require('babel-register')({
-  presets: ['react']
+  presets: ['react'],
+  ignore: function (filename) {
+    if (filename.match(/@nudj/) || filename.match(/lib\/app/)) {
+      return false
+    }
+    return true
+  }
 })
 let logger = require('./lib/logger')
 let path = require('path')

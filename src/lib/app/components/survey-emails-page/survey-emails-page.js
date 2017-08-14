@@ -1,9 +1,11 @@
 const React = require('react')
 const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
+const EmailForm = require('@nudj/components/lib/email-form/email-form')
 
 const getStyle = require('./survey-emails-page.css')
 const PageHeader = require('../page-header/page-header')
+const { cssProcessor } = require('../../lib/css')
 
 module.exports = class SurveyEmailsPage extends React.Component {
   constructor (props) {
@@ -27,6 +29,13 @@ module.exports = class SurveyEmailsPage extends React.Component {
         <PageHeader title={'Survey Email'} subtitle={`${hirer}`} />
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
+            <EmailForm
+              css={cssProcessor}
+              renderMessage={message => message}
+              recipients={recipientsList}
+              subject={emailSubject}
+              template={body}
+            />
             <h4 className={this.style.pageHeadline}>Subject: {emailSubject}</h4>
             <div className={this.style.formCard}>
               <ul className={this.style.formList}>

@@ -12,9 +12,18 @@ const css = (stylesheet) => {
     }, {})
   }
 }
+// eventually we would just modify the `css` function above to behave like the function below but it requires a refactor of all the components in the app to directly process style functions
+const cssProcessor = (styles) => {
+  return css(styles({
+    merge,
+    mixins,
+    variables
+  }))()
+}
 
 module.exports = {
   css,
+  cssProcessor,
   merge,
   variables,
   mixins
