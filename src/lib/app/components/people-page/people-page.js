@@ -45,7 +45,7 @@ module.exports = class CompaniesPage extends React.Component {
           const rowClass = minutes < 10 ? 'rowHighlight' : 'row'
 
           return (<RowItem
-            rowKey={get(person, 'id')}
+            key={get(person, 'id')}
             rowClass={rowClass}
             title={`${get(person, 'firstName')} ${get(person, 'lastName')}`}
             details={[{

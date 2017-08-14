@@ -108,6 +108,7 @@ module.exports = class JobsPage extends React.Component {
         const relatedReferral = this.findRelatedReferral(referralId)
         const relatedReferralInfo = relatedReferral ? `${relatedReferral.id} (${relatedReferral.firstName} ${relatedReferral.lastName})` : '-'
         return (<RowItem
+          key={`application${get(application, 'id')}`}
           title={name}
           details={[
             {
@@ -158,7 +159,7 @@ module.exports = class JobsPage extends React.Component {
         const relatedReferralInfo = relatedReferral ? `${relatedReferral.id} (${relatedReferral.firstName} ${relatedReferral.lastName})` : '-'
 
         return (<RowItem
-          rowKey={slug}
+          key={slug}
           rowClass={rowClass}
           title={name}
           uri={referralLink}

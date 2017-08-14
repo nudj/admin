@@ -181,13 +181,13 @@ module.exports = class JobsPage extends React.Component {
       const hirer = get(email, 'hirer')
       const subject = get(email, 'subject')
       const sendDate = format(get(email, 'created'), 'DD.MM.YYYY - HH:mm')
-      const recipient = get(email, 'recipient')
-      const recipientList = recipient.join(', ')
-      const amountSent = recipient.length
+      const recipients = get(email, 'recipients', [])
+      const recipientsList = recipients.join(', ')
+      const amountSent = recipients.length
 
       return (
         <RowItem
-          rowKey={id}
+          key={id}
           title={hirer}
           details={[{
             term: 'Date',
@@ -197,7 +197,7 @@ module.exports = class JobsPage extends React.Component {
             description: subject
           }, {
             term: 'Sent To',
-            description: recipientList
+            description: recipientsList
           }, {
             term: 'No. Sent',
             description: amountSent
@@ -254,7 +254,7 @@ module.exports = class JobsPage extends React.Component {
       const personTitle = `${get(person, 'firstName')} ${get(person, 'lastName')} (${get(person, 'email')})`
 
       return (<RowItem
-        rowKey={id}
+        key={id}
         rowClass='rowSmall'
         title={personTitle}
         details={[]}

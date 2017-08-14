@@ -245,7 +245,7 @@ data.surveyMessages = data.surveyMessages.concat([
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     hirer: 'hirer2',
-    recipient: ['nick@nudj.co'],
+    recipients: ['nick@nudj.co'],
     subject: 'email subject',
     body: 'body1'
   },
@@ -254,7 +254,7 @@ data.surveyMessages = data.surveyMessages.concat([
     created: '2017-06-09T11:38:19.485+00:00',
     modified: '2017-06-09T11:38:19.485+00:00',
     hirer: 'hirer1',
-    recipient: ['nick@nudj.co', 'jamie@nudj.co'],
+    recipients: ['nick@nudj.co', 'jamie@nudj.co'],
     subject: 'second email subject',
     body: 'body2'
   }

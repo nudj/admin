@@ -104,7 +104,7 @@ module.exports = class CompaniesPage extends React.Component {
         const title = `${jobTitle} (${companyName})`
 
         return (<RowItem
-          rowKey={slug}
+          key={slug}
           rowClass={rowClass}
           title={title}
           uri={link}
@@ -165,7 +165,7 @@ module.exports = class CompaniesPage extends React.Component {
         const key = `${companySlug}+${jobSlug}`
 
         return (<RowItem
-          rowKey={key}
+          key={key}
           rowClass={rowClass}
           title={title}
           details={[
