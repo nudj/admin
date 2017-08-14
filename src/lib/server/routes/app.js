@@ -214,7 +214,7 @@ function hirerSmooshing (data) {
     })
 }
 
-function companyJobsHandler (req, res, next) {
+function companyHandler (req, res, next) {
   const companySlug = req.params.companySlug
 
   companies
@@ -421,11 +421,13 @@ function personHandler (req, res, next) {
   genericPersonHandler(req, res, next, clone(req.session.data), req.params.personId)
 }
 
-function surveyMessagesHandler (req, res, next) {
+function surveyMessageHandler (req, res, next) {
+  const companySlug = req.params.companySlug
   const surveyMessageId = req.params.surveyMessageId
-
-  messages
-    .getOneById(clone(req.session.data), surveyMessageId)
+console.log('surveyMessageId', surveyMessageId)
+  companies
+    .get(clone(req.session.data), companySlug)
+    .then(data => messages.getOneById(data, surveyMessageId))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -479,11 +481,12 @@ router.use(ensureLoggedIn)
 router.get('/', companiesHandler)
 router.post('/', addCompanyHandler)
 
+router.get('/:companySlug', companyHandler)
 router.put('/:companySlug', editCompanyHandler)
-router.get('/:companySlug/jobs', companyJobsHandler)
 router.post('/:companySlug/jobs', addCompanyJobHandler)
 router.post('/:companySlug/hirers', addPersonThenCompanyHirerHandler)
 router.post('/:companySlug/hirers/:person', addCompanyHirerHandler)
+router.get('/:companySlug/messages/:surveyMessageId', surveyMessageHandler)
 
 router.get('/:companySlug/jobs/:jobSlug', jobHandler)
 router.put('/:companySlug/jobs/:jobSlug', editJobHandler)
@@ -493,7 +496,6 @@ router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', addReferralHandle
 router.get('/people', peopleHandler)
 router.post('/people', addPersonHandler)
 
-router.get('/message/:surveyMessageId', surveyMessagesHandler)
 
 router.get('/people/:personId', personHandler)
 router.put('/people/:personId', editPersonHandler)

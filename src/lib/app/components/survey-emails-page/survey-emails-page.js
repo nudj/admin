@@ -15,8 +15,8 @@ module.exports = class SurveyEmailsPage extends React.Component {
     const surveyMessage = get(this.props, 'surveyMessage')
     const emailSubject = get(surveyMessage, 'subject')
     const hirer = get(surveyMessage, 'hirer')
-    const recipient = get(surveyMessage, 'recipient')
-    const recipientList = recipient.join(', ')
+    const recipients = get(surveyMessage, 'recipients', [])
+    const recipientsList = recipients.join(', ')
     const body = get(surveyMessage, 'body')
 
     return (
@@ -31,7 +31,7 @@ module.exports = class SurveyEmailsPage extends React.Component {
             <div className={this.style.formCard}>
               <ul className={this.style.formList}>
                 <li className={this.style.formListItem}>
-                  Recipients: {recipientList}
+                  Recipients: {recipientsList}
                 </li>
                 <li className={this.style.formListItem}>
                   {body}

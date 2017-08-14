@@ -18,6 +18,6 @@ module.exports.getAllFor = function getAllFor (data, companyId) {
 }
 
 module.exports.getOneById = function getOneById (data, surveyMessageId) {
-  data.surveyMessage = fetchSurveyMessage(surveyMessageId)
+  data.surveyMessage = request(`surveyMessages/${surveyMessageId}`)
   return promiseMap(data)
 }

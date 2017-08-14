@@ -4,7 +4,7 @@ const get = require('lodash/get')
 const format = require('date-fns/format')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
-const getStyle = require('./jobs-page.css')
+const getStyle = require('./company-page.css')
 
 const isEmail = require('validator/lib/isEmail')
 const Autocomplete = require('../autocomplete/autocomplete')
@@ -175,6 +175,7 @@ module.exports = class JobsPage extends React.Component {
 
   renderSurveyEmailsList () {
     const emails = get(this.props, 'surveyMessages', [])
+    const companySlug = get(this.props, 'company.slug')
 
     const emailsList = emails.map((email) => {
       const id = get(email, 'id')
@@ -203,7 +204,7 @@ module.exports = class JobsPage extends React.Component {
             description: amountSent
           }]}
           actions={[
-            <Link className={this.style.nudj} to={`/message/${id}/`}>View email</Link>
+            <Link className={this.style.nudj} to={`/${companySlug}/messages/${id}`}>View email</Link>
           ]}
         />
       )
