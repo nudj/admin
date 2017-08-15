@@ -36,17 +36,6 @@ module.exports = class SurveyEmailsPage extends React.Component {
               subject={emailSubject}
               template={body}
             />
-            <h4 className={this.style.pageHeadline}>Subject: {emailSubject}</h4>
-            <div className={this.style.formCard}>
-              <ul className={this.style.formList}>
-                <li className={this.style.formListItem}>
-                  Recipients: {recipientsList}
-                </li>
-                <li className={this.style.formListItem}>
-                  {body}
-                </li>
-              </ul>
-            </div>
           </div>
           <div className={this.style.pageSidebar} />
         </div>

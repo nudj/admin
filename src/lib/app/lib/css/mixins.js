@@ -351,7 +351,7 @@ module.exports.buttonClose = {
   width: variables.padding.d
 }
 
-const inputBox = merge(headings.p, {
+const inputBoxReadonly = merge(headings.p, {
   border: `calc(${variables.sizing.baseBorderWidth} * 0.5) solid ${variables.colors.midGrey}`,
   borderRadius: `calc(${variables.sizing.baseBorderRadius} * 0.5)`,
   color: variables.colors.charcoal,
@@ -364,6 +364,9 @@ const inputBox = merge(headings.p, {
   ':placeholder-shown': {
     color: variables.colors.midGrey
   },
+  cursor: 'text'
+})
+const inputBox = merge(inputBoxReadonly, {
   ':focus': {
     borderColor: module.exports.mainColor,
     boxShadow: `${variables.sizing.genericBoxShadow} ${variables.colors.genericBoxShadow}`,
@@ -371,6 +374,17 @@ const inputBox = merge(headings.p, {
     outline: 'none'
   }
 })
+const removeInputBoxBorder = {
+  border: '0',
+  boxShadow: 'none',
+  padding: `${variables.padding.e} ${variables.padding.e} ${variables.padding.e} 0`,
+  ':focus': {
+    border: '0',
+    boxShadow: 'none'
+  }
+}
+const inputBoxBorderless = merge(inputBox, removeInputBoxBorder)
+const inputBoxReadonlyBorderless = merge(inputBoxReadonly, removeInputBoxBorder)
 
 module.exports.formStructure = {
   formList: merge(module.exports.deList),
@@ -393,18 +407,12 @@ module.exports.formElements = {
     padding: `0 0 ${variables.padding.e} 0`
   }),
   inputBox: inputBox,
+  inputBoxReadonly: inputBoxReadonly,
   inputBoxUrl: merge(inputBox, {
     fontFamily: 'monospace'
   }),
-  inputBoxBorderless: merge(inputBox, {
-    border: '0',
-    boxShadow: 'none',
-    padding: `${variables.padding.e} ${variables.padding.e} ${variables.padding.e} 0`,
-    ':focus': {
-      border: '0',
-      boxShadow: 'none'
-    }
-  }),
+  inputBoxBorderless: inputBoxBorderless,
+  inputBoxReadonlyBorderless: inputBoxReadonlyBorderless,
   inputTextarea: merge(inputBox, {
     minHeight: variables.padding.a,
     [breakpoints.l]: {
