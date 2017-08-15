@@ -7,6 +7,7 @@ const { merge } = require('../../lib')
 
 const logger = require('../lib/logger')
 const companies = require('../modules/companies')
+const surveys = require('../modules/surveys')
 const jobs = require('../modules/jobs')
 const hirers = require('../modules/hirers')
 const messages = require('../modules/messages')
@@ -219,6 +220,7 @@ function companyHandler (req, res, next) {
 
   companies
     .get(clone(req.session.data), companySlug)
+    .then(data => surveys.getSurveyForCompany(data))
     .then(data => jobs.getAll(data, data.company.id))
     .then(companies.getAll)
     .then(hirerSmooshing)
@@ -476,6 +478,49 @@ function addPersonRecommendationHandler (req, res, next) {
     .then(data => genericPersonHandler(req, res, next, data, req.params.personId))
 }
 
+function addCompanySurveyLinkHandler (req, res, next) {
+  const companySlug = req.params.companySlug
+  surveys
+    .post(clone(req.session.data), req.body)
+    .then(data => {
+      data.message = {
+        message: `Survey link added`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(data => companies.get(data, companySlug))
+    .then(data => jobs.getAll(data, data.company.id))
+    .then(companies.getAll)
+    .then(hirerSmooshing)
+    .then(data => messages.getAllFor(data, data.company.id))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
+function updateCompanySurveyLinkHandler (req, res, next) {
+  const companySlug = req.params.companySlug
+  const surveyId = req.params.surveyId
+  surveys
+    .patch(clone(req.session.data), surveyId, req.body)
+    .then(data => {
+      data.message = {
+        message: `Survey link updated`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(data => companies.get(data, companySlug))
+    .then(data => jobs.getAll(data, data.company.id))
+    .then(companies.getAll)
+    .then(hirerSmooshing)
+    .then(data => messages.getAllFor(data, data.company.id))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
 router.use(ensureLoggedIn)
 
 router.get('/', companiesHandler)
@@ -491,6 +536,8 @@ router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', addReferralHandle
 router.post('/:companySlug/hirers', addPersonThenCompanyHirerHandler)
 router.post('/:companySlug/hirers/:person', addCompanyHirerHandler)
 router.get('/:companySlug/messages/:surveyMessageId', surveyMessageHandler)
+router.post('/:companySlug/surveys', addCompanySurveyLinkHandler)
+router.patch('/:companySlug/surveys/:surveyId', updateCompanySurveyLinkHandler)
 
 router.get('/people', peopleHandler)
 router.post('/people', addPersonHandler)

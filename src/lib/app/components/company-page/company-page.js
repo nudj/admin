@@ -14,6 +14,7 @@ const Tooltip = require('../tooltip/tooltip')
 const CompanyForm = require('../company-form/company-form')
 const JobForm = require('../job-form/job-form')
 const Plural = require('../plural/plural')
+const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
 
 const { postData } = require('../../actions/app')
 
@@ -23,7 +24,8 @@ module.exports = class JobsPage extends React.Component {
     this.style = getStyle()
     const resetCompanyForm = false
     const resetJobForm = false
-    this.state = { resetCompanyForm, resetJobForm }
+    const surveyLink = get(this.props, 'survey.link')
+    this.state = { resetCompanyForm, resetJobForm, surveyLink }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -173,6 +175,42 @@ module.exports = class JobsPage extends React.Component {
     </ul>)
   }
 
+  onChangeSurveyLink (event) {
+    this.setState({
+      surveyLink: event.target.value
+    })
+  }
+
+  onSubmitLink () {
+    const company = get(this.props, 'company')
+    const survey = get(this.props, 'survey')
+    const url = `/${company.slug}/surveys${survey ? `/${survey.id}` : ''}`
+    const method = survey ? 'patch' : 'post'
+
+    this.props.dispatch(postData({
+      url,
+      method,
+      data: {
+        company: company.id,
+        link: get(this.state, 'surveyLink')
+      }
+    }))
+  }
+
+  renderSurveyLink () {
+    const surveyLink = get(this.state, 'surveyLink')
+
+    return (
+      <div className={this.style.missing}>
+        <div className={this.style.missingGroup}>
+          <input className={this.style.inputBox} type='text' id='surveyLink' name='surveyLink' onChange={this.onChangeSurveyLink.bind(this)} value={surveyLink} />
+          <button className={this.style.nudj} onClick={this.onSubmitLink.bind(this)}>Update</button>
+          <CopyToClipboard className={this.style.nudj} data-clipboard-text={surveyLink}>Copy link</CopyToClipboard>
+        </div>
+      </div>
+    )
+  }
+
   renderSurveyEmailsList () {
     const emails = get(this.props, 'surveyMessages', [])
     const companySlug = get(this.props, 'company.slug')
@@ -290,6 +328,7 @@ module.exports = class JobsPage extends React.Component {
     const addHirerForm = this.addHirerForm()
 
     const jobsList = this.renderJobsList()
+    const surveyLink = this.renderSurveyLink()
     const surveyEmailsList = this.renderSurveyEmailsList()
 
     const addJobForm = (<JobForm
@@ -341,6 +380,13 @@ module.exports = class JobsPage extends React.Component {
         <h4 className={this.style.pageHeadline}>Add <Plural zero='a' singular='another' count={jobs.length} /> job</h4>
         <div className={this.style.pageContent}>
           {addJobForm}
+          <div className={this.style.pageSidebar} />
+        </div>
+        <h4 className={this.style.pageHeadline}>Survey Link</h4>
+        <div className={this.style.pageContent}>
+          <div className={this.style.pageMain}>
+            {surveyLink}
+          </div>
           <div className={this.style.pageSidebar} />
         </div>
         <h4 className={this.style.pageHeadline}>Survey Emails</h4>
