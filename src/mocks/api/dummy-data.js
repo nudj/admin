@@ -6,7 +6,8 @@ const data = {
   applications: [],
   hirers: [],
   recommendations: [],
-  externalMessages: []
+  externalMessages: [],
+  surveyMessages: []
 }
 data.companies = data.companies.concat([
   {
@@ -152,12 +153,30 @@ data.people = data.people.concat([
     type: 'external',
     company: 'nudj',
     status: 'user'
+  },
+  {
+    id: 'person6',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    firstName: 'Tim',
+    lastName: 'Robinson',
+    email: 'tim@nudj.com',
+    url: 'http://not-a-real-person.com',
+    title: 'Junior Fake User',
+    type: 'internal',
+    company: 'nudj',
+    status: 'user'
   }
 ])
 data.hirers = data.hirers.concat([
   {
     id: 'hirer1',
     person: 'person5',
+    company: 'company1'
+  },
+  {
+    id: 'hirer2',
+    person: 'person6',
     company: 'company1'
   }
 ])
@@ -217,6 +236,27 @@ data.recommendations = data.recommendations.concat([
     person: 'person5',
     hirer: 'hirer1',
     source: 'NUDJ'
+  }
+])
+
+data.surveyMessages = data.surveyMessages.concat([
+  {
+    id: 'surveyMessage1',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    hirer: 'hirer2',
+    recipients: ['nick@nudj.co'],
+    subject: 'email subject',
+    body: 'body1'
+  },
+  {
+    id: 'surveyMessage2',
+    created: '2017-06-09T11:38:19.485+00:00',
+    modified: '2017-06-09T11:38:19.485+00:00',
+    hirer: 'hirer1',
+    recipients: ['nick@nudj.co', 'jamie@nudj.co'],
+    subject: 'second email subject',
+    body: 'body2'
   }
 ])
 

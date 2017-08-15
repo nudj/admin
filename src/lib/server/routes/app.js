@@ -9,6 +9,7 @@ const logger = require('../lib/logger')
 const companies = require('../modules/companies')
 const jobs = require('../modules/jobs')
 const hirers = require('../modules/hirers')
+const messages = require('../modules/messages')
 const network = require('../modules/network')
 const people = require('../modules/people')
 const { promiseMap } = require('../lib')
@@ -213,7 +214,7 @@ function hirerSmooshing (data) {
     })
 }
 
-function companyJobsHandler (req, res, next) {
+function companyHandler (req, res, next) {
   const companySlug = req.params.companySlug
 
   companies
@@ -221,6 +222,7 @@ function companyJobsHandler (req, res, next) {
     .then(data => jobs.getAll(data, data.company.id))
     .then(companies.getAll)
     .then(hirerSmooshing)
+    .then(data => messages.getAllFor(data, data.company.id))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -419,6 +421,18 @@ function personHandler (req, res, next) {
   genericPersonHandler(req, res, next, clone(req.session.data), req.params.personId)
 }
 
+function surveyMessageHandler (req, res, next) {
+  const companySlug = req.params.companySlug
+  const surveyMessageId = req.params.surveyMessageId
+
+  companies
+    .get(clone(req.session.data), companySlug)
+    .then(data => messages.getOneById(data, surveyMessageId))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+}
+
 function editPersonHandler (req, res, next) {
   people
     .put(clone(req.session.data), req.body)
@@ -462,27 +476,29 @@ function addPersonRecommendationHandler (req, res, next) {
     .then(data => genericPersonHandler(req, res, next, data, req.params.personId))
 }
 
-router.get('/', ensureLoggedIn, companiesHandler)
-router.post('/', ensureLoggedIn, addCompanyHandler)
+router.use(ensureLoggedIn)
 
-router.put('/:companySlug', ensureLoggedIn, editCompanyHandler)
-router.get('/:companySlug/jobs', ensureLoggedIn, companyJobsHandler)
-router.post('/:companySlug/jobs', ensureLoggedIn, addCompanyJobHandler)
-router.post('/:companySlug/hirers', ensureLoggedIn, addPersonThenCompanyHirerHandler)
-router.post('/:companySlug/hirers/:person', ensureLoggedIn, addCompanyHirerHandler)
+router.get('/', companiesHandler)
+router.post('/', addCompanyHandler)
 
-router.get('/:companySlug/jobs/:jobSlug', ensureLoggedIn, jobHandler)
-router.put('/:companySlug/jobs/:jobSlug', ensureLoggedIn, editJobHandler)
-router.post('/:companySlug/jobs/:jobSlug/referrals', ensureLoggedIn, addPersonThenReferralHandler)
-router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', ensureLoggedIn, addReferralHandler)
+router.get('/:companySlug', companyHandler)
+router.put('/:companySlug', editCompanyHandler)
+router.post('/:companySlug/jobs', addCompanyJobHandler)
+router.get('/:companySlug/jobs/:jobSlug', jobHandler)
+router.put('/:companySlug/jobs/:jobSlug', editJobHandler)
+router.post('/:companySlug/jobs/:jobSlug/referrals', addPersonThenReferralHandler)
+router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', addReferralHandler)
+router.post('/:companySlug/hirers', addPersonThenCompanyHirerHandler)
+router.post('/:companySlug/hirers/:person', addCompanyHirerHandler)
+router.get('/:companySlug/messages/:surveyMessageId', surveyMessageHandler)
 
-router.get('/people', ensureLoggedIn, peopleHandler)
-router.post('/people', ensureLoggedIn, addPersonHandler)
+router.get('/people', peopleHandler)
+router.post('/people', addPersonHandler)
+router.get('/people/:personId', personHandler)
+router.put('/people/:personId', editPersonHandler)
+router.post('/people/:personId/referrals/:jobSlug', addPersonReferralHandler)
+router.post('/people/:personId/recommendations/:jobSlug', addPersonRecommendationHandler)
 
-router.get('/people/:personId', ensureLoggedIn, personHandler)
-router.put('/people/:personId', ensureLoggedIn, editPersonHandler)
-router.post('/people/:personId/referrals/:jobSlug', ensureLoggedIn, addPersonReferralHandler)
-router.post('/people/:personId/recommendations/:jobSlug', ensureLoggedIn, addPersonRecommendationHandler)
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)

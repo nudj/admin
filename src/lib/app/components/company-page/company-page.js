@@ -4,7 +4,7 @@ const get = require('lodash/get')
 const format = require('date-fns/format')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
-const getStyle = require('./jobs-page.css')
+const getStyle = require('./company-page.css')
 
 const isEmail = require('validator/lib/isEmail')
 const Autocomplete = require('../autocomplete/autocomplete')
@@ -173,6 +173,48 @@ module.exports = class JobsPage extends React.Component {
     </ul>)
   }
 
+  renderSurveyEmailsList () {
+    const emails = get(this.props, 'surveyMessages', [])
+    const companySlug = get(this.props, 'company.slug')
+
+    const emailsList = emails.map((email) => {
+      const id = get(email, 'id')
+      const hirer = get(email, 'hirer')
+      const subject = get(email, 'subject')
+      const sendDate = format(get(email, 'created'), 'DD.MM.YYYY - HH:mm')
+      const recipients = get(email, 'recipients', [])
+      const recipientsList = recipients.join(', ')
+      const amountSent = recipients.length
+
+      return (
+        <RowItem
+          key={id}
+          title={hirer}
+          details={[{
+            term: 'Date',
+            description: sendDate
+          }, {
+            term: 'Subject',
+            description: subject
+          }, {
+            term: 'Sent To',
+            description: recipientsList
+          }, {
+            term: 'No. Sent',
+            description: amountSent
+          }]}
+          actions={[
+            <Link className={this.style.nudj} to={`/${companySlug}/messages/${id}`}>View email</Link>
+          ]}
+        />
+      )
+    })
+
+    return (<ul className={this.style.jobs}>
+      {emailsList}
+    </ul>)
+  }
+
   renderHirerActions (value) {
     const hirers = get(this.props, 'hirers', [])
 
@@ -213,7 +255,7 @@ module.exports = class JobsPage extends React.Component {
       const personTitle = `${get(person, 'firstName')} ${get(person, 'lastName')} (${get(person, 'email')})`
 
       return (<RowItem
-        rowKey={id}
+        key={id}
         rowClass='rowSmall'
         title={personTitle}
         details={[]}
@@ -248,6 +290,7 @@ module.exports = class JobsPage extends React.Component {
     const addHirerForm = this.addHirerForm()
 
     const jobsList = this.renderJobsList()
+    const surveyEmailsList = this.renderSurveyEmailsList()
 
     const addJobForm = (<JobForm
       jobs={jobs}
@@ -298,6 +341,13 @@ module.exports = class JobsPage extends React.Component {
         <h4 className={this.style.pageHeadline}>Add <Plural zero='a' singular='another' count={jobs.length} /> job</h4>
         <div className={this.style.pageContent}>
           {addJobForm}
+          <div className={this.style.pageSidebar} />
+        </div>
+        <h4 className={this.style.pageHeadline}>Survey Emails</h4>
+        <div className={this.style.pageContent}>
+          <div className={this.style.pageMain}>
+            {surveyEmailsList}
+          </div>
           <div className={this.style.pageSidebar} />
         </div>
       </div>

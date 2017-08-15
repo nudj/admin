@@ -20,9 +20,10 @@ module.exports = {
       {
         test: /\.js$/,
         include: [
-            path.join(__dirname, 'lib')
+            path.join(__dirname, 'lib'),
+            path.join(__dirname, 'node_modules', '@nudj'),
+            '/tmp/node_modules/@nudj'
         ],
-        exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
           presets: [

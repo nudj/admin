@@ -40,11 +40,11 @@ run:
 
 dev:
 	-@docker rm -f admin-dev-container 2> /dev/null || true
-	@echo 'App=http://localhost:90/, Api=http://localhost:91/'
+	@echo 'App=http://localhost:70/, Api=http://localhost:71/'
 	@docker run --rm -it \
 		--name admin-dev-container \
-		-p 0.0.0.0:90:80 \
-		-p 0.0.0.0:91:81 \
+		-p 0.0.0.0:70:80 \
+		-p 0.0.0.0:71:81 \
 		--add-host api:127.0.0.1 \
 		-v $(CWD)/src/lib:/usr/src/lib \
 		-v $(CWD)/src/mocks:/usr/src/mocks \
@@ -58,7 +58,35 @@ dev:
 			--quiet \
 			--watch ./ \
 			--delay 250ms \
-			-x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && torus run -o nudj -p admin -e local -- node ."'
+			-x "printf \"\n\nBuilding...\n\" && \
+			./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && \
+			torus run -o nudj -p admin -e local -- node ."'
+
+devInject:
+	-@docker rm -f admin-dev-container 2> /dev/null || true
+	@echo 'App=http://localhost:70/, Api=http://localhost:71/'
+	@docker run --rm -it \
+		--name admin-dev-container \
+		-p 0.0.0.0:70:80 \
+		-p 0.0.0.0:71:81 \
+		--add-host api:127.0.0.1 \
+		-v $(CWD)/src/lib:/usr/src/lib \
+		-v $(CWD)/src/mocks:/usr/src/mocks \
+		-v $(CWD)/src/package.json:/usr/src/package.json \
+		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
+		-v /Users/nick/dev/nudj/components/src:/usr/src/components \
+		--env-file $(CWD)/.env \
+		$(IMAGEDEV) \
+		/bin/sh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && $(BIN)/nodemon \
+			--config ./nodemon.json \
+			-e js,html,css \
+			--quiet \
+			--watch ./ \
+			--delay 250ms \
+			-x "printf \"\n\nBuilding...\n\" && \
+			npm i ./components && \
+			./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && \
+			torus run -o nudj -p admin -e local -- node ."'
 
 stats:
 	-@docker rm -f stats-container 2> /dev/null || true

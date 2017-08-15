@@ -6,11 +6,9 @@ const RowItem = (props) => {
   const style = getStyle()
 
   const rowClass = props.rowClass || 'row'
-  const rowKey = get(props, 'rowKey', '')
-  const key = get(props, 'key', rowKey)
 
   return (
-    <li className={style[rowClass]} key={key}>
+    <li className={style[rowClass]}>
       <a className={style.title} href={get(props, 'uri')}>{get(props, 'title')}</a>
       <ul className={style.details}>
         {get(props, 'details', []).map((detail) => {

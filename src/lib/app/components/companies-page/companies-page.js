@@ -59,7 +59,6 @@ module.exports = class CompaniesPage extends React.Component {
               {companies.map((company) => {
                 const minutes = differenceInMinutes(rightNow, get(company, 'created'))
                 const rowClass = minutes < 10 ? 'rowHighlight' : 'row'
-
                 return (<RowItem
                   key={get(company, 'slug')}
                   rowClass={rowClass}
@@ -75,7 +74,7 @@ module.exports = class CompaniesPage extends React.Component {
                     description: format(get(company, 'created'), 'DD.MM.YYYY')
                   }]}
                   actions={[
-                    <Link className={this.style.nudj} to={`/${get(company, 'slug')}/jobs`}>See jobs</Link>
+                    <Link className={this.style.nudj} to={`/${get(company, 'slug')}`}>See jobs</Link>
                   ]}
                 />)
               })}
