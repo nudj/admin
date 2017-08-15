@@ -23,7 +23,7 @@
     ]
   },
   "dependencies": {
-    "@nudj/components": "0.1.2",
+    "@nudj/components": "0.1.3",
     "@nudj/react-router-redux": "0.1.1--5.0.0-alpha.6",
     "aphrodite": "^1.2.0",
     "axios": "^0.16.1",
