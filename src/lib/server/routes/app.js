@@ -526,6 +526,13 @@ router.use(ensureLoggedIn)
 router.get('/', companiesHandler)
 router.post('/', addCompanyHandler)
 
+router.get('/people', peopleHandler)
+router.post('/people', addPersonHandler)
+router.get('/people/:personId', personHandler)
+router.put('/people/:personId', editPersonHandler)
+router.post('/people/:personId/referrals/:jobSlug', addPersonReferralHandler)
+router.post('/people/:personId/recommendations/:jobSlug', addPersonRecommendationHandler)
+
 router.get('/:companySlug', companyHandler)
 router.put('/:companySlug', editCompanyHandler)
 router.post('/:companySlug/jobs', addCompanyJobHandler)
@@ -539,12 +546,6 @@ router.get('/:companySlug/messages/:surveyMessageId', surveyMessageHandler)
 router.post('/:companySlug/surveys', addCompanySurveyLinkHandler)
 router.patch('/:companySlug/surveys/:surveyId', updateCompanySurveyLinkHandler)
 
-router.get('/people', peopleHandler)
-router.post('/people', addPersonHandler)
-router.get('/people/:personId', personHandler)
-router.put('/people/:personId', editPersonHandler)
-router.post('/people/:personId/referrals/:jobSlug', addPersonReferralHandler)
-router.post('/people/:personId/recommendations/:jobSlug', addPersonRecommendationHandler)
 
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})

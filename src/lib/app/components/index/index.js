@@ -48,11 +48,11 @@ const Index = () => {
         <Route path='*' component={WithState(Notification)} />
         <Switch>
           <Route exact path='/' component={PageWithState(CompaniesPage)} />
+          <Route exact path='/people' component={PageWithState(PeoplePage)} />
+          <Route exact path='/people/:personId' component={PageWithState(PersonPage)} />
           <Route exact path='/:companySlug' component={PageWithState(CompanyPage)} />
           <Route exact path='/:companySlug/jobs/:jobSlug' component={PageWithState(JobPage)} />
           <Route exact path='/:companySlug/messages/:surveyMessageId' component={PageWithState(SurveyEmailsPage)} />
-          <Route exact path='/people' component={PageWithState(PeoplePage)} />
-          <Route exact path='/people/:personId' component={PageWithState(PersonPage)} />
           <Route render={PageWithState((props) => <Status code={404}><PageNotFound {...props} /></Status>)} />
         </Switch>
       </div>
