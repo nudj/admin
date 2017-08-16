@@ -13,6 +13,7 @@ const hirers = require('../modules/hirers')
 const messages = require('../modules/messages')
 const network = require('../modules/network')
 const people = require('../modules/people')
+const tasks = require('../modules/tasks')
 const { promiseMap } = require('../lib')
 
 const app = require('../../app/server')
@@ -197,6 +198,7 @@ function editCompanyHandler (req, res, next) {
     .then(data => companies.get(data, companySlug))
     .then(data => jobs.getAll(data, data.company.id))
     .then(hirerSmooshing)
+    .then(data => tasks.getAllByCompany(data, data.company.id))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -225,6 +227,7 @@ function companyHandler (req, res, next) {
     .then(companies.getAll)
     .then(hirerSmooshing)
     .then(data => messages.getAllFor(data, data.company.id))
+    .then(data => tasks.getAllByCompany(data, data.company.id))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -250,6 +253,7 @@ function addCompanyJobHandler (req, res, next) {
     .then(companies.getAll)
     .then(data => jobs.getAll(data, data.company.id))
     .then(hirerSmooshing)
+    .then(data => tasks.getAllByCompany(data, data.company.id))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -267,6 +271,7 @@ function addCompanyHirer (req, res, next, data, company, person) {
     .then(companies.getAll)
     .then(data => jobs.getAll(data, data.company.id))
     .then(hirerSmooshing)
+    .then(data => tasks.getAllByCompany(data, data.company.id))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -285,6 +290,31 @@ function addPersonThenCompanyHirerHandler (req, res, next) {
     .get(clone(req.session.data), req.params.companySlug)
     .then(data => people.post(data, {email}))
     .then(data => addCompanyHirer(req, res, next, data, data.company.id, data.newPerson.id))
+}
+
+function addCompanyTaskHandler (req, res, next) {
+  companies
+    .get(clone(req.session.data), req.params.companySlug)
+    .then(data => {
+      const company = data.company.id
+      const type = req.params.taskType
+      const task = {company, type}
+      return tasks.post(data, task)
+    })
+    .then(data => {
+      data.message = {
+        message: `New ${data.newTask.type} task saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(companies.getAll)
+    .then(data => jobs.getAll(data, data.company.id))
+    .then(hirerSmooshing)
+    .then(data => tasks.getAllByCompany(data, data.company.id))
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
 }
 
 function genericGetJob ({data, req, res, next, companySlug}) {
@@ -414,6 +444,10 @@ function genericPersonHandler (req, res, next, data, person) {
     .then(data => jobs.getReferralsForPerson(data, person))
     // Recommendations associated with this person
     .then(data => network.getByPerson(data, person))
+    // This person's hirer and company information
+    .then(data => hirers.getFirstByPerson(data, data.person.id))
+    .then(data => data.hirer ? companies.get(data, data.hirer.company) : data)
+    .then(data => data.hirer ? tasks.getAllByHirerAndCompany(data, data.hirer.id, data.hirer.company) : data)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
@@ -521,6 +555,26 @@ function updateCompanySurveyLinkHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
+function addPersonTaskHandler (req, res, next) {
+  people
+    .get(clone(req.session.data), req.params.personId)
+    .then(data => hirers.getFirstByPerson(data, data.person.id))
+    .then(data => {
+      const hirer = data.hirer.id
+      const type = req.params.taskType
+      const task = {hirer, type}
+      return tasks.post(data, task)
+    })
+    .then(data => {
+      data.message = {
+        message: `New ${data.newTask.type} task saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(data => genericPersonHandler(req, res, next, data, data.person.id))
+}
+
 router.use(ensureLoggedIn)
 
 router.get('/', companiesHandler)
@@ -532,6 +586,7 @@ router.get('/people/:personId', personHandler)
 router.put('/people/:personId', editPersonHandler)
 router.post('/people/:personId/referrals/:jobSlug', addPersonReferralHandler)
 router.post('/people/:personId/recommendations/:jobSlug', addPersonRecommendationHandler)
+router.post('/people/:personId/tasks/:taskType', addPersonTaskHandler)
 
 router.get('/:companySlug', companyHandler)
 router.put('/:companySlug', editCompanyHandler)
@@ -545,6 +600,7 @@ router.post('/:companySlug/hirers/:person', addCompanyHirerHandler)
 router.get('/:companySlug/messages/:surveyMessageId', surveyMessageHandler)
 router.post('/:companySlug/surveys', addCompanySurveyLinkHandler)
 router.patch('/:companySlug/surveys/:surveyId', updateCompanySurveyLinkHandler)
+router.post('/:companySlug/tasks/:taskType', addCompanyTaskHandler)
 
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
