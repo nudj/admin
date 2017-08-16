@@ -57,7 +57,7 @@ module.exports = class PeoplePage extends React.Component {
 
     const types = this.types
 
-    return (<form className={this.style.pageMain} onSubmit={this.onSubmit.bind(this)} ref='taskForm'>
+    return (<form className={this.style.pageMain} onSubmit={this.onSubmit.bind(this)}>
       <div className={this.style.formCard}>
         <ul className={this.style.formList}>
           <li className={this.style.formListItem}>
