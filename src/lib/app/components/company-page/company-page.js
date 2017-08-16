@@ -15,6 +15,8 @@ const CompanyForm = require('../company-form/company-form')
 const JobForm = require('../job-form/job-form')
 const Plural = require('../plural/plural')
 const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
+const TasksList = require('../tasks-list/tasks-list')
+const TaskAdder = require('../task-adder/task-adder')
 
 const { postData } = require('../../actions/app')
 
@@ -52,6 +54,16 @@ module.exports = class JobsPage extends React.Component {
   getPersonFromEmail (email) {
     const people = get(this.props, 'people', [])
     return people.find(person => person.email === email)
+  }
+
+  onAddTask (task) {
+    const companySlug = get(this.props, 'company.slug', '')
+    const taskType = get(task, 'type', '')
+    const url = `/${companySlug}/tasks/${taskType}`
+    const data = {}
+    const method = 'post'
+
+    this.props.dispatch(postData({ url, data, method }))
   }
 
   onChangeHirer (value, matches) {
@@ -128,6 +140,10 @@ module.exports = class JobsPage extends React.Component {
       </div>
       {info}
     </div>)
+  }
+
+  addTaskForm () {
+    return (<span />)
   }
 
   renderJobsList () {
@@ -327,6 +343,9 @@ module.exports = class JobsPage extends React.Component {
     const hirersList = this.renderHirersList()
     const addHirerForm = this.addHirerForm()
 
+    const tasksList = (<TasksList {...this.props} />)
+    const addTaskForm = (<TaskAdder {...this.props} onSubmit={this.onAddTask.bind(this)} submitLabel='Add task for this company' />)
+
     const jobsList = this.renderJobsList()
     const surveyLink = this.renderSurveyLink()
     const surveyEmailsList = this.renderSurveyEmailsList()
@@ -366,6 +385,14 @@ module.exports = class JobsPage extends React.Component {
           </div>
           <div className={this.style.pageSidebar} />
         </div>
+        <hr className={this.style.sectionDivider} />
+        <h3 className={this.style.pageHeadline}>Tasks</h3>
+        <div className={this.style.pageMain}>
+          {tasksList}
+        </div>
+        <h4 className={this.style.pageHeadline}>Add <Plural zero='a' singular='another' count={get(this.props, 'tasks', []).length} /> task</h4>
+        {addTaskForm}
+        <hr className={this.style.sectionDivider} />
         <h3 className={this.style.pageHeadline}>
           Jobs: published <span className={this.style.pageHeadlineHighlight}>({publishedJobs.length})</span> / total <span className={this.style.pageHeadlineHighlight}>({jobs.length})</span>
         </h3>

@@ -16,13 +16,14 @@ function fetchHirersByCompany (company) {
     .then(results => results || [])
 }
 
-function fetchHirersByCompanyAndPerson (company, person) {
+// This should only ever return 1
+function fetchHirerByCompanyAndPerson (company, person) {
   return request(`hirers/filter?company=${company}&person=${person}`)
-    .then(results => results || [])
+    .then(results => results.pop())
 }
 
-function fetchHirersByPerson (company) {
-  return request(`hirers/filter?id=${company}`)
+function fetchHirersByPerson (person) {
+  return request(`hirers/filter?person=${person}`)
     .then(results => results || [])
 }
 
@@ -41,13 +42,19 @@ module.exports.getAllByCompany = function (data, company) {
   return promiseMap(data)
 }
 
-module.exports.getAllByCompanyAndPerson = function (data, company, person) {
-  data.hirers = fetchHirersByCompanyAndPerson(company, person)
+module.exports.getByCompanyAndPerson = function (data, company, person) {
+  data.hirer = fetchHirerByCompanyAndPerson(company, person)
   return promiseMap(data)
 }
 
 module.exports.getAllByPerson = function (data, person) {
   data.hirers = fetchHirersByPerson(person)
+  return promiseMap(data)
+}
+
+module.exports.getFirstByPerson = function (data, person) {
+  data.hirer = fetchHirersByPerson(person)
+    .then(results => results ? results.pop() : undefined)
   return promiseMap(data)
 }
 

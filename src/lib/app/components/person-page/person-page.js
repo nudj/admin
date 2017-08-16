@@ -11,6 +11,8 @@ const PageHeader = require('../page-header/page-header')
 const PersonForm = require('../person-form/person-form')
 const RowItem = require('../row-item/row-item')
 const Plural = require('../plural/plural')
+const TasksList = require('../tasks-list/tasks-list')
+const TaskAdder = require('../task-adder/task-adder')
 const { postData } = require('../../actions/app')
 
 module.exports = class CompaniesPage extends React.Component {
@@ -66,6 +68,16 @@ module.exports = class CompaniesPage extends React.Component {
   onSubmit (data) {
     const url = `/people/${data.id}`
     const method = 'put'
+
+    this.props.dispatch(postData({ url, data, method }))
+  }
+
+  onAddTask (task) {
+    const personId = get(this.props, 'person.id', '')
+    const taskType = get(task, 'type', '')
+    const url = `/people/${personId}/tasks/${taskType}`
+    const data = {}
+    const method = 'post'
 
     this.props.dispatch(postData({ url, data, method }))
   }
@@ -345,6 +357,27 @@ module.exports = class CompaniesPage extends React.Component {
     </div>)
   }
 
+  renderTasksSection () {
+    const tasksList = (<TasksList {...this.props} />)
+    const taskAdder = (<TaskAdder {...this.props} onSubmit={this.onAddTask.bind(this)} submitLabel='Add task for this hirer' />)
+
+    const hirer = get(this.props, 'hirer', '')
+
+    if (!hirer) {
+      return (<span />)
+    }
+
+    return (<div>
+      <hr className={this.style.sectionDivider} />
+      <h3 className={this.style.pageHeadline}>Tasks</h3>
+      <div className={this.style.pageMain}>
+        {tasksList}
+      </div>
+      <h4 className={this.style.pageHeadline}>Add <Plural zero='a' singular='another' count={get(this.props, 'tasks', []).length} /> task</h4>
+      {taskAdder}
+    </div>)
+  }
+
   render () {
     const people = get(this.props, 'people', [])
     const person = get(this.props, 'person', {})
@@ -363,6 +396,8 @@ module.exports = class CompaniesPage extends React.Component {
 
     const recommendationsList = this.renderRecommendationsList()
     const recommendationsAdder = this.renderRecommendationsAdder()
+
+    const taskSection = this.renderTasksSection()
 
     return (
       <div className={this.style.pageBody}>
@@ -394,6 +429,7 @@ module.exports = class CompaniesPage extends React.Component {
             <div className={this.style.pageMain}>
               {recommendationsAdder}
             </div>
+            {taskSection}
           </div>
         </div>
       </div>
