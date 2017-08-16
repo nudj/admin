@@ -546,7 +546,6 @@ router.get('/:companySlug/messages/:surveyMessageId', surveyMessageHandler)
 router.post('/:companySlug/surveys', addCompanySurveyLinkHandler)
 router.patch('/:companySlug/surveys/:surveyId', updateCompanySurveyLinkHandler)
 
-
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
   getRenderer(req, res)(data)
