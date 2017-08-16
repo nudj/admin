@@ -203,7 +203,7 @@ module.exports = class JobsPage extends React.Component {
     return (
       <div className={this.style.missing}>
         <div className={this.style.missingGroup}>
-          <input className={this.style.inputBox} type='text' id='surveyLink' name='surveyLink' onChange={this.onChangeSurveyLink.bind(this)} value={surveyLink} />
+          <input className={this.style.inputBoxUrl} type='text' id='surveyLink' name='surveyLink' onChange={this.onChangeSurveyLink.bind(this)} value={surveyLink} />
           <button className={this.style.nudj} onClick={this.onSubmitLink.bind(this)}>Update</button>
           <CopyToClipboard className={this.style.nudj} data-clipboard-text={surveyLink}>Copy link</CopyToClipboard>
         </div>
