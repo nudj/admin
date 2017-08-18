@@ -27,7 +27,8 @@ module.exports = class JobsPage extends React.Component {
     const resetCompanyForm = false
     const resetJobForm = false
     const surveyLink = get(this.props, 'survey.link')
-    this.state = { resetCompanyForm, resetJobForm, surveyLink }
+    const surveyUuid = get(this.props, 'survey.uuid')
+    this.state = { resetCompanyForm, resetJobForm, surveyLink, surveyUuid }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -197,6 +198,12 @@ module.exports = class JobsPage extends React.Component {
     })
   }
 
+  onChangeSurveyUuid (event) {
+    this.setState({
+      surveyUuid: event.target.value
+    })
+  }
+
   onSubmitLink () {
     const company = get(this.props, 'company')
     const survey = get(this.props, 'survey')
@@ -208,20 +215,31 @@ module.exports = class JobsPage extends React.Component {
       method,
       data: {
         company: company.id,
-        link: get(this.state, 'surveyLink')
+        link: get(this.state, 'surveyLink'),
+        uuid: get(this.state, 'surveyUuid')
       }
     }))
   }
 
   renderSurveyLink () {
     const surveyLink = get(this.state, 'surveyLink')
+    const surveyUuid = get(this.state, 'surveyUuid')
 
     return (
       <div className={this.style.missing}>
-        <div className={this.style.missingGroup}>
-          <input className={this.style.inputBoxUrl} type='text' id='surveyLink' name='surveyLink' onChange={this.onChangeSurveyLink.bind(this)} value={surveyLink} />
-          <button className={this.style.nudj} onClick={this.onSubmitLink.bind(this)}>Update</button>
+        <ul className={this.style.formList}>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='surveyLink'>Link</label>
+            <input className={this.style.inputBoxUrl} type='text' id='surveyLink' name='surveyLink' onChange={this.onChangeSurveyLink.bind(this)} value={surveyLink} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='surveyUuid'>Typeform UUID</label>
+            <input className={this.style.inputBoxUrl} type='text' id='surveyUuid' name='surveyUuid' onChange={this.onChangeSurveyUuid.bind(this)} value={surveyUuid} />
+          </li>
+        </ul>
+        <div className={this.style.formButtons}>
           <CopyToClipboard className={this.style.nudj} data-clipboard-text={surveyLink}>Copy link</CopyToClipboard>
+          <button className={this.style.nudj} onClick={this.onSubmitLink.bind(this)}>Update</button>
         </div>
       </div>
     )
