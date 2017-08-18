@@ -140,6 +140,7 @@ headings.p2Bold = merge(headings.p2, {
 module.exports.headings = headings
 
 module.exports.mainColor = variables.colors.pink
+module.exports.mainColorFade = variables.colors.lightPink
 module.exports.secondaryColor = variables.colors.royalBlue
 
 module.exports.typography = {
@@ -396,7 +397,9 @@ module.exports.formStructure = {
     padding: `${variables.padding.e} 0 0`
   }),
   formButtons: {
-    textAlign: 'right'
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 }
 

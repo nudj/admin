@@ -37,5 +37,9 @@ module.exports = css(merge(mixins.pageLayout, mixins.formStructure, mixins.formE
     [mixins.breakpoints.l]: {
       margin: `0 0 0 ${variables.padding.d}`
     }
+  }),
+  inputBox: merge(mixins.formElements.inputBox, {
+    flexGrow: '1',
+    width: '100%'
   })
 }))

@@ -271,7 +271,8 @@ data.surveys = data.surveys.concat([
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00',
     company: 'company1',
-    link: 'http://surveymonkey.com/123'
+    link: 'http://surveymonkey.com/123',
+    uuid: '123'
   }
 ])
 data.tasks = data.tasks.concat([
