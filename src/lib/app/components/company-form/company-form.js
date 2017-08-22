@@ -27,7 +27,7 @@ module.exports = class CompaniesPage extends React.Component {
     const companyForm = this.refs.companyForm
     companyForm.reset()
 
-    const company = merge({}, this.cleanCompany(), get(this.props, 'company', this.cleanCompany()))
+    const company = merge({}, this.cleanCompany(), get(nextProps, 'company', this.cleanCompany()))
     const validation = this.cleanValidation()
 
     this.setState({ company, validation })
@@ -43,7 +43,8 @@ module.exports = class CompaniesPage extends React.Component {
       url: '',
       facebook: '',
       twitter: '',
-      linkedin: ''
+      linkedin: '',
+      onboarded: false
     }
   }
 
@@ -105,8 +106,9 @@ module.exports = class CompaniesPage extends React.Component {
   }
 
   onChangeGeneric (event) {
-    const value = event.target.value
-    const key = event.target.name
+    const target = event.target
+    const value = target.type === 'checkbox' ? target.checked : target.value
+    const key = target.name
 
     this.updateCompany({ [key]: value })
   }
@@ -243,6 +245,10 @@ module.exports = class CompaniesPage extends React.Component {
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='companyLinkedIn'>LinkedIn</label>
             <input className={this.style.inputBoxUrl} type='uri' placeholder='eg: https://linkedin.com/company' id='companyLinkedIn' name='linkedin' onChange={this.onChangeGeneric.bind(this)} value={company.linkedin} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='companyOnboarded'>Onboarded</label>
+            <input className={this.style.inputBoxUrl} type='checkbox' id='companyOnboarded' name='onboarded' onChange={this.onChangeGeneric.bind(this)} checked={company.onboarded} />
           </li>
         </ul>
         <div className={this.style.formButtons}>

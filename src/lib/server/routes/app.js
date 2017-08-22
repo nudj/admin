@@ -1,5 +1,6 @@
 const express = require('express')
 const get = require('lodash/get')
+const find = require('lodash/find')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 let getTime = require('date-fns/get_time')
 
@@ -22,17 +23,10 @@ const router = express.Router()
 const clone = (obj) => Object.assign({}, obj)
 
 function spoofLoggedIn (req, res, next) {
+  const data = require('../../../mocks/api/dummy-data')
   req.session.data = {
-    hirer: {
-      id: 'hirer1',
-      company: 'company1',
-      person: 'person5'
-    },
-    person: {
-      id: 'person5',
-      firstName: 'David',
-      lastName: 'Platt'
-    }
+    hirer: find(data.hirers, { id: 'hirer1' }),
+    person: find(data.people, { id: 'person5' })
   }
   return next()
 }
