@@ -310,12 +310,15 @@ function addCompanyHirer (req, res, next, data, company, person) {
 }
 
 function addCompanyHirerHandler (req, res, next) {
+  const companySlug = req.params.companySlug
+
   Promise.resolve(merge(req.session.data))
     .then(addDataKeyValue('company', () => companies.get(companySlug)))
     .then(data => addCompanyHirer(req, res, next, data, data.company.id, req.params.person))
 }
 
 function addPersonThenCompanyHirerHandler (req, res, next) {
+  const companySlug = req.params.companySlug
   const email = req.body.email
 
   Promise.resolve(merge(req.session.data))
@@ -325,6 +328,8 @@ function addPersonThenCompanyHirerHandler (req, res, next) {
 }
 
 function addCompanyTaskHandler (req, res, next) {
+  const companySlug = req.params.companySlug
+
   Promise.resolve(merge(req.session.data))
     .then(addDataKeyValue('company', () => companies.get(companySlug)))
     .then(data => {
