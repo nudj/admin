@@ -225,6 +225,7 @@ function editCompanyHandler (req, res, next) {
         type: 'success'
       }),
       tasks: data => tasks.getAllByCompany(merge(data), data.company.id).then(data => data.tasks),
+      surveyMessages: data => messages.getAllFor(merge(data), data.company.id).then(data => data.surveyMessages),
       hirers: data => hirerSmooshing(merge(data)).then(data => data.hirers)
     }
   )
@@ -257,7 +258,7 @@ function companyHandler (req, res, next) {
       survey: data => surveys.getSurveyForCompany(merge(data)).then(data => data.survey),
       jobs: data => jobs.getAll(merge(data), data.company.id).then(data => data.jobs),
       hirers: data => hirerSmooshing(merge(data)).then(data => data.hirers),
-      messages: data => messages.getAllFor(merge(data), data.company.id).then(data => data.messages),
+      surveyMessages: data => messages.getAllFor(merge(data), data.company.id).then(data => data.surveyMessages),
       tasks: data => tasks.getAllByCompany(merge(data), data.company.id).then(data => data.tasks)
     }
   )
@@ -268,8 +269,8 @@ function addCompanyJobHandler (req, res, next) {
   const companySlug = req.params.companySlug
   const job = req.body
 
-  companies
-    .get(merge(req.session.data), companySlug)
+  Promise.resolve(merge(req.session.data))
+    .then(addDataKeyValue('company', () => companies.get(companySlug)))
     .then(data => {
       job.company = data.company.id
       return jobs.post(data, job)
@@ -309,23 +310,23 @@ function addCompanyHirer (req, res, next, data, company, person) {
 }
 
 function addCompanyHirerHandler (req, res, next) {
-  companies
-    .get(merge(req.session.data), req.params.companySlug)
+  Promise.resolve(merge(req.session.data))
+    .then(addDataKeyValue('company', () => companies.get(companySlug)))
     .then(data => addCompanyHirer(req, res, next, data, data.company.id, req.params.person))
 }
 
 function addPersonThenCompanyHirerHandler (req, res, next) {
   const email = req.body.email
 
-  companies
-    .get(merge(req.session.data), req.params.companySlug)
+  Promise.resolve(merge(req.session.data))
+    .then(addDataKeyValue('company', () => companies.get(companySlug)))
     .then(data => people.post(data, {email}))
     .then(data => addCompanyHirer(req, res, next, data, data.company.id, data.newPerson.id))
 }
 
 function addCompanyTaskHandler (req, res, next) {
-  companies
-    .get(merge(req.session.data), req.params.companySlug)
+  Promise.resolve(merge(req.session.data))
+    .then(addDataKeyValue('company', () => companies.get(companySlug)))
     .then(data => {
       const company = data.company.id
       const type = req.params.taskType
@@ -365,16 +366,14 @@ function genericGetJob ({data, req, res, next, companySlug}) {
 function jobHandler (req, res, next) {
   const companySlug = req.params.companySlug
   // Do we have an issue here with job-slug uniqueness across companies?
-  jobs
-    .get(merge(req.session.data), req.params.jobSlug)
+  jobs.get(merge(req.session.data), req.params.jobSlug)
     .then(jobs.getAll)
     .then(data => genericGetJob({data, req, res, next, companySlug}))
 }
 
 function editJobHandler (req, res, next) {
   const companySlug = req.params.companySlug
-  jobs
-    .put(merge(req.session.data), req.body)
+  jobs.put(merge(req.session.data), req.body)
     .then(jobs.getAll)
     .then(data => jobs.get(data, req.params.jobSlug))
     .then(data => {
@@ -391,8 +390,7 @@ function addPersonThenReferralHandler (req, res, next) {
   const email = req.body.email
   const companySlug = req.params.companySlug
 
-  jobs
-    .get(merge(req.session.data), req.params.jobSlug)
+  jobs.get(merge(req.session.data), req.params.jobSlug)
     .then(data => people.post(data, {email}))
     .then(data => jobs.addReferral(data, data.job.id, data.newPerson.id))
     .then(data => {
@@ -409,8 +407,7 @@ function addReferralHandler (req, res, next) {
   const person = req.params.personId
   const companySlug = req.params.companySlug
 
-  jobs
-    .get(merge(req.session.data), req.params.jobSlug)
+  jobs.get(merge(req.session.data), req.params.jobSlug)
     .then(data => jobs.addReferral(data, data.job.id, person))
     .then(data => {
       data.message = {
@@ -423,16 +420,14 @@ function addReferralHandler (req, res, next) {
 }
 
 function peopleHandler (req, res, next) {
-  people
-    .getAll(merge(req.session.data))
+  people.getAll(merge(req.session.data))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
 }
 
 function addPersonHandler (req, res, next) {
-  people
-    .post(merge(req.session.data), req.body)
+  people.post(merge(req.session.data), req.body)
     .then(data => {
       data.message = {
         message: `${data.newPerson.firstName} ${data.newPerson.lastName} added`,
@@ -463,8 +458,7 @@ function smooshJobs (data) {
 }
 
 function genericPersonHandler (req, res, next, data, person) {
-  people
-    .getAll(data)
+  people.getAll(data)
     .then(data => people.get(data, person))
     // Referrals associated with this person
     .then(data => jobs.getAll(data))
@@ -492,8 +486,8 @@ function surveyMessageHandler (req, res, next) {
   const companySlug = req.params.companySlug
   const surveyMessageId = req.params.surveyMessageId
 
-  companies
-    .get(merge(req.session.data), companySlug)
+  Promise.resolve(merge(req.session.data))
+    .then(addDataKeyValue('company', () => companies.get(companySlug)))
     .then(data => messages.getOneById(data, surveyMessageId))
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
@@ -501,8 +495,7 @@ function surveyMessageHandler (req, res, next) {
 }
 
 function editPersonHandler (req, res, next) {
-  people
-    .put(merge(req.session.data), req.body)
+  people.put(merge(req.session.data), req.body)
     .then(data => {
       data.message = {
         message: `${data.savedPerson.firstName} ${data.savedPerson.lastName} saved`,
@@ -515,8 +508,7 @@ function editPersonHandler (req, res, next) {
 }
 
 function addPersonReferralHandler (req, res, next) {
-  jobs
-    .get(merge(req.session.data), req.params.jobSlug)
+  jobs.get(merge(req.session.data), req.params.jobSlug)
     .then(data => jobs.addReferral(data, data.job.id, req.params.personId))
     .then(data => {
       data.message = {
@@ -530,8 +522,7 @@ function addPersonReferralHandler (req, res, next) {
 
 function addPersonRecommendationHandler (req, res, next) {
   const hirer = req.body.hirer
-  jobs
-    .get(merge(req.session.data), req.params.jobSlug)
+  jobs.get(merge(req.session.data), req.params.jobSlug)
     .then(data => network.post(data, hirer, data.job.id, req.params.personId))
     .then(data => {
       data.message = {
@@ -545,8 +536,7 @@ function addPersonRecommendationHandler (req, res, next) {
 
 function addCompanySurveyLinkHandler (req, res, next) {
   const companySlug = req.params.companySlug
-  surveys
-    .post(merge(req.session.data), req.body)
+  surveys.post(merge(req.session.data), req.body)
     .then(data => {
       data.message = {
         message: `Survey link added`,
@@ -567,8 +557,7 @@ function addCompanySurveyLinkHandler (req, res, next) {
 function updateCompanySurveyLinkHandler (req, res, next) {
   const companySlug = req.params.companySlug
   const surveyId = req.params.surveyId
-  surveys
-    .patch(merge(req.session.data), surveyId, req.body)
+  surveys.patch(merge(req.session.data), surveyId, req.body)
     .then(data => {
       data.message = {
         message: `Survey link updated`,
@@ -587,8 +576,7 @@ function updateCompanySurveyLinkHandler (req, res, next) {
 }
 
 function addPersonTaskHandler (req, res, next) {
-  people
-    .get(merge(req.session.data), req.params.personId)
+  people.get(merge(req.session.data), req.params.personId)
     .then(data => hirers.getFirstByPerson(data, data.person.id))
     .then(data => {
       const hirer = data.hirer.id
