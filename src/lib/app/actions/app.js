@@ -1,4 +1,5 @@
 const { push } = require('@nudj/react-router-redux')
+const get = require('lodash/get')
 const request = require('../../lib/request')
 const { merge } = require('../../lib')
 
@@ -115,7 +116,8 @@ module.exports.postData = ({
       })
     })
     .then((data) => {
-      if (data.page.notification) {
+      const notification = get(data, 'page.notification')
+      if (notification) {
         data.page.notification.timer = setTimeout(() => dispatch(hideNotification()), 5000)
       }
       dispatch(fetchedPage(data))
