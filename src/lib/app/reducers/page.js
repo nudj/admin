@@ -29,7 +29,7 @@ function pageReducer (state = initialState, action) {
     case SHOW_NOTIFICATION:
       return merge(state, { notification: merge(action.notification, { hide: false }) })
     case HIDE_NOTIFICATION:
-      return merge(state, { notification: { hide: true } })
+      return merge(state, { notification: { hide: true, timer: false } })
     default:
       return state
   }

@@ -79,7 +79,11 @@ function showNotification (notification) {
 }
 module.exports.showNotification = (notification) => {
   return (dispatch, getState) => {
-    dispatch(showNotification(notification))
+    const state = getState()
+    if (!get(state, 'notification.timer')) {
+      notification.timer = setTimeout(() => dispatch(hideNotification()), 5000)
+      dispatch(showNotification(notification))
+    }
   }
 }
 
@@ -111,6 +115,9 @@ module.exports.postData = ({
       })
     })
     .then((data) => {
+      if (data.page.notification) {
+        data.page.notification.timer = setTimeout(() => dispatch(hideNotification()), 5000)
+      }
       dispatch(fetchedPage(data))
       if (data.page.url.originalUrl !== url) {
         dispatch(push(data.page.url.originalUrl))

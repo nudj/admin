@@ -10,24 +10,13 @@ class Notification extends React.Component {
     super(props)
     this.style = getStyle()
     this.state = {
-      js: false,
-      timer: false
+      js: false
     }
   }
   componentDidMount () {
     this.setState({
       js: true
     })
-  }
-  componentDidUpdate () {
-    if (!get(this.props, 'notification.hide') && !this.state.timer) {
-      this.setState({
-        timer: setTimeout(() => {
-          this.props.dispatch(hideNotification())
-          this.setState({timer: false})
-        }, 5000)
-      })
-    }
   }
   render () {
     const notification = get(this.props, 'notification')

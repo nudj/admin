@@ -148,13 +148,14 @@ function getRenderer (req, res, next) {
 }
 
 const actionMap = (actionObj, data) => {
-  let actionArr = []
-  let keyMap = {}
+  const actionArr = []
+  const keyMap = {}
   Object.keys(actionObj).forEach((key, i) => {
     keyMap[i] = key
     actionArr[i] = actionObj[key]
   })
-  return Promise.all(actionArr.map(action => typeof action === 'function' ? action(data) : Promise.resolve(action))).then((resolvedArr) => {
+  const promises = actionArr.map(action => typeof action === 'function' ? action(data) : action)
+  return Promise.all(promises).then((resolvedArr) => {
     return resolvedArr.reduce((resolvedObj, v, i) => {
       resolvedObj[keyMap[i]] = v
       return resolvedObj
@@ -164,12 +165,12 @@ const actionMap = (actionObj, data) => {
 
 const actionChain = curry((actions, data) => actions[0] ? actions[0](data).then(actionChain(actions.slice(1))) : data)
 
-const actionAccumulator = (actionsObject, data) => {
+const actionAccumulator = curry((actionsObject, data) => {
   return actionMap(actionsObject, data).then(newData => Object.assign(data, newData))
-}
+})
 
 function actionMapAssign (...actionsArray) {
-  return actionChain(actionsArray.map(actionsObject => data => actionAccumulator(actionsObject, data)), {})
+  return actionChain(actionsArray.map(actionsObject => actionAccumulator(actionsObject)), {})
 }
 
 function respondWith (req, res, next) {
@@ -476,7 +477,7 @@ function genericPersonHandler (req, res, next, data, person) {
     .then(data => network.getByPerson(data, person))
     // This person's hirer and company information
     .then(data => hirers.getFirstByPerson(data, data.person.id))
-    .then(data => data.hirer ? addDataKeyValue('company', data => companies.get(data.hirer.company)) : data)
+    .then(data => data.hirer ? addDataKeyValue('company', data => companies.get(data.hirer.company))(data) : data)
     .then(data => data.hirer ? tasks.getAllByHirerAndCompany(data, data.hirer.id, data.hirer.company) : data)
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
@@ -502,14 +503,14 @@ function surveyMessageHandler (req, res, next) {
 function editPersonHandler (req, res, next) {
   people.put(merge(req.session.data), req.body)
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `${data.savedPerson.firstName} ${data.savedPerson.lastName} saved`,
         type: 'success'
       }
       data.person = data.savedPerson
       return promiseMap(data)
     })
-    .then(data => genericPersonHandler(req, res, next, merge(req.session.data), req.params.personId))
+    .then(data => genericPersonHandler(req, res, next, data, req.params.personId))
 }
 
 function addPersonReferralHandler (req, res, next) {
