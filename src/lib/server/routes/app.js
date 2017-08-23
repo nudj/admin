@@ -192,21 +192,21 @@ function companiesHandler (req, res, next) {
 
 function addCompanyHandler (req, res, next) {
   const company = req.body
-  const data = merge(req.session.data)
 
-  companies
-    .post(data, company)
-    .then(data => {
-      data.message = {
+  actionMapAssign(
+    merge(req.session.data),
+    {
+      newCompany: () => companies.post(company)
+    },
+    {
+      companies: () => companies.getAll(),
+      notification: data => ({
         message: `${data.newCompany.name} added`,
         type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(addDataKeyValue('companies', companies.getAll))
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
+      })
+    }
+  )
+  .then(respondWith(req, res, next))
 }
 
 function editCompanyHandler (req, res, next) {
