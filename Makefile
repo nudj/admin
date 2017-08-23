@@ -61,4 +61,5 @@ test:
 		-v $(CWD)/src/lib:/usr/src/lib \
 		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/test:/usr/src/test \
-		$(IMAGEDEV)
+		$(IMAGEDEV) \
+		/bin/sh -c './node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test'

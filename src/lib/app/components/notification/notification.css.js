@@ -14,7 +14,6 @@ module.exports = css({
     borderRadius: variables.sizing.baseBorderRadius,
     boxShadow: `${variables.sizing.genericBoxShadow} ${variables.colors.genericBoxShadow}`,
     backgroundColor: variables.colors.lightGrey,
-    position: 'absolute',
     left: '50%',
     top: variables.sizing.notificationTop,
     transition: 'transform 300ms ease-in-out, opacity 300ms ease-in-out',

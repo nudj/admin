@@ -7,7 +7,6 @@ const getTime = require('date-fns/get_time')
 const {
   merge,
   promiseMap,
-  promiseChain,
   addDataKeyValue
 } = require('@nudj/library')
 
@@ -166,7 +165,7 @@ const actionMap = (actionObj, data) => {
 const actionChain = curry((actions, data) => actions[0] ? actions[0](data).then(actionChain(actions.slice(1))) : data)
 
 const actionAccumulator = (actionsObject, data) => {
-    return actionMap(actionsObject, data).then(newData => Object.assign(data, newData))
+  return actionMap(actionsObject, data).then(newData => Object.assign(data, newData))
 }
 
 function actionMapAssign (...actionsArray) {
@@ -210,7 +209,7 @@ function addCompanyHandler (req, res, next) {
 }
 
 function editCompanyHandler (req, res, next) {
-  const companySlug = req.params.companySlug
+  // const companySlug = req.params.companySlug
   const company = req.body
 
   actionMapAssign(
@@ -252,7 +251,7 @@ function companyHandler (req, res, next) {
     merge(req.session.data),
     {
       company: () => companies.get(companySlug),
-      companies: () => companies.getAll(),
+      companies: () => companies.getAll()
     },
     {
       survey: data => surveys.getSurveyForCompany(merge(data)).then(data => data.survey),

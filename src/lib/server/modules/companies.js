@@ -1,5 +1,4 @@
 const request = require('../../lib/request')
-const { promiseMap } = require('../lib')
 const common = require('./common')
 
 module.exports.get = function (companySlug) {
