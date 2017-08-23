@@ -11,39 +11,35 @@ function createCompany (data, company) {
   return promiseMap(data)
 }
 
-function editCompany (data, company) {
-  data.savedCompany = request(`companies/${company.id}`, {
+function editCompany (company) {
+  return request(`companies/${company.id}`, {
     data: company,
     method: 'patch'
   })
-
-  return promiseMap(data)
 }
 
-function fetchCompany (data, companySlug) {
-  data.company = request(`companies/filter?slug=${companySlug}`)
+function fetchCompany (companySlug) {
+  return request(`companies/filter?slug=${companySlug}`)
     .then(results => results.pop())
-  return promiseMap(data)
 }
 
-function fetchCompanies (data) {
-  data.companies = request(`companies`)
+function fetchCompanies () {
+  return request(`companies`)
     .then(results => results.sort(common.sortByCreated))
-  return promiseMap(data)
 }
 
-module.exports.get = function (data, companySlug) {
-  return fetchCompany(data, companySlug)
+module.exports.get = function (companySlug) {
+  return fetchCompany(companySlug)
 }
 
-module.exports.getAll = function (data) {
-  return fetchCompanies(data)
+module.exports.getAll = function () {
+  return fetchCompanies()
 }
 
 module.exports.post = function (data, company) {
   return createCompany(data, company)
 }
 
-module.exports.put = function (data, company) {
-  return editCompany(data, company)
+module.exports.put = function (company) {
+  return editCompany(company)
 }

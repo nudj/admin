@@ -17,9 +17,11 @@ module.exports = css({
     position: 'absolute',
     left: '50%',
     top: variables.sizing.notificationTop,
-    transition: 'transform 300ms ease-in-out',
+    transition: 'transform 300ms ease-in-out, opacity 300ms ease-in-out',
     transform: 'translateX(-50%) translateY(-200%)',
-    overflow: 'hidden'
+    opacity: 0,
+    overflow: 'hidden',
+    position: 'fixed'
   },
   info: {
     backgroundColor: variables.colors.pink
@@ -59,6 +61,7 @@ module.exports = css({
     display: 'block'
   },
   visible: {
-    transform: 'translateX(-50%) translateY(-30%)'
+    transform: 'translateX(-50%) translateY(-30%)',
+    opacity: 1
   }
 })
