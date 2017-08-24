@@ -25,7 +25,7 @@ const router = express.Router()
 
 function spoofLoggedIn (req, res, next) {
   const data = require('../../../mocks/api/dummy-data')
-  req.session.data = {
+  req.session.data = req.session.data || {
     hirer: find(data.hirers, { id: 'hirer1' }),
     person: find(data.people, { id: 'person5' })
   }
@@ -485,6 +485,7 @@ function genericPersonHandler (req, res, next, data, person) {
 }
 
 function personHandler (req, res, next) {
+  console.log(req.session.data.person)
   genericPersonHandler(req, res, next, merge(req.session.data), req.params.personId)
 }
 
@@ -508,6 +509,10 @@ function editPersonHandler (req, res, next) {
         type: 'success'
       }
       data.person = data.savedPerson
+      // if the updated person is the logged in person, update the session object too
+      if (data.person.id === req.session.data.person.id) {
+        req.session.data.person = data.person
+      }
       return promiseMap(data)
     })
     .then(data => genericPersonHandler(req, res, next, data, req.params.personId))
