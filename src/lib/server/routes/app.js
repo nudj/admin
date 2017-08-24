@@ -1,7 +1,6 @@
 const express = require('express')
 const get = require('lodash/get')
 const find = require('lodash/find')
-const curry = require('lodash/curry')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 const getTime = require('date-fns/get_time')
 const {
