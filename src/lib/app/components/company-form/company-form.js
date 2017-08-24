@@ -248,7 +248,7 @@ module.exports = class CompaniesPage extends React.Component {
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='companyOnboarded'>Onboarded</label>
-            <input className={this.style.inputBoxUrl} type='checkbox' id='companyOnboarded' name='onboarded' onChange={this.onChangeGeneric.bind(this)} checked={company.onboarded} />
+            <input type='checkbox' id='companyOnboarded' name='onboarded' onChange={this.onChangeGeneric.bind(this)} checked={company.onboarded} />
           </li>
         </ul>
         <div className={this.style.formButtons}>
