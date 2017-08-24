@@ -7,7 +7,8 @@ const getTime = require('date-fns/get_time')
 const {
   merge,
   promiseMap,
-  addDataKeyValue
+  addDataKeyValue,
+  actionMapAssign
 } = require('@nudj/library')
 
 const logger = require('../lib/logger')
@@ -145,32 +146,6 @@ function getRenderer (req, res, next) {
       })
     }
   }
-}
-
-const actionMap = (actionObj, data) => {
-  const actionArr = []
-  const keyMap = {}
-  Object.keys(actionObj).forEach((key, i) => {
-    keyMap[i] = key
-    actionArr[i] = actionObj[key]
-  })
-  const promises = actionArr.map(action => typeof action === 'function' ? action(data) : action)
-  return Promise.all(promises).then((resolvedArr) => {
-    return resolvedArr.reduce((resolvedObj, v, i) => {
-      resolvedObj[keyMap[i]] = v
-      return resolvedObj
-    }, {})
-  })
-}
-
-const actionChain = curry((actions, data) => actions[0] ? actions[0](data).then(actionChain(actions.slice(1))) : data)
-
-const actionAccumulator = curry((actionsObject, data) => {
-  return actionMap(actionsObject, data).then(newData => Object.assign(data, newData))
-})
-
-function actionMapAssign (...actionsArray) {
-  return actionChain(actionsArray.map(actionsObject => actionAccumulator(actionsObject)), {})
 }
 
 function respondWith (req, res, next) {
