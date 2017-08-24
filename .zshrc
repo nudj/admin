@@ -1,3 +1,5 @@
+source /root/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 PROMPT='admin» '
 
 alias run="torus run -o nudj -p admin -e local -- node ."
@@ -31,3 +33,12 @@ bindkey "^X\\x7f" backward-kill-line
 
 # adds redo
 bindkey "^X^_" redo
+
+# history substring search
+zle -N history-substring-search-up
+zle -N history-substring-search-down
+bindkey "^[OA" history-substring-search-up
+bindkey "^[OB" history-substring-search-down
+
+source /root/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /root/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh

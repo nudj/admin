@@ -1,4 +1,5 @@
 const { push } = require('@nudj/react-router-redux')
+const get = require('lodash/get')
 const request = require('../../lib/request')
 const { merge } = require('../../lib')
 
@@ -79,7 +80,11 @@ function showNotification (notification) {
 }
 module.exports.showNotification = (notification) => {
   return (dispatch, getState) => {
-    dispatch(showNotification(notification))
+    const state = getState()
+    if (!get(state, 'notification.timer')) {
+      notification.timer = setTimeout(() => dispatch(hideNotification()), 5000)
+      dispatch(showNotification(notification))
+    }
   }
 }
 
@@ -111,6 +116,10 @@ module.exports.postData = ({
       })
     })
     .then((data) => {
+      const notification = get(data, 'page.notification')
+      if (notification) {
+        data.page.notification.timer = setTimeout(() => dispatch(hideNotification()), 5000)
+      }
       dispatch(fetchedPage(data))
       if (data.page.url.originalUrl !== url) {
         dispatch(push(data.page.url.originalUrl))
