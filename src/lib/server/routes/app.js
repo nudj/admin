@@ -485,7 +485,6 @@ function genericPersonHandler (req, res, next, data, person) {
 }
 
 function personHandler (req, res, next) {
-  console.log(req.session.data.person)
   genericPersonHandler(req, res, next, merge(req.session.data), req.params.personId)
 }
 
