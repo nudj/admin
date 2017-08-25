@@ -1,5 +1,5 @@
 const request = require('../../lib/request')
-const { promiseMap } = require('../lib')
+const { promiseMap } = require('@nudj/library')
 
 module.exports.post = function (data, survey) {
   data.survey = request(`surveys`, {

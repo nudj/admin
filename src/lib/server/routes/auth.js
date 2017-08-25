@@ -1,7 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const logger = require('../lib/logger')
-const { promiseMap } = require('../lib')
+const { promiseMap } = require('@nudj/library')
 const people = require('../modules/people')
 
 function cacheReturnTo (req, res, next) {
