@@ -1,9 +1,11 @@
 const isThisWeek = require('date-fns/is_this_week')
 const differenceInCalendarWeeks = require('date-fns/difference_in_calendar_weeks')
+const {
+  merge,
+  promiseMap
+} = require('@nudj/library')
 
-const { merge } = require('../../lib')
-let request = require('../../lib/request')
-let { promiseMap } = require('../lib')
+const request = require('../../lib/request')
 const common = require('./common')
 
 function createJob (data, job) {

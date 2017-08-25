@@ -7,7 +7,7 @@ let {
   SHOW_NOTIFICATION,
   HIDE_NOTIFICATION
 } = require('../actions/app')
-const { merge } = require('../../lib')
+const { merge } = require('@nudj/library')
 
 const initialState = {}
 

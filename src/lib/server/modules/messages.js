@@ -1,5 +1,5 @@
 const request = require('../../lib/request')
-const { promiseMap } = require('../lib')
+const { promiseMap } = require('@nudj/library')
 const flatten = require('lodash/flatten')
 
 module.exports.getAllFor = function getAllFor (data, companyId) {

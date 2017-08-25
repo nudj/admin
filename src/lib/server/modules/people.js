@@ -1,5 +1,5 @@
 const request = require('../../lib/request')
-const { promiseMap } = require('../lib')
+const { promiseMap } = require('@nudj/library')
 
 function fetchPeople () {
   return request(`people`)

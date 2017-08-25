@@ -12,7 +12,8 @@ module.exports = class PeoplePage extends React.Component {
 
     this.types = [
       'SEND_SURVEY_INTERNAL',
-      'UNLOCK_NETWORK_LINKEDIN'
+      'UNLOCK_NETWORK_LINKEDIN',
+      'SHARE_JOBS'
     ]
 
     const task = this.cleanTask()

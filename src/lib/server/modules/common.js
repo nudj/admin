@@ -1,6 +1,6 @@
 const isAfter = require('date-fns/is_after')
 
-let request = require('../../lib/request')
+const request = require('../../lib/request')
 
 function fetchPersonFromFragment (fragment) {
   return request(`people/${fragment.personId || fragment}`)
