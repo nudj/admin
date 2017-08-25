@@ -1,4 +1,4 @@
-const { merge } = require('../../../lib')
+const { merge } = require('@nudj/library')
 const variables = require('./variables')
 
 module.exports.variables = variables

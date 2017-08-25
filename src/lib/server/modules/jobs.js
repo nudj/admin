@@ -1,7 +1,7 @@
 const isThisWeek = require('date-fns/is_this_week')
 const differenceInCalendarWeeks = require('date-fns/difference_in_calendar_weeks')
 
-const { merge } = require('../../lib')
+const { merge } = require('@nudj/library')
 let request = require('../../lib/request')
 let { promiseMap } = require('../lib')
 const common = require('./common')

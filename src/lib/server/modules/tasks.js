@@ -1,5 +1,5 @@
 const request = require('../../lib/request')
-const { merge } = require('../../lib')
+const { merge } = require('@nudj/library')
 const { promiseMap } = require('../lib')
 
 function fetchTaskById (id) {

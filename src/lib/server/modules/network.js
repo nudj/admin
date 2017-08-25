@@ -5,7 +5,7 @@ const request = require('../../lib/request')
 const mailer = require('../lib/mailer')
 const templater = require('../../lib/templater')
 const { promiseMap } = require('../lib')
-const { merge } = require('../../lib')
+const { merge } = require('@nudj/library')
 const logger = require('../../lib/logger')
 const { emails: validators } = require('../../lib/validators')
 
