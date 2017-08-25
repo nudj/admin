@@ -1,11 +1,14 @@
 const get = require('lodash/get')
 const mapValues = require('lodash/mapValues')
+const {
+  merge,
+  promiseMap
+} = require('@nudj/library')
+
 const NudjError = require('../../lib/error')
 const request = require('../../lib/request')
 const mailer = require('../lib/mailer')
 const templater = require('../../lib/templater')
-const { promiseMap } = require('@nudj/library')
-const { merge } = require('@nudj/library')
 const logger = require('../../lib/logger')
 const { emails: validators } = require('../../lib/validators')
 

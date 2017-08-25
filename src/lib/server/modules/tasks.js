@@ -1,6 +1,9 @@
+const {
+  merge,
+  promiseMap
+} = require('@nudj/library')
+
 const request = require('../../lib/request')
-const { merge } = require('@nudj/library')
-const { promiseMap } = require('@nudj/library')
 
 function fetchTaskById (id) {
   return request(`tasks/filter?id=${id}`)
