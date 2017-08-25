@@ -314,7 +314,7 @@ function addCompanyTaskHandler (req, res, next) {
       return tasks.post(data, task)
     })
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `New ${data.newTask.type} task saved`,
         type: 'success'
       }

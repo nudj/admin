@@ -20,7 +20,8 @@ module.exports = css({
     transform: 'translateX(-50%) translateY(-200%)',
     opacity: 0,
     overflow: 'hidden',
-    position: 'fixed'
+    position: 'fixed',
+    zIndex: 100
   },
   info: {
     backgroundColor: variables.colors.pink
