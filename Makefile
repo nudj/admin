@@ -11,6 +11,13 @@ build:
 		-f $(CWD)/Dockerfile.dev \
 		.
 
+buildLocal:
+	@docker build \
+		-t $(IMAGE):local \
+		--build-arg NPM_TOKEN=${NPM_TOKEN} \
+		-f $(CWD)/Dockerfile \
+		.
+
 ssh:
 	-@docker rm -f admin-dev 2> /dev/null || true
 	@docker run --rm -it \
