@@ -129,7 +129,8 @@ module.exports = class JobsPage extends React.Component {
     const companySlug = get(this.props, 'company.slug')
     const jobSlug = get(this.props, 'job.slug', '')
     const slug = `${companySlug}+${jobSlug}+${get(referral, 'id', '')}`
-    const referralLink = `https://nudj.co/jobs/${slug}`
+    const webHostname = get(this.props, 'web.hostname')
+    const referralLink = `https://${webHostname}/jobs/${slug}`
     return referralLink
   }
 

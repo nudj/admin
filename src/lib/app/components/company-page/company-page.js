@@ -151,6 +151,7 @@ module.exports = class JobsPage extends React.Component {
     const jobs = get(this.props, 'jobs', [])
     const companySlug = get(this.props, 'company.slug')
     const rightNow = new Date()
+    const webHostname = get(this.props, 'web.hostname')
 
     const jobsList = jobs.map((job) => {
       const jobBonus = get(job, 'bonus')
@@ -167,7 +168,7 @@ module.exports = class JobsPage extends React.Component {
         key={jobSlug}
         rowClass={rowClass}
         title={jobTitle}
-        uri={`//nudj.co/jobs/${jobSlug}+${jobSlug}`}
+        uri={`//${webHostname}/jobs/${companySlug}+${jobSlug}`}
         details={[{
           term: 'Status',
           description: jobStatus

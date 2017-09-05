@@ -60,6 +60,7 @@ function handleError (error, data) {
 function renderMessage ({ data, template }) {
   const companySlug = get(data, 'company.slug', '')
   const jobSlug = get(data, 'job.slug', '')
+  const webHostname = get(this.props, 'web.hostname')
 
   return templater.render({
     template,
@@ -69,7 +70,7 @@ function renderMessage ({ data, template }) {
       },
       job: {
         bonus: get(data, 'job.bonus', ''),
-        link: `https://nudj.co/jobs/${companySlug}+${jobSlug}`, // ?
+        link: `https://${webHostname}/jobs/${companySlug}+${jobSlug}`, // ?
         title: get(data, 'job.title', '')
       },
       sender: {
