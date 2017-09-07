@@ -5,17 +5,17 @@ const { Link } = require('react-router-dom')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 
 const getStyle = require('./person-page.css')
-const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
-const Autocomplete = require('../autocomplete/autocomplete')
-const PageHeader = require('../page-header/page-header')
-const PersonForm = require('../person-form/person-form')
-const RowItem = require('../row-item/row-item')
-const Plural = require('../plural/plural')
-const TasksList = require('../tasks-list/tasks-list')
-const TaskAdder = require('../task-adder/task-adder')
-const { postData } = require('../../actions/app')
+const CopyToClipboard = require('../../app/components/copy-to-clipboard/copy-to-clipboard')
+const Autocomplete = require('../../app/components/autocomplete/autocomplete')
+const PageHeader = require('../../app/components/page-header/page-header')
+const PersonForm = require('../../app/components/person-form/person-form')
+const RowItem = require('../../app/components/row-item/row-item')
+const Plural = require('../../app/components/plural/plural')
+const TasksList = require('../../app/components/tasks-list/tasks-list')
+const TaskAdder = require('../../app/components/task-adder/task-adder')
+const { postData } = require('../../app/actions/app')
 
-module.exports = class CompaniesPage extends React.Component {
+module.exports = class PersonPage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()

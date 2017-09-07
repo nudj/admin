@@ -14,6 +14,7 @@ const logger = require('../lib/logger')
 const companies = require('../modules/companies')
 const fetchersCompanies = require('../../routes/companies/companies-fetchers')
 const fetchersPeople = require('../../routes/people/people-fetchers')
+const fetchersPerson = require('../../routes/person/person-fetchers')
 const surveys = require('../modules/surveys')
 const jobs = require('../modules/jobs')
 const hirers = require('../modules/hirers')
@@ -165,7 +166,8 @@ function respondWithData (dataFetcher) {
     return dataFetcher({
       data: merge(req.session.data),
       params: req.params,
-      body: req.body
+      body: req.body,
+      req
     })
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
@@ -427,10 +429,6 @@ function genericPersonHandler (req, res, next, data, person) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function personHandler (req, res, next) {
-  genericPersonHandler(req, res, next, merge(req.session.data), req.params.personId)
-}
-
 function surveyMessageHandler (req, res, next) {
   const companySlug = req.params.companySlug
   const surveyMessageId = req.params.surveyMessageId
@@ -441,23 +439,6 @@ function surveyMessageHandler (req, res, next) {
     .then(getRenderDataBuilder(req, res, next))
     .then(getRenderer(req, res, next))
     .catch(getErrorHandler(req, res, next))
-}
-
-function editPersonHandler (req, res, next) {
-  people.put(merge(req.session.data), req.body)
-    .then(data => {
-      data.notification = {
-        message: `${data.savedPerson.firstName} ${data.savedPerson.lastName} saved`,
-        type: 'success'
-      }
-      data.person = data.savedPerson
-      // if the updated person is the logged in person, update the session object too
-      if (data.person.id === req.session.data.person.id) {
-        req.session.data.person = data.person
-      }
-      return promiseMap(data)
-    })
-    .then(data => genericPersonHandler(req, res, next, data, req.params.personId))
 }
 
 function addPersonReferralHandler (req, res, next) {
@@ -554,8 +535,8 @@ router.post('/', respondWithData(fetchersCompanies.post))
 
 router.get('/people', respondWithData(fetchersPeople.get))
 router.post('/people', respondWithData(fetchersPeople.post))
-router.get('/people/:personId', personHandler)
-router.put('/people/:personId', editPersonHandler)
+router.get('/people/:personId', respondWithData(fetchersPerson.get))
+router.put('/people/:personId', respondWithData(fetchersPerson.put))
 router.post('/people/:personId/referrals/:jobSlug', addPersonReferralHandler)
 router.post('/people/:personId/recommendations/:jobSlug', addPersonRecommendationHandler)
 router.post('/people/:personId/tasks/:taskType', addPersonTaskHandler)

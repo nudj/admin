@@ -12,7 +12,7 @@ const PersonForm = require('../../app/components/person-form/person-form')
 const Plural = require('../../app/components/plural/plural')
 const { postData } = require('../../app/actions/app')
 
-module.exports = class CompaniesPage extends React.Component {
+module.exports = class PeoplePage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
