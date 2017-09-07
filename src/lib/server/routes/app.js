@@ -231,7 +231,8 @@ function companyHandler (req, res, next) {
     merge(req.session.data),
     {
       company: () => companies.get(companySlug),
-      companies: () => companies.getAll()
+      companies: () => companies.getAll(),
+      people: data => people.getAll(data).then(data => data.people)
     },
     {
       survey: data => surveys.getSurveyForCompany(merge(data)).then(data => data.survey),
@@ -255,7 +256,7 @@ function addCompanyJobHandler (req, res, next) {
       return jobs.post(data, job)
     })
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `${data.newJob.title} added`,
         type: 'success'
       }
@@ -273,7 +274,7 @@ function addCompanyJobHandler (req, res, next) {
 function addCompanyHirer (req, res, next, data, company, person) {
   hirers.post(data, {company, person})
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `New hirer added`,
         type: 'success'
       }
@@ -361,7 +362,7 @@ function editJobHandler (req, res, next) {
     .then(jobs.getAll)
     .then(data => jobs.get(data, req.params.jobSlug))
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `${data.savedJob.title} saved`,
         type: 'success'
       }
@@ -378,7 +379,7 @@ function addPersonThenReferralHandler (req, res, next) {
     .then(data => people.post(data, {email}))
     .then(data => jobs.addReferral(data, data.job.id, data.newPerson.id))
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `${data.referral.id} saved`,
         type: 'success'
       }
@@ -394,7 +395,7 @@ function addReferralHandler (req, res, next) {
   jobs.get(merge(req.session.data), req.params.jobSlug)
     .then(data => jobs.addReferral(data, data.job.id, person))
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `${data.referral.id} saved`,
         type: 'success'
       }
@@ -413,7 +414,7 @@ function peopleHandler (req, res, next) {
 function addPersonHandler (req, res, next) {
   people.post(merge(req.session.data), req.body)
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `${data.newPerson.firstName} ${data.newPerson.lastName} added`,
         type: 'success'
       }
@@ -499,7 +500,7 @@ function addPersonReferralHandler (req, res, next) {
   jobs.get(merge(req.session.data), req.params.jobSlug)
     .then(data => jobs.addReferral(data, data.job.id, req.params.personId))
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `${data.referral.id} saved`,
         type: 'success'
       }
@@ -513,7 +514,7 @@ function addPersonRecommendationHandler (req, res, next) {
   jobs.get(merge(req.session.data), req.params.jobSlug)
     .then(data => network.post(data, hirer, data.job.id, req.params.personId))
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `${data.recommendation.id} saved`,
         type: 'success'
       }
@@ -526,7 +527,7 @@ function addCompanySurveyLinkHandler (req, res, next) {
   const companySlug = req.params.companySlug
   surveys.post(merge(req.session.data), req.body)
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `Survey link added`,
         type: 'success'
       }
@@ -547,7 +548,7 @@ function updateCompanySurveyLinkHandler (req, res, next) {
   const surveyId = req.params.surveyId
   surveys.patch(merge(req.session.data), surveyId, req.body)
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `Survey link updated`,
         type: 'success'
       }
@@ -573,7 +574,7 @@ function addPersonTaskHandler (req, res, next) {
       return tasks.post(data, task)
     })
     .then(data => {
-      data.message = {
+      data.notification = {
         message: `New ${data.newTask.type} task saved`,
         type: 'success'
       }
