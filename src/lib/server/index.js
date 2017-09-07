@@ -1,13 +1,12 @@
 require('babel-register')({
   presets: ['react'],
   ignore: function (filename) {
-    if (filename.match(/@nudj/) || filename.match(/lib\/app/)) {
+    if (filename.match(/@nudj/) || filename.match(/lib\/app/) || filename.match(/lib\/routes/)) {
       return false
     }
     return true
   }
 })
-let logger = require('./lib/logger')
 let path = require('path')
 let express = require('express')
 let bodyParser = require('body-parser')
@@ -19,6 +18,7 @@ let csrf = require('csurf')
 let redis = require('redis')
 let RedisStore = require('connect-redis')(session)
 
+let logger = require('./lib/logger')
 let authRoutes = require('./routes/auth')
 let appRoutes = require('./routes/app')
 

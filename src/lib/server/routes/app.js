@@ -12,6 +12,8 @@ const {
 
 const logger = require('../lib/logger')
 const companies = require('../modules/companies')
+const fetchersCompanies = require('../../routes/companies/companies-fetchers')
+const fetchersPeople = require('../../routes/people/people-fetchers')
 const surveys = require('../modules/surveys')
 const jobs = require('../modules/jobs')
 const hirers = require('../modules/hirers')
@@ -158,33 +160,17 @@ function respondWith (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function companiesHandler (req, res, next) {
-  actionMapAssign(
-    merge(req.session.data),
-    {
-      companies: () => companies.getAll()
-    }
-  )
-  .then(respondWith(req, res, next))
-}
-
-function addCompanyHandler (req, res, next) {
-  const company = req.body
-
-  actionMapAssign(
-    merge(req.session.data),
-    {
-      newCompany: () => companies.post(company)
-    },
-    {
-      companies: () => companies.getAll(),
-      notification: data => ({
-        message: `${data.newCompany.name} added`,
-        type: 'success'
-      })
-    }
-  )
-  .then(respondWith(req, res, next))
+function respondWithData (dataFetcher) {
+  return (req, res, next) => {
+    return dataFetcher({
+      data: merge(req.session.data),
+      params: req.params,
+      body: req.body
+    })
+    .then(getRenderDataBuilder(req, res, next))
+    .then(getRenderer(req, res, next))
+    .catch(getErrorHandler(req, res, next))
+  }
 }
 
 function editCompanyHandler (req, res, next) {
@@ -404,28 +390,6 @@ function addReferralHandler (req, res, next) {
     .then(data => genericGetJob({data, req, res, next, companySlug}))
 }
 
-function peopleHandler (req, res, next) {
-  people.getAll(merge(req.session.data))
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
-}
-
-function addPersonHandler (req, res, next) {
-  people.post(merge(req.session.data), req.body)
-    .then(data => {
-      data.notification = {
-        message: `${data.newPerson.firstName} ${data.newPerson.lastName} added`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(data => people.getAll(data))
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
-}
-
 function smooshJob (data, job) {
   const relatedCompany = data.companies.find(company => company.id === job.company)
   const relatedHirers = data.hirers.filter(hirer => hirer.company === job.company)
@@ -585,11 +549,11 @@ function addPersonTaskHandler (req, res, next) {
 
 router.use(ensureLoggedIn)
 
-router.get('/', companiesHandler)
-router.post('/', addCompanyHandler)
+router.get('/', respondWithData(fetchersCompanies.get))
+router.post('/', respondWithData(fetchersCompanies.post))
 
-router.get('/people', peopleHandler)
-router.post('/people', addPersonHandler)
+router.get('/people', respondWithData(fetchersPeople.get))
+router.post('/people', respondWithData(fetchersPeople.post))
 router.get('/people/:personId', personHandler)
 router.put('/people/:personId', editPersonHandler)
 router.post('/people/:personId/referrals/:jobSlug', addPersonReferralHandler)

@@ -5,12 +5,12 @@ const format = require('date-fns/format')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
 const getStyle = require('./people-page.css')
-const PageHeader = require('../page-header/page-header')
-const RowItem = require('../row-item/row-item')
-const Tooltip = require('../tooltip/tooltip')
-const PersonForm = require('../person-form/person-form')
-const Plural = require('../plural/plural')
-const { postData } = require('../../actions/app')
+const PageHeader = require('../../app/components/page-header/page-header')
+const RowItem = require('../../app/components/row-item/row-item')
+const Tooltip = require('../../app/components/tooltip/tooltip')
+const PersonForm = require('../../app/components/person-form/person-form')
+const Plural = require('../../app/components/plural/plural')
+const { postData } = require('../../app/actions/app')
 
 module.exports = class CompaniesPage extends React.Component {
   constructor (props) {
