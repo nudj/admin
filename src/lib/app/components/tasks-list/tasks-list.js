@@ -20,7 +20,7 @@ const TaskList = (props) => {
     const scope = get(task, 'company', '') ? 'Company' : 'Hirer'
 
     return (<RowItem
-      rowKey={key}
+      key={key}
       rowClass='rowSmall'
       title={title}
       details={[

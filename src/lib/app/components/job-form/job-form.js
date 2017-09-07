@@ -1,14 +1,24 @@
 const React = require('react')
 const get = require('lodash/get')
-const merge = require('lodash/merge')
+const { merge } = require('@nudj/library')
+
 const getStyle = require('./job-form.css')
+
+const normaliseJob = (job) => merge(job, {
+  tags: job.tags.join(', '),
+  templateTags: job.templateTags.join(', ')
+})
+const denormaliseJob = (job) => merge(job, {
+  tags: job.tags.replace(/\s/g, '').split(','),
+  templateTags: job.templateTags.replace(/\s/g, '').split(',')
+})
 
 module.exports = class CompaniesPage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
     this.submit = get(props, 'onSubmit')
-    const job = merge({}, this.cleanJob(), get(props, 'job', this.cleanJob()))
+    const job = normaliseJob(get(props, 'job', this.cleanJob()))
     this.state = { job }
   }
 
@@ -27,7 +37,7 @@ module.exports = class CompaniesPage extends React.Component {
     const jobForm = this.refs.jobForm
     jobForm.reset()
 
-    const job = merge({}, this.cleanJob(), get(this.props, 'job', this.cleanJob()))
+    const job = normaliseJob(get(nextProps, 'job', this.cleanJob()))
     const validation = this.cleanValidation()
 
     this.setState({ job, validation })
@@ -43,6 +53,7 @@ module.exports = class CompaniesPage extends React.Component {
       description: '',
       type: 'PERMANENT', // 'Contract', 'Freelance'
       remuneration: '',
+      templateTags: [],
       tags: [],
       location: '',
       companyId: get(this.props, 'company.id'),
@@ -156,9 +167,9 @@ module.exports = class CompaniesPage extends React.Component {
     }
 
     const submit = get(this.props, 'onSubmit', () => {})
-    const data = get(this.state, 'job', {})
+    const job = get(this.state, 'job')
 
-    submit(data)
+    submit(denormaliseJob(job))
   }
 
   updateJob (newStuff) {
@@ -250,6 +261,14 @@ module.exports = class CompaniesPage extends React.Component {
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobLocation'>Location</label>
             <input className={this.style.inputBox} type='text' placeholder='eg: London' id='newJobLocation' required name='location' onChange={this.onChangeGeneric.bind(this)} value={job.location} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='newJobTags'>Tags</label>
+            <input className={this.style.inputBox} type='text' placeholder='eg: finance, tech' id='newJobTags' name='tags' onChange={this.onChangeGeneric.bind(this)} value={job.tags} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='newJobTemplateTags'>Template tags</label>
+            <input className={this.style.inputBox} type='text' placeholder='eg: food, movies' id='newJobTemplateTags' name='templateTags' onChange={this.onChangeGeneric.bind(this)} value={job.templateTags} />
           </li>
         </ul>
         <div className={this.style.formButtons}>

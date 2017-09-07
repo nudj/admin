@@ -4,9 +4,9 @@ const get = require('lodash/get')
 const format = require('date-fns/format')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
-const getStyle = require('./company-page.css')
-
 const isEmail = require('validator/lib/isEmail')
+
+const getStyle = require('./company-page.css')
 const Autocomplete = require('../autocomplete/autocomplete')
 const PageHeader = require('../page-header/page-header')
 const RowItem = require('../row-item/row-item')
@@ -17,7 +17,6 @@ const Plural = require('../plural/plural')
 const CopyToClipboard = require('../copy-to-clipboard/copy-to-clipboard')
 const TasksList = require('../tasks-list/tasks-list')
 const TaskAdder = require('../task-adder/task-adder')
-
 const { postData } = require('../../actions/app')
 
 module.exports = class JobsPage extends React.Component {
@@ -380,7 +379,7 @@ module.exports = class JobsPage extends React.Component {
     return (
       <div className={this.style.pageBody}>
         <Helmet>
-          <title>{`nudj - ${companyName}`}</title>
+          <title>{`ADMIN - ${companyName}`}</title>
         </Helmet>
         <PageHeader title={companyName} subtitle={`Jobs and Hirers`} />
         <h3 className={this.style.pageHeadline}>

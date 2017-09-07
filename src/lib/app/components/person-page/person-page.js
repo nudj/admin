@@ -403,7 +403,7 @@ module.exports = class CompaniesPage extends React.Component {
     return (
       <div className={this.style.pageBody}>
         <Helmet>
-          <title>{`nudj - ${personName}`}</title>
+          <title>{`ADMIN - ${personName}`}</title>
         </Helmet>
         <PageHeader title={personName}>
           <h4>{get(this.props, 'person.email')}</h4>
