@@ -15,6 +15,7 @@ const fetchersCompanies = require('../../routes/companies/companies-fetchers')
 const fetchersPeople = require('../../routes/people/people-fetchers')
 const fetchersPerson = require('../../routes/person/person-fetchers')
 const fetchersCompany = require('../../routes/company/company-fetchers')
+const fetchersCompanyJobs = require('../../routes/company-jobs/company-jobs-fetchers')
 const surveys = require('../modules/surveys')
 const jobs = require('../modules/jobs')
 const hirers = require('../modules/hirers')
@@ -178,32 +179,6 @@ function hirerSmooshing (data) {
       data.hirers = expandedHirers
       return promiseMap(data)
     })
-}
-
-function addCompanyJobHandler (req, res, next) {
-  const companySlug = req.params.companySlug
-  const job = req.body
-
-  Promise.resolve(merge(req.session.data))
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => {
-      job.company = data.company.id
-      return jobs.post(data, job)
-    })
-    .then(data => {
-      data.notification = {
-        message: `${data.newJob.title} added`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(addDataKeyValue('companies', companies.getAll))
-    .then(data => jobs.getAll(data, data.company.id))
-    .then(hirerSmooshing)
-    .then(data => tasks.getAllByCompany(data, data.company.id))
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
 }
 
 function addCompanyHirer (req, res, next, data, company, person) {
@@ -407,7 +382,7 @@ router.post('/people/:personId/tasks/:taskType', respondWith(fetchersPerson.post
 
 router.get('/:companySlug', respondWith(fetchersCompany.get))
 router.put('/:companySlug', respondWith(fetchersCompany.put))
-router.post('/:companySlug/jobs', addCompanyJobHandler)
+router.post('/:companySlug/jobs', respondWith(fetchersCompanyJobs.post))
 router.get('/:companySlug/jobs/:jobSlug', jobHandler)
 router.put('/:companySlug/jobs/:jobSlug', editJobHandler)
 router.post('/:companySlug/jobs/:jobSlug/referrals', addPersonThenReferralHandler)
