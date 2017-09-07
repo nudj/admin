@@ -1,8 +1,4 @@
-const {
-  merge,
-  promiseMap,
-  actionMapAssign
-} = require('@nudj/library')
+const { actionMapAssign } = require('@nudj/library')
 
 const people = require('../../server/modules/people')
 

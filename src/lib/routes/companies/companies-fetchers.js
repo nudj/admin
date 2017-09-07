@@ -1,7 +1,4 @@
-const {
-  merge,
-  actionMapAssign
-} = require('@nudj/library')
+const { actionMapAssign } = require('@nudj/library')
 
 const companies = require('../../server/modules/companies')
 

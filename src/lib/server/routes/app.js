@@ -408,27 +408,6 @@ function smooshJobs (data) {
   return promiseMap(data)
 }
 
-function genericPersonHandler (req, res, next, data, person) {
-  people.getAll(data)
-    .then(data => people.get(data, person))
-    // Referrals associated with this person
-    .then(data => jobs.getAll(data))
-    .then(addDataKeyValue('companies', companies.getAll))
-    .then(data => hirers.getAll(data))
-    .then(data => promiseMap(data)) // Do I need this?
-    .then(data => smooshJobs(data))
-    .then(data => jobs.getReferralsForPerson(data, person))
-    // Recommendations associated with this person
-    .then(data => network.getByPerson(data, person))
-    // This person's hirer and company information
-    .then(data => hirers.getFirstByPerson(data, data.person.id))
-    .then(data => data.hirer ? addDataKeyValue('company', data => companies.get(data.hirer.company))(data) : data)
-    .then(data => data.hirer ? tasks.getAllByHirerAndCompany(data, data.hirer.id, data.hirer.company) : data)
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
-}
-
 function surveyMessageHandler (req, res, next) {
   const companySlug = req.params.companySlug
   const surveyMessageId = req.params.surveyMessageId
