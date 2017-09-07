@@ -151,6 +151,34 @@ function patchSurvey ({
     .then(data => messages.getAllFor(data, data.company.id))
 }
 
+function postTask ({
+  data,
+  params,
+  body
+}) {
+  const companySlug = params.companySlug
+
+  return Promise.resolve(data)
+    .then(addDataKeyValue('company', () => companies.get(companySlug)))
+    .then(data => {
+      const company = data.company.id
+      const type = params.taskType
+      const task = {company, type}
+      return tasks.post(data, task)
+    })
+    .then(data => {
+      data.notification = {
+        message: `New ${data.newTask.type} task saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(addDataKeyValue('companies', companies.getAll))
+    .then(data => jobs.getAll(data, data.company.id))
+    .then(hirerSmooshing)
+    .then(data => tasks.getAllByCompany(data, data.company.id))
+}
+
 function hirerSmooshing (data) {
   return people.getAll(data)
     .then(data => hirers.getAllByCompany(data, data.company.id))
@@ -186,5 +214,6 @@ module.exports = {
   postHirer,
   postHirerPerson,
   postSurvey,
-  patchSurvey
+  patchSurvey,
+  postTask
 }

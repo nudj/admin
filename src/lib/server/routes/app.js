@@ -5,7 +5,6 @@ const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 const getTime = require('date-fns/get_time')
 const {
   merge,
-  promiseMap,
   addDataKeyValue
 } = require('@nudj/library')
 
@@ -16,11 +15,7 @@ const fetchersPeople = require('../../routes/people/people-fetchers')
 const fetchersPerson = require('../../routes/person/person-fetchers')
 const fetchersCompany = require('../../routes/company/company-fetchers')
 const fetchersCompanyJob = require('../../routes/company-job/company-job-fetchers')
-const jobs = require('../modules/jobs')
-const hirers = require('../modules/hirers')
 const messages = require('../modules/messages')
-const people = require('../modules/people')
-const tasks = require('../modules/tasks')
 const app = require('../../app/server')
 
 const router = express.Router()
@@ -167,46 +162,6 @@ function respondWith (dataFetcher) {
   }
 }
 
-function hirerSmooshing (data) {
-  return people.getAll(data)
-    .then(data => hirers.getAllByCompany(data, data.company.id))
-    .then(data => {
-      const expandedHirers = data.hirers.map(hirer => {
-        const person = data.people.find(person => person.id === hirer.person)
-        return merge({}, hirer, {person})
-      })
-      data.hirers = expandedHirers
-      return promiseMap(data)
-    })
-}
-
-function addCompanyTaskHandler (req, res, next) {
-  const companySlug = req.params.companySlug
-
-  Promise.resolve(merge(req.session.data))
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => {
-      const company = data.company.id
-      const type = req.params.taskType
-      const task = {company, type}
-      return tasks.post(data, task)
-    })
-    .then(data => {
-      data.notification = {
-        message: `New ${data.newTask.type} task saved`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(addDataKeyValue('companies', companies.getAll))
-    .then(data => jobs.getAll(data, data.company.id))
-    .then(hirerSmooshing)
-    .then(data => tasks.getAllByCompany(data, data.company.id))
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
-}
-
 function surveyMessageHandler (req, res, next) {
   const companySlug = req.params.companySlug
   const surveyMessageId = req.params.surveyMessageId
@@ -238,7 +193,7 @@ router.post('/:companySlug/hirers', respondWith(fetchersCompany.postHirer))
 router.post('/:companySlug/hirers/:person', respondWith(fetchersCompany.postHirerPerson))
 router.post('/:companySlug/surveys', respondWith(fetchersCompany.postSurvey))
 router.patch('/:companySlug/surveys/:surveyId', respondWith(fetchersCompany.patchSurvey))
-router.post('/:companySlug/tasks/:taskType', addCompanyTaskHandler)
+router.post('/:companySlug/tasks/:taskType', respondWith(fetchersCompany.postTask))
 
 router.post('/:companySlug/jobs', respondWith(fetchersCompany.postJob))
 router.get('/:companySlug/jobs/:jobSlug', respondWith(fetchersCompanyJob.get))
