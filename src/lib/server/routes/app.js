@@ -16,7 +16,6 @@ const fetchersPeople = require('../../routes/people/people-fetchers')
 const fetchersPerson = require('../../routes/person/person-fetchers')
 const fetchersCompany = require('../../routes/company/company-fetchers')
 const fetchersCompanyJob = require('../../routes/company-job/company-job-fetchers')
-const surveys = require('../modules/surveys')
 const jobs = require('../modules/jobs')
 const hirers = require('../modules/hirers')
 const messages = require('../modules/messages')
@@ -220,47 +219,6 @@ function surveyMessageHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function addCompanySurveyLinkHandler (req, res, next) {
-  const companySlug = req.params.companySlug
-  surveys.post(merge(req.session.data), req.body)
-    .then(data => {
-      data.notification = {
-        message: `Survey link added`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => jobs.getAll(data, data.company.id))
-    .then(addDataKeyValue('companies', companies.getAll))
-    .then(hirerSmooshing)
-    .then(data => messages.getAllFor(data, data.company.id))
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
-}
-
-function updateCompanySurveyLinkHandler (req, res, next) {
-  const companySlug = req.params.companySlug
-  const surveyId = req.params.surveyId
-  surveys.patch(merge(req.session.data), surveyId, req.body)
-    .then(data => {
-      data.notification = {
-        message: `Survey link updated`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => jobs.getAll(data, data.company.id))
-    .then(addDataKeyValue('companies', companies.getAll))
-    .then(hirerSmooshing)
-    .then(data => messages.getAllFor(data, data.company.id))
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
-}
-
 router.use(ensureLoggedIn)
 
 router.get('/', respondWith(fetchersCompanies.get))
@@ -276,17 +234,19 @@ router.post('/people/:personId/tasks/:taskType', respondWith(fetchersPerson.post
 
 router.get('/:companySlug', respondWith(fetchersCompany.get))
 router.put('/:companySlug', respondWith(fetchersCompany.put))
+router.post('/:companySlug/hirers', respondWith(fetchersCompany.postHirer))
+router.post('/:companySlug/hirers/:person', respondWith(fetchersCompany.postHirerPerson))
+router.post('/:companySlug/surveys', respondWith(fetchersCompany.postSurvey))
+router.patch('/:companySlug/surveys/:surveyId', respondWith(fetchersCompany.patchSurvey))
+router.post('/:companySlug/tasks/:taskType', addCompanyTaskHandler)
+
 router.post('/:companySlug/jobs', respondWith(fetchersCompany.postJob))
 router.get('/:companySlug/jobs/:jobSlug', respondWith(fetchersCompanyJob.get))
 router.put('/:companySlug/jobs/:jobSlug', respondWith(fetchersCompanyJob.put))
 router.post('/:companySlug/jobs/:jobSlug/referrals', respondWith(fetchersCompanyJob.postReferral))
 router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', respondWith(fetchersCompanyJob.postReferralPerson))
-router.post('/:companySlug/hirers', respondWith(fetchersCompany.postHirer))
-router.post('/:companySlug/hirers/:person', respondWith(fetchersCompany.postHirerPerson))
+
 router.get('/:companySlug/messages/:surveyMessageId', surveyMessageHandler)
-router.post('/:companySlug/surveys', addCompanySurveyLinkHandler)
-router.patch('/:companySlug/surveys/:surveyId', updateCompanySurveyLinkHandler)
-router.post('/:companySlug/tasks/:taskType', addCompanyTaskHandler)
 
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})

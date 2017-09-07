@@ -108,6 +108,49 @@ function postHirerPerson ({
     .then(data => addCompanyHirer(data, data.company.id, params.person))
 }
 
+function postSurvey ({
+  data,
+  params,
+  body
+}) {
+  const companySlug = params.companySlug
+  return surveys.post(data, body)
+    .then(data => {
+      data.notification = {
+        message: `Survey added`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(addDataKeyValue('company', () => companies.get(companySlug)))
+    .then(data => jobs.getAll(data, data.company.id))
+    .then(addDataKeyValue('companies', companies.getAll))
+    .then(hirerSmooshing)
+    .then(data => messages.getAllFor(data, data.company.id))
+}
+
+function patchSurvey ({
+  data,
+  params,
+  body
+}) {
+  const companySlug = params.companySlug
+  const surveyId = params.surveyId
+  return surveys.patch(data, surveyId, body)
+    .then(data => {
+      data.notification = {
+        message: `Survey updated`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(addDataKeyValue('company', () => companies.get(companySlug)))
+    .then(data => jobs.getAll(data, data.company.id))
+    .then(addDataKeyValue('companies', companies.getAll))
+    .then(hirerSmooshing)
+    .then(data => messages.getAllFor(data, data.company.id))
+}
+
 function hirerSmooshing (data) {
   return people.getAll(data)
     .then(data => hirers.getAllByCompany(data, data.company.id))
@@ -141,5 +184,7 @@ module.exports = {
   put,
   postJob,
   postHirer,
-  postHirerPerson
+  postHirerPerson,
+  postSurvey,
+  patchSurvey
 }
