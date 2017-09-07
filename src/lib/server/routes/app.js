@@ -181,42 +181,6 @@ function hirerSmooshing (data) {
     })
 }
 
-function addCompanyHirer (req, res, next, data, company, person) {
-  hirers.post(data, {company, person})
-    .then(data => {
-      data.notification = {
-        message: `New hirer added`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(addDataKeyValue('companies', companies.getAll))
-    .then(data => jobs.getAll(data, data.company.id))
-    .then(hirerSmooshing)
-    .then(data => tasks.getAllByCompany(data, data.company.id))
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
-}
-
-function addCompanyHirerHandler (req, res, next) {
-  const companySlug = req.params.companySlug
-
-  Promise.resolve(merge(req.session.data))
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => addCompanyHirer(req, res, next, data, data.company.id, req.params.person))
-}
-
-function addPersonThenCompanyHirerHandler (req, res, next) {
-  const companySlug = req.params.companySlug
-  const email = req.body.email
-
-  Promise.resolve(merge(req.session.data))
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => people.post(data, {email}))
-    .then(data => addCompanyHirer(req, res, next, data, data.company.id, data.newPerson.id))
-}
-
 function addCompanyTaskHandler (req, res, next) {
   const companySlug = req.params.companySlug
 
@@ -316,9 +280,9 @@ router.post('/:companySlug/jobs', respondWith(fetchersCompany.postJob))
 router.get('/:companySlug/jobs/:jobSlug', respondWith(fetchersCompanyJob.get))
 router.put('/:companySlug/jobs/:jobSlug', respondWith(fetchersCompanyJob.put))
 router.post('/:companySlug/jobs/:jobSlug/referrals', respondWith(fetchersCompanyJob.postReferral))
-router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', respondWith(fetchersCompanyJob.postPersonReferral))
-router.post('/:companySlug/hirers', addPersonThenCompanyHirerHandler)
-router.post('/:companySlug/hirers/:person', addCompanyHirerHandler)
+router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', respondWith(fetchersCompanyJob.postReferralPerson))
+router.post('/:companySlug/hirers', respondWith(fetchersCompany.postHirer))
+router.post('/:companySlug/hirers/:person', respondWith(fetchersCompany.postHirerPerson))
 router.get('/:companySlug/messages/:surveyMessageId', surveyMessageHandler)
 router.post('/:companySlug/surveys', addCompanySurveyLinkHandler)
 router.patch('/:companySlug/surveys/:surveyId', updateCompanySurveyLinkHandler)

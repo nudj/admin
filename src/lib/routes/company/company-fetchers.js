@@ -82,6 +82,32 @@ function postJob ({
     .then(data => tasks.getAllByCompany(data, data.company.id))
 }
 
+function postHirer ({
+  data,
+  params,
+  body
+}) {
+  const companySlug = params.companySlug
+  const email = body.email
+
+  return Promise.resolve(data)
+    .then(addDataKeyValue('company', () => companies.get(companySlug)))
+    .then(data => people.post(data, {email}))
+    .then(data => addCompanyHirer(data, data.company.id, data.newPerson.id))
+}
+
+function postHirerPerson ({
+  data,
+  params,
+  body
+}) {
+  const companySlug = params.companySlug
+
+  return Promise.resolve(data)
+    .then(addDataKeyValue('company', () => companies.get(companySlug)))
+    .then(data => addCompanyHirer(data, data.company.id, params.person))
+}
+
 function hirerSmooshing (data) {
   return people.getAll(data)
     .then(data => hirers.getAllByCompany(data, data.company.id))
@@ -95,8 +121,25 @@ function hirerSmooshing (data) {
     })
 }
 
+function addCompanyHirer (data, company, person) {
+  return hirers.post(data, {company, person})
+    .then(data => {
+      data.notification = {
+        message: `New hirer added`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(addDataKeyValue('companies', companies.getAll))
+    .then(data => jobs.getAll(data, data.company.id))
+    .then(hirerSmooshing)
+    .then(data => tasks.getAllByCompany(data, data.company.id))
+}
+
 module.exports = {
   get,
   put,
-  postJob
+  postJob,
+  postHirer,
+  postHirerPerson
 }

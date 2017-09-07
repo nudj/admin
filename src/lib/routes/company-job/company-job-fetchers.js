@@ -59,7 +59,7 @@ function postReferral ({
     .then(data => genericGetJob({ data, companySlug }))
 }
 
-function postPersonReferral ({
+function postReferralPerson ({
   data,
   params,
   body
@@ -94,5 +94,5 @@ module.exports = {
   get,
   put,
   postReferral,
-  postPersonReferral
+  postReferralPerson
 }
