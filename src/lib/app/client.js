@@ -9,7 +9,7 @@ const { ConnectedRouter, routerMiddleware, routerReducer } = require('@nudj/reac
 const thunkMiddleware = require('redux-thunk').default
 const { StyleSheet } = require('aphrodite/no-important')
 
-const App = require('./components/index')
+const App = require('../components/index')
 const { pageReducer } = require('./reducers/page')
 const { setPage, showLoading } = require('./actions/app')
 const request = require('../lib/request')

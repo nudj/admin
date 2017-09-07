@@ -6,11 +6,11 @@ const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
 
 const getStyle = require('./companies-page.css')
-const PageHeader = require('../../app/components/page-header/page-header')
-const RowItem = require('../../app/components/row-item/row-item')
-const Tooltip = require('../../app/components/tooltip/tooltip')
-const CompanyForm = require('../../app/components/company-form/company-form')
-const Plural = require('../../app/components/plural/plural')
+const PageHeader = require('../../components/page-header/page-header')
+const RowItem = require('../../components/row-item/row-item')
+const Tooltip = require('../../components/tooltip/tooltip')
+const CompanyForm = require('../../components/company-form/company-form')
+const Plural = require('../../components/plural/plural')
 const { postData } = require('../../app/actions/app')
 
 module.exports = class CompaniesPage extends React.Component {

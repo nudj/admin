@@ -19,7 +19,7 @@ module.exports = (data) => {
   )
   const context = {}
   const { html, css } = StyleSheetServer.renderStatic(() => {
-    const App = require('./components/index')
+    const App = require('../components/index')
     return ReactDOMServer.renderToString(
       <Provider store={store}>
         <StaticRouter

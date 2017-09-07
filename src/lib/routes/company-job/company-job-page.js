@@ -6,11 +6,11 @@ const isEmail = require('validator/lib/isEmail')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 
 const getStyle = require('./company-job-page.css')
-const Autocomplete = require('../../app/components/autocomplete/autocomplete')
-const PageHeader = require('../../app/components/page-header/page-header')
-const RowItem = require('../../app/components/row-item/row-item')
-const CopyToClipboard = require('../../app/components/copy-to-clipboard/copy-to-clipboard')
-const JobForm = require('../../app/components/job-form/job-form')
+const Autocomplete = require('../../components/autocomplete/autocomplete')
+const PageHeader = require('../../components/page-header/page-header')
+const RowItem = require('../../components/row-item/row-item')
+const CopyToClipboard = require('../../components/copy-to-clipboard/copy-to-clipboard')
+const JobForm = require('../../components/job-form/job-form')
 const { postData } = require('../../app/actions/app')
 
 module.exports = class JobsPage extends React.Component {

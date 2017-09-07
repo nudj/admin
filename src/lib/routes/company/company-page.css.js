@@ -3,7 +3,7 @@ let {
   merge,
   mixins,
   variables
-} = require('../../app/lib/css')
+} = require('../../components/lib/css')
 
 const listStyle = {
   listStyle: 'none',
