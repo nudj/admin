@@ -441,33 +441,6 @@ function surveyMessageHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function addPersonReferralHandler (req, res, next) {
-  jobs.get(merge(req.session.data), req.params.jobSlug)
-    .then(data => jobs.addReferral(data, data.job.id, req.params.personId))
-    .then(data => {
-      data.notification = {
-        message: `${data.referral.id} saved`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(data => genericPersonHandler(req, res, next, data, req.params.personId))
-}
-
-function addPersonRecommendationHandler (req, res, next) {
-  const hirer = req.body.hirer
-  jobs.get(merge(req.session.data), req.params.jobSlug)
-    .then(data => network.post(data, hirer, data.job.id, req.params.personId))
-    .then(data => {
-      data.notification = {
-        message: `${data.recommendation.id} saved`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(data => genericPersonHandler(req, res, next, data, req.params.personId))
-}
-
 function addCompanySurveyLinkHandler (req, res, next) {
   const companySlug = req.params.companySlug
   surveys.post(merge(req.session.data), req.body)
@@ -509,25 +482,6 @@ function updateCompanySurveyLinkHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function addPersonTaskHandler (req, res, next) {
-  people.get(merge(req.session.data), req.params.personId)
-    .then(data => hirers.getFirstByPerson(data, data.person.id))
-    .then(data => {
-      const hirer = data.hirer.id
-      const type = req.params.taskType
-      const task = {hirer, type}
-      return tasks.post(data, task)
-    })
-    .then(data => {
-      data.notification = {
-        message: `New ${data.newTask.type} task saved`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(data => genericPersonHandler(req, res, next, data, data.person.id))
-}
-
 router.use(ensureLoggedIn)
 
 router.get('/', respondWithData(fetchersCompanies.get))
@@ -537,9 +491,9 @@ router.get('/people', respondWithData(fetchersPeople.get))
 router.post('/people', respondWithData(fetchersPeople.post))
 router.get('/people/:personId', respondWithData(fetchersPerson.get))
 router.put('/people/:personId', respondWithData(fetchersPerson.put))
-router.post('/people/:personId/referrals/:jobSlug', addPersonReferralHandler)
-router.post('/people/:personId/recommendations/:jobSlug', addPersonRecommendationHandler)
-router.post('/people/:personId/tasks/:taskType', addPersonTaskHandler)
+router.post('/people/:personId/referrals/:jobSlug', respondWithData(fetchersPerson.postReferral))
+router.post('/people/:personId/recommendations/:jobSlug', respondWithData(fetchersPerson.postRecommendation))
+router.post('/people/:personId/tasks/:taskType', respondWithData(fetchersPerson.postTask))
 
 router.get('/:companySlug', companyHandler)
 router.put('/:companySlug', editCompanyHandler)

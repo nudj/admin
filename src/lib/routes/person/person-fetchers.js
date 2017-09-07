@@ -41,6 +41,61 @@ function put ({
     .then(data => genericPersonHandler(data, params.personId))
 }
 
+function postReferral ({
+  data,
+  params
+}) {
+  return jobs.get(data, params.jobSlug)
+    .then(data => jobs.addReferral(data, data.job.id, params.personId))
+    .then(data => {
+      data.notification = {
+        message: `New referral ${data.referral.id} saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(data => genericPersonHandler(data, params.personId))
+}
+
+function postTask ({
+  data,
+  params
+}) {
+  return people.get(data, params.personId)
+    .then(data => hirers.getFirstByPerson(data, data.person.id))
+    .then(data => {
+      const hirer = data.hirer.id
+      const type = params.taskType
+      const task = {hirer, type}
+      return tasks.post(data, task)
+    })
+    .then(data => {
+      data.notification = {
+        message: `New ${data.newTask.type} task saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(data => genericPersonHandler(data, data.person.id))
+}
+
+function postRecommendation ({
+  data,
+  params,
+  body
+}) {
+  return jobs.get(data, params.jobSlug)
+    .then(data => network.post(data, body.hirer, data.job.id, params.personId))
+    .then(data => {
+      data.notification = {
+        message: `New recommendation ${data.recommendation.id} saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(data => genericPersonHandler(data, params.personId))
+}
+
 function genericPersonHandler (data, personId) {
   return people.getAll(data)
     .then(data => people.get(data, personId))
@@ -77,5 +132,8 @@ function smooshJobs (data) {
 
 module.exports = {
   get,
-  put
+  put,
+  postReferral,
+  postRecommendation,
+  postTask
 }
