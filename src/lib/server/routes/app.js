@@ -6,8 +6,7 @@ const getTime = require('date-fns/get_time')
 const {
   merge,
   promiseMap,
-  addDataKeyValue,
-  actionMapAssign
+  addDataKeyValue
 } = require('@nudj/library')
 
 const logger = require('../lib/logger')
@@ -15,11 +14,11 @@ const companies = require('../modules/companies')
 const fetchersCompanies = require('../../routes/companies/companies-fetchers')
 const fetchersPeople = require('../../routes/people/people-fetchers')
 const fetchersPerson = require('../../routes/person/person-fetchers')
+const fetchersCompany = require('../../routes/company/company-fetchers')
 const surveys = require('../modules/surveys')
 const jobs = require('../modules/jobs')
 const hirers = require('../modules/hirers')
 const messages = require('../modules/messages')
-const network = require('../modules/network')
 const people = require('../modules/people')
 const tasks = require('../modules/tasks')
 const app = require('../../app/server')
@@ -154,14 +153,7 @@ function getRenderer (req, res, next) {
   }
 }
 
-function respondWith (req, res, next) {
-  return data => Promise.resolve(data)
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
-}
-
-function respondWithData (dataFetcher) {
+function respondWith (dataFetcher) {
   return (req, res, next) => {
     return dataFetcher({
       data: merge(req.session.data),
@@ -175,30 +167,6 @@ function respondWithData (dataFetcher) {
   }
 }
 
-function editCompanyHandler (req, res, next) {
-  // const companySlug = req.params.companySlug
-  const company = req.body
-
-  actionMapAssign(
-    merge(req.session.data),
-    {
-      companies: () => companies.getAll(),
-      company: () => companies.put(company)
-    },
-    {
-      jobs: data => jobs.getAll(merge(data), data.company.id).then(data => data.jobs),
-      notification: data => ({
-        message: `${data.company.name} saved`,
-        type: 'success'
-      }),
-      tasks: data => tasks.getAllByCompany(merge(data), data.company.id).then(data => data.tasks),
-      surveyMessages: data => messages.getAllFor(merge(data), data.company.id).then(data => data.surveyMessages),
-      hirers: data => hirerSmooshing(merge(data)).then(data => data.hirers)
-    }
-  )
-  .then(respondWith(req, res, next))
-}
-
 function hirerSmooshing (data) {
   return people.getAll(data)
     .then(data => hirers.getAllByCompany(data, data.company.id))
@@ -210,27 +178,6 @@ function hirerSmooshing (data) {
       data.hirers = expandedHirers
       return promiseMap(data)
     })
-}
-
-function companyHandler (req, res, next) {
-  const companySlug = req.params.companySlug
-
-  actionMapAssign(
-    merge(req.session.data),
-    {
-      company: () => companies.get(companySlug),
-      companies: () => companies.getAll(),
-      people: data => people.getAll(data).then(data => data.people)
-    },
-    {
-      survey: data => surveys.getSurveyForCompany(merge(data)).then(data => data.survey),
-      jobs: data => jobs.getAll(merge(data), data.company.id).then(data => data.jobs),
-      hirers: data => hirerSmooshing(merge(data)).then(data => data.hirers),
-      surveyMessages: data => messages.getAllFor(merge(data), data.company.id).then(data => data.surveyMessages),
-      tasks: data => tasks.getAllByCompany(merge(data), data.company.id).then(data => data.tasks)
-    }
-  )
-  .then(respondWith(req, res, next))
 }
 
 function addCompanyJobHandler (req, res, next) {
@@ -392,22 +339,6 @@ function addReferralHandler (req, res, next) {
     .then(data => genericGetJob({data, req, res, next, companySlug}))
 }
 
-function smooshJob (data, job) {
-  const relatedCompany = data.companies.find(company => company.id === job.company)
-  const relatedHirers = data.hirers.filter(hirer => hirer.company === job.company)
-  const hirers = relatedHirers.map(hirer => {
-    const person = data.people.find(person => person.id === hirer.person)
-    return merge({}, hirer, { person })
-  })
-  const company = merge({}, relatedCompany, { hirers })
-  return merge({}, job, { company })
-}
-
-function smooshJobs (data) {
-  data.expandedJobs = data.jobs.map(job => smooshJob(data, job))
-  return promiseMap(data)
-}
-
 function surveyMessageHandler (req, res, next) {
   const companySlug = req.params.companySlug
   const surveyMessageId = req.params.surveyMessageId
@@ -463,19 +394,19 @@ function updateCompanySurveyLinkHandler (req, res, next) {
 
 router.use(ensureLoggedIn)
 
-router.get('/', respondWithData(fetchersCompanies.get))
-router.post('/', respondWithData(fetchersCompanies.post))
+router.get('/', respondWith(fetchersCompanies.get))
+router.post('/', respondWith(fetchersCompanies.post))
 
-router.get('/people', respondWithData(fetchersPeople.get))
-router.post('/people', respondWithData(fetchersPeople.post))
-router.get('/people/:personId', respondWithData(fetchersPerson.get))
-router.put('/people/:personId', respondWithData(fetchersPerson.put))
-router.post('/people/:personId/referrals/:jobSlug', respondWithData(fetchersPerson.postReferral))
-router.post('/people/:personId/recommendations/:jobSlug', respondWithData(fetchersPerson.postRecommendation))
-router.post('/people/:personId/tasks/:taskType', respondWithData(fetchersPerson.postTask))
+router.get('/people', respondWith(fetchersPeople.get))
+router.post('/people', respondWith(fetchersPeople.post))
+router.get('/people/:personId', respondWith(fetchersPerson.get))
+router.put('/people/:personId', respondWith(fetchersPerson.put))
+router.post('/people/:personId/referrals/:jobSlug', respondWith(fetchersPerson.postReferral))
+router.post('/people/:personId/recommendations/:jobSlug', respondWith(fetchersPerson.postRecommendation))
+router.post('/people/:personId/tasks/:taskType', respondWith(fetchersPerson.postTask))
 
-router.get('/:companySlug', companyHandler)
-router.put('/:companySlug', editCompanyHandler)
+router.get('/:companySlug', respondWith(fetchersCompany.get))
+router.put('/:companySlug', respondWith(fetchersCompany.put))
 router.post('/:companySlug/jobs', addCompanyJobHandler)
 router.get('/:companySlug/jobs/:jobSlug', jobHandler)
 router.put('/:companySlug/jobs/:jobSlug', editJobHandler)

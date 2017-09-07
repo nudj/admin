@@ -8,7 +8,7 @@ const Notification = require('../notification/notification')
 const CompaniesPage = require('../../../routes/companies/companies-page')
 const PeoplePage = require('../../../routes/people/people-page')
 const PersonPage = require('../../../routes/person/person-page')
-const CompanyPage = require('../company-page/company-page')
+const CompanyPage = require('../../../routes/company/company-page')
 const SurveyEmailsPage = require('../survey-emails-page/survey-emails-page')
 const JobPage = require('../job-page/job-page')
 
