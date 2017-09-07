@@ -7,6 +7,7 @@ const { Helmet } = require('react-helmet')
 const isEmail = require('validator/lib/isEmail')
 
 const getStyle = require('./company-page.css')
+const Page = require('../../components/page/page')
 const Autocomplete = require('../../components/autocomplete/autocomplete')
 const PageHeader = require('../../components/page-header/page-header')
 const RowItem = require('../../components/row-item/row-item')
@@ -377,7 +378,7 @@ module.exports = class JobsPage extends React.Component {
     const publishedJobs = jobs.filter(job => job.status === 'PUBLISHED')
 
     return (
-      <div className={this.style.pageBody}>
+      <Page {...this.props} className={this.style.pageBody}>
         <Helmet>
           <title>{`ADMIN - ${companyName}`}</title>
         </Helmet>
@@ -441,7 +442,7 @@ module.exports = class JobsPage extends React.Component {
           </div>
           <div className={this.style.pageSidebar} />
         </div>
-      </div>
+      </Page>
     )
   }
 }

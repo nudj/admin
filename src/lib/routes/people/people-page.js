@@ -5,6 +5,7 @@ const format = require('date-fns/format')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
 const getStyle = require('./people-page.css')
+const Page = require('../../components/page/page')
 const PageHeader = require('../../components/page-header/page-header')
 const RowItem = require('../../components/row-item/row-item')
 const Tooltip = require('../../components/tooltip/tooltip')
@@ -76,7 +77,7 @@ module.exports = class PeoplePage extends React.Component {
     const peopleList = this.renderPeopleList()
 
     return (
-      <div className={this.style.pageBody}>
+      <Page {...this.props} className={this.style.pageBody}>
         <Helmet>
           <title>ADMIN - People</title>
         </Helmet>
@@ -93,7 +94,7 @@ module.exports = class PeoplePage extends React.Component {
           {addPersonForm}
           <div className={this.style.pageSidebar} />
         </div>
-      </div>
+      </Page>
     )
   }
 }

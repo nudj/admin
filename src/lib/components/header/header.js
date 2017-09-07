@@ -2,7 +2,7 @@ const React = require('react')
 const { Link } = require('react-router-dom')
 const getStyle = require('./header.css')
 
-const Header = (props) => {
+const Header = () => {
   const style = getStyle()
   return (
     <nav className={style.nav}>

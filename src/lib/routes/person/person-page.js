@@ -5,6 +5,7 @@ const { Link } = require('react-router-dom')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 
 const getStyle = require('./person-page.css')
+const Page = require('../../components/page/page')
 const CopyToClipboard = require('../../components/copy-to-clipboard/copy-to-clipboard')
 const Autocomplete = require('../../components/autocomplete/autocomplete')
 const PageHeader = require('../../components/page-header/page-header')
@@ -401,7 +402,7 @@ module.exports = class PersonPage extends React.Component {
     const taskSection = this.renderTasksSection()
 
     return (
-      <div className={this.style.pageBody}>
+      <Page {...this.props} className={this.style.pageBody}>
         <Helmet>
           <title>{`ADMIN - ${personName}`}</title>
         </Helmet>
@@ -433,7 +434,7 @@ module.exports = class PersonPage extends React.Component {
             {taskSection}
           </div>
         </div>
-      </div>
+      </Page>
     )
   }
 }

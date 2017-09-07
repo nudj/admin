@@ -4,6 +4,7 @@ const { Helmet } = require('react-helmet')
 const EmailForm = require('@nudj/components/lib/email-form/email-form')
 
 const getStyle = require('./company-survey-message-page.css')
+const Page = require('../../components/page/page')
 const PageHeader = require('../../components/page-header/page-header')
 const { cssProcessor } = require('../../components/lib/css')
 
@@ -17,7 +18,7 @@ module.exports = (props) => {
   const body = get(surveyMessage, 'body')
 
   return (
-    <div className={style.pageBody}>
+    <Page {...this.props} className={this.style.pageBody}>
       <Helmet>
         <title>ADMIN - survey email</title>
       </Helmet>
@@ -34,6 +35,6 @@ module.exports = (props) => {
         </div>
         <div className={style.pageSidebar} />
       </div>
-    </div>
+    </Page>
   )
 }

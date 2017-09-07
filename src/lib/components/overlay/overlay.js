@@ -10,7 +10,7 @@ function onClickClose (props) {
   return (event) => props.dispatch(hideDialog())
 }
 
-function onClickDialog (props) {
+function onClickDialog () {
   return (event) => event.stopPropagation()
 }
 

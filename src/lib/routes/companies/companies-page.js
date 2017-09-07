@@ -6,6 +6,7 @@ const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
 
 const getStyle = require('./companies-page.css')
+const Page = require('../../components/page/page')
 const PageHeader = require('../../components/page-header/page-header')
 const RowItem = require('../../components/row-item/row-item')
 const Tooltip = require('../../components/tooltip/tooltip')
@@ -48,7 +49,7 @@ module.exports = class CompaniesPage extends React.Component {
     const rightNow = new Date()
 
     return (
-      <div className={this.style.pageBody}>
+      <Page {...this.props} className={this.style.pageBody}>
         <Helmet>
           <title>ADMIN - Companies</title>
         </Helmet>
@@ -90,7 +91,7 @@ module.exports = class CompaniesPage extends React.Component {
           {addCompanyForm}
           <div className={this.style.pageSidebar} />
         </div>
-      </div>
+      </Page>
     )
   }
 }

@@ -6,6 +6,7 @@ const isEmail = require('validator/lib/isEmail')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 
 const getStyle = require('./company-job-page.css')
+const Page = require('../../components/page/page')
 const Autocomplete = require('../../components/autocomplete/autocomplete')
 const PageHeader = require('../../components/page-header/page-header')
 const RowItem = require('../../components/row-item/row-item')
@@ -327,7 +328,7 @@ module.exports = class JobsPage extends React.Component {
       submitLabel='Save changes' />)
 
     return (
-      <div className={this.style.pageBody}>
+      <Page {...this.props} className={this.style.pageBody}>
         <Helmet>
           <title>{`ADMIN - ${jobTitle} @ ${companyName}`}</title>
         </Helmet>
@@ -367,7 +368,7 @@ module.exports = class JobsPage extends React.Component {
             </div>
           </div>
         </div>
-      </div>
+      </Page>
     )
   }
 }
