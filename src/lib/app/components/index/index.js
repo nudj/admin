@@ -5,12 +5,13 @@ const getStyle = require('./index.css')
 const Header = require('../header/header')
 const Message = require('../message/message')
 const Notification = require('../notification/notification')
+
 const CompaniesPage = require('../../../routes/companies/companies-page')
 const PeoplePage = require('../../../routes/people/people-page')
 const PersonPage = require('../../../routes/person/person-page')
 const CompanyPage = require('../../../routes/company/company-page')
+const CompanyJobPage = require('../../../routes/company-job/company-job-page')
 const SurveyEmailsPage = require('../survey-emails-page/survey-emails-page')
-const JobPage = require('../job-page/job-page')
 
 const PageNotFound = require('../404-page/404-page')
 const Overlay = require('../overlay/overlay')
@@ -41,7 +42,7 @@ const Index = () => {
           <Route exact path='/people' component={PageWithState(PeoplePage)} />
           <Route exact path='/people/:personId' component={PageWithState(PersonPage)} />
           <Route exact path='/:companySlug' component={PageWithState(CompanyPage)} />
-          <Route exact path='/:companySlug/jobs/:jobSlug' component={PageWithState(JobPage)} />
+          <Route exact path='/:companySlug/jobs/:jobSlug' component={PageWithState(CompanyJobPage)} />
           <Route exact path='/:companySlug/messages/:surveyMessageId' component={PageWithState(SurveyEmailsPage)} />
           <Route render={PageWithState((props) => <Status code={404}><PageNotFound {...props} /></Status>)} />
         </Switch>

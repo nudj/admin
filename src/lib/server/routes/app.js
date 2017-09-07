@@ -16,6 +16,7 @@ const fetchersPeople = require('../../routes/people/people-fetchers')
 const fetchersPerson = require('../../routes/person/person-fetchers')
 const fetchersCompany = require('../../routes/company/company-fetchers')
 const fetchersCompanyJobs = require('../../routes/company-jobs/company-jobs-fetchers')
+const fetchersCompanyJob = require('../../routes/company-job/company-job-fetchers')
 const surveys = require('../modules/surveys')
 const jobs = require('../modules/jobs')
 const hirers = require('../modules/hirers')
@@ -258,29 +259,6 @@ function genericGetJob ({data, req, res, next, companySlug}) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function jobHandler (req, res, next) {
-  const companySlug = req.params.companySlug
-  // Do we have an issue here with job-slug uniqueness across companies?
-  jobs.get(merge(req.session.data), req.params.jobSlug)
-    .then(jobs.getAll)
-    .then(data => genericGetJob({data, req, res, next, companySlug}))
-}
-
-function editJobHandler (req, res, next) {
-  const companySlug = req.params.companySlug
-  jobs.put(merge(req.session.data), req.body)
-    .then(jobs.getAll)
-    .then(data => jobs.get(data, req.params.jobSlug))
-    .then(data => {
-      data.notification = {
-        message: `${data.savedJob.title} saved`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(data => genericGetJob({data, req, res, next, companySlug}))
-}
-
 function addPersonThenReferralHandler (req, res, next) {
   const email = req.body.email
   const companySlug = req.params.companySlug
@@ -383,8 +361,8 @@ router.post('/people/:personId/tasks/:taskType', respondWith(fetchersPerson.post
 router.get('/:companySlug', respondWith(fetchersCompany.get))
 router.put('/:companySlug', respondWith(fetchersCompany.put))
 router.post('/:companySlug/jobs', respondWith(fetchersCompanyJobs.post))
-router.get('/:companySlug/jobs/:jobSlug', jobHandler)
-router.put('/:companySlug/jobs/:jobSlug', editJobHandler)
+router.get('/:companySlug/jobs/:jobSlug', respondWith(fetchersCompanyJob.get))
+router.put('/:companySlug/jobs/:jobSlug', respondWith(fetchersCompanyJob.put))
 router.post('/:companySlug/jobs/:jobSlug/referrals', addPersonThenReferralHandler)
 router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', addReferralHandler)
 router.post('/:companySlug/hirers', addPersonThenCompanyHirerHandler)

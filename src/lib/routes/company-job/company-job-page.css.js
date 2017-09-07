@@ -3,7 +3,7 @@ let {
   merge,
   mixins,
   variables
-} = require('../../lib/css')
+} = require('../../app/lib/css')
 
 const cardChoiceIconSize = '46px'
 
