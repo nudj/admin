@@ -1,7 +1,8 @@
 const {
   merge,
   actionMapAssign,
-  promiseMap
+  promiseMap,
+  addDataKeyValue
 } = require('@nudj/library')
 
 const companies = require('../../server/modules/companies')
@@ -57,6 +58,30 @@ function put ({
   )
 }
 
+function postJob ({
+  data,
+  params,
+  body
+}) {
+  return Promise.resolve(data)
+    .then(addDataKeyValue('company', () => companies.get(params.companySlug)))
+    .then(data => {
+      body.company = data.company.id
+      return jobs.post(data, body)
+    })
+    .then(data => {
+      data.notification = {
+        message: `${data.newJob.title} added`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(addDataKeyValue('companies', companies.getAll))
+    .then(data => jobs.getAll(data, data.company.id))
+    .then(hirerSmooshing)
+    .then(data => tasks.getAllByCompany(data, data.company.id))
+}
+
 function hirerSmooshing (data) {
   return people.getAll(data)
     .then(data => hirers.getAllByCompany(data, data.company.id))
@@ -72,5 +97,6 @@ function hirerSmooshing (data) {
 
 module.exports = {
   get,
-  put
+  put,
+  postJob
 }
