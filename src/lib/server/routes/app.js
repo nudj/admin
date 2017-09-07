@@ -245,53 +245,6 @@ function addCompanyTaskHandler (req, res, next) {
     .catch(getErrorHandler(req, res, next))
 }
 
-function genericGetJob ({data, req, res, next, companySlug}) {
-  jobs.getReferrals(data, data.job.id)
-    .then(data => jobs.getApplications(data, data.job.id))
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => people.getAll(data))
-    .then(data => {
-      data.activities = jobs.getJobActivities(data, data.job.id)
-      return promiseMap(data)
-    })
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
-}
-
-function addPersonThenReferralHandler (req, res, next) {
-  const email = req.body.email
-  const companySlug = req.params.companySlug
-
-  jobs.get(merge(req.session.data), req.params.jobSlug)
-    .then(data => people.post(data, {email}))
-    .then(data => jobs.addReferral(data, data.job.id, data.newPerson.id))
-    .then(data => {
-      data.notification = {
-        message: `${data.referral.id} saved`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(data => genericGetJob({data, req, res, next, companySlug}))
-}
-
-function addReferralHandler (req, res, next) {
-  const person = req.params.personId
-  const companySlug = req.params.companySlug
-
-  jobs.get(merge(req.session.data), req.params.jobSlug)
-    .then(data => jobs.addReferral(data, data.job.id, person))
-    .then(data => {
-      data.notification = {
-        message: `${data.referral.id} saved`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(data => genericGetJob({data, req, res, next, companySlug}))
-}
-
 function surveyMessageHandler (req, res, next) {
   const companySlug = req.params.companySlug
   const surveyMessageId = req.params.surveyMessageId
@@ -363,8 +316,8 @@ router.put('/:companySlug', respondWith(fetchersCompany.put))
 router.post('/:companySlug/jobs', respondWith(fetchersCompanyJobs.post))
 router.get('/:companySlug/jobs/:jobSlug', respondWith(fetchersCompanyJob.get))
 router.put('/:companySlug/jobs/:jobSlug', respondWith(fetchersCompanyJob.put))
-router.post('/:companySlug/jobs/:jobSlug/referrals', addPersonThenReferralHandler)
-router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', addReferralHandler)
+router.post('/:companySlug/jobs/:jobSlug/referrals', respondWith(fetchersCompanyJob.postReferral))
+router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', respondWith(fetchersCompanyJob.postPersonReferral))
 router.post('/:companySlug/hirers', addPersonThenCompanyHirerHandler)
 router.post('/:companySlug/hirers/:person', addCompanyHirerHandler)
 router.get('/:companySlug/messages/:surveyMessageId', surveyMessageHandler)

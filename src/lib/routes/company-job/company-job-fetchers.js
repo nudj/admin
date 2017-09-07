@@ -38,6 +38,47 @@ function put ({
     .then(data => genericGetJob({ data, companySlug }))
 }
 
+function postReferral ({
+  data,
+  params,
+  body
+}) {
+  const email = body.email
+  const companySlug = params.companySlug
+
+  return jobs.get(data, params.jobSlug)
+    .then(data => people.post(data, {email}))
+    .then(data => jobs.addReferral(data, data.job.id, data.newPerson.id))
+    .then(data => {
+      data.notification = {
+        message: `New referral ${data.referral.id} saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(data => genericGetJob({ data, companySlug }))
+}
+
+function postPersonReferral ({
+  data,
+  params,
+  body
+}) {
+  const person = params.personId
+  const companySlug = params.companySlug
+
+  return jobs.get(data, params.jobSlug)
+    .then(data => jobs.addReferral(data, data.job.id, person))
+    .then(data => {
+      data.notification = {
+        message: `New referral ${data.referral.id} saved`,
+        type: 'success'
+      }
+      return promiseMap(data)
+    })
+    .then(data => genericGetJob({ data, companySlug }))
+}
+
 function genericGetJob ({ data, companySlug }) {
   return jobs.getReferrals(data, data.job.id)
     .then(data => jobs.getApplications(data, data.job.id))
@@ -51,5 +92,7 @@ function genericGetJob ({ data, companySlug }) {
 
 module.exports = {
   get,
-  put
+  put,
+  postReferral,
+  postPersonReferral
 }
