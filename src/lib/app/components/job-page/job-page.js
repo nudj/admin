@@ -329,7 +329,7 @@ module.exports = class JobsPage extends React.Component {
     return (
       <div className={this.style.pageBody}>
         <Helmet>
-          <title>{`nudj - ${jobTitle} @ ${companyName}`}</title>
+          <title>{`ADMIN - ${jobTitle} @ ${companyName}`}</title>
         </Helmet>
         <PageHeader
           title={jobTitle}

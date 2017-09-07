@@ -23,19 +23,9 @@ const Index = () => {
     <div className={style.body}>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>nudj</title>
+        <title>ADMIN</title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <meta name='description' content='With your help, nudj connects the best companies with the best people, without any of the faff.' />
-        <meta name='title' content='nudj - Stop looking. Start hiring.' />
-        <meta property='og:description' content='With your help, we connect the best companies with the best people, without any of the faff.' />
-        <meta property='twitter:description' content='With your help, we connect the best companies with the best people, without any of the faff.' />
-        <meta property='og:type' content='article' />
-        <meta property='og:title' content='nudj - Stop looking. Start hiring.' />
-        <meta property='twitter:card' content='nudj - Stop looking. Start hiring.' />
-        <meta property='twitter:title' content='nudj - Stop looking. Start hiring.' />
-        <meta property='og:site_name' content='nudj - Stop looking. Start hiring.' />
-        <meta property='twitter:image' content='' />
-        <meta property='og:image' content='' />
+        <meta name='title' content='ADMIN' />
         <link rel='icon' href='/assets/images/nudj-square.ico' type='image/x-icon' />
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css' />
         <link rel='stylesheet' href='/assets/css/reset.css' />

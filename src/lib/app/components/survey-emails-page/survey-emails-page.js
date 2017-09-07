@@ -19,7 +19,7 @@ module.exports = (props) => {
   return (
     <div className={style.pageBody}>
       <Helmet>
-        <title>nudj - survey email</title>
+        <title>ADMIN - survey email</title>
       </Helmet>
       <PageHeader title='Survey Email' subtitle={hirer} />
       <div className={style.pageContent}>

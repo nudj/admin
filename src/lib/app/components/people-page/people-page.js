@@ -78,7 +78,7 @@ module.exports = class CompaniesPage extends React.Component {
     return (
       <div className={this.style.pageBody}>
         <Helmet>
-          <title>nudj - People</title>
+          <title>ADMIN - People</title>
         </Helmet>
         <PageHeader title='People' />
         <h3 className={this.style.pageHeadline}>People on nudj <span className={this.style.textHighlight}>({people.length})</span></h3>
