@@ -3,9 +3,9 @@ const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
 const EmailForm = require('@nudj/components/lib/email-form/email-form')
 
-const getStyle = require('./survey-emails-page.css')
-const PageHeader = require('../page-header/page-header')
-const { cssProcessor } = require('../../lib/css')
+const getStyle = require('./company-survey-message-page.css')
+const PageHeader = require('../../app/components/page-header/page-header')
+const { cssProcessor } = require('../../app/lib/css')
 
 module.exports = (props) => {
   const style = getStyle()

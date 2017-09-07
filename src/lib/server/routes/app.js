@@ -3,20 +3,16 @@ const get = require('lodash/get')
 const find = require('lodash/find')
 const _ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 const getTime = require('date-fns/get_time')
-const {
-  merge,
-  addDataKeyValue
-} = require('@nudj/library')
+const { merge } = require('@nudj/library')
 
 const logger = require('../lib/logger')
-const companies = require('../modules/companies')
+const app = require('../../app/server')
 const fetchersCompanies = require('../../routes/companies/companies-fetchers')
 const fetchersPeople = require('../../routes/people/people-fetchers')
 const fetchersPerson = require('../../routes/person/person-fetchers')
 const fetchersCompany = require('../../routes/company/company-fetchers')
 const fetchersCompanyJob = require('../../routes/company-job/company-job-fetchers')
-const messages = require('../modules/messages')
-const app = require('../../app/server')
+const fetchersCompanySurveyMessage = require('../../routes/company-survey-message/company-survey-message-fetchers')
 
 const router = express.Router()
 
@@ -162,18 +158,6 @@ function respondWith (dataFetcher) {
   }
 }
 
-function surveyMessageHandler (req, res, next) {
-  const companySlug = req.params.companySlug
-  const surveyMessageId = req.params.surveyMessageId
-
-  Promise.resolve(merge(req.session.data))
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => messages.getOneById(data, surveyMessageId))
-    .then(getRenderDataBuilder(req, res, next))
-    .then(getRenderer(req, res, next))
-    .catch(getErrorHandler(req, res, next))
-}
-
 router.use(ensureLoggedIn)
 
 router.get('/', respondWith(fetchersCompanies.get))
@@ -201,7 +185,7 @@ router.put('/:companySlug/jobs/:jobSlug', respondWith(fetchersCompanyJob.put))
 router.post('/:companySlug/jobs/:jobSlug/referrals', respondWith(fetchersCompanyJob.postReferral))
 router.post('/:companySlug/jobs/:jobSlug/referrals/:personId', respondWith(fetchersCompanyJob.postReferralPerson))
 
-router.get('/:companySlug/messages/:surveyMessageId', surveyMessageHandler)
+router.get('/:companySlug/messages/:surveyMessageId', respondWith(fetchersCompanySurveyMessage.get))
 
 router.get('*', (req, res) => {
   let data = getRenderDataBuilder(req)({})
