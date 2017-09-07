@@ -6,11 +6,11 @@ const getStyle = require('./job-form.css')
 
 const normaliseJob = (job) => merge(job, {
   tags: job.tags.join(', '),
-  templateTags: job.tags.join(', ')
+  templateTags: job.templateTags.join(', ')
 })
 const denormaliseJob = (job) => merge(job, {
   tags: job.tags.replace(/\s/g, '').split(','),
-  templateTags: job.tags.replace(/\s/g, '').split(',')
+  templateTags: job.templateTags.replace(/\s/g, '').split(',')
 })
 
 module.exports = class CompaniesPage extends React.Component {
