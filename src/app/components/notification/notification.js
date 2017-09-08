@@ -1,7 +1,7 @@
 const React = require('react')
 const get = require('lodash/get')
 const getStyle = require('./notification.css')
-const { hideNotification } = require('../../app/actions/app')
+const { hideNotification } = require('../../redux/actions/app')
 
 const onClickClose = (props) => (event) => props.dispatch(hideNotification())
 

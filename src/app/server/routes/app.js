@@ -6,7 +6,7 @@ const getTime = require('date-fns/get_time')
 const { merge } = require('@nudj/library')
 
 const logger = require('../lib/logger')
-const app = require('../../app/server')
+const app = require('../../redux/server')
 const fetchersCompanies = require('../../routes/companies/companies-fetchers')
 const fetchersPeople = require('../../routes/people/people-fetchers')
 const fetchersPerson = require('../../routes/person/person-fetchers')

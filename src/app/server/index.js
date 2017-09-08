@@ -1,7 +1,7 @@
 require('babel-register')({
   presets: ['react'],
   ignore: function (filename) {
-    if (filename.match(/@nudj/) || filename.match(/lib\/app/) || filename.match(/lib\/components/) || filename.match(/lib\/routes/)) {
+    if (filename.match(/@nudj/) || filename.match(/app\/redux/) || filename.match(/app\/components/) || filename.match(/app\/routes/)) {
       return false
     }
     return true

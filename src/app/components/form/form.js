@@ -2,7 +2,7 @@ const React = require('react')
 const { connect } = require('react-redux')
 const serialise = require('form-serialize')
 const omit = require('lodash/omit')
-const { postData } = require('../../app/actions/app')
+const { postData } = require('../../redux/actions/app')
 
 function getSubmitHandler (props) {
   return (event) => {

@@ -12,7 +12,7 @@ const RowItem = require('../../components/row-item/row-item')
 const Tooltip = require('../../components/tooltip/tooltip')
 const CompanyForm = require('../../components/company-form/company-form')
 const Plural = require('../../components/plural/plural')
-const { postData } = require('../../app/actions/app')
+const { postData } = require('../../redux/actions/app')
 
 module.exports = class CompaniesPage extends React.Component {
   constructor (props) {

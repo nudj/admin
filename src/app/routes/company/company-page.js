@@ -18,7 +18,7 @@ const Plural = require('../../components/plural/plural')
 const CopyToClipboard = require('../../components/copy-to-clipboard/copy-to-clipboard')
 const TasksList = require('../../components/tasks-list/tasks-list')
 const TaskAdder = require('../../components/task-adder/task-adder')
-const { postData } = require('../../app/actions/app')
+const { postData } = require('../../redux/actions/app')
 
 module.exports = class JobsPage extends React.Component {
   constructor (props) {
