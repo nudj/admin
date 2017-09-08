@@ -3,7 +3,7 @@ let {
   mixins,
   merge,
   variables
-} = require('../lib/css')
+} = require('../../lib/css')
 
 module.exports = css({
   background: {

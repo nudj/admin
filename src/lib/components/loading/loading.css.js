@@ -1,7 +1,7 @@
 let {
   css,
   variables
-} = require('../lib/css')
+} = require('../../lib/css')
 
 const spin = {
   '0%': {

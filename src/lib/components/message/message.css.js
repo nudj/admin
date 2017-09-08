@@ -2,7 +2,7 @@ let {
   css,
   variables,
   merge
-} = require('../lib/css')
+} = require('../../lib/css')
 
 let messageStyle = {
   display: 'flex',

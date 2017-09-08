@@ -1,16 +1,32 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
+const get = require('lodash/get')
+
 const getStyle = require('./page.css')
+const ScrollTop = require('../scroll-top/scroll-top')
+const ErrorPage = require('../error-page/error-page')
+const Status = require('../status/status')
+const Loading = require('../loading/loading')
 const Header = require('../header/header')
 const Message = require('../message/message')
 const Notification = require('../notification/notification')
 const Overlay = require('../overlay/overlay')
 
-class Page extends React.Component {
-  render () {
-    const style = getStyle()
+const Page = (props) => {
+  const style = getStyle()
+  const error = get(props, 'error')
+  const loading = get(props, 'loading')
+
+  if (error) {
     return (
-      <div className={`${this.props.className} ${style.body}`}>
+      <Status code={error.code}>
+        <ErrorPage {...props.page} />
+      </Status>
+    )
+  }
+  return (
+    <ScrollTop ignore={props.historyAction === 'REPLACE'}>
+      <div className={`${props.className} ${style.body}`}>
         <Helmet>
           <meta charSet='utf-8' />
           <title>ADMIN</title>
@@ -24,14 +40,14 @@ class Page extends React.Component {
           <Header />
         </header>
         <div className={style.content}>
-          <Message message={this.props.message} />
-          <Notification notification={this.props.notification} dispatch={this.props.dispatch} />
-          {this.props.children}
+          <Message message={props.message} />
+          <Notification notification={props.notification} dispatch={props.dispatch} />
+          {loading ? <Loading /> : props.children}
         </div>
-        <Overlay overlay={this.props.overlay} dispatch={this.props.dispatch} />
+        <Overlay overlay={props.overlay} dispatch={props.dispatch} />
       </div>
-    )
-  }
+    </ScrollTop>
+  )
 }
 
 module.exports = Page

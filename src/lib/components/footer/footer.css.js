@@ -1,4 +1,4 @@
-let { css, mixins, variables, merge } = require('../lib/css')
+let { css, mixins, variables, merge } = require('../../lib/css')
 
 const linkItem = merge({
   fontSize: '.875rem',

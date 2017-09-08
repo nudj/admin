@@ -1,4 +1,4 @@
-let { css } = require('../lib/css')
+let { css } = require('../../lib/css')
 
 module.exports = css({
   body: {

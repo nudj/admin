@@ -1,7 +1,7 @@
 const React = require('react')
 const { Switch, Route } = require('react-router-dom')
 
-const { PageWithState } = require('../components/lib/with-state')
+const PageWithState = require('./page-with-state')
 const CompaniesPage = require('../routes/companies/companies-page')
 const PeoplePage = require('../routes/people/people-page')
 const PersonPage = require('../routes/person/person-page')
