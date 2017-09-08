@@ -1,4 +1,5 @@
 const logger = require('./logger')
+const { merge } = require('@nudj/library')
 
 function NudjError (message, type, data) {
   this.message = message
@@ -7,7 +8,7 @@ function NudjError (message, type, data) {
   Error.captureStackTrace(this, NudjError)
   logger.log('error', this)
 }
-NudjError.prototype = Object.assign({}, Error.prototype)
+NudjError.prototype = merge(Error.prototype)
 NudjError.prototype.name = 'NudjError'
 
 module.exports = NudjError
