@@ -1,7 +1,7 @@
 const React = require('react')
 const get = require('lodash/get')
 const getStyle = require('./message.css')
-const ScrollTop = require('../scroll-top/scroll-top')
+const ScrollTop = require('../scroll-top')
 
 const Message = (props) => {
   const style = getStyle()

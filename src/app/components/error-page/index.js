@@ -1,8 +1,8 @@
 const React = require('react')
 
 const getStyle = require('./error-page.css')
-const PageNotFound = require('../404-page/404-page')
-const ServerError = require('../500-page/500-page')
+const PageNotFound = require('../404-page')
+const ServerError = require('../500-page')
 
 const ErrorPage = (props) => {
   const style = getStyle()

@@ -1,6 +1,6 @@
 const React = require('react')
 const getStyle = require('./loading.css')
-const PageHeader = require('../page-header/page-header')
+const PageHeader = require('../page-header')
 
 const Loading = () => {
   const style = getStyle()

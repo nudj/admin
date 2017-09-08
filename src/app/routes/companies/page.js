@@ -6,12 +6,12 @@ const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
 
 const getStyle = require('./companies-page.css')
-const Page = require('../../components/page/page')
-const PageHeader = require('../../components/page-header/page-header')
-const RowItem = require('../../components/row-item/row-item')
-const Tooltip = require('../../components/tooltip/tooltip')
-const CompanyForm = require('../../components/company-form/company-form')
-const Plural = require('../../components/plural/plural')
+const Page = require('../../components/page')
+const PageHeader = require('../../components/page-header')
+const RowItem = require('../../components/row-item')
+const Tooltip = require('../../components/tooltip')
+const CompanyForm = require('../../components/company-form')
+const Plural = require('../../components/plural')
 const { postData } = require('../../redux/actions/app')
 
 module.exports = class CompaniesPage extends React.Component {

@@ -4,8 +4,8 @@ const { Helmet } = require('react-helmet')
 const EmailForm = require('@nudj/components/lib/email-form/email-form')
 
 const getStyle = require('./company-survey-message-page.css')
-const Page = require('../../components/page/page')
-const PageHeader = require('../../components/page-header/page-header')
+const Page = require('../../components/page')
+const PageHeader = require('../../components/page-header')
 const { cssProcessor } = require('../../lib/css')
 
 module.exports = (props) => {

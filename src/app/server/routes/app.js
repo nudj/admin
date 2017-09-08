@@ -7,12 +7,12 @@ const { merge } = require('@nudj/library')
 
 const logger = require('../lib/logger')
 const app = require('../../redux/server')
-const fetchersCompanies = require('../../routes/companies/companies-fetchers')
-const fetchersPeople = require('../../routes/people/people-fetchers')
-const fetchersPerson = require('../../routes/person/person-fetchers')
-const fetchersCompany = require('../../routes/company/company-fetchers')
-const fetchersCompanyJob = require('../../routes/company-job/company-job-fetchers')
-const fetchersCompanySurveyMessage = require('../../routes/company-survey-message/company-survey-message-fetchers')
+const fetchersCompanies = require('../../routes/companies/fetchers')
+const fetchersPeople = require('../../routes/people/fetchers')
+const fetchersPerson = require('../../routes/person/fetchers')
+const fetchersCompany = require('../../routes/company/fetchers')
+const fetchersCompanyJob = require('../../routes/company-job/fetchers')
+const fetchersCompanySurveyMessage = require('../../routes/company-survey-message/fetchers')
 
 const router = express.Router()
 

@@ -6,12 +6,12 @@ const isEmail = require('validator/lib/isEmail')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 
 const getStyle = require('./company-job-page.css')
-const Page = require('../../components/page/page')
-const Autocomplete = require('../../components/autocomplete/autocomplete')
-const PageHeader = require('../../components/page-header/page-header')
-const RowItem = require('../../components/row-item/row-item')
-const CopyToClipboard = require('../../components/copy-to-clipboard/copy-to-clipboard')
-const JobForm = require('../../components/job-form/job-form')
+const Page = require('../../components/page')
+const Autocomplete = require('../../components/autocomplete')
+const PageHeader = require('../../components/page-header')
+const RowItem = require('../../components/row-item')
+const CopyToClipboard = require('../../components/copy-to-clipboard')
+const JobForm = require('../../components/job-form')
 const { postData } = require('../../redux/actions/app')
 
 module.exports = class JobsPage extends React.Component {

@@ -1,7 +1,7 @@
 const React = require('react')
 const get = require('lodash/get')
 
-const RowItem = require('../row-item/row-item')
+const RowItem = require('../row-item')
 const getStyle = require('./tasks-list.css')
 
 const TaskList = (props) => {

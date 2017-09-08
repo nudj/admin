@@ -2,14 +2,14 @@ const React = require('react')
 const { Switch, Route } = require('react-router-dom')
 
 const PageWithState = require('./page-with-state')
-const CompaniesPage = require('../routes/companies/companies-page')
-const PeoplePage = require('../routes/people/people-page')
-const PersonPage = require('../routes/person/person-page')
-const CompanyPage = require('../routes/company/company-page')
-const CompanyJobPage = require('../routes/company-job/company-job-page')
-const SurveyMessagePage = require('../routes/company-survey-message/company-survey-message-page')
-const Status = require('../components/status/status')
-const PageNotFound = require('../components/404-page/404-page')
+const CompaniesPage = require('../routes/companies/page')
+const PeoplePage = require('../routes/people/page')
+const PersonPage = require('../routes/person/page')
+const CompanyPage = require('../routes/company/page')
+const CompanyJobPage = require('../routes/company-job/page')
+const SurveyMessagePage = require('../routes/company-survey-message/page')
+const Status = require('../components/status')
+const PageNotFound = require('../components/404-page')
 
 module.exports = () => (
   <Switch>
