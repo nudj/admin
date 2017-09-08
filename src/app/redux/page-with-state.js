@@ -7,7 +7,7 @@ class Component extends React.Component {
   render () {
     const Page = this.props.component
     return (
-      <Page {...this.props.page} dispatch={this.props.dispatch} historyAction={this.props.history.action} />
+      <Page {...this.props.server} dispatch={this.props.dispatch} historyAction={this.props.history.action} />
     )
   }
 }

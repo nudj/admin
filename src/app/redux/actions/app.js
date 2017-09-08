@@ -112,17 +112,17 @@ module.exports.postData = ({
     request(url, {
       method,
       data: merge(data, {
-        _csrf: state.page.csrfToken
+        _csrf: state.server.csrfToken
       })
     })
     .then((data) => {
-      const notification = get(data, 'page.notification')
+      const notification = get(data, 'server.notification')
       if (notification) {
-        data.page.notification.timer = setTimeout(() => dispatch(hideNotification()), 5000)
+        data.server.notification.timer = setTimeout(() => dispatch(hideNotification()), 5000)
       }
       dispatch(fetchedPage(data))
-      if (data.page.url.originalUrl !== url) {
-        dispatch(push(data.page.url.originalUrl))
+      if (data.server.url.originalUrl !== url) {
+        dispatch(push(data.server.url.originalUrl))
       }
     })
   }

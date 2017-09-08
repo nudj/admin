@@ -65,7 +65,7 @@ function getRenderDataBuilder (req) {
       hostname: process.env.WEB_HOSTNAME
     }
     return {
-      page: data
+      server: data
     }
   }
 }
@@ -128,8 +128,8 @@ function getRenderer (req, res, next) {
     if (staticContext.url) {
       res.redirect(staticContext.url)
     } else {
-      let status = get(data, 'page.error.code', staticContext.status || 200)
-      let person = get(data, 'page.person')
+      let status = get(data, 'server.error.code', staticContext.status || 200)
+      let person = get(data, 'server.person')
       res.status(status).render('app', {
         data: JSON.stringify(data),
         css: staticContext.css,

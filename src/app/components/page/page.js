@@ -20,7 +20,7 @@ const Page = (props) => {
   if (error) {
     return (
       <Status code={error.code}>
-        <ErrorPage {...props.page} />
+        <ErrorPage error={error} />
       </Status>
     )
   }

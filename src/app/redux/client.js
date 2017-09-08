@@ -10,7 +10,7 @@ const thunkMiddleware = require('redux-thunk').default
 const { StyleSheet } = require('aphrodite/no-important')
 
 const Routes = require('./routes')
-const { pageReducer } = require('./reducers/page')
+const { serverReducer } = require('./reducers/server')
 const { setPage, showLoading } = require('./actions/app')
 const request = require('../lib/request')
 
@@ -19,7 +19,7 @@ const historyMiddleware = routerMiddleware(history)
 const store = createStore(
   combineReducers({
     router: routerReducer,
-    page: pageReducer
+    server: serverReducer
   }),
   data,
   applyMiddleware(thunkMiddleware, historyMiddleware)
@@ -33,7 +33,7 @@ ReactDOM.render(
       // - history action is not PUSH
       // - history action is PUSH and requested url is not already in page data (page data is stale)
       const newUrl = location.pathname
-      const oldUrl = store.getState().page.url.originalUrl
+      const oldUrl = store.getState().server.url.originalUrl
       if (newUrl === '/logout') {
         dispatch(showLoading())
         window.location = `${newUrl}?returnTo=${encodeURIComponent(oldUrl)}`
@@ -52,7 +52,7 @@ ReactDOM.render(
         })
         .then((data) => {
           // only update page state if it is the date for the page we are currently viewing
-          if (data && data.page.url.originalUrl === store.getState().router.location.pathname) {
+          if (data && data.server.url.originalUrl === store.getState().router.location.pathname) {
             return dispatch(setPage(data))
           }
         })

@@ -7,12 +7,12 @@ let { Helmet } = require('react-helmet')
 let { StyleSheetServer } = require('aphrodite/no-important')
 let thunkMiddleware = require('redux-thunk').default
 
-let { pageReducer } = require('./reducers/page')
+let { serverReducer } = require('./reducers/server')
 
 module.exports = (data) => {
   const store = createStore(
     combineReducers({
-      page: pageReducer
+      server: serverReducer
     }),
     data,
     applyMiddleware(thunkMiddleware)
@@ -23,7 +23,7 @@ module.exports = (data) => {
     return ReactDOMServer.renderToString(
       <Provider store={store}>
         <StaticRouter
-          location={data.page.url.originalUrl}
+          location={data.server.url.originalUrl}
           context={context}
         >
           <Routes />

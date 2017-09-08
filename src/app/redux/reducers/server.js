@@ -11,14 +11,14 @@ const { merge } = require('@nudj/library')
 
 const initialState = {}
 
-function pageReducer (state = initialState, action) {
+function serverReducer (state = initialState, action) {
   switch (action.type) {
     case SENDING:
       return merge(state, { sending: true, notification: null })
     case SHOW_LOADING:
       return merge(state, { loading: true })
     case FETCHED_PAGE:
-      return merge(action.data.page, {
+      return merge(action.data.server, {
         sending: false,
         loading: false
       })
@@ -36,5 +36,5 @@ function pageReducer (state = initialState, action) {
 }
 
 module.exports = {
-  pageReducer
+  serverReducer
 }
