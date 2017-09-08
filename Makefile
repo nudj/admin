@@ -68,5 +68,6 @@ test:
 		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/test:/usr/src/test \
+		-v $(CWD)/src/package.json:/usr/src/package.json \
 		$(IMAGEDEV) \
 		/bin/sh -c './node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test'

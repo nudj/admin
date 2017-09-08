@@ -16,9 +16,9 @@
   "standard": {
     "parser": "babel-eslint",
     "ignore": [
-      "lib/server/assets",
-      "lib/server/build*",
-      "lib/node_modules",
+      "app/server/assets",
+      "app/server/build*",
+      "app/node_modules",
       "webpack*"
     ]
   },
