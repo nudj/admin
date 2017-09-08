@@ -1,10 +1,10 @@
 .env*
 node_modules
 .DS_Store
-src/lib/server/assets/css/app.*
-src/lib/server/assets/js/app.*
-src/lib/server/assets/js/vendors.*
-src/lib/server/build.*
+src/app/server/assets/css/app.*
+src/app/server/assets/js/app.*
+src/app/server/assets/js/vendors.*
+src/app/server/build.*
 db.json
 .cache/*
 !.cache/readme.md
