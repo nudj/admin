@@ -28,7 +28,7 @@ ssh:
 		-p 0.0.0.0:70:80 \
 		-p 0.0.0.0:71:81 \
 		-v $(CWD)/.zshrc:/root/.zshrc \
-		-v $(CWD)/src/lib:/usr/src/lib \
+		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/test:/usr/src/test \
 		-v $(CWD)/src/.npmrc:/usr/src/.npmrc \
@@ -49,7 +49,7 @@ inject:
 		-p 0.0.0.0:70:80 \
 		-p 0.0.0.0:71:81 \
 		-v $(CWD)/.zshrc:/root/.zshrc \
-		-v $(CWD)/src/lib:/usr/src/lib \
+		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/test:/usr/src/test \
 		-v $(CWD)/src/.npmrc:/usr/src/.npmrc \
@@ -57,7 +57,7 @@ inject:
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
-		-v $(HOME)/dev/nudj/library/src:/usr/src/library \
+		-v $(HOME)/dev/nudj/library/src:/usr/src/apprary \
 		$(IMAGEDEV) \
 		/bin/zsh
 
@@ -65,8 +65,9 @@ test:
 	-@docker rm -f admin-test 2> /dev/null || true
 	@docker run --rm -it \
 		--name admin-test \
-		-v $(CWD)/src/lib:/usr/src/lib \
+		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/test:/usr/src/test \
+		-v $(CWD)/src/package.json:/usr/src/package.json \
 		$(IMAGEDEV) \
 		/bin/sh -c './node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test'

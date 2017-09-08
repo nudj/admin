@@ -2,7 +2,7 @@
   "name": "admin",
   "version": "0.0.1",
   "description": "Nudj admin",
-  "main": "lib/server",
+  "main": "app/server",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nudj/admin.git"
@@ -16,9 +16,9 @@
   "standard": {
     "parser": "babel-eslint",
     "ignore": [
-      "lib/server/assets",
-      "lib/server/build*",
-      "lib/node_modules",
+      "app/server/assets",
+      "app/server/build*",
+      "app/node_modules",
       "webpack*"
     ]
   },

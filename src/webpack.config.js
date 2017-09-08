@@ -7,7 +7,7 @@ process.noDeprecation = true
 module.exports = {
   cache: true,
   entry: {
-    'lib/server/assets/js/app': './lib/app/client'
+    'app/server/assets/js/app': './app/redux/client'
   },
   output: {
     path: __dirname,
@@ -20,7 +20,7 @@ module.exports = {
       {
         test: /\.js$/,
         include: [
-            path.join(__dirname, 'lib'),
+            path.join(__dirname, 'app'),
             path.join(__dirname, 'node_modules', '@nudj'),
             '/tmp/node_modules/@nudj'
         ],
