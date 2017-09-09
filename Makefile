@@ -29,6 +29,7 @@ ssh:
 		-p 0.0.0.0:71:81 \
 		-v $(CWD)/.zshrc:/root/.zshrc \
 		-v $(CWD)/src/app:/usr/src/app \
+		-v $(CWD)/src/framework:/usr/src/framework \
 		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/test:/usr/src/test \
 		-v $(CWD)/src/.npmrc:/usr/src/.npmrc \
@@ -50,6 +51,7 @@ inject:
 		-p 0.0.0.0:71:81 \
 		-v $(CWD)/.zshrc:/root/.zshrc \
 		-v $(CWD)/src/app:/usr/src/app \
+		-v $(CWD)/src/framework:/usr/src/framework \
 		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/test:/usr/src/test \
 		-v $(CWD)/src/.npmrc:/usr/src/.npmrc \
@@ -57,7 +59,7 @@ inject:
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
-		-v $(HOME)/dev/nudj/library/src:/usr/src/apprary \
+		-v $(HOME)/dev/nudj/framework/src:/usr/src/framework \
 		$(IMAGEDEV) \
 		/bin/zsh
 

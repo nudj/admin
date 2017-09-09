@@ -14,7 +14,7 @@ const RowItem = require('../../components/row-item')
 const Plural = require('../../components/plural')
 const TasksList = require('../../components/tasks-list')
 const TaskAdder = require('../../components/task-adder')
-const { postData } = require('../../redux/actions/app')
+const { postData } = require('../../../framework/redux/actions/app')
 
 module.exports = class PersonPage extends React.Component {
   constructor (props) {

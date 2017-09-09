@@ -6,7 +6,7 @@ const EmailForm = require('@nudj/components/lib/email-form/email-form')
 const getStyle = require('./company-survey-message-page.css')
 const Page = require('../../components/page')
 const PageHeader = require('../../components/page-header')
-const { cssProcessor } = require('../../lib/css')
+const { cssProcessor } = require('../../../framework/lib/css')
 
 module.exports = (props) => {
   const style = getStyle()

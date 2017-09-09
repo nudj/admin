@@ -1,4 +1,4 @@
-const request = require('../../lib/request')
+const request = require('../../../framework/lib/request')
 const { promiseMap } = require('@nudj/library')
 
 function fetchHirers () {

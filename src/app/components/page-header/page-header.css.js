@@ -3,7 +3,7 @@ let {
   variables,
   mixins,
   merge
-} = require('../../lib/css')
+} = require('../../../framework/lib/css')
 
 module.exports = css({
   header: {

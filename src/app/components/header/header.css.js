@@ -3,7 +3,7 @@ let {
   merge,
   mixins,
   variables
-} = require('../../lib/css')
+} = require('../../../framework/lib/css')
 
 let linkStyle = {
   display: 'block',

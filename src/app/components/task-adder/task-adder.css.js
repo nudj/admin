@@ -1,4 +1,4 @@
-const { css, merge, mixins } = require('../../lib/css')
+const { css, merge, mixins } = require('../../../framework/lib/css')
 
 module.exports = css(merge(mixins.pageLayout, mixins.formStructure, mixins.formElements, {
   formCard: mixins.cardStyle,

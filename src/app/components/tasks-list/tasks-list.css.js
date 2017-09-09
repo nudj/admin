@@ -1,4 +1,4 @@
-const { css, merge, mixins } = require('../../lib/css')
+const { css, merge, mixins } = require('../../../framework/lib/css')
 
 module.exports = css({
   copy: merge(mixins.typography.p, {}),

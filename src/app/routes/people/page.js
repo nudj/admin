@@ -11,7 +11,7 @@ const RowItem = require('../../components/row-item')
 const Tooltip = require('../../components/tooltip')
 const PersonForm = require('../../components/person-form')
 const Plural = require('../../components/plural')
-const { postData } = require('../../redux/actions/app')
+const { postData } = require('../../../framework/redux/actions/app')
 
 module.exports = class PeoplePage extends React.Component {
   constructor (props) {

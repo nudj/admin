@@ -12,7 +12,7 @@ const PageHeader = require('../../components/page-header')
 const RowItem = require('../../components/row-item')
 const CopyToClipboard = require('../../components/copy-to-clipboard')
 const JobForm = require('../../components/job-form')
-const { postData } = require('../../redux/actions/app')
+const { postData } = require('../../../framework/redux/actions/app')
 
 module.exports = class JobsPage extends React.Component {
   constructor (props) {

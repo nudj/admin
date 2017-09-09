@@ -3,7 +3,7 @@ let {
   merge,
   mixins,
   variables
-} = require('../../lib/css')
+} = require('../../../framework/lib/css')
 
 module.exports = css(merge(mixins.pageLayout, {
   inputBoxHole: {

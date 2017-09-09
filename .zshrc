@@ -10,7 +10,7 @@ alias dev='./node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-m
 		--quiet \
 		--watch ./ \
 		--delay 250ms \
-		-x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && torus run -o nudj -p admin -e local -- node ."'
+		-x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
 alias test="./node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test"
 alias tdd='./node_modules/.bin/nodemon \
 	--quiet \

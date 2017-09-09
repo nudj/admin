@@ -3,7 +3,7 @@ const {
   promiseMap
 } = require('@nudj/library')
 
-const request = require('../../lib/request')
+const request = require('../../../framework/lib/request')
 
 function fetchTaskById (id) {
   return request(`tasks/filter?id=${id}`)
