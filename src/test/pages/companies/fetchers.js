@@ -9,7 +9,7 @@ chai.use(dirtyChai)
 
 const fetchers = require('../../../app/pages/companies/fetchers')
 
-describe.only('Companies fetchers', () => {
+describe('Companies fetchers', () => {
   const api = nock('http://api:81')
 
   beforeEach(() => {
