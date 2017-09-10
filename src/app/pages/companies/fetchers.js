@@ -2,14 +2,16 @@ const { actionMapAssign } = require('@nudj/library')
 
 const companies = require('../../server/modules/companies')
 
+const pageData = {
+  companies: () => companies.getAll()
+}
+
 const get = ({
   data,
   params
 }) => actionMapAssign(
   data,
-  {
-    companies: () => companies.getAll()
-  }
+  pageData
 )
 
 const post = ({
@@ -21,12 +23,12 @@ const post = ({
     newCompany: () => companies.post(body)
   },
   {
-    companies: () => companies.getAll(),
     notification: data => ({
       message: `${data.newCompany.name} added`,
       type: 'success'
     })
-  }
+  },
+  pageData
 )
 
 module.exports = {
