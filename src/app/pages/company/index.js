@@ -5,8 +5,9 @@ const format = require('date-fns/format')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
 const isEmail = require('validator/lib/isEmail')
+const actions = require('@nudj/framework/actions')
 
-const getStyle = require('./company-page.css')
+const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const Autocomplete = require('../../components/autocomplete')
 const PageHeader = require('../../components/page-header')
@@ -18,7 +19,6 @@ const Plural = require('../../components/plural')
 const CopyToClipboard = require('../../components/copy-to-clipboard')
 const TasksList = require('../../components/tasks-list')
 const TaskAdder = require('../../components/task-adder')
-const actions = require('@nudj/framework/actions')
 
 module.exports = class JobsPage extends React.Component {
   constructor (props) {

@@ -4,15 +4,15 @@ const get = require('lodash/get')
 const format = require('date-fns/format')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
+const actions = require('@nudj/framework/actions')
 
-const getStyle = require('./companies-page.css')
+const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const PageHeader = require('../../components/page-header')
 const RowItem = require('../../components/row-item')
 const Tooltip = require('../../components/tooltip')
 const CompanyForm = require('../../components/company-form')
 const Plural = require('../../components/plural')
-const actions = require('@nudj/framework/actions')
 
 module.exports = class CompaniesPage extends React.Component {
   constructor (props) {

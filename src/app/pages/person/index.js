@@ -3,8 +3,9 @@ const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
+const actions = require('@nudj/framework/actions')
 
-const getStyle = require('./person-page.css')
+const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const CopyToClipboard = require('../../components/copy-to-clipboard')
 const Autocomplete = require('../../components/autocomplete')
@@ -14,7 +15,6 @@ const RowItem = require('../../components/row-item')
 const Plural = require('../../components/plural')
 const TasksList = require('../../components/tasks-list')
 const TaskAdder = require('../../components/task-adder')
-const actions = require('@nudj/framework/actions')
 
 module.exports = class PersonPage extends React.Component {
   constructor (props) {

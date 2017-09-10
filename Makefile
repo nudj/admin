@@ -29,8 +29,6 @@ ssh:
 		-p 0.0.0.0:71:81 \
 		-v $(CWD)/.zshrc:/root/.zshrc \
 		-v $(CWD)/src/app:/usr/src/app \
-		-v $(CWD)/src/framework:/usr/src/framework \
-		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/test:/usr/src/test \
 		-v $(CWD)/src/.npmrc:/usr/src/.npmrc \
 		-v $(CWD)/src/nodemon.json:/usr/src/nodemon.json \
@@ -51,7 +49,6 @@ inject:
 		-p 0.0.0.0:71:81 \
 		-v $(CWD)/.zshrc:/root/.zshrc \
 		-v $(CWD)/src/app:/usr/src/app \
-		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/test:/usr/src/test \
 		-v $(CWD)/src/.npmrc:/usr/src/.npmrc \
 		-v $(CWD)/src/nodemon.json:/usr/src/nodemon.json \
@@ -67,7 +64,6 @@ test:
 	@docker run --rm -it \
 		--name admin-test \
 		-v $(CWD)/src/app:/usr/src/app \
-		-v $(CWD)/src/mocks:/usr/src/mocks \
 		-v $(CWD)/src/test:/usr/src/test \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		$(IMAGEDEV) \

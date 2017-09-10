@@ -25,11 +25,11 @@ function get ({
       people: data => people.getAll(data).then(data => data.people)
     },
     {
-      survey: data => surveys.getSurveyForCompany(merge(data)).then(data => data.survey),
-      jobs: data => jobs.getAll(merge(data), data.company.id).then(data => data.jobs),
+      survey: data => surveys.getSurveyForCompany({}, data.company.id).then(data => data.survey),
+      jobs: data => jobs.getAll({}, data.company.id).then(data => data.jobs),
       hirers: data => hirerSmooshing(merge(data)).then(data => data.hirers),
-      surveyMessages: data => messages.getAllFor(merge(data), data.company.id).then(data => data.surveyMessages),
-      tasks: data => tasks.getAllByCompany(merge(data), data.company.id).then(data => data.tasks)
+      surveyMessages: data => messages.getAllFor({}, data.company.id).then(data => data.surveyMessages),
+      tasks: data => tasks.getAllByCompany({}, data.company.id).then(data => data.tasks)
     }
   )
 }
@@ -46,13 +46,14 @@ function put ({
     },
     {
       companies: () => companies.getAll(),
-      jobs: data => jobs.getAll(merge(data), data.company.id).then(data => data.jobs),
+      jobs: data => jobs.getAll({}, data.company.id).then(data => data.jobs),
       notification: data => ({
         message: `${data.company.name} saved`,
         type: 'success'
       }),
-      tasks: data => tasks.getAllByCompany(merge(data), data.company.id).then(data => data.tasks),
-      surveyMessages: data => messages.getAllFor(merge(data), data.company.id).then(data => data.surveyMessages),
+      survey: data => surveys.getSurveyForCompany({}, data.company.id).then(data => data.survey),
+      tasks: data => tasks.getAllByCompany({}, data.company.id).then(data => data.tasks),
+      surveyMessages: data => messages.getAllFor({}, data.company.id).then(data => data.surveyMessages),
       hirers: data => hirerSmooshing(merge(data)).then(data => data.hirers)
     }
   )

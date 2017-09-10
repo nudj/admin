@@ -4,15 +4,15 @@ const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
 const isEmail = require('validator/lib/isEmail')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
+const actions = require('@nudj/framework/actions')
 
-const getStyle = require('./company-job-page.css')
+const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const Autocomplete = require('../../components/autocomplete')
 const PageHeader = require('../../components/page-header')
 const RowItem = require('../../components/row-item')
 const CopyToClipboard = require('../../components/copy-to-clipboard')
 const JobForm = require('../../components/job-form')
-const actions = require('@nudj/framework/actions')
 
 module.exports = class JobsPage extends React.Component {
   constructor (props) {

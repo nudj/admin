@@ -4,14 +4,15 @@ const get = require('lodash/get')
 const format = require('date-fns/format')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
-const getStyle = require('./people-page.css')
+const actions = require('@nudj/framework/actions')
+
+const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const PageHeader = require('../../components/page-header')
 const RowItem = require('../../components/row-item')
 const Tooltip = require('../../components/tooltip')
 const PersonForm = require('../../components/person-form')
 const Plural = require('../../components/plural')
-const actions = require('@nudj/framework/actions')
 
 module.exports = class PeoplePage extends React.Component {
   constructor (props) {

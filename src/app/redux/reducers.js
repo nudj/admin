@@ -1,4 +1,4 @@
-// const peoplePage = require('../routes/people/reducer')
+// const peoplePage = require('../pages/people/reducer')
 
 module.exports = {
   // peoplePage
