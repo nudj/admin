@@ -35,6 +35,10 @@ module.exports = class JobsPage extends React.Component {
     const resetCompanyForm = !!get(nextProps, 'savedCompany')
     const resetJobForm = !!get(nextProps, 'newJob')
     const resetHirerForm = !!get(nextProps, 'newHirer')
+    const surveyLink = get(nextProps, 'survey.link')
+    const surveyUuid = get(nextProps, 'survey.uuid')
+
+    this.setState({ surveyLink, surveyUuid })
 
     if (resetCompanyForm && resetCompanyForm !== this.state.resetCompanyForm) {
       this.setState({ resetCompanyForm })
@@ -215,7 +219,6 @@ module.exports = class JobsPage extends React.Component {
       url,
       method,
       data: {
-        company: company.id,
         link: get(this.state, 'surveyLink'),
         uuid: get(this.state, 'surveyUuid')
       }

@@ -18,7 +18,7 @@ module.exports = (props) => {
   const body = get(surveyMessage, 'body')
 
   return (
-    <Page {...this.props} className={this.style.pageBody}>
+    <Page {...props} className={style.pageBody}>
       <Helmet>
         <title>ADMIN - survey email</title>
       </Helmet>

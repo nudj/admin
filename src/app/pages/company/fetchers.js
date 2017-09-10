@@ -13,24 +13,33 @@ const tasks = require('../../server/modules/tasks')
 const surveys = require('../../server/modules/surveys')
 const hirers = require('../../server/modules/hirers')
 
+const addPeopleToHirers = (hirers, people) => hirers.map(hirer => {
+  const person = people.find(person => person.id === hirer.person)
+  return merge(hirer, { person })
+})
+
+const addPageData = (companySlug) => [
+  {
+    company: data => data.company || companies.get(companySlug),
+    companies: data => companies.getAll(),
+    people: data => people.getAll(data).then(data => data.people)
+  },
+  {
+    survey: data => data.survey || surveys.getSurveyForCompany({}, data.company.id).then(data => data.survey),
+    jobs: data => jobs.getAll({}, data.company.id).then(data => data.jobs),
+    hirers: data => hirers.getAllByCompany(data, data.company.id).then(data => addPeopleToHirers(data.hirers, data.people)),
+    surveyMessages: data => messages.getAllFor({}, data.company.id).then(data => data.surveyMessages),
+    tasks: data => tasks.getAllByCompany({}, data.company.id).then(data => data.tasks)
+  }
+]
+
 function get ({
   data,
   params
 }) {
   return actionMapAssign(
     data,
-    {
-      company: () => companies.get(params.companySlug),
-      companies: () => companies.getAll(),
-      people: data => people.getAll(data).then(data => data.people)
-    },
-    {
-      survey: data => surveys.getSurveyForCompany({}, data.company.id).then(data => data.survey),
-      jobs: data => jobs.getAll({}, data.company.id).then(data => data.jobs),
-      hirers: data => hirerSmooshing(merge(data)).then(data => data.hirers),
-      surveyMessages: data => messages.getAllFor({}, data.company.id).then(data => data.surveyMessages),
-      tasks: data => tasks.getAllByCompany({}, data.company.id).then(data => data.tasks)
-    }
+    ...addPageData(params.companySlug)
   )
 }
 
@@ -45,17 +54,12 @@ function put ({
       company: () => companies.put(body)
     },
     {
-      companies: () => companies.getAll(),
-      jobs: data => jobs.getAll({}, data.company.id).then(data => data.jobs),
       notification: data => ({
         message: `${data.company.name} saved`,
         type: 'success'
-      }),
-      survey: data => surveys.getSurveyForCompany({}, data.company.id).then(data => data.survey),
-      tasks: data => tasks.getAllByCompany({}, data.company.id).then(data => data.tasks),
-      surveyMessages: data => messages.getAllFor({}, data.company.id).then(data => data.surveyMessages),
-      hirers: data => hirerSmooshing(merge(data)).then(data => data.hirers)
-    }
+      })
+    },
+    ...addPageData(params.companySlug)
   )
 }
 
@@ -64,23 +68,22 @@ function postJob ({
   params,
   body
 }) {
-  return Promise.resolve(data)
-    .then(addDataKeyValue('company', () => companies.get(params.companySlug)))
-    .then(data => {
-      body.company = data.company.id
-      return jobs.post(data, body)
-    })
-    .then(data => {
-      data.notification = {
+  return actionMapAssign(
+    data,
+    {
+      company: () => companies.get(params.companySlug)
+    },
+    {
+      newJob: data => jobs.post({}, merge(body, { company: data.company.id })).then(data => data.newJob)
+    },
+    {
+      notification: data => ({
         message: `${data.newJob.title} added`,
         type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(addDataKeyValue('companies', companies.getAll))
-    .then(data => jobs.getAll(data, data.company.id))
-    .then(hirerSmooshing)
-    .then(data => tasks.getAllByCompany(data, data.company.id))
+      })
+    },
+    ...addPageData(params.companySlug)
+  )
 }
 
 function postHirer ({
@@ -91,10 +94,26 @@ function postHirer ({
   const companySlug = params.companySlug
   const email = body.email
 
-  return Promise.resolve(data)
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => people.post(data, {email}))
-    .then(data => addCompanyHirer(data, data.company.id, data.newPerson.id))
+  return actionMapAssign(
+    data,
+    {
+      company: () => companies.get(companySlug),
+      newPerson: () => people.post({}, { email }).then(data => data.newPerson)
+    },
+    {
+      newHirer: data => hirers.post({}, {
+        company: data.company.id,
+        person: data.newPerson.id
+      }).then(data => data.newHirer)
+    },
+    {
+      notification: data => ({
+        message: `New person and hirer added`,
+        type: 'success'
+      })
+    },
+    ...addPageData(companySlug)
+  )
 }
 
 function postHirerPerson ({
@@ -103,10 +122,27 @@ function postHirerPerson ({
   body
 }) {
   const companySlug = params.companySlug
+  const person = params.person
 
-  return Promise.resolve(data)
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => addCompanyHirer(data, data.company.id, params.person))
+  return actionMapAssign(
+    data,
+    {
+      company: () => companies.get(companySlug)
+    },
+    {
+      newHirer: data => hirers.post({}, {
+        company: data.company.id,
+        person
+      }).then(data => data.newHirer)
+    },
+    {
+      notification: data => ({
+        message: `New hirer added`,
+        type: 'success'
+      })
+    },
+    ...addPageData(companySlug)
+  )
 }
 
 function postSurvey ({
@@ -115,19 +151,23 @@ function postSurvey ({
   body
 }) {
   const companySlug = params.companySlug
-  return surveys.post(data, body)
-    .then(data => {
-      data.notification = {
+
+  return actionMapAssign(
+    data,
+    {
+      company: () => companies.get(companySlug)
+    },
+    {
+      survey: data => surveys.post({}, merge(body, { company: data.company.id })).then(data => data.survey)
+    },
+    {
+      notification: data => ({
         message: `Survey added`,
         type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => jobs.getAll(data, data.company.id))
-    .then(addDataKeyValue('companies', companies.getAll))
-    .then(hirerSmooshing)
-    .then(data => messages.getAllFor(data, data.company.id))
+      })
+    },
+    ...addPageData(companySlug)
+  )
 }
 
 function patchSurvey ({
@@ -137,19 +177,23 @@ function patchSurvey ({
 }) {
   const companySlug = params.companySlug
   const surveyId = params.surveyId
-  return surveys.patch(data, surveyId, body)
-    .then(data => {
-      data.notification = {
+
+  return actionMapAssign(
+    data,
+    {
+      company: () => companies.get(companySlug)
+    },
+    {
+      survey: data => surveys.patch({}, surveyId, merge(body, { company: data.company.id })).then(data => data.survey)
+    },
+    {
+      notification: data => ({
         message: `Survey updated`,
         type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => jobs.getAll(data, data.company.id))
-    .then(addDataKeyValue('companies', companies.getAll))
-    .then(hirerSmooshing)
-    .then(data => messages.getAllFor(data, data.company.id))
+      })
+    },
+    ...addPageData(companySlug)
+  )
 }
 
 function postTask ({
@@ -158,54 +202,27 @@ function postTask ({
   body
 }) {
   const companySlug = params.companySlug
+  const type = params.taskType
 
-  return Promise.resolve(data)
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => {
-      const company = data.company.id
-      const type = params.taskType
-      const task = {company, type}
-      return tasks.post(data, task)
-    })
-    .then(data => {
-      data.notification = {
+  return actionMapAssign(
+    data,
+    {
+      company: () => companies.get(companySlug)
+    },
+    {
+      newTask: data => {
+        const company = data.company.id
+        return tasks.post({}, { company, type }).then(data => data.newTask)
+      }
+    },
+    {
+      notification: data => ({
         message: `New ${data.newTask.type} task saved`,
         type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(addDataKeyValue('companies', companies.getAll))
-    .then(data => jobs.getAll(data, data.company.id))
-    .then(hirerSmooshing)
-    .then(data => tasks.getAllByCompany(data, data.company.id))
-}
-
-function hirerSmooshing (data) {
-  return people.getAll(data)
-    .then(data => hirers.getAllByCompany(data, data.company.id))
-    .then(data => {
-      const expandedHirers = data.hirers.map(hirer => {
-        const person = data.people.find(person => person.id === hirer.person)
-        return merge({}, hirer, {person})
       })
-      data.hirers = expandedHirers
-      return promiseMap(data)
-    })
-}
-
-function addCompanyHirer (data, company, person) {
-  return hirers.post(data, {company, person})
-    .then(data => {
-      data.notification = {
-        message: `New hirer added`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(addDataKeyValue('companies', companies.getAll))
-    .then(data => jobs.getAll(data, data.company.id))
-    .then(hirerSmooshing)
-    .then(data => tasks.getAllByCompany(data, data.company.id))
+    },
+    ...addPageData(companySlug)
+  )
 }
 
 module.exports = {
