@@ -12,7 +12,7 @@ const PageHeader = require('../../components/page-header')
 const RowItem = require('../../components/row-item')
 const CopyToClipboard = require('../../components/copy-to-clipboard')
 const JobForm = require('../../components/job-form')
-const { postData } = require('../../../framework/redux/actions/app')
+const actions = require('@nudj/framework/actions')
 
 module.exports = class JobsPage extends React.Component {
   constructor (props) {
@@ -208,7 +208,7 @@ module.exports = class JobsPage extends React.Component {
     const url = `/${companySlug}/jobs/${jobSlug}`
     const method = 'put'
 
-    this.props.dispatch(postData({ url, data, method }))
+    this.props.dispatch(actions.app.postData({ url, data, method }))
   }
 
   getPersonFromEmail (email) {
@@ -229,7 +229,7 @@ module.exports = class JobsPage extends React.Component {
 
     this.setState({
       referralValue: ''
-    }, () => this.props.dispatch(postData({ url, data, method })))
+    }, () => this.props.dispatch(actions.app.postData({ url, data, method })))
   }
 
   saveUser (event) {
@@ -243,7 +243,7 @@ module.exports = class JobsPage extends React.Component {
 
     this.setState({
       value: ''
-    }, () => this.props.dispatch(postData({ url, data, method })))
+    }, () => this.props.dispatch(actions.app.postData({ url, data, method })))
   }
 
   renderUserActions (value) {

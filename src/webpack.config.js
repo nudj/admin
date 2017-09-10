@@ -1,6 +1,5 @@
 var path = require('path')
 var webpack = require('webpack')
-var DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 
 process.noDeprecation = true
 
@@ -45,11 +44,6 @@ module.exports = {
       manifest: require('./vendors-manifest.json')
     })
   ],
-  resolve: {
-    plugins: [
-      new DirectoryNamedWebpackPlugin()
-    ]
-  },
   stats: {
     colors: true,
     cached: false,

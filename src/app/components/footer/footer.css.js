@@ -1,4 +1,4 @@
-let { css, mixins, variables, merge } = require('../../../framework/lib/css')
+let { css, mixins, variables, merge } = require('@nudj/framework/css')
 
 const linkItem = merge({
   fontSize: '.875rem',

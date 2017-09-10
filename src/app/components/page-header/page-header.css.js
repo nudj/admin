@@ -3,7 +3,7 @@ let {
   variables,
   mixins,
   merge
-} = require('../../../framework/lib/css')
+} = require('@nudj/framework/css')
 
 module.exports = css({
   header: {

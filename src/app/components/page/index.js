@@ -1,9 +1,8 @@
 const React = require('react')
-const { Helmet } = require('react-helmet')
 const get = require('lodash/get')
 
 const getStyle = require('./style.css')
-const FrameworkPage = require('../../../framework/components/page')
+const FrameworkPage = require('@nudj/framework/page')
 const Loading = require('../loading')
 const Header = require('../header')
 

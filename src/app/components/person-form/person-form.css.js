@@ -2,7 +2,7 @@ let {
   css,
   merge,
   mixins
-} = require('../../../framework/lib/css')
+} = require('@nudj/framework/css')
 
 module.exports = css(merge(mixins.pageLayout, mixins.formStructure, mixins.formElements, {
   formCard: mixins.cardStyle,

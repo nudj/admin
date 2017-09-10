@@ -12,7 +12,7 @@ const RowItem = require('../../components/row-item')
 const Tooltip = require('../../components/tooltip')
 const CompanyForm = require('../../components/company-form')
 const Plural = require('../../components/plural')
-const { postData } = require('../../../framework/redux/actions/app')
+const actions = require('@nudj/framework/actions')
 
 module.exports = class CompaniesPage extends React.Component {
   constructor (props) {
@@ -34,7 +34,7 @@ module.exports = class CompaniesPage extends React.Component {
     const url = '/'
     const method = 'post'
 
-    this.props.dispatch(postData({ url, data, method }))
+    this.props.dispatch(actions.app.postData({ url, data, method }))
   }
 
   render () {

@@ -18,7 +18,7 @@ const Plural = require('../../components/plural')
 const CopyToClipboard = require('../../components/copy-to-clipboard')
 const TasksList = require('../../components/tasks-list')
 const TaskAdder = require('../../components/task-adder')
-const { postData } = require('../../../framework/redux/actions/app')
+const actions = require('@nudj/framework/actions')
 
 module.exports = class JobsPage extends React.Component {
   constructor (props) {
@@ -64,7 +64,7 @@ module.exports = class JobsPage extends React.Component {
     const data = {}
     const method = 'post'
 
-    this.props.dispatch(postData({ url, data, method }))
+    this.props.dispatch(actions.app.postData({ url, data, method }))
   }
 
   onChangeHirer (value, matches) {
@@ -83,7 +83,7 @@ module.exports = class JobsPage extends React.Component {
     const url = `/${companySlug}/jobs`
     const method = 'post'
 
-    this.props.dispatch(postData({ url, data, method }))
+    this.props.dispatch(actions.app.postData({ url, data, method }))
   }
 
   onSubmitCompanyChanges (data) {
@@ -91,7 +91,7 @@ module.exports = class JobsPage extends React.Component {
     const url = `/${companySlug}`
     const method = 'put'
 
-    this.props.dispatch(postData({ url, data, method }))
+    this.props.dispatch(actions.app.postData({ url, data, method }))
   }
 
   saveHirerCommon ({email, personId}) {
@@ -102,7 +102,7 @@ module.exports = class JobsPage extends React.Component {
 
     this.setState({
       hirerValue: ''
-    }, () => this.props.dispatch(postData({ url, data, method })))
+    }, () => this.props.dispatch(actions.app.postData({ url, data, method })))
   }
 
   saveHirer (event) {
@@ -211,7 +211,7 @@ module.exports = class JobsPage extends React.Component {
     const url = `/${company.slug}/surveys${survey ? `/${survey.id}` : ''}`
     const method = survey ? 'patch' : 'post'
 
-    this.props.dispatch(postData({
+    this.props.dispatch(actions.app.postData({
       url,
       method,
       data: {

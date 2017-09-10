@@ -1,4 +1,4 @@
-const { css, merge, mixins } = require('../../../framework/lib/css')
+const { css, merge, mixins } = require('@nudj/framework/css')
 
 module.exports = css({
   copy: merge(mixins.typography.p, {}),

@@ -1,4 +1,4 @@
-const request = require('../../../framework/lib/request')
+const request = require('@nudj/framework/request')
 const { promiseMap } = require('@nudj/library')
 const flatten = require('lodash/flatten')
 

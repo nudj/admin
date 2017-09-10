@@ -2,13 +2,13 @@ const React = require('react')
 const { connect } = require('react-redux')
 const serialise = require('form-serialize')
 const omit = require('lodash/omit')
-const { postData } = require('../../../framework/redux/actions/app')
+const actions = require('@nudj/framework/actions')
 
 function getSubmitHandler (props) {
   return (event) => {
     event.preventDefault()
     props.onSubmit && props.onSubmit(event)
-    props.dispatch(postData({
+    props.dispatch(actions.app.postData({
       url: props.action,
       method: props.method,
       data: serialise(event.target, { hash: true })

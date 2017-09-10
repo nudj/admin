@@ -14,7 +14,7 @@ const RowItem = require('../../components/row-item')
 const Plural = require('../../components/plural')
 const TasksList = require('../../components/tasks-list')
 const TaskAdder = require('../../components/task-adder')
-const { postData } = require('../../../framework/redux/actions/app')
+const actions = require('@nudj/framework/actions')
 
 module.exports = class PersonPage extends React.Component {
   constructor (props) {
@@ -71,7 +71,7 @@ module.exports = class PersonPage extends React.Component {
     const url = `/people/${data.id}`
     const method = 'put'
 
-    this.props.dispatch(postData({ url, data, method }))
+    this.props.dispatch(actions.app.postData({ url, data, method }))
   }
 
   onAddTask (task) {
@@ -81,7 +81,7 @@ module.exports = class PersonPage extends React.Component {
     const data = {}
     const method = 'post'
 
-    this.props.dispatch(postData({ url, data, method }))
+    this.props.dispatch(actions.app.postData({ url, data, method }))
   }
 
   renderReferralsList () {
@@ -223,7 +223,7 @@ module.exports = class PersonPage extends React.Component {
 
     this.setState({
       referralJobId: ''
-    }, () => this.props.dispatch(postData({ url, data, method })))
+    }, () => this.props.dispatch(actions.app.postData({ url, data, method })))
   }
 
   saveRecommendation (event) {
@@ -241,7 +241,7 @@ module.exports = class PersonPage extends React.Component {
     this.setState({
       recommendationJobId: '',
       recommendationHirerId: ''
-    }, () => this.props.dispatch(postData({ url, data, method })))
+    }, () => this.props.dispatch(actions.app.postData({ url, data, method })))
   }
 
   renderReferralActions (referralJobId) {

@@ -11,7 +11,7 @@ const RowItem = require('../../components/row-item')
 const Tooltip = require('../../components/tooltip')
 const PersonForm = require('../../components/person-form')
 const Plural = require('../../components/plural')
-const { postData } = require('../../../framework/redux/actions/app')
+const actions = require('@nudj/framework/actions')
 
 module.exports = class PeoplePage extends React.Component {
   constructor (props) {
@@ -33,7 +33,7 @@ module.exports = class PeoplePage extends React.Component {
     const url = '/people/'
     const method = 'post'
 
-    this.props.dispatch(postData({ url, data, method }))
+    this.props.dispatch(actions.app.postData({ url, data, method }))
   }
 
   renderPeopleList () {

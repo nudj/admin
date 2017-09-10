@@ -8,25 +8,21 @@ require('babel-register')({
   }
 })
 const path = require('path')
-const server = require('../framework/server')
+const server = require('@nudj/framework/server')
 
-const customRouters = [
+const reduxRoutes = require('./redux/routes')
+const reduxReducers = require('./redux/reducers')
+const expressRouters = [
   require('./server/routers/auth'),
   require('./server/routers/app')
 ]
-const reduxRoutes = {
-  '/': require('./routes/companies/page'),
-  '/people': require('./routes/people/page'),
-  '/people/:personId': require('./routes/person/page'),
-  '/:companySlug': require('./routes/company/page'),
-  '/:companySlug/jobs/:jobSlug': require('./routes/company-job/page'),
-  '/:companySlug/messages/:surveyMessageId': require('./routes/company-survey-message/page')
-}
-const customReducers = {}
+const expressAssetPath = path.join(__dirname, 'server/assets')
+const mockData = require('./mock-data')
 
 server({
-  customRouters,
   reduxRoutes,
-  customReducers,
-  customAssetPath: path.join(__dirname, 'server/assets')
+  reduxReducers,
+  expressRouters,
+  expressAssetPath,
+  mockData
 })

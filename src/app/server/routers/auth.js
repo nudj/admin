@@ -1,6 +1,6 @@
 const express = require('express')
 const passport = require('passport')
-const logger = require('../../../framework/lib/logger')
+const logger = require('@nudj/framework/logger')
 const { promiseMap } = require('@nudj/library')
 const people = require('../modules/people')
 

@@ -3,7 +3,7 @@ let {
   merge,
   variables,
   mixins
-} = require('../../../framework/lib/css')
+} = require('@nudj/framework/css')
 
 const listStyle = {
   listStyle: 'none',
