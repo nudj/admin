@@ -1,8 +1,6 @@
 const {
   merge,
-  actionMapAssign,
-  promiseMap,
-  addDataKeyValue
+  actionMapAssign
 } = require('@nudj/library')
 
 const companies = require('../../server/modules/companies')
