@@ -60,8 +60,10 @@
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.3.2",
     "chai": "^3.5.0",
+    "chai-as-promised": "^7.1.1",
     "dirty-chai": "^1.2.2",
     "mocha": "^3.2.0",
+    "nock": "^9.0.14",
     "nodemon": "^1.11.0",
     "standard": "^9.0.0",
     "webpack": "^2.2.1"
