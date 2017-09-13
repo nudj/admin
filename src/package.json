@@ -2,7 +2,7 @@
   "name": "admin",
   "version": "0.0.1",
   "description": "Nudj admin",
-  "main": "lib/server",
+  "main": "app/server",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nudj/admin.git"
@@ -16,16 +16,16 @@
   "standard": {
     "parser": "babel-eslint",
     "ignore": [
-      "lib/server/assets",
-      "lib/server/build*",
-      "lib/node_modules",
+      "app/server/assets",
+      "app/server/build*",
+      "app/node_modules",
       "webpack*"
     ]
   },
   "dependencies": {
-    "@nudj/dummy": "0.6.0",
+    "@nudj/components": "0.1.3",
+    "@nudj/library": "1.0.0",
     "@nudj/react-router-redux": "0.1.1--5.0.0-alpha.6",
-    "@nudj/schemas": "0.11.1",
     "aphrodite": "^1.2.0",
     "axios": "^0.16.1",
     "babel-preset-env": "^1.1.10",
@@ -38,7 +38,6 @@
     "consolidate": "^0.14.5",
     "csurf": "^1.9.0",
     "date-fns": "^1.28.3",
-    "deepmerge": "^1.3.2",
     "escape-html": "^1.0.3",
     "express": "^4.14.1",
     "express-session": "^1.15.1",

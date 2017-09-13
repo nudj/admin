@@ -1,11 +1,11 @@
 {
   "ignore": [
-    "lib/server/build*",
-    "lib/server/assets/js/app*",
-    "lib/server/assets/js/vendors.js",
-    "lib/server/assets/css/app*",
+    "app/server/build*",
+    "app/server/assets/js/app*",
+    "app/server/assets/js/vendors.js",
+    "app/server/assets/css/app*",
     "ignore*",
-    "lib/ignore*"
+    "app/ignore*"
   ],
   "ext": "js css"
 }

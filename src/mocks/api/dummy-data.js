@@ -6,7 +6,10 @@ const data = {
   applications: [],
   hirers: [],
   recommendations: [],
-  externalMessages: []
+  externalMessages: [],
+  surveys: [],
+  surveyMessages: [],
+  tasks: []
 }
 data.companies = data.companies.concat([
   {
@@ -19,7 +22,8 @@ data.companies = data.companies.concat([
     name: 'Fake Company',
     slug: 'fake-company',
     url: 'http://omg.fake-company.com',
-    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.'
+    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    onboarded: true
   },
   {
     id: 'company2',
@@ -31,7 +35,8 @@ data.companies = data.companies.concat([
     name: 'nudj',
     slug: 'nudj',
     url: 'https://nudj.co',
-    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.'
+    description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    onboarded: true
   }
 ])
 data.jobs = data.jobs.concat([
@@ -152,6 +157,19 @@ data.people = data.people.concat([
     type: 'external',
     company: 'nudj',
     status: 'user'
+  },
+  {
+    id: 'person6',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    firstName: 'Tim',
+    lastName: 'Robinson',
+    email: 'tim@nudj.com',
+    url: 'http://not-a-real-person.com',
+    title: 'Junior Fake User',
+    type: 'internal',
+    company: 'nudj',
+    status: 'user'
   }
 ])
 data.hirers = data.hirers.concat([
@@ -159,6 +177,16 @@ data.hirers = data.hirers.concat([
     id: 'hirer1',
     person: 'person5',
     company: 'company1'
+  },
+  {
+    id: 'hirer2',
+    person: 'person6',
+    company: 'company1'
+  },
+  {
+    id: 'hirer3',
+    person: 'person1',
+    company: 'company2'
   }
 ])
 data.referrals = data.referrals.concat([
@@ -217,6 +245,54 @@ data.recommendations = data.recommendations.concat([
     person: 'person5',
     hirer: 'hirer1',
     source: 'NUDJ'
+  }
+])
+data.surveyMessages = data.surveyMessages.concat([
+  {
+    id: 'surveyMessage1',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    hirer: 'hirer2',
+    recipients: ['nick@nudj.co'],
+    subject: 'email subject',
+    body: 'body1'
+  },
+  {
+    id: 'surveyMessage2',
+    created: '2017-06-09T11:38:19.485+00:00',
+    modified: '2017-06-09T11:38:19.485+00:00',
+    hirer: 'hirer1',
+    recipients: ['nick@nudj.co', 'jamie@nudj.co'],
+    subject: 'second email subject',
+    body: 'body2'
+  }
+])
+data.surveys = data.surveys.concat([
+  {
+    id: 'survey1',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    company: 'company1',
+    link: 'http://surveymonkey.com/123',
+    uuid: '123'
+  }
+])
+data.tasks = data.tasks.concat([
+  {
+    id: 'task1',
+    hirer: 'hirer2',
+    type: 'UNLOCK_NETWORK_LINKEDIN',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    completed: null
+  },
+  {
+    id: 'task2',
+    company: 'company2',
+    type: 'SEND_SURVEY_INTERNAL',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    completed: 'hirer2'
   }
 ])
 

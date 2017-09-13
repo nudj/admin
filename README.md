@@ -9,14 +9,16 @@ Nudj admin for nudj employees only
 1. Docker
 1. Make
 
-### Setup
+### Outside container
 
 1. `make build` to build the image
-1. `make cache` to cache the npm modules (saves time later)
-1. `make dll` to compile the vendor libs together
+1. `make ssh` to ssh into container
+1. `make test` to run the tests
 
-### Development
+### Development (Inside container)
 
-1. `make dev` to run the app with file watchers
-1. `make test` to run the tests one time
-1. `make tdd` to run the tdd watcher
+1. `run` to run the app
+1. `dev` to run the app with a watcher
+1. `test` to run the tests
+1. `tdd` to run the tests with a watcher
+1. `exit` to leave the container and close the ssh session
