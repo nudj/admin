@@ -1,5 +1,4 @@
 const React = require('react')
-const get = require('lodash/get')
 
 const getStyle = require('./style.css')
 const Header = require('../header')
@@ -9,7 +8,6 @@ const ScrollTop = require('../scroll-top')
 
 const Page = (props) => {
   const style = getStyle()
-  const loading = get(props, 'loading')
 
   return (
     <ScrollTop ignore={props.historyAction === 'REPLACE'}>

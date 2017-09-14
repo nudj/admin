@@ -9,7 +9,6 @@ require('babel-register')({
 })
 const path = require('path')
 const server = require('@nudj/framework/server')
-const logger = require('@nudj/framework/logger')
 const find = require('lodash/find')
 
 const App = require('./redux')
@@ -40,7 +39,7 @@ const spoofLoggedIn = (req, res, next) => {
   next()
 }
 const errorHandlers = {}
-console.log('App', App)
+
 server({
   App,
   reduxRoutes,
