@@ -1,7 +1,5 @@
-let {
-  css,
-  variables
-} = require('@nudj/framework/css')
+const { css } = require('@nudj/framework/css')
+const { variables } = require('../../lib/css')
 
 const spin = {
   '0%': {

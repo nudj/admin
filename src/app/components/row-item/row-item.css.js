@@ -1,9 +1,5 @@
-let {
-  css,
-  merge,
-  variables,
-  mixins
-} = require('@nudj/framework/css')
+const { css, merge } = require('@nudj/framework/css')
+const { variables, mixins } = require('../../lib/css')
 
 const listStyle = {
   listStyle: 'none',
