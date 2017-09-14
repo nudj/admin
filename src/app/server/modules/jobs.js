@@ -5,7 +5,7 @@ const {
   promiseMap
 } = require('@nudj/library')
 
-const request = require('../../lib/request')
+const request = require('@nudj/framework/request')
 const common = require('./common')
 
 function createJob (data, job) {

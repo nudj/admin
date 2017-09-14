@@ -16,7 +16,7 @@ alias tdd='./node_modules/.bin/nodemon \
 	--quiet \
 	--watch ./ \
 	--delay 250ms \
-	-x "./node_modules/.bin/mocha test/*.js || exit 1"'
+	-x "./node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test || exit 1"'
 
 alias ll="ls -la"
 alias d="docker"

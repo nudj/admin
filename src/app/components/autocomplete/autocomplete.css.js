@@ -1,9 +1,5 @@
-let {
-  css,
-  merge,
-  mixins,
-  variables
-} = require('../../lib/css')
+const { css, merge } = require('@nudj/framework/css')
+const { variables, mixins } = require('../../lib/css')
 
 module.exports = css(merge(mixins.pageLayout, {
   inputBoxHole: {

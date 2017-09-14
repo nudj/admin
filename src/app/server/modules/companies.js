@@ -1,4 +1,4 @@
-const request = require('../../lib/request')
+const request = require('@nudj/framework/request')
 const common = require('./common')
 
 module.exports.get = function (companySlug) {
