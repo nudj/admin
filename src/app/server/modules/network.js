@@ -5,12 +5,12 @@ const {
   promiseMap
 } = require('@nudj/library')
 
-const NudjError = require('../../lib/error')
-const request = require('../../lib/request')
+const NudjError = require('@nudj/framework/error')
+const request = require('@nudj/framework/request')
 const mailer = require('../lib/mailer')
-const templater = require('../../lib/templater')
-const logger = require('../../lib/logger')
-const { emails: validators } = require('../../lib/validators')
+const templater = require('@nudj/framework/templater')
+const logger = require('@nudj/framework/logger')
+const { emails: validators } = require('@nudj/framework/validators')
 
 function validate (formData, data) {
   let invalid

@@ -1,13 +1,12 @@
 var path = require('path')
 var webpack = require('webpack')
-var DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 
 process.noDeprecation = true
 
 module.exports = {
   cache: true,
   entry: {
-    'app/server/assets/js/app': './app/redux/client'
+    'app/server/assets/js/app': './app/client'
   },
   output: {
     path: __dirname,
@@ -21,8 +20,7 @@ module.exports = {
         test: /\.js$/,
         include: [
             path.join(__dirname, 'app'),
-            path.join(__dirname, 'node_modules', '@nudj'),
-            '/tmp/node_modules/@nudj'
+            path.join(__dirname, 'node_modules', '@nudj')
         ],
         loader: 'babel-loader',
         options: {
@@ -44,11 +42,6 @@ module.exports = {
       manifest: require('./vendors-manifest.json')
     })
   ],
-  resolve: {
-    plugins: [
-      new DirectoryNamedWebpackPlugin()
-    ]
-  },
   stats: {
     colors: true,
     cached: false,

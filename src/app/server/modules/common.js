@@ -1,6 +1,5 @@
 const isAfter = require('date-fns/is_after')
-
-const request = require('../../lib/request')
+const request = require('@nudj/framework/request')
 
 function fetchPersonFromFragment (fragment) {
   return request(`people/${fragment.personId || fragment}`)

@@ -40,6 +40,7 @@ module.exports = class CompaniesPage extends React.Component {
       logo: '',
       description: '',
       industry: '',
+      location: '',
       url: '',
       facebook: '',
       twitter: '',
@@ -226,6 +227,10 @@ module.exports = class CompaniesPage extends React.Component {
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='companyIndustry'>Industry</label>
             <input className={this.style.inputBox} type='text' id='companyIndustry' name='industry' onChange={this.onChangeGeneric.bind(this)} value={company.industry} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='companyLocation'>Location</label>
+            <input className={this.style.inputBox} type='text' id='companyLocation' name='location' onChange={this.onChangeGeneric.bind(this)} value={company.location} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='companyUrl'>URL</label>
