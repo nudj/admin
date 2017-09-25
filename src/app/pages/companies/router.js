@@ -1,4 +1,4 @@
-const express = require('express')
+const createRouter = require('@nudj/framework/router')
 
 const fetchers = require('./fetchers')
 
@@ -6,11 +6,11 @@ const Router = ({
   ensureLoggedIn,
   respondWith
 }) => {
-  const router = express.Router()
+  const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.get('/', respondWith(fetchers.get))
-  router.post('/', respondWith(fetchers.post))
+  router.getHandlers('/', respondWith(fetchers.get))
+  router.postHandlers('/', respondWith(fetchers.post))
 
   return router
 }
