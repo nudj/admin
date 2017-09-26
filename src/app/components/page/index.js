@@ -10,7 +10,7 @@ const Page = (props) => {
   const style = getStyle()
 
   return (
-    <ScrollTop ignore={props.historyAction === 'REPLACE'}>
+    <ScrollTop ignore={props.history.action === 'REPLACE'}>
       <div className={`${props.className} ${style.body}`}>
         <Notification notification={props.notification} dispatch={props.dispatch} />
         <Overlay overlay={props.overlay} dispatch={props.dispatch} />
