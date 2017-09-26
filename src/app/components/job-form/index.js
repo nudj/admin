@@ -4,13 +4,20 @@ const { merge } = require('@nudj/library')
 
 const getStyle = require('./job-form.css')
 
+const normaliseItem = (item) => item ? item.join(', ') : ''
 const normaliseJob = (job) => merge(job, {
-  tags: job.tags.join(', '),
-  templateTags: job.templateTags.join(', ')
+  tags: normaliseItem(job.tags),
+  templateTags: normaliseItem(job.templateTags)
 })
+const denormaliseItem = (item) => {
+  if (!item || !item.replace(/\s/g, '')) {
+    return []
+  }
+  return item.replace(/\s/g, '').split(',')
+}
 const denormaliseJob = (job) => merge(job, {
-  tags: job.tags.replace(/\s/g, '').split(','),
-  templateTags: job.templateTags.replace(/\s/g, '').split(',')
+  tags: denormaliseItem(job.tags),
+  templateTags: denormaliseItem(job.templateTags)
 })
 
 module.exports = class CompaniesPage extends React.Component {
@@ -57,7 +64,7 @@ module.exports = class CompaniesPage extends React.Component {
       tags: [],
       location: '',
       companyId: get(this.props, 'company.id'),
-      related: []
+      relatedJobs: []
     }
   }
 
