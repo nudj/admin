@@ -373,6 +373,7 @@ module.exports = class JobsPage extends React.Component {
     const surveyEmailsList = this.renderSurveyEmailsList()
 
     const addJobForm = (<JobForm
+      company={company}
       jobs={jobs}
       reset={this.state.resetJobForm}
       onSubmit={this.onSubmitJob.bind(this)}

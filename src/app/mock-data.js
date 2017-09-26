@@ -63,7 +63,7 @@ data.jobs = data.jobs.concat([
     location: 'London',
     company: 'company2',
     relatedJobs: [
-      '2'
+      'job2'
     ]
   },
   {
@@ -88,8 +88,54 @@ data.jobs = data.jobs.concat([
     location: 'London',
     company: 'company1',
     relatedJobs: [
-      '1'
+      'job1'
     ]
+  },
+  {
+    id: 'job3',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    title: 'A job that should show up first',
+    slug: 'senior-fake-test-job-3',
+    url: 'https://fake.com',
+    status: 'PUBLISHED',
+    bonus: 1000,
+    description: 'Fake job! vitae sodales velit ligula quis ligula. Sed et tincidunt nisi. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    type: 'Permanent',
+    remuneration: 'Competitive + Options',
+    experience: '300+ years',
+    requirements: 'building large-scale web-based applications in 🐔, 💅🏼 and 💩.',
+    templateTags: ['food', 'film'],
+    tags: [
+      'Fake',
+      'Job'
+    ],
+    location: 'London',
+    company: 'company1',
+    relatedJobs: []
+  },
+  {
+    id: 'job4',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    title: 'Z should be the last job!',
+    slug: 'senior-fake-test-job-4',
+    url: 'https://fake.com',
+    status: 'PUBLISHED',
+    bonus: 1000,
+    description: 'Fake job! vitae sodales velit ligula quis ligula. Sed et tincidunt nisi. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    type: 'Permanent',
+    remuneration: 'Competitive + Options',
+    experience: '300+ years',
+    requirements: 'building large-scale web-based applications in 🐔, 💅🏼 and 💩.',
+    templateTags: ['food', 'film'],
+    tags: [
+      'Fake',
+      'Job'
+    ],
+    location: 'London',
+    company: 'company1',
+    relatedJobs: []
   }
 ])
 data.people = data.people.concat([
