@@ -321,6 +321,7 @@ module.exports = class JobsPage extends React.Component {
     const jobs = get(this.props, 'jobs', [])
 
     const editJobForm = (<JobForm
+      company={company}
       jobs={jobs}
       job={job}
       reset={this.state.resetJobForm}
@@ -334,7 +335,7 @@ module.exports = class JobsPage extends React.Component {
         </Helmet>
         <PageHeader
           title={jobTitle}
-          subtitle={<span>@ <Link className={this.style.headerLink} to={`/${companySlug}/jobs`}>{companyName}</Link></span>}>
+          subtitle={<span>@ <Link className={this.style.headerLink} to={`/${companySlug}`}>{companyName}</Link></span>}>
           <h4>{get(this.props, 'job.status')}</h4>
         </PageHeader>
         <div className={this.style.pageContent}>

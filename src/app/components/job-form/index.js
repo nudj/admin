@@ -4,13 +4,20 @@ const { merge } = require('@nudj/library')
 
 const getStyle = require('./job-form.css')
 
+const normaliseItem = (item) => item ? item.join(', ') : ''
 const normaliseJob = (job) => merge(job, {
-  tags: job.tags.join(', '),
-  templateTags: job.templateTags.join(', ')
+  tags: normaliseItem(job.tags),
+  templateTags: normaliseItem(job.templateTags)
 })
+const denormaliseItem = (item) => {
+  if (!item || !item.replace(/\s/g, '')) {
+    return []
+  }
+  return item.replace(/\s/g, '').split(',')
+}
 const denormaliseJob = (job) => merge(job, {
-  tags: job.tags.replace(/\s/g, '').split(','),
-  templateTags: job.templateTags.replace(/\s/g, '').split(',')
+  tags: denormaliseItem(job.tags),
+  templateTags: denormaliseItem(job.templateTags)
 })
 
 module.exports = class CompaniesPage extends React.Component {
@@ -57,7 +64,7 @@ module.exports = class CompaniesPage extends React.Component {
       tags: [],
       location: '',
       companyId: get(this.props, 'company.id'),
-      related: []
+      relatedJobs: []
     }
   }
 
@@ -74,6 +81,12 @@ module.exports = class CompaniesPage extends React.Component {
         notUnique: !this.isTitleUnique(title)
       }
     }
+  }
+
+  clearRelatedJobs () {
+    const job = get(this.state, 'job', {})
+    job.relatedJobs = []
+    this.setState({ job })
   }
 
   makeSlugFromName (name) {
@@ -123,6 +136,26 @@ module.exports = class CompaniesPage extends React.Component {
     const key = event.target.name
 
     this.updateJob({ [key]: value })
+  }
+
+  onChangeMultiSelect (event) {
+    const value = event.target.value
+    const key = event.target.name
+
+    if (!value) {
+      return
+    }
+
+    const values = get(this.state, `job[${key}]`, [])
+    const index = values.indexOf(value)
+
+    if (index !== -1) {
+      values.splice(index, 1)
+    } else {
+      values.push(value)
+    }
+
+    this.updateJob({ [key]: values })
   }
 
   isJobValid () {
@@ -203,6 +236,16 @@ module.exports = class CompaniesPage extends React.Component {
     return errorLabels
   }
 
+  sortJobsAlphabeticallyByTitle (a, b) {
+    return a.title > b.title ? 1 : a.title < b.title ? -1 : 0
+  }
+
+  filterOutUnrelatableJobs (relatedJob, jobId, companyId) {
+    // Filter out any job that's not in the same company
+    // Also filter out the existing job cause it can't be related
+    return relatedJob.company === companyId && relatedJob.id !== jobId
+  }
+
   render () {
     const job = get(this.state, 'job', {})
 
@@ -216,6 +259,13 @@ module.exports = class CompaniesPage extends React.Component {
 
     const statuses = ['DRAFT', 'PUBLISHED', 'ARCHIVED']
     const types = ['PERMANENT', 'CONTRACT', 'FREELANCE']
+
+    const companyId = get(this.props, 'company.id')
+    const jobId = get(job, 'id')
+
+    const relatedJobs = get(this.props, 'jobs', [])
+      .filter(relatedJob => this.filterOutUnrelatableJobs(relatedJob, jobId, companyId))
+      .sort(this.sortJobsAlphabeticallyByTitle)
 
     return (<form className={this.style.pageMain} onSubmit={this.onSubmit.bind(this)} ref='jobForm'>
       <div className={this.style.formCard}>
@@ -269,6 +319,13 @@ module.exports = class CompaniesPage extends React.Component {
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobTemplateTags'>Template tags</label>
             <input className={this.style.inputBox} type='text' placeholder='eg: food, movies' id='newJobTemplateTags' name='templateTags' onChange={this.onChangeGeneric.bind(this)} value={job.templateTags} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='newJobRelatedJobs'>Related jobs</label>
+            <select className={this.style.selectBoxMultiple} id='newJobRelatedJobs' name='relatedJobs' multiple onChange={this.onChangeMultiSelect.bind(this)} value={job.relatedJobs}>
+              {relatedJobs.map(relatedJob => (<option value={relatedJob.id}>{relatedJob.title}</option>))}
+            </select>
+            <button type='button' className={this.style.secondaryButton} onClick={this.clearRelatedJobs.bind(this)}>Clear all</button>
           </li>
         </ul>
         <div className={this.style.formButtons}>
