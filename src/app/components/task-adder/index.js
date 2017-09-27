@@ -11,9 +11,10 @@ module.exports = class PeoplePage extends React.Component {
     this.submit = get(props, 'onSubmit')
 
     this.types = [
+      'HIRER_SURVEY',
       'SEND_SURVEY_INTERNAL',
-      'UNLOCK_NETWORK_LINKEDIN',
-      'SHARE_JOBS'
+      'SHARE_JOBS',
+      'UNLOCK_NETWORK_LINKEDIN'
     ]
 
     const task = this.cleanTask()

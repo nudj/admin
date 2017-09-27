@@ -24,6 +24,7 @@ const addPageData = (companySlug) => [
   },
   {
     survey: data => data.survey || surveys.getSurveyForCompany({}, data.company.id).then(data => data.survey),
+    hirerSurvey: data => data.hirerSurvey || surveys.getSurveyForCompany({}, data.company.id, 'HIRER_SURVEY').then(data => data.survey),
     jobs: data => jobs.getAll({}, data.company.id).then(data => data.jobs),
     hirers: data => hirers.getAllByCompany(data, data.company.id).then(data => addPeopleToHirers(data.hirers, data.people)),
     surveyMessages: data => messages.getAllFor({}, data.company.id).then(data => data.surveyMessages),
@@ -156,7 +157,8 @@ function postSurvey ({
       company: () => companies.get(companySlug)
     },
     {
-      survey: data => surveys.post({}, merge(body, { company: data.company.id })).then(data => data.survey)
+      survey: data => body.type === 'EMPLOYEE_SURVEY' ? surveys.post({}, merge(body, { company: data.company.id })).then(data => data.survey) : null,
+      hirerSurvey: data => body.type === 'HIRER_SURVEY' ? surveys.post({}, merge(body, { company: data.company.id })).then(data => data.survey) : null
     },
     {
       notification: data => ({
@@ -182,7 +184,8 @@ function patchSurvey ({
       company: () => companies.get(companySlug)
     },
     {
-      survey: data => surveys.patch({}, surveyId, merge(body, { company: data.company.id })).then(data => data.survey)
+      survey: data => body.type === 'EMPLOYEE_SURVEY' ? surveys.patch({}, surveyId, merge(body, { company: data.company.id })).then(data => data.survey) : null,
+      hirerSurvey: data => body.type === 'HIRER_SURVEY' ? surveys.patch({}, surveyId, merge(body, { company: data.company.id })).then(data => data.survey) : null
     },
     {
       notification: data => ({

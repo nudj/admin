@@ -17,8 +17,8 @@ module.exports.patch = function (data, surveyId, survey) {
   return promiseMap(data)
 }
 
-module.exports.getSurveyForCompany = function (data, companyId) {
-  data.survey = request(`surveys/filter?company=${companyId}`)
+module.exports.getSurveyForCompany = function (data, companyId, type = 'EMPLOYEE_SURVEY') {
+  data.survey = request(`surveys/filter?type=${type}&company=${companyId}`)
     .then(results => results.pop())
   return promiseMap(data)
 }
