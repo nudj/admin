@@ -42,9 +42,10 @@ function put ({
 
 function postReferral ({
   data,
-  params
+  params,
+  body
 }) {
-  return jobs.get(data, params.jobSlug)
+  return jobs.getById(data, params.jobId)
     .then(data => jobs.addReferral(data, data.job.id, params.personId))
     .then(data => {
       data.notification = {
@@ -83,7 +84,7 @@ function postRecommendation ({
   params,
   body
 }) {
-  return jobs.get(data, params.jobSlug)
+  return jobs.getById(data, params.jobId)
     .then(data => network.post(data, body.hirer, data.job.id, params.personId))
     .then(data => {
       data.notification = {

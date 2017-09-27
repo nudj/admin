@@ -136,6 +136,32 @@ data.jobs = data.jobs.concat([
     location: 'London',
     company: 'company1',
     relatedJobs: []
+  },
+  {
+    id: 'job5',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    title: 'Senior Full-Stack Software Engineer',
+    slug: 'senior-full-stack-software-engineer-2',
+    url: 'https://bulb.workable.com/j/389500EB72',
+    status: 'PUBLISHED',
+    bonus: 1000,
+    description: '5+ years software engineering experience, using Node (6+), ES6 (Babel) and TypeScript. You should also be familiar with Git, Github, PRs, Code Reviews - please send us a link to your Github profile.',
+    type: 'Permanent',
+    remuneration: 'Competitive + Options',
+    experience: '16 billion years',
+    requirements: 'building large-scale web-based applications in 🐔, 💅🏼 and 💩.',
+    templateTags: ['food'],
+    tags: [
+      'Software',
+      'Developer',
+      'Full-Stack'
+    ],
+    location: 'London',
+    company: 'company1',
+    relatedJobs: [
+      'job2'
+    ]
   }
 ])
 data.people = data.people.concat([

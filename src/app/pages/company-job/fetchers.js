@@ -1,22 +1,36 @@
-const {
-  addDataKeyValue,
-  promiseMap
-} = require('@nudj/library')
+const { actionMapAssign } = require('@nudj/library')
 
 const companies = require('../../server/modules/companies')
 const people = require('../../server/modules/people')
 const jobs = require('../../server/modules/jobs')
 
+const addPageData = (companySlug) => [
+  {
+    jobs: () => jobs.getAll({}).then(data => data.jobs),
+    referrals: data => jobs.getReferrals({}, data.job.id).then(data => data.referrals),
+    applications: data => jobs.getApplications({}, data.job.id).then(data => data.applications),
+    company: data => data.company || companies.get(companySlug),
+    people: data => people.getAll({}).then(data => data.people),
+    activities: data => jobs.getJobActivities({}, data.job.id)
+  }
+]
+
 function get ({
   data,
   params
 }) {
-  // Do we have an issue here with job-slug uniqueness across companies? YES!
-  // TODO: check for job slug uniqueness across companies
   const companySlug = params.companySlug
-  return jobs.get(data, params.jobSlug)
-    .then(jobs.getAll)
-    .then(data => genericGetJob({ data, companySlug }))
+
+  return actionMapAssign(
+    data,
+    {
+      company: () => companies.get(companySlug)
+    },
+    {
+      job: data => jobs.get(data, params.jobSlug, data.company.id).then(data => data.job)
+    },
+    ...addPageData(companySlug)
+  )
 }
 
 function put ({
@@ -25,17 +39,21 @@ function put ({
   body
 }) {
   const companySlug = params.companySlug
-  return jobs.put(data, body)
-    .then(jobs.getAll)
-    .then(data => jobs.get(data, params.jobSlug))
-    .then(data => {
-      data.notification = {
+
+  return actionMapAssign(
+    data,
+    {
+      savedJob: () => jobs.put({}, body).then(data => data.savedJob)
+    },
+    {
+      job: data => data.savedJob,
+      notification: data => ({
         message: `${data.savedJob.title} saved`,
         type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(data => genericGetJob({ data, companySlug }))
+      })
+    },
+    ...addPageData(companySlug)
+  )
 }
 
 function postReferral ({
@@ -46,17 +64,26 @@ function postReferral ({
   const email = body.email
   const companySlug = params.companySlug
 
-  return jobs.get(data, params.jobSlug)
-    .then(data => people.post(data, {email}))
-    .then(data => jobs.addReferral(data, data.job.id, data.newPerson.id))
-    .then(data => {
-      data.notification = {
+  return actionMapAssign(
+    data,
+    {
+      company: () => companies.get(companySlug),
+      newPerson: () => people.post({}, {email}).then(data => data.newPerson)
+    },
+    {
+      job: data => jobs.get(data, params.jobSlug, data.company.id).then(data => data.job)
+    },
+    {
+      referral: data => jobs.addReferral({}, data.job.id, data.newPerson.id).then(data => data.referral)
+    },
+    {
+      notification: data => ({
         message: `New referral ${data.referral.id} saved`,
         type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(data => genericGetJob({ data, companySlug }))
+      })
+    },
+    ...addPageData(companySlug)
+  )
 }
 
 function postReferralPerson ({
@@ -67,27 +94,25 @@ function postReferralPerson ({
   const person = params.personId
   const companySlug = params.companySlug
 
-  return jobs.get(data, params.jobSlug)
-    .then(data => jobs.addReferral(data, data.job.id, person))
-    .then(data => {
-      data.notification = {
+  return actionMapAssign(
+    data,
+    {
+      company: () => companies.get(companySlug)
+    },
+    {
+      job: data => jobs.get(data, params.jobSlug, data.company.id).then(data => data.job)
+    },
+    {
+      referral: data => jobs.addReferral({}, data.job.id, person).then(data => data.referral)
+    },
+    {
+      notification: data => ({
         message: `New referral ${data.referral.id} saved`,
         type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(data => genericGetJob({ data, companySlug }))
-}
-
-function genericGetJob ({ data, companySlug }) {
-  return jobs.getReferrals(data, data.job.id)
-    .then(data => jobs.getApplications(data, data.job.id))
-    .then(addDataKeyValue('company', () => companies.get(companySlug)))
-    .then(data => people.getAll(data))
-    .then(data => {
-      data.activities = jobs.getJobActivities(data, data.job.id)
-      return promiseMap(data)
-    })
+      })
+    },
+    ...addPageData(companySlug)
+  )
 }
 
 module.exports = {
