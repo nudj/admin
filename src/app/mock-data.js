@@ -320,7 +320,17 @@ data.surveys = data.surveys.concat([
     modified: '2017-06-08T11:38:19.485+00:00',
     company: 'company1',
     link: 'http://surveymonkey.com/123',
-    uuid: '123'
+    uuid: '123',
+    type: 'EMPLOYEE_SURVEY'
+  },
+  {
+    id: 'survey2',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    company: 'company1',
+    link: 'http://surveymonkey.com/456',
+    uuid: '456',
+    type: 'HIRER_SURVEY'
   }
 ])
 data.tasks = data.tasks.concat([
