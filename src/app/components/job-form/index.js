@@ -236,6 +236,16 @@ module.exports = class CompaniesPage extends React.Component {
     return errorLabels
   }
 
+  sortJobsAlphabeticallyByTitle (a, b) {
+    return a.title > b.title ? 1 : a.title < b.title ? -1 : 0
+  }
+
+  filterOutUnrelatableJobs (relatedJob, jobId, companyId) {
+    // Filter out any job that's not in the same company
+    // Also filter out the existing job cause it can't be related
+    return relatedJob.company === companyId && relatedJob.id !== jobId
+  }
+
   render () {
     const job = get(this.state, 'job', {})
 
@@ -251,10 +261,11 @@ module.exports = class CompaniesPage extends React.Component {
     const types = ['PERMANENT', 'CONTRACT', 'FREELANCE']
 
     const companyId = get(this.props, 'company.id')
+    const jobId = get(job, 'id')
 
     const relatedJobs = get(this.props, 'jobs', [])
-      .filter(relatedJob => relatedJob.company === companyId && relatedJob.id !== job.id)
-      .sort((a, b) => a.title > b.title ? 1 : a.title < b.title ? -1 : 0)
+      .filter(relatedJob => this.filterOutUnrelatableJobs(relatedJob, jobId, companyId))
+      .sort(this.sortJobsAlphabeticallyByTitle)
 
     return (<form className={this.style.pageMain} onSubmit={this.onSubmit.bind(this)} ref='jobForm'>
       <div className={this.style.formCard}>
