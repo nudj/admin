@@ -58,6 +58,8 @@ module.exports = class CompaniesPage extends React.Component {
       status: 'DRAFT', // 'Published', 'Archived'
       bonus: 0,
       description: '',
+      roleDescription: '',
+      candidateDescription: '',
       type: 'PERMANENT', // 'Contract', 'Freelance'
       remuneration: '',
       templateTags: [],
@@ -301,8 +303,12 @@ module.exports = class CompaniesPage extends React.Component {
             </select>
           </li>
           <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobDescription'>Description</label>
-            <textarea className={this.style.inputTextarea} id='newJobDescription' name='description' required onChange={this.onChangeGeneric.bind(this)} value={job.description} />
+            <label className={this.style.label} htmlFor='newJobRoleDescription'>Role Description</label>
+            <textarea className={this.style.inputTextarea} id='newJobRoleDescription' name='roleDescription' required onChange={this.onChangeGeneric.bind(this)} value={job.roleDescription} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='newJobDescription'>Candidate Description</label>
+            <textarea className={this.style.inputTextarea} id='newJobCandidateDescription' name='candidateDescription' required onChange={this.onChangeGeneric.bind(this)} value={job.candidateDescription} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobRemuneration'>Remuneration</label>
