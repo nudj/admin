@@ -110,7 +110,7 @@ function genericPersonHandler (data, personId) {
     .then(data => network.getByPerson(data, personId))
     // This person's hirer and company information
     .then(data => hirers.getFirstByPerson(data, data.person.id))
-    .then(data => data.hirer ? addDataKeyValue('company', data => companies.get(data.hirer.company))(data) : data)
+    .then(data => data.hirer ? addDataKeyValue('company', data => companies.getById(data.hirer.company))(data) : data)
     .then(data => data.hirer ? tasks.getAllByHirerAndCompany(data, data.hirer.id, data.hirer.company) : data)
 }
 

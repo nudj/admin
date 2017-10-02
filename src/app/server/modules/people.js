@@ -9,7 +9,7 @@ function fetchPeople () {
 function fetchPerson (personId) {
   return request(`people/${personId}`)
     .catch(error => {
-      throw new LogThenNotFound('Error fetching person', personId, error)
+      throw new LogThenNotFound('Person not found by id', personId, error)
     })
 }
 
