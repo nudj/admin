@@ -7,11 +7,9 @@ function fetchPeople () {
 }
 
 function fetchPerson (personId) {
-  return request(`people/filter?id=${personId}`)
-    .then(results => results.pop())
-    .then(person => {
-      if (!person) throw new LogThenNotFound('Person not found', personId)
-      return person
+  return request(`people/${personId}`)
+    .catch(error => {
+      throw new LogThenNotFound('Error fetching person', personId, error)
     })
 }
 
