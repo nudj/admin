@@ -6,8 +6,15 @@ module.exports.get = function (companySlug) {
   return request(`companies/filter?slug=${companySlug}`)
     .then(results => results.pop())
     .then(company => {
-      if (!company) throw new LogThenNotFound('Company not found', companySlug)
+      if (!company) throw new LogThenNotFound('Company not found by slug', companySlug)
       return company
+    })
+}
+
+module.exports.getById = function (companyId) {
+  return request(`companies/${companyId}`)
+    .catch(error => {
+      throw new LogThenNotFound('Company not found by id', companyId, error)
     })
 }
 
