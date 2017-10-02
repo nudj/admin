@@ -110,7 +110,7 @@ module.exports = class PersonPage extends React.Component {
         const jobSlug = get(relatedJob, 'slug', '')
         const jobTitle = get(relatedJob, 'title', '')
 
-        const jobLink = `/${companySlug}/jobs/${jobSlug}`
+        const jobLink = `/companies/${companySlug}/jobs/${jobSlug}`
 
         const minutes = differenceInMinutes(rightNow, get(referral, 'created'))
         const rowClass = minutes < 10 ? 'rowHighlight' : 'row'
@@ -165,7 +165,7 @@ module.exports = class PersonPage extends React.Component {
         const jobSlug = get(relatedJob, 'slug', '')
         const jobTitle = get(relatedJob, 'title', '')
 
-        const jobLink = `/${companySlug}/jobs/${jobSlug}`
+        const jobLink = `/companies/${companySlug}/jobs/${jobSlug}`
 
         const hirerId = get(recommendation, 'hirer')
         const hirer = get(this.props, 'hirers', []).find(hirer => hirer.id === hirerId)
@@ -213,11 +213,9 @@ module.exports = class PersonPage extends React.Component {
   }
 
   saveLink (event) {
-    const job = this.findRelatedJob(this.state.referralJobId)
-    const jobSlug = get(job, 'slug', '')
     const personId = get(this.props, 'person.id', '')
 
-    const url = `/people/${personId}/referrals/${jobSlug}`
+    const url = `/people/${personId}/referrals/${this.state.referralJobId}`
     const method = 'post'
     const data = {}
 
@@ -228,11 +226,9 @@ module.exports = class PersonPage extends React.Component {
 
   saveRecommendation (event) {
     const { recommendationJobId, recommendationHirerId } = this.state
-    const job = this.findRelatedJob(recommendationJobId)
-    const jobSlug = get(job, 'slug', '')
     const personId = get(this.props, 'person.id', '')
 
-    const url = `/people/${personId}/recommendations/${jobSlug}`
+    const url = `/people/${personId}/recommendations/${recommendationJobId}`
     const method = 'post'
     const data = {
       hirer: recommendationHirerId

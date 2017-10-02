@@ -5,7 +5,6 @@ const {
   promiseMap
 } = require('@nudj/library')
 
-const NudjError = require('@nudj/framework/error')
 const request = require('@nudj/framework/request')
 const mailer = require('../lib/mailer')
 const templater = require('@nudj/framework/templater')
@@ -14,7 +13,7 @@ const { emails: validators } = require('@nudj/framework/validators')
 
 function validate (formData, data) {
   let invalid
-  formData = mapValues(formData, (value, key) => {
+  data.form = mapValues(formData, (value, key) => {
     const error = validators[key](value)
     if (error) {
       invalid = true
@@ -25,36 +24,27 @@ function validate (formData, data) {
     }
   })
   if (invalid) {
-    throw new NudjError(`Invalid form data`, 'invalid-form', formData)
+    data.invalid = true
   }
-  data.form = formData
   return data
 }
 
 function sendEmails ({ recipients, subject, template }) {
   return (data) => {
-    try {
-      data = validate({ recipients, subject, template }, data)
-      let html = renderMessage({ data, template }).join('')
-      data.notifications = Promise.all(recipients.replace(' ', '').split(',').map(sendEmail({ subject, html })))
-    } catch (error) {
-      if (error.name !== 'NudjError') {
-        return Promise.reject(error)
+    data = validate({ recipients, subject, template }, data)
+    if (data.invalid) {
+      delete data.messages
+      delete data.invalid
+      data.notification = {
+        type: 'error',
+        message: 'Invalid form data'
       }
-      data = handleError(error, data)
+      return promiseMap(data)
     }
+    let html = renderMessage({ data, template }).join('')
+    data.notifications = Promise.all(recipients.replace(' ', '').split(',').map(sendEmail({ subject, html })))
     return promiseMap(data)
   }
-}
-
-function handleError (error, data) {
-  delete data.messages
-  data.form = error.data
-  data.notification = {
-    type: 'error',
-    message: error.message
-  }
-  return data
 }
 
 function renderMessage ({ data, template }) {

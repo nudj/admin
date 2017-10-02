@@ -26,14 +26,19 @@ function editJob (data, job) {
   return promiseMap(data)
 }
 
-function fetchJob (data, jobSlug) {
-  data.job = request(`jobs/filter?slug=${jobSlug}`)
+function fetchJob (data, jobSlug, companyId) {
+  data.job = request(`jobs/filter?slug=${jobSlug}&company=${companyId}`)
     .then(results => results ? results.pop() : results)
   return promiseMap(data)
 }
 
-function fetchJobAndRecipients (data, jobSlug, recipients) {
-  data.job = request(`jobs/filter?slug=${jobSlug}`)
+function fetchJobById (data, jobId) {
+  data.job = request(`jobs/${jobId}`)
+  return promiseMap(data)
+}
+
+function fetchJobAndRecipients (data, jobSlug, companyId, recipients) {
+  data.job = request(`jobs/filter?slug=${jobSlug}&company=${companyId}`)
     .then(results => results ? results.pop() : results)
   data.recipients = common.fetchPeopleFromFragments(recipients)
   return promiseMap(data)
@@ -107,9 +112,9 @@ function getJobActivity (dataCall, dataActivityKey) {
   })
 }
 
-function getJobActivities (data, job) {
-  const applications = getJobActivity(fetchJobApplications({}, data.job.id), 'applications')
-  const referrers = getJobActivity(fetchJobReferrals({}, data.job.id), 'referrals')
+function getJobActivities (jobId) {
+  const applications = getJobActivity(fetchJobApplications({}, jobId), 'applications')
+  const referrers = getJobActivity(fetchJobReferrals({}, jobId), 'referrals')
 
   // This is mocked for now
   const pageViews = {
@@ -123,21 +128,25 @@ function getJobActivities (data, job) {
   return promiseMap(activities)
 }
 
-module.exports.get = function (data, jobSlug) {
-  return fetchJob(data, jobSlug)
+module.exports.get = function (data, jobSlug, companyId) {
+  return fetchJob(data, jobSlug, companyId)
+}
+
+module.exports.getById = function (data, jobId) {
+  return fetchJobById(data, jobId)
 }
 
 module.exports.getAll = function (data, company) {
   return fetchJobs(data, company)
 }
 
-module.exports.patch = function (data, jobSlug, patch) {
-  return fetchJob(data, jobSlug)
+module.exports.patch = function (data, jobSlug, companyId, patch) {
+  return fetchJob(data, jobSlug, companyId)
   .then(patchJobWith(patch))
 }
 
-module.exports.compose = function (data, jobSlug, recipients) {
-  return fetchJobAndRecipients(data, jobSlug, recipients)
+module.exports.compose = function (data, jobSlug, companyId, recipients) {
+  return fetchJobAndRecipients(data, jobSlug, companyId, recipients)
 }
 
 module.exports.getApplications = function (data, job) {
@@ -184,7 +193,7 @@ module.exports.getReferralsForPerson = function (data, person) {
 }
 
 module.exports.getJobActivities = function (data, job) {
-  return getJobActivities(data, job)
+  return getJobActivities(job)
 }
 
 module.exports.addReferral = function (data, job, person) {

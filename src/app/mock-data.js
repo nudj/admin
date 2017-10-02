@@ -49,7 +49,8 @@ data.jobs = data.jobs.concat([
     url: 'https://bulb.workable.com/j/389500EB72',
     status: 'PUBLISHED',
     bonus: 1000,
-    description: '5+ years software engineering experience, using Node (6+), ES6 (Babel) and TypeScript. You should also be familiar with Git, Github, PRs, Code Reviews - please send us a link to your Github profile.',
+    roleDescription: 'Fake job! vitae sodales velit ligula quis ligula. Sed et tincidunt nisi. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    candidateDescription: '5+ years software engineering experience, using Node (6+), ES6 (Babel) and TypeScript. You should also be familiar with Git, Github, PRs, Code Reviews - please send us a link to your Github profile.',
     type: 'Permanent',
     remuneration: 'Competitive + Options',
     experience: '16 billion years',
@@ -63,7 +64,7 @@ data.jobs = data.jobs.concat([
     location: 'London',
     company: 'company2',
     relatedJobs: [
-      '2'
+      'job2'
     ]
   },
   {
@@ -75,7 +76,8 @@ data.jobs = data.jobs.concat([
     url: 'https://fake.com',
     status: 'PUBLISHED',
     bonus: 1000,
-    description: 'Fake job! vitae sodales velit ligula quis ligula. Sed et tincidunt nisi. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    roleDescription: 'Fake job! vitae sodales velit ligula quis ligula. Sed et tincidunt nisi. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    candidateDescription: '5+ years software engineering experience, using Node (6+), ES6 (Babel) and TypeScript. You should also be familiar with Git, Github, PRs, Code Reviews - please send us a link to your Github profile.',
     type: 'Permanent',
     remuneration: 'Competitive + Options',
     experience: '300+ years',
@@ -88,7 +90,81 @@ data.jobs = data.jobs.concat([
     location: 'London',
     company: 'company1',
     relatedJobs: [
-      '1'
+      'job1'
+    ]
+  },
+  {
+    id: 'job3',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    title: 'A job that should show up first',
+    slug: 'senior-fake-test-job-3',
+    url: 'https://fake.com',
+    status: 'PUBLISHED',
+    bonus: 1000,
+    roleDescription: 'Fake job! vitae sodales velit ligula quis ligula. Sed et tincidunt nisi. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    candidateDescription: '5+ years software engineering experience, using Node (6+), ES6 (Babel) and TypeScript. You should also be familiar with Git, Github, PRs, Code Reviews - please send us a link to your Github profile.',
+    type: 'Permanent',
+    remuneration: 'Competitive + Options',
+    experience: '300+ years',
+    requirements: 'building large-scale web-based applications in 🐔, 💅🏼 and 💩.',
+    templateTags: ['food', 'film'],
+    tags: [
+      'Fake',
+      'Job'
+    ],
+    location: 'London',
+    company: 'company1',
+    relatedJobs: []
+  },
+  {
+    id: 'job4',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    title: 'Z should be the last job!',
+    slug: 'senior-fake-test-job-4',
+    url: 'https://fake.com',
+    status: 'PUBLISHED',
+    bonus: 1000,
+    roleDescription: 'Fake job! vitae sodales velit ligula quis ligula. Sed et tincidunt nisi. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    candidateDescription: '5+ years software engineering experience, using Node (6+), ES6 (Babel) and TypeScript. You should also be familiar with Git, Github, PRs, Code Reviews - please send us a link to your Github profile.',
+    type: 'Permanent',
+    remuneration: 'Competitive + Options',
+    experience: '300+ years',
+    requirements: 'building large-scale web-based applications in 🐔, 💅🏼 and 💩.',
+    templateTags: ['food', 'film'],
+    tags: [
+      'Fake',
+      'Job'
+    ],
+    location: 'London',
+    company: 'company1',
+    relatedJobs: []
+  },
+  {
+    id: 'job5',
+    created: '1986-07-06T07:34:54.000+00:00',
+    modified: '2000-01-17T02:51:58.000+00:00',
+    title: 'Senior Full-Stack Software Engineer',
+    slug: 'senior-full-stack-software-engineer-2',
+    url: 'https://bulb.workable.com/j/389500EB72',
+    status: 'PUBLISHED',
+    bonus: 1000,
+    description: '5+ years software engineering experience, using Node (6+), ES6 (Babel) and TypeScript. You should also be familiar with Git, Github, PRs, Code Reviews - please send us a link to your Github profile.',
+    type: 'Permanent',
+    remuneration: 'Competitive + Options',
+    experience: '16 billion years',
+    requirements: 'building large-scale web-based applications in 🐔, 💅🏼 and 💩.',
+    templateTags: ['food'],
+    tags: [
+      'Software',
+      'Developer',
+      'Full-Stack'
+    ],
+    location: 'London',
+    company: 'company1',
+    relatedJobs: [
+      'job2'
     ]
   }
 ])
@@ -274,7 +350,17 @@ data.surveys = data.surveys.concat([
     modified: '2017-06-08T11:38:19.485+00:00',
     company: 'company1',
     link: 'http://surveymonkey.com/123',
-    uuid: '123'
+    uuid: '123',
+    type: 'EMPLOYEE_SURVEY'
+  },
+  {
+    id: 'survey2',
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00',
+    company: 'company1',
+    link: 'http://surveymonkey.com/456',
+    uuid: '456',
+    type: 'HIRER_SURVEY'
   }
 ])
 data.tasks = data.tasks.concat([

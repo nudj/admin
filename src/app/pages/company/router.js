@@ -1,4 +1,4 @@
-const express = require('express')
+const createRouter = require('@nudj/framework/router')
 
 const fetchers = require('./fetchers')
 
@@ -6,17 +6,17 @@ const Router = ({
   ensureLoggedIn,
   respondWith
 }) => {
-  const router = express.Router()
+  const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.get('/:companySlug', respondWith(fetchers.get))
-  router.put('/:companySlug', respondWith(fetchers.put))
-  router.post('/:companySlug/hirers', respondWith(fetchers.postHirer))
-  router.post('/:companySlug/hirers/:person', respondWith(fetchers.postHirerPerson))
-  router.post('/:companySlug/surveys', respondWith(fetchers.postSurvey))
-  router.patch('/:companySlug/surveys/:surveyId', respondWith(fetchers.patchSurvey))
-  router.post('/:companySlug/tasks/:taskType', respondWith(fetchers.postTask))
-  router.post('/:companySlug/jobs', respondWith(fetchers.postJob))
+  router.getHandlers('/companies/:companySlug', respondWith(fetchers.get))
+  router.putHandlers('/companies/:companySlug', respondWith(fetchers.put))
+  router.postHandlers('/companies/:companySlug/hirers', respondWith(fetchers.postHirer))
+  router.postHandlers('/companies/:companySlug/hirers/:person', respondWith(fetchers.postHirerPerson))
+  router.postHandlers('/companies/:companySlug/surveys', respondWith(fetchers.postSurvey))
+  router.patchHandlers('/companies/:companySlug/surveys/:surveyId', respondWith(fetchers.patchSurvey))
+  router.postHandlers('/companies/:companySlug/tasks/:taskType', respondWith(fetchers.postTask))
+  router.postHandlers('/companies/:companySlug/jobs', respondWith(fetchers.postJob))
 
   return router
 }

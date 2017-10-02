@@ -423,6 +423,13 @@ module.exports.formElements = {
     }
   }),
   selectBox: inputBox,
+  selectBoxMultiple: merge(inputBox, {
+    cursor: 'pointer',
+    minHeight: variables.padding.b
+  }),
+  secondaryButton: merge(module.exports.buttonSecondary, {
+    margin: `${variables.padding.e} 0`
+  }),
   submitButton: merge(module.exports.button, {
     [breakpoints.l]: {
       display: 'inline-block'
