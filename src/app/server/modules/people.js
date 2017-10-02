@@ -1,13 +1,18 @@
 const request = require('@nudj/framework/request')
+const { LogThenNotFound } = require('@nudj/framework/errors')
 const { promiseMap } = require('@nudj/library')
 
 function fetchPeople () {
   return request(`people`)
 }
 
-function fetchPerson (person) {
-  return request(`people/filter?id=${person}`)
+function fetchPerson (personId) {
+  return request(`people/filter?id=${personId}`)
     .then(results => results.pop())
+    .then(person => {
+      if (!person) throw new LogThenNotFound('Person not found', personId)
+      return person
+    })
 }
 
 function fetchPersonByEmail (email) {

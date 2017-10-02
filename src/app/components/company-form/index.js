@@ -3,7 +3,7 @@ const get = require('lodash/get')
 const merge = require('lodash/merge')
 const getStyle = require('./company-form.css')
 
-module.exports = class CompaniesPage extends React.Component {
+module.exports = class CompanyForm extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()

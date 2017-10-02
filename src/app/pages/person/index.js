@@ -110,7 +110,7 @@ module.exports = class PersonPage extends React.Component {
         const jobSlug = get(relatedJob, 'slug', '')
         const jobTitle = get(relatedJob, 'title', '')
 
-        const jobLink = `/${companySlug}/jobs/${jobSlug}`
+        const jobLink = `/companies/${companySlug}/jobs/${jobSlug}`
 
         const minutes = differenceInMinutes(rightNow, get(referral, 'created'))
         const rowClass = minutes < 10 ? 'rowHighlight' : 'row'
@@ -165,7 +165,7 @@ module.exports = class PersonPage extends React.Component {
         const jobSlug = get(relatedJob, 'slug', '')
         const jobTitle = get(relatedJob, 'title', '')
 
-        const jobLink = `/${companySlug}/jobs/${jobSlug}`
+        const jobLink = `/companies/${companySlug}/jobs/${jobSlug}`
 
         const hirerId = get(recommendation, 'hirer')
         const hirer = get(this.props, 'hirers', []).find(hirer => hirer.id === hirerId)

@@ -1,4 +1,5 @@
 const createRouter = require('@nudj/framework/router')
+const { LogThenRedirect } = require('@nudj/framework/errors')
 
 const fetchers = require('./fetchers')
 
@@ -11,6 +12,9 @@ const Router = ({
 
   router.getHandlers('/', respondWith(fetchers.get))
   router.postHandlers('/', respondWith(fetchers.post))
+  router.getHandlers('/companies', (req, res, next) => {
+    next(new LogThenRedirect('Cannot access this url directly', '/', req.originalUrl))
+  })
 
   return router
 }

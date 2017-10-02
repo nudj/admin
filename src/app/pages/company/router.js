@@ -9,14 +9,14 @@ const Router = ({
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/:companySlug', respondWith(fetchers.get))
-  router.putHandlers('/:companySlug', respondWith(fetchers.put))
-  router.postHandlers('/:companySlug/hirers', respondWith(fetchers.postHirer))
-  router.postHandlers('/:companySlug/hirers/:person', respondWith(fetchers.postHirerPerson))
-  router.postHandlers('/:companySlug/surveys', respondWith(fetchers.postSurvey))
-  router.patchHandlers('/:companySlug/surveys/:surveyId', respondWith(fetchers.patchSurvey))
-  router.postHandlers('/:companySlug/tasks/:taskType', respondWith(fetchers.postTask))
-  router.postHandlers('/:companySlug/jobs', respondWith(fetchers.postJob))
+  router.getHandlers('/companies/:companySlug', respondWith(fetchers.get))
+  router.putHandlers('/companies/:companySlug', respondWith(fetchers.put))
+  router.postHandlers('/companies/:companySlug/hirers', respondWith(fetchers.postHirer))
+  router.postHandlers('/companies/:companySlug/hirers/:person', respondWith(fetchers.postHirerPerson))
+  router.postHandlers('/companies/:companySlug/surveys', respondWith(fetchers.postSurvey))
+  router.patchHandlers('/companies/:companySlug/surveys/:surveyId', respondWith(fetchers.patchSurvey))
+  router.postHandlers('/companies/:companySlug/tasks/:taskType', respondWith(fetchers.postTask))
+  router.postHandlers('/companies/:companySlug/jobs', respondWith(fetchers.postJob))
 
   return router
 }

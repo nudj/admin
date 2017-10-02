@@ -14,7 +14,7 @@ const RowItem = require('../../components/row-item')
 const CopyToClipboard = require('../../components/copy-to-clipboard')
 const JobForm = require('../../components/job-form')
 
-module.exports = class JobsPage extends React.Component {
+module.exports = class JobPage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
@@ -205,7 +205,7 @@ module.exports = class JobsPage extends React.Component {
   onSubmitJob (data) {
     const companySlug = get(this.props, 'company.slug')
     const jobSlug = get(this.props, 'job.slug')
-    const url = `/${companySlug}/jobs/${jobSlug}`
+    const url = `/companies/${companySlug}/jobs/${jobSlug}`
     const method = 'put'
 
     this.props.dispatch(actions.app.postData({ url, data, method }))
@@ -223,7 +223,7 @@ module.exports = class JobsPage extends React.Component {
     const person = this.getPersonFromEmail(this.state.referralValue)
     const personId = person.id
 
-    const url = `/${companySlug}/jobs/${jobSlug}/referrals/${personId}`
+    const url = `/companies/${companySlug}/jobs/${jobSlug}/referrals/${personId}`
     const method = 'post'
     const data = {}
 
@@ -237,7 +237,7 @@ module.exports = class JobsPage extends React.Component {
     const jobSlug = get(this.props, 'job.slug', '')
     const email = this.state.referralValue.toString()
 
-    const url = `/${companySlug}/jobs/${jobSlug}/referrals`
+    const url = `/companies/${companySlug}/jobs/${jobSlug}/referrals`
     const method = 'post'
     const data = {email}
 
@@ -335,7 +335,7 @@ module.exports = class JobsPage extends React.Component {
         </Helmet>
         <PageHeader
           title={jobTitle}
-          subtitle={<span>@ <Link className={this.style.headerLink} to={`/${companySlug}`}>{companyName}</Link></span>}>
+          subtitle={<span>@ <Link className={this.style.headerLink} to={`/companies/${companySlug}`}>{companyName}</Link></span>}>
           <h4>{get(this.props, 'job.status')}</h4>
         </PageHeader>
         <div className={this.style.pageContent}>

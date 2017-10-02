@@ -9,10 +9,10 @@ const Router = ({
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/:companySlug/jobs/:jobSlug', respondWith(fetchers.get))
-  router.putHandlers('/:companySlug/jobs/:jobSlug', respondWith(fetchers.put))
-  router.postHandlers('/:companySlug/jobs/:jobSlug/referrals', respondWith(fetchers.postReferral))
-  router.postHandlers('/:companySlug/jobs/:jobSlug/referrals/:personId', respondWith(fetchers.postReferralPerson))
+  router.getHandlers('/companies/:companySlug/jobs/:jobSlug', respondWith(fetchers.get))
+  router.putHandlers('/companies/:companySlug/jobs/:jobSlug', respondWith(fetchers.put))
+  router.postHandlers('/companies/:companySlug/jobs/:jobSlug/referrals', respondWith(fetchers.postReferral))
+  router.postHandlers('/companies/:companySlug/jobs/:jobSlug/referrals/:personId', respondWith(fetchers.postReferralPerson))
 
   return router
 }

@@ -20,7 +20,7 @@ const CopyToClipboard = require('../../components/copy-to-clipboard')
 const TasksList = require('../../components/tasks-list')
 const TaskAdder = require('../../components/task-adder')
 
-module.exports = class JobsPage extends React.Component {
+module.exports = class CompanyPage extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
@@ -75,7 +75,7 @@ module.exports = class JobsPage extends React.Component {
   onAddTask (task) {
     const companySlug = get(this.props, 'company.slug', '')
     const taskType = get(task, 'type', '')
-    const url = `/${companySlug}/tasks/${taskType}`
+    const url = `/companies/${companySlug}/tasks/${taskType}`
     const data = {}
     const method = 'post'
 
@@ -95,7 +95,7 @@ module.exports = class JobsPage extends React.Component {
   onSubmitJob (data) {
     const companySlug = get(this.props, 'company.slug')
 
-    const url = `/${companySlug}/jobs`
+    const url = `/companies/${companySlug}/jobs`
     const method = 'post'
 
     this.props.dispatch(actions.app.postData({ url, data, method }))
@@ -103,7 +103,7 @@ module.exports = class JobsPage extends React.Component {
 
   onSubmitCompanyChanges (data) {
     const companySlug = data.slug
-    const url = `/${companySlug}`
+    const url = `/companies/${companySlug}`
     const method = 'put'
 
     this.props.dispatch(actions.app.postData({ url, data, method }))
@@ -111,7 +111,7 @@ module.exports = class JobsPage extends React.Component {
 
   saveHirerCommon ({email, personId}) {
     const companySlug = get(this.props, 'company.slug')
-    const url = personId ? `/${companySlug}/hirers/${personId}` : `/${companySlug}/hirers`
+    const url = personId ? `/companies/${companySlug}/hirers/${personId}` : `/companies/${companySlug}/hirers`
     const method = 'post'
     const data = {email}
 
@@ -198,7 +198,7 @@ module.exports = class JobsPage extends React.Component {
           description: `£${jobBonus}`
         }]}
         actions={[
-          <Link className={this.style.nudj} to={`/${companySlug}/jobs/${jobSlug}`}>See job</Link>
+          <Link className={this.style.nudj} to={`/companies/${companySlug}/jobs/${jobSlug}`}>See job</Link>
         ]}
       />)
     })
@@ -240,7 +240,7 @@ module.exports = class JobsPage extends React.Component {
   onSubmitLink (type) {
     const company = get(this.props, 'company')
     const {original, survey} = this.getSurveyFromType(type)
-    const url = `/${company.slug}/surveys${original ? `/${original.id}` : ''}`
+    const url = `/companies/${company.slug}/surveys${original ? `/${original.id}` : ''}`
     const method = original ? 'patch' : 'post'
 
     this.props.dispatch(actions.app.postData({
@@ -311,7 +311,7 @@ module.exports = class JobsPage extends React.Component {
             description: amountSent
           }]}
           actions={[
-            <Link className={this.style.nudj} to={`/${companySlug}/messages/${id}`}>View email</Link>
+            <Link className={this.style.nudj} to={`/companies/${companySlug}/messages/${id}`}>View email</Link>
           ]}
         />
       )

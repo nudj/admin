@@ -20,7 +20,7 @@ const denormaliseJob = (job) => merge(job, {
   templateTags: denormaliseItem(job.templateTags)
 })
 
-module.exports = class CompaniesPage extends React.Component {
+module.exports = class JobForm extends React.Component {
   constructor (props) {
     super(props)
     this.style = getStyle()
@@ -329,7 +329,7 @@ module.exports = class CompaniesPage extends React.Component {
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobRelatedJobs'>Related jobs</label>
             <select className={this.style.selectBoxMultiple} id='newJobRelatedJobs' name='relatedJobs' multiple onChange={this.onChangeMultiSelect.bind(this)} value={job.relatedJobs}>
-              {relatedJobs.map(relatedJob => (<option value={relatedJob.id}>{relatedJob.title}</option>))}
+              {relatedJobs.map((relatedJob, index) => (<option key={index} value={relatedJob.id}>{relatedJob.title}</option>))}
             </select>
             <button type='button' className={this.style.secondaryButton} onClick={this.clearRelatedJobs.bind(this)}>Clear all</button>
           </li>
