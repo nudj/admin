@@ -1,6 +1,6 @@
 const express = require('express')
 const passport = require('passport')
-const logger = require('@nudj/framework/logger')
+const { LogThenError } = require('@nudj/framework/errors')
 const { promiseMap } = require('@nudj/library')
 const people = require('../modules/people')
 
@@ -15,7 +15,7 @@ function fetchPerson (email) {
   const data = {}
   people.getByEmail(data, email)
     .then(data => {
-      if (data.person.error) throw new Error('Unable to fetch person')
+      if (data.person.error) throw new LogThenError('Unable to fetch person')
       return data
     })
 
@@ -47,8 +47,7 @@ const Router = ({
     passport.authenticate('auth0', { failureRedirect: '/login' }),
     (req, res, next) => {
       if (!req.user) {
-        logger.log('error', 'User not returned from Auth0')
-        return next('Unable to login')
+        return next(new LogThenError('User not returned from Auth0'))
       }
 
       fetchPerson(req.user._json.email)
@@ -57,8 +56,7 @@ const Router = ({
           res.redirect(req.session.returnTo || '/')
         })
         .catch((error) => {
-          logger.log('error', error)
-          next('Unable to login')
+          next(new LogThenError('Unable to login', req.user._json.email, error))
         })
     }
   )

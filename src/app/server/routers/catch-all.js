@@ -7,7 +7,7 @@ const Router = ({
   const router = express.Router()
   router.use(ensureLoggedIn)
 
-  router.get('*', respondWith(() => ({})))
+  router.get('*', respondWith(() => Promise.resolve({})))
 
   return router
 }

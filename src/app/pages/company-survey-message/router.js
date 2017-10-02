@@ -9,7 +9,7 @@ const Router = ({
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/:companySlug/messages/:surveyMessageId', respondWith(fetchers.get))
+  router.getHandlers('/companies/:companySlug/messages/:surveyMessageId', respondWith(fetchers.get))
 
   return router
 }
