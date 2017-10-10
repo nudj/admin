@@ -3,6 +3,9 @@ const { actionMapAssign } = require('@nudj/library')
 const companies = require('../../server/modules/companies')
 const people = require('../../server/modules/people')
 const jobs = require('../../server/modules/jobs')
+const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
+const repo = process.env.PRISMICIO_REPO
+const prismic = require('../../server/modules/prismic')({accessToken, repo})
 
 const addPageData = (companySlug) => [
   {
@@ -28,6 +31,9 @@ function get ({
     },
     {
       job: data => jobs.get(data, params.jobSlug, data.company.id).then(data => data.job)
+    },
+    {
+      jobTemplateTags: data => prismic.fetchAllJobTags()
     },
     ...addPageData(companySlug)
   )

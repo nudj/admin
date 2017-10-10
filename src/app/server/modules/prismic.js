@@ -1,4 +1,5 @@
 const Prismic = require('prismic.io')
+const union = require('lodash/union')
 
 class PrismicModule {
   constructor ({accessToken, repo}) {
@@ -32,6 +33,18 @@ class PrismicModule {
     const prismicQuery = Object.keys(documentQuery).map(key => Prismic.Predicates.at(key, documentQuery[key]))
     // calling api.query('') will return all documents
     return api.query(prismicQuery)
+  }
+
+  fetchAllJobTags () {
+    return Prismic.api(this.repoUrl, {accessToken: this.accessToken})
+      .then(api => {
+        return api.query()
+      })
+      .then(response => {
+        const tags = response.results.map(document => document.tags)
+        return union(...tags)
+      })
+      .catch(error => this.handleErrors(error))
   }
 }
 
