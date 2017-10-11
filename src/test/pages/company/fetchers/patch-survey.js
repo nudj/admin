@@ -28,14 +28,6 @@ describe('Company patchSurvey fetcher', () => {
       .reply(200, ['allCompanies'])
 
     api
-      .post('/people')
-      .reply(200, { id: 'personId' })
-
-    api
-      .post('/hirers')
-      .reply(200, { id: 'hirerId' })
-
-    api
       .get('/surveys/filter')
       .query({ type: 'EMPLOYEE_SURVEY', company: 'companyId' })
       .times(2)

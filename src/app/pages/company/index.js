@@ -198,7 +198,7 @@ module.exports = class CompanyPage extends React.Component {
           description: `£${jobBonus}`
         }]}
         actions={[
-          <Link className={this.style.nudj} to={`/companies/${companySlug}/jobs/${jobSlug}`}>See jared</Link>
+          <Link className={this.style.nudj} to={`/companies/${companySlug}/jobs/${jobSlug}`}>See job</Link>
         ]}
       />)
     })
