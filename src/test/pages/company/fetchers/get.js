@@ -9,28 +9,10 @@ const expect = chai.expect
 chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
-// const { standardGetResponse } = require('../helpers/responses')
+const { standardGetResponse } = require('../helpers/responses')
 const fetchers = proxyquire('../../../../app/pages/company/fetchers', {
   '../../server/modules/prismic': () => ({ fetchAllJobTags: () => 'prismicTagsResponse' })
 })
-
-const standardGetResponse = {
-  companies: [ 'allCompanies' ],
-  company: { id: 'companyId' },
-  hirerSurvey: 'surveyResponse',
-  hirers: [
-    {
-      id: 'hirerId',
-      person: 'peopleResponse'
-    }
-  ],
-  jobTemplateTags: 'prismicTagsResponse',
-  jobs: [ 'jobResponse' ],
-  people: [ 'peopleResponse' ],
-  survey: 'surveyResponse',
-  surveyMessages: [ 'hirerResponse' ],
-  tasks: [ 'taskResponse' ]
-}
 
 describe('Company get fetcher', () => {
   const api = nock('http://api:81')

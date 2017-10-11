@@ -2,43 +2,14 @@
 const chai = require('chai')
 const dirtyChai = require('dirty-chai')
 const chaiAsPromised = require('chai-as-promised')
-const proxyquire = require('proxyquire')
 const { merge } = require('@nudj/library')
 const nock = require('nock')
 const expect = chai.expect
 chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
-// const { standardGetResponse } = require('../helpers/responses')
-const fetchers = proxyquire('../../../../app/pages/company/fetchers', {
-  '../../server/modules/prismic': () => ({ fetchAllJobTags: () => 'prismicTagsResponse' })
-})
-
-const standardPostTaskResponse = {
-  companies: [ 'allCompanies' ],
-  company: { id: 'companyId' },
-  hirerSurvey: 'surveyResponse',
-  hirers: [
-    {
-      id: 'hirerId',
-      person: 'peopleResponse'
-    }
-  ],
-  newTask: {
-    id: 'taskId',
-    type: 'TEST'
-  },
-  jobTemplateTags: 'prismicTagsResponse',
-  jobs: [ 'jobResponse' ],
-  people: [ 'peopleResponse' ],
-  survey: 'surveyResponse',
-  surveyMessages: [ 'hirerResponse' ],
-  tasks: [ 'taskResponse' ],
-  notification: {
-    message: 'New TEST task saved',
-    type: 'success'
-  }
-}
+const { standardPostTaskResponse } = require('../helpers/responses')
+const fetchers = require('../../../../app/pages/company/fetchers')
 
 describe('Company postTask fetcher', () => {
   const api = nock('http://api:81')

@@ -40,11 +40,12 @@ const baseFetcherResponse = {
       lastName: 'McTest',
       person: 'personId'
     }
-  ],
-  jobTemplateTags: 'prismicTagsResponse'
+  ]
 }
 
-const standardGetResponse = baseFetcherResponse
+const standardGetResponse = merge(baseFetcherResponse, {
+  jobTemplateTags: 'prismicTagsResponse'
+})
 
 const standardPostReferralResponse = merge(baseFetcherResponse, {
   notification: {
