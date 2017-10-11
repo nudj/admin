@@ -69,7 +69,7 @@ describe('Company-job put fetcher', () => {
       },
       params,
       body
-    })).to.eventually.deep.equal(merge({ provided: 'important-data' }, standardPutResponse))
+    })).to.eventually.deep.equal(merge(standardPutResponse, { provided: 'important-data' }))
   })
 
   it('should overwrite passed data with page data', () => {

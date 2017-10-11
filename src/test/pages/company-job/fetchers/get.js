@@ -68,7 +68,7 @@ describe('Company-job get fetcher', () => {
         provided: 'important-data'
       },
       params
-    })).to.eventually.deep.equal(merge({ provided: 'important-data' }, standardGetResponse))
+    })).to.eventually.deep.equal(merge(standardGetResponse, { provided: 'important-data' }))
   })
 
   it('should overwrite passed data with page data', () => {

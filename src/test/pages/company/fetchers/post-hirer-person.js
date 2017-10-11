@@ -24,7 +24,6 @@ describe('Company postHirerPerson fetcher', () => {
   beforeEach(() => {
     api
       .get('/companies')
-      .times(18)
       .reply(200, ['allCompanies'])
 
     api
@@ -34,7 +33,6 @@ describe('Company postHirerPerson fetcher', () => {
     api
       .get('/surveys/filter')
       .query({ type: 'EMPLOYEE_SURVEY', company: 'companyId' })
-      .times(2)
       .reply(200, ['surveyResponse'])
 
     api
@@ -91,7 +89,7 @@ describe('Company postHirerPerson fetcher', () => {
       },
       params,
       body
-    })).to.eventually.deep.equal(merge({ provided: 'important-data' }, standardPostHirerPersonResponse))
+    })).to.eventually.deep.equal(merge(standardPostHirerPersonResponse, { provided: 'important-data' }))
   })
 
   it('should overwrite passed data with page data', () => {

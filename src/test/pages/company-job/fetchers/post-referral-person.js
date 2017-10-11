@@ -75,7 +75,7 @@ describe('Company-job postReferralPerson fetcher', () => {
       },
       params,
       body: {}
-    })).to.eventually.deep.equal(merge({ provided: 'important-data' }, standardPostReferralPersonResponse))
+    })).to.eventually.deep.equal(merge(standardPostReferralPersonResponse, { provided: 'important-data' }))
   })
 
   it('should overwrite passed data with page data', () => {

@@ -24,13 +24,11 @@ describe('Company patchSurvey fetcher', () => {
   beforeEach(() => {
     api
       .get('/companies')
-      .times(18)
       .reply(200, ['allCompanies'])
 
     api
       .get('/surveys/filter')
       .query({ type: 'EMPLOYEE_SURVEY', company: 'companyId' })
-      .times(2)
       .reply(200, ['surveyResponse'])
 
     api
@@ -87,7 +85,7 @@ describe('Company patchSurvey fetcher', () => {
       },
       params,
       body
-    })).to.eventually.deep.equal(merge({ provided: 'important-data' }, standardPatchSurveyResponse))
+    })).to.eventually.deep.equal(merge(standardPatchSurveyResponse, { provided: 'important-data' }))
   })
 
   it('should overwrite passed data with page data', () => {

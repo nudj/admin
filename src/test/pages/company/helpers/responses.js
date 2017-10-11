@@ -14,13 +14,11 @@ const baseFetcherResponse = {
   people: [ 'peopleResponse' ],
   survey: 'surveyResponse',
   surveyMessages: [ 'hirerResponse' ],
-  tasks: [ 'taskResponse' ]
+  tasks: [ 'taskResponse' ],
+  jobTemplateTags: 'prismicTagsResponse'
 }
 
-const standardGetResponse = merge(baseFetcherResponse, {
-  jobTemplateTags: 'prismicTagsResponse'
-})
-
+const standardGetResponse = baseFetcherResponse
 const standardPatchSurveyResponse = merge(baseFetcherResponse, {
   notification: {
     message: 'Survey updated',

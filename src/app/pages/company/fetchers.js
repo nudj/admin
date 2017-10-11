@@ -23,7 +23,8 @@ const addPageData = (companySlug) => [
   {
     company: data => data.company || companies.get(companySlug),
     companies: data => companies.getAll(),
-    people: data => people.getAll(data).then(data => data.people)
+    people: data => people.getAll(data).then(data => data.people),
+    jobTemplateTags: data => prismic.fetchAllJobTags()
   },
   {
     survey: data => data.survey || surveys.getSurveyForCompany({}, data.company.id).then(data => data.survey),
@@ -41,9 +42,6 @@ function get ({
 }) {
   return actionMapAssign(
     data,
-    {
-      jobTemplateTags: data => prismic.fetchAllJobTags()
-    },
     ...addPageData(params.companySlug)
   )
 }
