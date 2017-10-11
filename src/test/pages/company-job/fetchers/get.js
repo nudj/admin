@@ -3,61 +3,18 @@ const chai = require('chai')
 const dirtyChai = require('dirty-chai')
 const chaiAsPromised = require('chai-as-promised')
 const proxyquire = require('proxyquire')
-const merge = require('lodash/merge')
+const { merge } = require('@nudj/library')
 const nock = require('nock')
 const expect = chai.expect
 chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
+const { standardGetResponse } = require('../helpers/responses')
 const fetchers = proxyquire('../../../../app/pages/company-job/fetchers', {
   '../../server/modules/prismic': () => ({ fetchAllJobTags: () => 'prismicTagsResponse' })
 })
 
-const standardGetResponse = {
-  activities: {
-    applications: {
-      lastWeek: 0,
-      thisWeek: 0,
-      total: 1,
-      trend: 0
-    },
-    pageViews: {
-      lastWeek: 0,
-      thisWeek: 0,
-      total: 0,
-      trend: 0
-    },
-    referrers: {
-      lastWeek: 0,
-      thisWeek: 0,
-      total: 1,
-      trend: 0
-    }
-  },
-  company: { id: 'companyId' },
-  job: { id: 'jobId' },
-  jobs: ['jobsResponse'],
-  people: ['peopleResponse'],
-  jobTemplateTags: 'prismicTagsResponse',
-  applications: [
-    {
-      email: 'test@email.com',
-      firstName: 'Test',
-      lastName: 'McTest',
-      person: 'personId'
-    }
-  ],
-  referrals: [
-    {
-      email: 'test@email.com',
-      firstName: 'Test',
-      lastName: 'McTest',
-      person: 'personId'
-    }
-  ]
-}
-
-describe('Company-job fetcher', () => {
+describe('Company-job get fetcher', () => {
   const api = nock('http://api:81')
   const params = {
     jobSlug: 'fake-test-job',
@@ -98,30 +55,28 @@ describe('Company-job fetcher', () => {
     nock.cleanAll()
   })
 
-  describe('get', () => {
-    it('should resolve with the page data', () => {
-      return expect(fetchers.get({
-        data: {},
-        params
-      })).to.eventually.deep.equal(standardGetResponse)
-    })
+  it('should resolve with the page data', () => {
+    return expect(fetchers.get({
+      data: {},
+      params
+    })).to.eventually.deep.equal(standardGetResponse)
+  })
 
-    it('should append any passed data', () => {
-      return expect(fetchers.get({
-        data: {
-          provided: 'important-data'
-        },
-        params
-      })).to.eventually.deep.equal(merge({ provided: 'important-data' }, standardGetResponse))
-    })
+  it('should append any passed data', () => {
+    return expect(fetchers.get({
+      data: {
+        provided: 'important-data'
+      },
+      params
+    })).to.eventually.deep.equal(merge({ provided: 'important-data' }, standardGetResponse))
+  })
 
-    it('should overwrite passed data with page data', () => {
-      return expect(fetchers.get({
-        data: {
-          company: 'Testing Inc.'
-        },
-        params
-      })).to.eventually.deep.equal(standardGetResponse)
-    })
+  it('should overwrite passed data with page data', () => {
+    return expect(fetchers.get({
+      data: {
+        company: 'Testing Inc.'
+      },
+      params
+    })).to.eventually.deep.equal(standardGetResponse)
   })
 })

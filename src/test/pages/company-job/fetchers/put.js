@@ -2,70 +2,24 @@
 const chai = require('chai')
 const dirtyChai = require('dirty-chai')
 const chaiAsPromised = require('chai-as-promised')
-const merge = require('lodash/merge')
+const { merge } = require('@nudj/library')
 const nock = require('nock')
 const expect = chai.expect
 chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
+const { standardPutResponse } = require('../helpers/responses')
 const fetchers = require('../../../../app/pages/company-job/fetchers')
 
-const standardPutResponse = {
-  activities: {
-    applications: {
-      lastWeek: 0,
-      thisWeek: 0,
-      total: 1,
-      trend: 0
-    },
-    pageViews: {
-      lastWeek: 0,
-      thisWeek: 0,
-      total: 0,
-      trend: 0
-    },
-    referrers: {
-      lastWeek: 0,
-      thisWeek: 0,
-      total: 1,
-      trend: 0
-    }
-  },
-  company: { id: 'companyId' },
-  notification: {
-    message: 'Job Title saved',
-    type: 'success'
-  },
-  job: {
-    id: 'jobId',
-    title: 'Job Title'
-  },
-  savedJob: {
-    id: 'jobId',
-    title: 'Job Title'
-  },
-  jobs: ['jobsResponse'],
-  people: ['peopleResponse'],
-  applications: [
-    {
-      email: 'test@email.com',
-      firstName: 'Test',
-      lastName: 'McTest',
-      person: 'personId'
-    }
-  ],
-  referrals: [
-    {
-      email: 'test@email.com',
-      firstName: 'Test',
-      lastName: 'McTest',
-      person: 'personId'
-    }
-  ]
-}
-
-describe('Company-job fetcher', () => {
+describe('Company-job put fetcher', () => {
   const api = nock('http://api:81')
+  const body = {
+    id: 'jobId'
+  }
+  const params = {
+    companySlug: 'fake-company'
+  }
+
   beforeEach(() => {
     api
       .patch('/jobs/jobId')
@@ -100,40 +54,31 @@ describe('Company-job fetcher', () => {
     nock.cleanAll()
   })
 
-  describe('put', () => {
-    const body = {
-      id: 'jobId'
-    }
-    const params = {
-      companySlug: 'fake-company'
-    }
+  it('should return the page data', () => {
+    return expect(fetchers.put({
+      data: {},
+      params,
+      body
+    })).to.eventually.deep.equal(standardPutResponse)
+  })
 
-    it('should return the page data', () => {
-      return expect(fetchers.put({
-        data: {},
-        params,
-        body
-      })).to.eventually.deep.equal(standardPutResponse)
-    })
+  it('should append any passed data', () => {
+    return expect(fetchers.put({
+      data: {
+        provided: 'important-data'
+      },
+      params,
+      body
+    })).to.eventually.deep.equal(merge({ provided: 'important-data' }, standardPutResponse))
+  })
 
-    it('should append any passed data', () => {
-      return expect(fetchers.put({
-        data: {
-          provided: 'important-data'
-        },
-        params,
-        body
-      })).to.eventually.deep.equal(merge({ provided: 'important-data' }, standardPutResponse))
-    })
-
-    it('should overwrite passed data with page data', () => {
-      return expect(fetchers.put({
-        data: {
-          job: 'Tester'
-        },
-        params,
-        body
-      })).to.eventually.deep.equal(standardPutResponse)
-    })
+  it('should overwrite passed data with page data', () => {
+    return expect(fetchers.put({
+      data: {
+        job: 'Tester'
+      },
+      params,
+      body
+    })).to.eventually.deep.equal(standardPutResponse)
   })
 })
