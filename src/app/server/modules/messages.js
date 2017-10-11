@@ -3,10 +3,10 @@ const { promiseMap } = require('@nudj/library')
 const flatten = require('lodash/flatten')
 
 module.exports.getAllFor = function getAllFor (data, companyId) {
-  data.surveyMessages = request(`hirers?company=${companyId}`)
+  data.surveyMessages = request(`hirers/filter?company=${companyId}`)
     .then(hirers => {
       return Promise
-        .all(hirers.map((hirer) => request(`surveyMessages?hirer=${hirer.id}`)))
+        .all(hirers.map((hirer) => request(`surveyMessages/filter?hirer=${hirer.id}`)))
         .then((messages) => flatten(messages))
     })
   return promiseMap(data)

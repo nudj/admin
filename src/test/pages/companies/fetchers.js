@@ -41,7 +41,7 @@ describe('Companies fetchers', () => {
       })
     })
 
-    it('should overrite passed data with page data', () => {
+    it('should overwrite passed data with page data', () => {
       return expect(fetchers.get({
         data: {
           companies: 'passed'
@@ -95,7 +95,7 @@ describe('Companies fetchers', () => {
         }
       })
     })
-    it('should overrite passed data with page data', () => {
+    it('should overwrite passed data with page data', () => {
       return expect(fetchers.post({
         data: {
           companies: 'passed'

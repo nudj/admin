@@ -10,6 +10,9 @@ const messages = require('../../server/modules/messages')
 const tasks = require('../../server/modules/tasks')
 const surveys = require('../../server/modules/surveys')
 const hirers = require('../../server/modules/hirers')
+const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
+const repo = process.env.PRISMICIO_REPO
+const prismic = require('../../server/modules/prismic')({accessToken, repo})
 
 const addPeopleToHirers = (hirers, people) => hirers.map(hirer => {
   const person = people.find(person => person.id === hirer.person)
@@ -20,7 +23,8 @@ const addPageData = (companySlug) => [
   {
     company: data => data.company || companies.get(companySlug),
     companies: data => companies.getAll(),
-    people: data => people.getAll(data).then(data => data.people)
+    people: data => people.getAll(data).then(data => data.people),
+    jobTemplateTags: data => prismic.fetchAllJobTags()
   },
   {
     survey: data => data.survey || surveys.getSurveyForCompany({}, data.company.id).then(data => data.survey),

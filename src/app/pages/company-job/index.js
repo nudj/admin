@@ -319,11 +319,13 @@ module.exports = class JobPage extends React.Component {
 
     const job = get(this.props, 'job', {})
     const jobs = get(this.props, 'jobs', [])
+    const templateTags = get(this.props, 'jobTemplateTags', [])
 
     const editJobForm = (<JobForm
       company={company}
       jobs={jobs}
       job={job}
+      templateTags={templateTags}
       reset={this.state.resetJobForm}
       onSubmit={this.onSubmitJob.bind(this)}
       submitLabel='Save changes' />)
