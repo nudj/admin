@@ -14,7 +14,8 @@ const addPageData = (companySlug) => [
     applications: data => jobs.getApplications({}, data.job.id).then(data => data.applications),
     company: data => data.company || companies.get(companySlug),
     people: data => people.getAll({}).then(data => data.people),
-    activities: data => jobs.getJobActivities({}, data.job.id)
+    activities: data => jobs.getJobActivities({}, data.job.id),
+    jobTemplateTags: data => prismic.fetchAllJobTags()
   }
 ]
 
@@ -31,9 +32,6 @@ function get ({
     },
     {
       job: data => jobs.get(data, params.jobSlug, data.company.id).then(data => data.job)
-    },
-    {
-      jobTemplateTags: data => prismic.fetchAllJobTags()
     },
     ...addPageData(companySlug)
   )

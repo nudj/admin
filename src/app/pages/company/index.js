@@ -198,7 +198,7 @@ module.exports = class CompanyPage extends React.Component {
           description: `£${jobBonus}`
         }]}
         actions={[
-          <Link className={this.style.nudj} to={`/companies/${companySlug}/jobs/${jobSlug}`}>See job</Link>
+          <Link className={this.style.nudj} to={`/companies/${companySlug}/jobs/${jobSlug}`}>See jared</Link>
         ]}
       />)
     })
@@ -382,6 +382,7 @@ module.exports = class CompanyPage extends React.Component {
     const hirers = get(this.props, 'hirers', [])
     const companies = get(this.props, 'companies', [])
     const company = get(this.props, 'company', {})
+    const templateTags = get(this.props, 'jobTemplateTags', [])
     const tooltip = get(this.props, 'tooltip')
 
     const companyName = get(company, 'name')
@@ -412,6 +413,7 @@ module.exports = class CompanyPage extends React.Component {
       company={company}
       jobs={jobs}
       reset={this.state.resetJobForm}
+      templateTags={templateTags}
       onSubmit={this.onSubmitJob.bind(this)}
       submitLabel='Add job' />)
 
