@@ -294,6 +294,8 @@ module.exports = class JobForm extends React.Component {
       .filter(relatedJob => this.filterOutUnrelatableJobs(relatedJob, jobId, companyId))
       .sort(this.sortJobsAlphabeticallyByTitle)
 
+    const expandedDescriptionRequired = !this.state.job.description // If an old description exists, you don't need to add candidateDescription or roleDescription. Otherwise, they're required.
+
     return (<form className={this.style.pageMain} onSubmit={this.onSubmit.bind(this)} ref='jobForm'>
       <div className={this.style.formCard}>
         <ul className={this.style.formList}>
@@ -329,11 +331,15 @@ module.exports = class JobForm extends React.Component {
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobRoleDescription'>Role Description</label>
-            <textarea className={this.style.inputTextarea} id='newJobRoleDescription' name='roleDescription' required onChange={this.onChangeGeneric.bind(this)} value={job.roleDescription} />
+            <textarea className={this.style.inputTextarea} id='newJobRoleDescription' name='roleDescription' required={expandedDescriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.roleDescription} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobDescription'>Candidate Description</label>
-            <textarea className={this.style.inputTextarea} id='newJobCandidateDescription' name='candidateDescription' required onChange={this.onChangeGeneric.bind(this)} value={job.candidateDescription} />
+            <textarea className={this.style.inputTextarea} id='newJobCandidateDescription' name='candidateDescription' required={expandedDescriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.candidateDescription} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='description'>Old Description</label>
+            <textarea className={this.style.inputTextarea} id='description' name='description' onChange={this.onChangeGeneric.bind(this)} value={job.description} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobRemuneration'>Remuneration</label>
