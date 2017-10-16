@@ -38,6 +38,7 @@ module.exports = class CompanyForm extends React.Component {
       name: '',
       slug: '',
       logo: '',
+      mission: '',
       description: '',
       industry: '',
       location: '',
@@ -223,6 +224,10 @@ module.exports = class CompanyForm extends React.Component {
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='companyDescription'>Description</label>
             <textarea className={this.style.inputTextarea} id='companyDescription' name='description' onChange={this.onChangeGeneric.bind(this)} value={company.description} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='mission'>Mission</label>
+            <input className={this.style.inputBox} type='text' id='mission' name='mission' onChange={this.onChangeGeneric.bind(this)} value={company.mission} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='companyIndustry'>Industry</label>

@@ -1,5 +1,7 @@
 const React = require('react')
 const get = require('lodash/get')
+const difference = require('lodash/difference')
+const compact = require('lodash/compact')
 const { merge } = require('@nudj/library')
 
 const getStyle = require('./job-form.css')
@@ -133,6 +135,23 @@ module.exports = class JobForm extends React.Component {
     this.updateValidation(validation)
   }
 
+  onChangeTemplateTags (event) {
+    const value = event.target.value
+    const key = event.target.name
+    const validTags = get(this.props, 'templateTags')
+    const tags = compact(value.replace(/\s/g, '').split(','))
+    const validity = difference(tags, validTags) // Produces array of tags that aren't included in validTags
+
+    this.updateJob({ [key]: value })
+
+    const validation = {
+      templateTags: {
+        invalid: !!validity.length
+      }
+    }
+    this.updateValidation(validation)
+  }
+
   onChangeGeneric (event) {
     const value = event.target.value
     const key = event.target.name
@@ -163,8 +182,9 @@ module.exports = class JobForm extends React.Component {
   isJobValid () {
     const slugEmpty = get(this.state.validation, 'slug.empty', false)
     const titleEmpty = get(this.state.validation, 'title.empty', false)
+    const invalidTemplateTags = get(this.state.validation, 'templateTags.invalid', false)
 
-    if (slugEmpty || titleEmpty) {
+    if (slugEmpty || titleEmpty || invalidTemplateTags) {
       return false
     }
 
@@ -224,11 +244,16 @@ module.exports = class JobForm extends React.Component {
   renderErrorLabels () {
     const errorLabels = {
       jobTitleNotUniqueLabel: (<span />),
-      jobSlugNotUniqueLabel: (<span />)
+      jobSlugNotUniqueLabel: (<span />),
+      templateTagsInvalidLabel: (<span />)
     }
 
     if (get(this.state.validation, 'slug.notUnique', false)) {
       errorLabels.jobSlugNotUniqueLabel = this.renderErrorLabel('There\'s already another job with that slug', 'jobSlug')
+    }
+
+    if (get(this.state.validation, 'templateTags.invalid', false)) {
+      errorLabels.templateTagsInvalidLabel = this.renderErrorLabel('Those tags don\'t exist', 'jobTemplateTags')
     }
 
     if (get(this.state.validation, 'title.notUnique', false)) {
@@ -269,6 +294,8 @@ module.exports = class JobForm extends React.Component {
       .filter(relatedJob => this.filterOutUnrelatableJobs(relatedJob, jobId, companyId))
       .sort(this.sortJobsAlphabeticallyByTitle)
 
+    const expandedDescriptionRequired = !this.state.job.description // If an old description exists, you don't need to add candidateDescription or roleDescription. Otherwise, they're required.
+
     return (<form className={this.style.pageMain} onSubmit={this.onSubmit.bind(this)} ref='jobForm'>
       <div className={this.style.formCard}>
         <ul className={this.style.formList}>
@@ -304,11 +331,15 @@ module.exports = class JobForm extends React.Component {
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobRoleDescription'>Role Description</label>
-            <textarea className={this.style.inputTextarea} id='newJobRoleDescription' name='roleDescription' required onChange={this.onChangeGeneric.bind(this)} value={job.roleDescription} />
+            <textarea className={this.style.inputTextarea} id='newJobRoleDescription' name='roleDescription' required={expandedDescriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.roleDescription} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobDescription'>Candidate Description</label>
-            <textarea className={this.style.inputTextarea} id='newJobCandidateDescription' name='candidateDescription' required onChange={this.onChangeGeneric.bind(this)} value={job.candidateDescription} />
+            <textarea className={this.style.inputTextarea} id='newJobCandidateDescription' name='candidateDescription' required={expandedDescriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.candidateDescription} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='description'>Old Description</label>
+            <textarea className={this.style.inputTextarea} id='description' name='description' onChange={this.onChangeGeneric.bind(this)} value={job.description} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobRemuneration'>Remuneration</label>
@@ -324,7 +355,8 @@ module.exports = class JobForm extends React.Component {
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobTemplateTags'>Template tags</label>
-            <input className={this.style.inputBox} type='text' placeholder='eg: food, movies' id='newJobTemplateTags' name='templateTags' onChange={this.onChangeGeneric.bind(this)} value={job.templateTags} />
+            <input className={this.style.inputBox} type='text' placeholder='eg: food, movies' id='newJobTemplateTags' name='templateTags' onChange={this.onChangeTemplateTags.bind(this)} value={job.templateTags} />
+            {errorLabels.templateTagsInvalidLabel}
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobRelatedJobs'>Related jobs</label>
