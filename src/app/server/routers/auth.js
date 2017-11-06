@@ -35,7 +35,7 @@ const Router = ({
     req.session.logout = true
     req.session.returnTo = req.query.returnTo
     res.clearCookie('connect.sid', {path: '/'})
-    res.redirect(`https://${process.env.AUTH0_DOMAIN}/v2/logout?returnTo=${encodeURIComponent(`http://${process.env.DOMAIN}/loggedout`)}&client_id=${process.env.AUTH0_CLIENT_ID}`)
+    res.redirect(`https://${process.env.AUTH0_DOMAIN}/v2/logout?returnTo=${encodeURIComponent(`${process.env.PROTOCOL_DOMAIN}/loggedout`)}&client_id=${process.env.AUTH0_CLIENT_ID}`)
   })
 
   router.get('/loggedout', (req, res, next) => {
