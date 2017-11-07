@@ -1,7 +1,7 @@
 var webpack = require('webpack')
 module.exports = {
   entry: {
-    'app/server/assets/js/vendors': ['./app/vendors']
+    'app/server/build/vendors': ['./app/vendors']
   },
   output: {
     path: __dirname,

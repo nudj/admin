@@ -1,12 +1,7 @@
 .env*
 node_modules
 .DS_Store
-src/app/server/assets/css/app.*
-src/app/server/assets/js/app.*
-src/app/server/assets/js/vendors.*
-src/app/server/build.*
+src/app/server/build/*
+!src/app/server/build/readme.md
 db.json
-.cache/*
-!.cache/readme.md
-!.cache/.npmrc
 src/vendors-manifest.json

@@ -22,7 +22,7 @@ if (process.env.DEBUG !== 'true') {
 module.exports = {
   cache: true,
   entry: {
-    'app/server/assets/js/app': './app/client'
+    'app/server/build/app': './app/client'
   },
   output: {
     path: __dirname,
@@ -35,8 +35,9 @@ module.exports = {
       {
         test: /\.js$/,
         include: [
-            path.join(__dirname, 'app'),
-            path.join(__dirname, 'node_modules', '@nudj')
+          path.join(__dirname, 'app'),
+          path.join(__dirname, 'framework'),
+          path.join(__dirname, 'node_modules', '@nudj')
         ],
         loader: 'babel-loader',
         options: {
