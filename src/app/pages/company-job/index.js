@@ -90,7 +90,7 @@ module.exports = class JobPage extends React.Component {
     </div>)
   }
 
-  findRelatedReferral (referralId) {
+  findParentReferral (referralId) {
     const referrals = get(this.props, 'referrals', [])
     return referrals.find(referral => referral.id === referralId)
   }
@@ -105,9 +105,9 @@ module.exports = class JobPage extends React.Component {
     return (<div>
       {applications.map(application => {
         const name = `${get(application, 'firstName')} ${get(application, 'lastName')}`
-        const referralId = get(application, 'referralId')
-        const relatedReferral = this.findRelatedReferral(referralId)
-        const relatedReferralInfo = relatedReferral ? `${relatedReferral.id} (${relatedReferral.firstName} ${relatedReferral.lastName})` : '-'
+        const referralId = get(application, 'referral')
+        const parentReferral = this.findParentReferral(referralId)
+        const parentReferralInfo = parentReferral ? `${parentReferral.id} (${parentReferral.firstName} ${parentReferral.lastName})` : '-'
         return (<RowItem
           key={`application${get(application, 'id')}`}
           title={name}
@@ -118,7 +118,7 @@ module.exports = class JobPage extends React.Component {
             },
             {
               term: 'Referral',
-              description: relatedReferralInfo
+              description: parentReferralInfo
             }
           ]}
         />)
@@ -150,15 +150,15 @@ module.exports = class JobPage extends React.Component {
       {referrals.map(referral => {
         const name = `${get(referral, 'firstName', '-')} ${get(referral, 'lastName', '-')}`
         const slug = `${companySlug}+${jobSlug}+${get(referral, 'id', '')}`
-        const referralId = get(referral, 'referralId')
-        const relatedReferral = this.findRelatedReferral(referralId)
+        const parentId = get(referral, 'parent')
+        const parentReferral = this.findParentReferral(parentId)
         const referralLink = this.generateReferralLink(referral)
         const personLink = `/people/${referral.person}`
 
         const minutes = differenceInMinutes(rightNow, get(referral, 'created'))
         const rowClass = minutes < 10 ? 'rowHighlight' : 'row'
 
-        const relatedReferralInfo = relatedReferral ? `${relatedReferral.id} (${relatedReferral.firstName} ${relatedReferral.lastName})` : '-'
+        const parentReferralInfo = parentReferral ? `${parentReferral.id} (${parentReferral.firstName} ${parentReferral.lastName})` : '-'
 
         return (<RowItem
           key={slug}
@@ -180,7 +180,7 @@ module.exports = class JobPage extends React.Component {
             },
             {
               term: 'Related referral',
-              description: relatedReferralInfo
+              description: parentReferralInfo
             }
           ]}
           actions={[

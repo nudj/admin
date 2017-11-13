@@ -268,9 +268,17 @@ data.hirers = data.hirers.concat([
 data.referrals = data.referrals.concat([
   {
     id: 'referral1',
-    job: 'job2',
+    job: 'job1',
     person: 'person2',
     parent: null,
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00'
+  },
+  {
+    id: 'referral2',
+    job: 'job1',
+    person: 'person4',
+    parent: 'referral1',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00'
   }
@@ -278,9 +286,17 @@ data.referrals = data.referrals.concat([
 data.applications = data.applications.concat([
   {
     id: 'application1',
-    job: 'job2',
+    job: 'job1',
     person: 'person3',
-    referral: 'referral1',
+    referral: null,
+    created: '2017-06-08T11:38:19.485+00:00',
+    modified: '2017-06-08T11:38:19.485+00:00'
+  },
+  {
+    id: 'application2',
+    job: 'job1',
+    person: 'person1',
+    referral: 'referral2',
     created: '2017-06-08T11:38:19.485+00:00',
     modified: '2017-06-08T11:38:19.485+00:00'
   }
