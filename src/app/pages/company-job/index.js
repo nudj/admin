@@ -179,7 +179,7 @@ module.exports = class JobPage extends React.Component {
               description: referralLink
             },
             {
-              term: 'Related referral',
+              term: 'Parent referral',
               description: parentReferralInfo
             }
           ]}
