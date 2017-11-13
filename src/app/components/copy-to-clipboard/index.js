@@ -1,7 +1,8 @@
 const React = require('react')
 const get = require('lodash/get')
 const omit = require('lodash/omit')
-const ClipboardButton = require('react-clipboard.js')
+const ReactClipboard = require('react-clipboard.js')
+const ClipboardButton = ReactClipboard.default || ReactClipboard
 
 class CopyToClipboard extends React.Component {
   constructor (props) {
