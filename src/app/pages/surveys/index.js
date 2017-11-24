@@ -14,20 +14,11 @@ const SurveyPage = (props) => {
   const style = getStyle()
 
   const columns = [
-    { heading: 'Company', name: 'company' },
-    { heading: 'Intro Title', name: 'name' },
+    { heading: 'Company', name: 'company.name' },
+    { heading: 'Intro Title', name: 'title' },
     { heading: 'Description', name: 'description' },
     { name: 'link' }
   ]
-
-  const data = surveys.map(survey => (
-    {
-      id: survey.id,
-      name: survey.title,
-      description: survey.description,
-      company: survey.company.name
-    }
-  ))
 
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
@@ -45,7 +36,7 @@ const SurveyPage = (props) => {
       <h3 className={style.pageHeadline}>Surveys <span className={style.textHighlight}>({surveys.length})</span></h3>
       <div className={style.pageContent}>
         <div className={style.pageMain}>
-          <Table cellRenderer={cellRenderer} data={data} columns={columns} />
+          <Table cellRenderer={cellRenderer} data={surveys} columns={columns} />
         </div>
       </div>
     </Page>
