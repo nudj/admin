@@ -3,6 +3,11 @@ function get ({ query }) {
     query SurveyPage ($filters: SurveyFilterInput) {
       surveys (filters: $filters) {
         id
+        title: introTitle
+        description: introDescription
+        company {
+          name
+        }
       }
     }
   `

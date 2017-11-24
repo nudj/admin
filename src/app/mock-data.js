@@ -376,7 +376,7 @@ data.surveys = data.surveys.concat([
     id: 'survey1',
     slug: 'aided-recall-baby',
     company: 'company1',
-    introTitle: 'Intro Title for the Survey!',
+    introTitle: 'First Title for the Survey',
     introDescription: 'Felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
     outroTitle: 'Outro Title for the Survey!',
     outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
@@ -385,7 +385,7 @@ data.surveys = data.surveys.concat([
     id: 'survey2',
     slug: 'aided-recall-baby2',
     company: 'company1',
-    introTitle: 'Intro Title for the Survey!',
+    introTitle: 'Second Intro Title',
     introDescription: 'Felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
     outroTitle: 'Outro Title for the Survey!',
     outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
@@ -394,7 +394,7 @@ data.surveys = data.surveys.concat([
     id: 'survey3',
     slug: 'aided-recall-baby3',
     company: 'company2',
-    introTitle: 'Intro Title for the Survey!',
+    introTitle: 'Third Survey',
     introDescription: 'Felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
     outroTitle: 'Outro Title for the Survey!',
     outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
