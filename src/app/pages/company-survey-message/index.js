@@ -11,11 +11,19 @@ const EmailForm = require('../../components/email-form')
 module.exports = (props) => {
   const style = getStyle()
   const surveyMessage = get(props, 'surveyMessage')
-  const emailSubject = get(surveyMessage, 'subject')
+  // const emailSubject = get(surveyMessage, 'subject')
   const hirer = get(surveyMessage, 'hirer')
-  const recipients = get(surveyMessage, 'recipients', [])
-  const recipientsList = recipients.join(', ')
-  const body = get(surveyMessage, 'body')
+  // const recipients = get(surveyMessage, 'recipients', [])
+  // const recipientsList = recipients.join(', ')
+  // const body = get(surveyMessage, 'body')
+
+  // <EmailForm
+  //   css={cssProcessor}
+  //   renderMessage={message => message}
+  //   recipients={recipientsList}
+  //   subject={emailSubject}
+  //   template={body}
+  // />
 
   return (
     <Page {...props} className={style.pageBody}>
@@ -24,15 +32,7 @@ module.exports = (props) => {
       </Helmet>
       <PageHeader title='Survey Email' subtitle={hirer} />
       <div className={style.pageContent}>
-        <div className={style.pageMain}>
-          <EmailForm
-            css={cssProcessor}
-            renderMessage={message => message}
-            recipients={recipientsList}
-            subject={emailSubject}
-            template={body}
-          />
-        </div>
+        <div className={style.pageMain} />
         <div className={style.pageSidebar} />
       </div>
     </Page>

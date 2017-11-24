@@ -27,6 +27,7 @@ ssh:
 		-e NPM_TOKEN=${NPM_TOKEN} \
 		-p 0.0.0.0:70:80 \
 		-p 0.0.0.0:71:81 \
+		-p 0.0.0.0:72:82 \
 		-v $(CWD)/.zshrc:/root/.zshrc \
 		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/test:/usr/src/test \
@@ -35,7 +36,10 @@ ssh:
 		-v $(CWD)/src/package.json:/usr/src/package.json \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
-		-v $(CWD)/../framework/src:/usr/src/framework \
+		-v $(CWD)/../framework/src:/usr/src/@nudj/framework \
+		-v $(CWD)/../library/src:/usr/src/@nudj/library \
+		-v $(CWD)/../components/src:/usr/src/@nudj/components \
+		-v $(CWD)/../api/src:/usr/src/@nudj/api \
 		$(IMAGEDEV) \
 		/bin/zsh
 

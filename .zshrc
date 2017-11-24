@@ -3,20 +3,19 @@ source /root/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 PROMPT='admin» '
 
 alias run="node ."
-alias dev='./node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && \
-	./node_modules/.bin/nodemon \
-		--config ./nodemon.json \
-		-e js,html,css \
-		--quiet \
-		--watch ./ \
-		--delay 250ms \
-		-x "./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
+alias dev='./node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
 alias test="./node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test"
 alias tdd='./node_modules/.bin/nodemon \
 	--quiet \
 	--watch ./ \
 	--delay 250ms \
 	-x "./node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test || exit 1"'
+
+yank () {
+	cd ./@nudj/$1 && yarn link && cd ../.. && yarn link @nudj/$1
+}
+
+alias idev="yank framework && yank components && yank api && yank library && dev"
 
 alias ll="ls -la"
 alias d="docker"

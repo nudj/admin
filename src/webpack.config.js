@@ -36,7 +36,7 @@ module.exports = {
         test: /\.js$/,
         include: [
           path.join(__dirname, 'app'),
-          path.join(__dirname, 'framework'),
+          path.join(__dirname, '@nudj'),
           path.join(__dirname, 'node_modules', '@nudj')
         ],
         loader: 'babel-loader',
