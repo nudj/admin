@@ -17,6 +17,7 @@ const PageHeader = require('../../../components/page-header')
 const SurveyPage = (props) => {
   const query = parse(get(props, 'location.search', ''))
   const companies = get(props, 'companies', [])
+  const surveys = get(props, 'surveys', [])
   const company = find(companies, { id: query.company }) || {}
   const style = getStyle()
   const fieldStyles = { root: style.field }
@@ -43,6 +44,12 @@ const SurveyPage = (props) => {
     props.dispatch(setSurveyDraft(draft))
   }
 
+  const validateSlug = () => {
+    const draftSlug = get(props, 'surveyPage.draft.slug', '')
+    const slugs = surveys.map(survey => survey.slug)
+    return slugs.includes(draftSlug) ? 'This slug already exists' : ''
+  }
+
   const renderCompaniesList = () => (
     <select className={style.selectBox} id='company' name='company' onChange={onChange}>
       <option>Choose a company</option>
@@ -62,6 +69,12 @@ const SurveyPage = (props) => {
 
     if (!validCompany) {
       const notification = { type: 'error', message: 'Please choose a company' }
+      return props.dispatch(actions.app.showNotification(notification))
+    }
+
+    const slugs = surveys.map(survey => survey.slug)
+    if (slugs.includes(data.slug)) {
+      const notification = { type: 'error', message: 'Invalid slug' }
       return props.dispatch(actions.app.showNotification(notification))
     }
 
@@ -96,9 +109,10 @@ const SurveyPage = (props) => {
               </InputField>
               <InputField classNames={fieldStyles} label='Slug' htmlFor='slug'>
                 <Input
-                  type='textarea'
+                  type='text'
                   id='slug'
                   name='slug'
+                  error={validateSlug()}
                   value={get(props, 'surveyPage.draft.slug', '')}
                   onChange={onChange}
                 />
