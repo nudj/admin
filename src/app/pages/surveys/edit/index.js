@@ -12,7 +12,6 @@ const Page = require('../../../components/page')
 const PageHeader = require('../../../components/page-header')
 
 const SurveyPage = (props) => {
-  console.log(props)
   const { survey } = props
   const company = get(survey, 'company', {})
   const style = getStyle()
@@ -27,12 +26,10 @@ const SurveyPage = (props) => {
 
   const onSubmit = (event) => {
     event.preventDefault()
-    const draft = get(props, 'surveyPage.draft', {})
-    const data = company.id ? merge(draft, { company: company.id }) : draft
-
-    const url = `/surveys`
+    const data = get(props, 'surveyPage.draft', {})
+    const url = `/surveys/${survey.id}`
     const method = 'patch'
-    return props.dispatch(actions.app.postData({ url, data, method }, (postedData) => {
+    return props.dispatch(actions.app.postData({ url, data, method }, () => {
       props.dispatch(actions.app.showNotification({
         type: 'success',
         message: 'Survey updated'
@@ -57,8 +54,8 @@ const SurveyPage = (props) => {
                 <Input
                   type='text'
                   id='intro-title'
-                  name='intro'
-                  value={get(props, 'surveyPage.draft.intro', survey.introTitle)}
+                  name='introTitle'
+                  value={get(props, 'surveyPage.draft.introTitle', survey.introTitle)}
                   onChange={onChange}
                 />
               </InputField>
@@ -75,8 +72,8 @@ const SurveyPage = (props) => {
                 <Input
                   type='text'
                   id='outro-title'
-                  name='outro'
-                  value={get(props, 'surveyPage.draft.outro', survey.outroTitle)}
+                  name='outroTitle'
+                  value={get(props, 'surveyPage.draft.outroTitle', survey.outroTitle)}
                   onChange={onChange}
                 />
               </InputField>

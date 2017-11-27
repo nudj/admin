@@ -104,9 +104,41 @@ function postSurvey ({ data, body }) {
   return { gql, variables }
 }
 
+function patchSurvey ({ data, body, params }) {
+  const gql = `
+    mutation UpdateSurvey (
+      $id: ID!
+      $input: SurveyUpdateInput
+    ) {
+      survey: updateSurvey (
+        id: $id
+        input: $input
+      ) {
+        id
+        slug
+        company {
+          id
+          name
+        }
+        introTitle
+        introDescription
+        outroTitle
+        outroDescription
+      }
+    }
+  `
+  const variables = {
+    id: params.id,
+    input: body
+  }
+
+  return { gql, variables }
+}
+
 module.exports = {
   get,
   getNew,
   getOne,
+  patchSurvey,
   postSurvey
 }
