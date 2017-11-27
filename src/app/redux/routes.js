@@ -3,7 +3,7 @@ module.exports = {
   '/people': require('../pages/people'),
   '/surveys': require('../pages/surveys'),
   '/surveys/new': require('../pages/surveys/new'),
-  '/surveys/:id': require('../pages/surveys'),
+  '/surveys/:id': require('../pages/surveys/edit'),
   '/people/:personId': require('../pages/person'),
   '/companies/:companySlug': require('../pages/company'),
   '/companies/:companySlug/jobs/:jobSlug': require('../pages/company-job'),

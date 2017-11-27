@@ -79,9 +79,7 @@ function postSurvey ({ data, body }) {
     outroDescription: body.outroDescription
   }
 
-  const redirect = '/'
-
-  return { gql, variables, redirect }
+  return { gql, variables }
 }
 
 module.exports = {

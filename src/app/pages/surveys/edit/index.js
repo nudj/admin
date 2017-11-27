@@ -1,6 +1,5 @@
 const React = require('react')
 const get = require('lodash/get')
-const find = require('lodash/find')
 const { Helmet } = require('react-helmet')
 
 const { Input, InputField, Card } = require('@nudj/components')
@@ -15,7 +14,6 @@ const PageHeader = require('../../../components/page-header')
 
 const SurveyPage = (props) => {
   const company = get(props, 'survey.company', {})
-  const companies = get(props, 'companies')
   const style = getStyle()
   const fieldStyles = { root: style.field }
 
@@ -26,30 +24,10 @@ const SurveyPage = (props) => {
     props.dispatch(setSurveyDraft(draft))
   }
 
-  const renderCompaniesList = () => (
-    <select className={style.selectBox} id='personType' name='company' onChange={onChange}>
-      <option>Choose a company</option>
-      {
-        companies.map((company, index) => (
-          <option key={index} value={company.id}>{company.name}</option>
-        ))
-      }
-    </select>
-  )
-
-  const notification = (type, message) => (
-    props.dispatch(actions.app.showNotification({ type, message }))
-  )
-
   const onSubmit = (event) => {
     event.preventDefault()
     const draft = get(props, 'surveysPage.draft', {})
     const data = company.id ? merge(draft, { company: company.id }) : draft
-    const validCompany = !!find(companies, { id: data.company })
-
-    if (!validCompany) {
-      return notification('error', 'Please choose a company')
-    }
 
     const url = `/surveys`
     const method = 'post'
@@ -108,7 +86,7 @@ const SurveyPage = (props) => {
                 />
               </InputField>
               <InputField classNames={fieldStyles} label='Company: ' htmlFor='personType'>
-                { company.name || renderCompaniesList() }
+                {company.name}
               </InputField>
             </Card>
             <div className={style.formButtons}>
