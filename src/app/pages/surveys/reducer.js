@@ -11,12 +11,7 @@ const actions = {
 }
 
 const initialState = {
-  draft: {
-    intro: '',
-    outro: '',
-    introDescription: '',
-    outroDescription: ''
-  }
+  draft: {}
 }
 
 const reducer = (initialState, actions) => (state = initialState, action) => {

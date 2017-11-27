@@ -21,7 +21,7 @@ const SurveyPage = (props) => {
 
   const onChange = (event) => {
     const target = event.target || event
-    const survey = get(props, 'surveysPage.draft', {})
+    const survey = get(props, 'surveyPage.draft', {})
     const draft = merge(survey, { [target.name]: target.value })
     props.dispatch(setSurveyDraft(draft))
   }
@@ -39,7 +39,7 @@ const SurveyPage = (props) => {
 
   const onSubmit = (event) => {
     event.preventDefault()
-    const draft = get(props, 'surveysPage.draft', {})
+    const draft = get(props, 'surveyPage.draft', {})
     const data = company.id ? merge(draft, { company: company.id }) : draft
     const validCompany = !!find(companies, { id: data.company })
 
@@ -70,7 +70,7 @@ const SurveyPage = (props) => {
                   type='text'
                   id='intro-title'
                   name='intro'
-                  value={get(props, 'surveysPage.draft.intro', '')}
+                  value={get(props, 'surveyPage.draft.intro', '')}
                   onChange={onChange}
                 />
               </InputField>
@@ -79,7 +79,7 @@ const SurveyPage = (props) => {
                   type='textarea'
                   id='intro-description'
                   name='introDescription'
-                  value={get(props, 'surveysPage.draft.introDescription', '')}
+                  value={get(props, 'surveyPage.draft.introDescription', '')}
                   onChange={onChange}
                 />
               </InputField>
@@ -88,7 +88,7 @@ const SurveyPage = (props) => {
                   type='text'
                   id='outro-title'
                   name='outro'
-                  value={get(props, 'surveysPage.draft.outro', '')}
+                  value={get(props, 'surveyPage.draft.outro', '')}
                   onChange={onChange}
                 />
               </InputField>
@@ -97,7 +97,7 @@ const SurveyPage = (props) => {
                   type='textarea'
                   id='outro-description'
                   name='outroDescription'
-                  value={get(props, 'surveysPage.draft.outroDescription', '')}
+                  value={get(props, 'surveyPage.draft.outroDescription', '')}
                   onChange={onChange}
                 />
               </InputField>

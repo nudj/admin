@@ -8,7 +8,7 @@ const Page = require('../../components/page')
 const { Link } = require('react-router-dom')
 const PageHeader = require('../../components/page-header')
 
-const SurveysPage = (props) => {
+const surveyPage = (props) => {
   const surveys = get(props, 'surveys', [])
   const query = get(props, 'location.search', '')
   const style = getStyle()
@@ -45,4 +45,4 @@ const SurveysPage = (props) => {
   )
 }
 
-module.exports = SurveysPage
+module.exports = surveyPage

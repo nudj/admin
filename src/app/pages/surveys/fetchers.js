@@ -1,6 +1,6 @@
 function get ({ query }) {
   const gql = `
-    query SurveyPage ($filters: SurveyFilterInput) {
+    query surveyPage ($filters: SurveyFilterInput) {
       surveys (filters: $filters) {
         id
         title: introTitle
@@ -35,6 +35,28 @@ function getNew ({ query }) {
   `
   const variables = {
     filters: { company: filter }
+  }
+  return { gql, variables }
+}
+
+function getOne ({ params }) {
+  const gql = `
+    query SurveyPage ($id: ID) {
+      survey (id: $id) {
+        id
+        introTitle
+        introDescription
+        outroTitle
+        outroDescription
+        company {
+          name
+          id
+        }
+      }
+    }
+  `
+  const variables = {
+    id: params.id
   }
   return { gql, variables }
 }
@@ -85,5 +107,6 @@ function postSurvey ({ data, body }) {
 module.exports = {
   get,
   getNew,
+  getOne,
   postSurvey
 }

@@ -12,7 +12,7 @@ const Router = ({
   router.getHandlers('/surveys', respondWith(fetchers.get))
   router.postHandlers('/surveys', respondWith(fetchers.postSurvey))
   router.getHandlers('/surveys/new', respondWith(fetchers.getNew))
-  router.getHandlers('/surveys/:id', respondWith(fetchers.get))
+  router.getHandlers('/surveys/:id', respondWith(fetchers.getOne))
 
   return router
 }
