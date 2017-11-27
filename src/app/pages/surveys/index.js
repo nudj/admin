@@ -4,7 +4,9 @@ const { Helmet } = require('react-helmet')
 
 const { Table, Input, InputField, Card } = require('@nudj/components')
 const actions = require('@nudj/framework/actions')
+const { merge } = require('@nudj/library')
 
+const { setSurveyDraft } = require('./actions')
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const { Link } = require('react-router-dom')
@@ -33,13 +35,17 @@ const SurveyPage = (props) => {
     <Table cellRenderer={cellRenderer} data={surveys} columns={columns} />
   )
 
+  const onChange = (event) => {
+    const survey = get(props, 'surveysPage.draft', {})
+    const draft = merge(survey, { [event.name]: event.value })
+    props.dispatch(setSurveyDraft(draft))
+  }
+
   const onSubmit = (event) => {
     event.preventDefault()
 
     const url = `/surveys/new`
-    const data = {
-      survey: ''
-    }
+    const data = get(props, 'surveysPage.draft', {})
     const method = 'post'
 
     props.dispatch(actions.app.postData({ url, data, method }))
@@ -49,8 +55,41 @@ const SurveyPage = (props) => {
     return (
       <form className={style.pageMain} onSubmit={onSubmit}>
         <Card>
-          <InputField htmlFor='test'>
-            <Input type='text' id='test' name='test-name' />
+          <InputField label='Intro Title' htmlFor='intro-title'>
+            <Input
+              type='text'
+              id='intro-title'
+              name='intro'
+              value={get(props, 'surveysPage.draft.intro', '')}
+              onChange={onChange}
+            />
+          </InputField>
+          <InputField label='Intro Description' htmlFor='intro-description'>
+            <Input
+              type='text'
+              id='intro-description'
+              name='introDescription'
+              value={get(props, 'surveysPage.draft.introDescription', '')}
+              onChange={onChange}
+            />
+          </InputField>
+          <InputField label='Outro Title' htmlFor='outro-title'>
+            <Input
+              type='text'
+              id='outro-title'
+              name='outro'
+              value={get(props, 'surveysPage.draft.outro', '')}
+              onChange={onChange}
+            />
+          </InputField>
+          <InputField label='Outro Description' htmlFor='outro-description'>
+            <Input
+              type='text'
+              id='outro-description'
+              name='outroDescription'
+              value={get(props, 'surveysPage.draft.outroDescription', '')}
+              onChange={onChange}
+            />
           </InputField>
         </Card>
         <div className={style.formButtons}>

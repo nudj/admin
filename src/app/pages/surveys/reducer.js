@@ -1,18 +1,24 @@
 const { merge } = require('@nudj/library')
 
 const {
-  UPDATE_SURVEY
+  SET_SURVEY_DRAFT
 } = require('./actions')
 
-const updateSurvey = (state, action) => {
-  return merge(state, {})
-}
+const setSurveyDraft = (state, action) => merge(state, { draft: action.draft })
 
 const actions = {
-  [UPDATE_SURVEY]: updateSurvey
+  [SET_SURVEY_DRAFT]: setSurveyDraft
 }
 
-const initialState = {}
+const initialState = {
+  draft: {
+    company: '',
+    intro: '',
+    outro: '',
+    introDescription: '',
+    outroDescription: ''
+  }
+}
 
 const reducer = (initialState, actions) => (state = initialState, action) => {
   const { type } = action

@@ -1,10 +1,12 @@
 const quickDispatch = (action) => (dispatch, getState) => dispatch(action)
 
-const UPDATE_SURVEY = 'UPDATE_SURVEY'
-module.exports.UPDATE_SURVEY = UPDATE_SURVEY
-function updateSurvey () {
+const SET_SURVEY_DRAFT = 'SET_SURVEY_DRAFT'
+module.exports.SET_SURVEY_DRAFT = SET_SURVEY_DRAFT
+
+function setSurveyDraft (draft) {
   return {
-    type: UPDATE_SURVEY
+    type: SET_SURVEY_DRAFT,
+    draft
   }
 }
-module.exports.updateSurvey = () => quickDispatch(updateSurvey())
+module.exports.setSurveyDraft = (draft) => quickDispatch(setSurveyDraft(draft))
