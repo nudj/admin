@@ -12,7 +12,6 @@ const actions = {
 
 const initialState = {
   draft: {
-    company: '',
     intro: '',
     outro: '',
     introDescription: '',

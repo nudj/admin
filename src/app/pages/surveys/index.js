@@ -33,7 +33,7 @@ const SurveyPage = (props) => {
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <Link className={style.link} to={`/surveys/new${query}`}>New Survey</Link>
+        <a className={style.link} href={`/surveys/new${query}`}>New Survey</a>
       </PageHeader>
       <h3 className={style.pageHeadline}>Surveys <span className={style.textHighlight}>({surveys.length})</span></h3>
       <div className={style.pageContent}>

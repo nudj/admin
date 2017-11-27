@@ -1,5 +1,6 @@
 const React = require('react')
 const get = require('lodash/get')
+const find = require('lodash/find')
 const { Helmet } = require('react-helmet')
 
 const { Input, InputField, Card } = require('@nudj/components')
@@ -13,29 +14,39 @@ const { Link } = require('react-router-dom')
 const PageHeader = require('../../components/page-header')
 
 const SurveyPage = (props) => {
-  const company = get(props, 'newSurvey.company.name')
+  const company = get(props, 'survey.company', {})
   const companies = get(props, 'companies')
-  const surveys = get(props, 'surveys', [])
-  const query = get(props, 'location.search', '')
   const style = getStyle()
   const fieldStyles = { root: style.field }
 
   const onChange = (event) => {
+    const target = event.target || event
     const survey = get(props, 'surveysPage.draft', {})
-    const draft = merge(survey, { [event.name]: event.value })
+    const draft = merge(survey, { [target.name]: target.value })
     props.dispatch(setSurveyDraft(draft))
   }
 
-  const onChangeCompany = (event) => {
-    const survey = get(props, 'surveysPage.draft', {})
-    const draft = merge(survey, { [event.target.name]: event.target.value })
-    props.dispatch(setSurveyDraft(draft))
-  }
+  const renderCompaniesList = () => (
+    <select className={style.selectBox} id='personType' name='company' onChange={onChange}>
+      <option>Choose a company</option>
+      {
+        companies.map((company, index) => {
+          return <option key={index} value={company.id}>{company.name}</option>
+        })
+      }
+    </select>
+  )
 
   const onSubmit = (event) => {
     event.preventDefault()
     const draft = get(props, 'surveysPage.draft', {})
-    const data = draft.company ? draft : merge(draft, { company })
+    const data = company.id ? merge(draft, { company: company.id }) : draft
+    const validCompany = !!find(companies, { id: data.company })
+
+    if (!validCompany) {
+      return props.dispatch(actions.app.showNotification({ type: 'error', message: 'Please choose a company' }))
+    }
+
     const url = `/surveys/new`
     const method = 'post'
     props.dispatch(actions.app.postData({ url, data, method }))
@@ -47,9 +58,9 @@ const SurveyPage = (props) => {
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <Link className={style.link} to={`/surveys/new${query}`}>New Survey</Link>
+        <Link className={style.link} to={`/surveys/new`}>New Survey</Link>
       </PageHeader>
-      <h3 className={style.pageHeadline}>Surveys <span className={style.textHighlight}>({surveys.length})</span></h3>
+      <h3 className={style.pageHeadline}>Create survey</h3>
       <div className={style.pageContent}>
         <div className={style.pageMain}>
           <form className={style.pageMain} onSubmit={onSubmit}>
@@ -90,15 +101,8 @@ const SurveyPage = (props) => {
                   onChange={onChange}
                 />
               </InputField>
-
-              <InputField classNames={fieldStyles} label='Company' htmlFor='personType'>
-                <select className={style.selectBox} id='personType' name='company' onChange={onChangeCompany} value={get(props, 'surveysPage.draft.company', company)}>
-                  {
-                    companies.map((company, index) => {
-                      return <option key={index} value={company.id}>{company.name}</option>
-                    })
-                  }
-                </select>
+              <InputField classNames={fieldStyles} label='Company: ' htmlFor='personType'>
+                { company.name || renderCompaniesList() }
               </InputField>
             </Card>
             <div className={style.formButtons}>
