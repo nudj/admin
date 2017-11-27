@@ -49,17 +49,7 @@ function postSurvey ({ data, body }) {
       $company: ID!
       $slug: String!
     ) {
-      survey: surveyByFilters (filters: { company: $company }) {
-        company {
-          name
-          id
-        }
-      }
-      companies {
-        name
-        id
-      }
-      newSurvey: createSurvey (input: {
+      survey: createSurvey (input: {
         introTitle: $intro
         outroTitle: $outro
         introDescription: $introDescription
@@ -68,6 +58,15 @@ function postSurvey ({ data, body }) {
         slug: $slug
       }) {
         id
+        slug
+        company {
+          id
+          name
+        }
+        introTitle
+        introDescription
+        outroTitle
+        outroDescription
       }
     }
   `
