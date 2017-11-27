@@ -1,11 +1,14 @@
 function get ({ query }) {
   const gql = `
-    query surveyPage ($filters: SurveyFilterInput) {
-      surveys (filters: $filters) {
+    query surveyPage {
+      surveys {
         id
-        title: introTitle
-        description: introDescription
+        introTitle
+        introDescription
+        outroTitle
+        outroDescription
         company {
+          id
           name
         }
       }
@@ -45,9 +48,15 @@ function getOne ({ params }) {
       survey (id: $id) {
         id
         introTitle
+        slug
         introDescription
         outroTitle
         outroDescription
+        sections: surveySections {
+          id
+          title
+          description
+        }
         company {
           name
           id
@@ -96,7 +105,7 @@ function postSurvey ({ data, body }) {
     intro: body.intro,
     outro: body.outro,
     company: body.company,
-    slug: 'slug',
+    slug: body.slug,
     introDescription: body.introDescription,
     outroDescription: body.outroDescription
   }
@@ -119,6 +128,11 @@ function patchSurvey ({ data, body, params }) {
         company {
           id
           name
+        }
+        sections: surveySections {
+          id
+          title
+          description
         }
         introTitle
         introDescription

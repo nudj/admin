@@ -1,6 +1,7 @@
 const React = require('react')
 const get = require('lodash/get')
 const find = require('lodash/find')
+const { parse } = require('query-string')
 const { Helmet } = require('react-helmet')
 
 const { Input, InputField, Card } = require('@nudj/components')
@@ -14,8 +15,9 @@ const { Link } = require('react-router-dom')
 const PageHeader = require('../../../components/page-header')
 
 const SurveyPage = (props) => {
-  const company = get(props, 'survey.company', {})
-  const companies = get(props, 'companies')
+  const query = parse(get(props, 'location.search', ''))
+  const companies = get(props, 'companies', [])
+  const company = find(companies, { id: query.company }) || {}
   const style = getStyle()
   const fieldStyles = { root: style.field }
 
@@ -26,8 +28,23 @@ const SurveyPage = (props) => {
     props.dispatch(setSurveyDraft(draft))
   }
 
+  const makeSlugFromTitle = (title) => {
+    return title.toLowerCase()
+      .replace(/\s+/g, ' ')
+      .replace(/\s/g, '-')
+      .replace(/[^a-z0-9-]/g, '')
+  }
+
+  const onChangeTitle = (event) => {
+    const title = event.value
+    const slug = makeSlugFromTitle(title)
+    const survey = get(props, 'surveyPage.draft', {})
+    const draft = merge(survey, { [event.name]: title, slug })
+    props.dispatch(setSurveyDraft(draft))
+  }
+
   const renderCompaniesList = () => (
-    <select className={style.selectBox} id='personType' name='company' onChange={onChange}>
+    <select className={style.selectBox} id='company' name='company' onChange={onChange}>
       <option>Choose a company</option>
       {
         companies.map((company, index) => (
@@ -74,6 +91,15 @@ const SurveyPage = (props) => {
                   id='intro-title'
                   name='intro'
                   value={get(props, 'surveyPage.draft.intro', '')}
+                  onChange={onChangeTitle}
+                />
+              </InputField>
+              <InputField classNames={fieldStyles} label='Slug' htmlFor='slug'>
+                <Input
+                  type='textarea'
+                  id='slug'
+                  name='slug'
+                  value={get(props, 'surveyPage.draft.slug', '')}
                   onChange={onChange}
                 />
               </InputField>
@@ -104,7 +130,7 @@ const SurveyPage = (props) => {
                   onChange={onChange}
                 />
               </InputField>
-              <InputField classNames={fieldStyles} label='Company: ' htmlFor='personType'>
+              <InputField classNames={fieldStyles} label='Company' htmlFor='company'>
                 { company.name || renderCompaniesList() }
               </InputField>
             </Card>

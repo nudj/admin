@@ -406,6 +406,18 @@ data.surveySections = data.surveySections.concat([
     survey: 'survey1',
     title: 'Professional + Previous Employers',
     description: 'First up, the places that you\'ve worked before and the people you know professionally.'
+  },
+  {
+    id: 'section2',
+    survey: 'survey1',
+    title: 'Section Title',
+    description: 'Viverra quis iaculis et, ipsum ligula et lacus.'
+  },
+  {
+    id: 'section1B',
+    survey: 'survey2',
+    title: 'Cash + Money',
+    description: 'Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
   }
 ])
 data.surveyQuestions = data.surveyQuestions.concat([

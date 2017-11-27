@@ -1,8 +1,9 @@
 const React = require('react')
 const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
+const { Link } = require('react-router-dom')
 
-const { Input, InputField, Card } = require('@nudj/components')
+const { Input, InputField, Card, Table } = require('@nudj/components')
 const actions = require('@nudj/framework/actions')
 const { merge } = require('@nudj/library')
 
@@ -13,6 +14,7 @@ const PageHeader = require('../../../components/page-header')
 
 const SurveyPage = (props) => {
   const { survey } = props
+  const sections = get(survey, 'sections', [])
   const company = get(survey, 'company', {})
   const style = getStyle()
   const fieldStyles = { root: style.field }
@@ -23,6 +25,19 @@ const SurveyPage = (props) => {
     const draft = merge(survey, { [target.name]: target.value })
     props.dispatch(setSurveyDraft(draft))
   }
+
+  const cellRenderer = (column, row, defaultRender) => {
+    if (column.name === 'link') {
+      return <Link className={style.link} to={`/sections/${row.id}`}>View/Edit</Link>
+    }
+    return defaultRender
+  }
+
+  const columns = [
+    { heading: 'Title', name: 'title' },
+    { heading: 'Description', name: 'description' },
+    { name: 'link' }
+  ]
 
   const onSubmit = (event) => {
     event.preventDefault()
@@ -43,7 +58,7 @@ const SurveyPage = (props) => {
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <a className={style.link} href={`/surveys?company=${company.id}`}>Company Surveys</a>
+        <Link className={style.link} to={`/surveys?company=${company.id}`}>Company Surveys</Link>
       </PageHeader>
       <h3 className={style.pageHeadline}>Survey for <span className={style.textHighlight}>{company.name}</span></h3>
       <div className={style.pageContent}>
@@ -56,6 +71,15 @@ const SurveyPage = (props) => {
                   id='intro-title'
                   name='introTitle'
                   value={get(props, 'surveyPage.draft.introTitle', survey.introTitle)}
+                  onChange={onChange}
+                />
+              </InputField>
+              <InputField classNames={fieldStyles} label='Slug' htmlFor='slug'>
+                <Input
+                  type='textarea'
+                  id='slug'
+                  name='slug'
+                  value={get(props, 'surveyPage.draft.slug', survey.slug)}
                   onChange={onChange}
                 />
               </InputField>
@@ -91,6 +115,8 @@ const SurveyPage = (props) => {
               <button className={style.submitButton}>SUBMIT</button>
             </div>
           </form>
+          <h3 className={style.pageHeadline}>Sections <span className={style.textHighlight}>({sections.length})</span></h3>
+          <Table cellRenderer={cellRenderer} data={sections} columns={columns} />
         </div>
       </div>
     </Page>

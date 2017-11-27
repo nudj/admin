@@ -1,6 +1,8 @@
 const React = require('react')
 const get = require('lodash/get')
+const filter = require('lodash/filter')
 const { Helmet } = require('react-helmet')
+const { parse } = require('query-string')
 
 const { Table } = require('@nudj/components')
 const getStyle = require('./style.css')
@@ -8,15 +10,26 @@ const Page = require('../../components/page')
 const { Link } = require('react-router-dom')
 const PageHeader = require('../../components/page-header')
 
+const createFilter = (filter) => {
+  const query = parse(filter)
+
+  let filters = query
+  if (query.company) {
+    filters.company = { id: query.company }
+  }
+  return filters
+}
+
 const surveyPage = (props) => {
   const surveys = get(props, 'surveys', [])
   const query = get(props, 'location.search', '')
+  const data = filter(surveys, createFilter(query))
   const style = getStyle()
 
   const columns = [
     { heading: 'Company', name: 'company.name' },
-    { heading: 'Intro Title', name: 'title' },
-    { heading: 'Description', name: 'description' },
+    { heading: 'Intro Title', name: 'introTitle' },
+    { heading: 'Description', name: 'introDescription' },
     { name: 'link' }
   ]
 
@@ -33,12 +46,12 @@ const surveyPage = (props) => {
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <a className={style.link} href={`/surveys/new${query}`}>New Survey</a>
+        <Link className={style.link} to={`/surveys/new${query}`}>New Survey</Link>
       </PageHeader>
-      <h3 className={style.pageHeadline}>Surveys <span className={style.textHighlight}>({surveys.length})</span></h3>
+      <h3 className={style.pageHeadline}>Surveys <span className={style.textHighlight}>({data.length})</span></h3>
       <div className={style.pageContent}>
         <div className={style.pageMain}>
-          <Table cellRenderer={cellRenderer} data={surveys} columns={columns} />
+          <Table cellRenderer={cellRenderer} data={data} columns={columns} />
         </div>
       </div>
     </Page>
