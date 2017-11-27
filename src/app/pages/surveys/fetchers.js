@@ -18,20 +18,23 @@ function get ({ query }) {
 }
 
 function getNew ({ query }) {
+  const filter = query.company || {}
   const gql = `
     query NewSurvey ($filters: SurveyFilterInput) {
-      newSurvey: surveys (filters: $filters) {
-        id
-        title: introTitle
-        description: introDescription
+      newSurvey: surveyByFilters (filters: $filters) {
         company {
           name
+          id
         }
+      }
+      companies {
+        name
+        id
       }
     }
   `
   const variables = {
-    filters: query
+    filters: { company: filter }
   }
   return { gql, variables }
 }
