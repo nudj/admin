@@ -30,9 +30,9 @@ const SurveyPage = (props) => {
     <select className={style.selectBox} id='personType' name='company' onChange={onChange}>
       <option>Choose a company</option>
       {
-        companies.map((company, index) => {
-          return <option key={index} value={company.id}>{company.name}</option>
-        })
+        companies.map((company, index) => (
+          <option key={index} value={company.id}>{company.name}</option>
+        ))
       }
     </select>
   )
@@ -47,9 +47,9 @@ const SurveyPage = (props) => {
       return props.dispatch(actions.app.showNotification({ type: 'error', message: 'Please choose a company' }))
     }
 
-    const url = `/surveys/new`
+    const url = `/surveys`
     const method = 'post'
-    props.dispatch(actions.app.postData({ url, data, method }))
+    return props.dispatch(actions.app.postData({ url, data, method }))
   }
 
   return (
