@@ -10,6 +10,9 @@ const Router = ({
   router.use(ensureLoggedIn)
 
   router.getHandlers('/surveys', respondWith(fetchers.get))
+  router.getHandlers('/surveys/new', respondWith(fetchers.getNew))
+  router.postHandlers('/surveys/new', respondWith(fetchers.postSurvey))
+  // router.getHandlers('/surveys/:id', respondWith(fetchers.getId))
 
   return router
 }
