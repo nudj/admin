@@ -1,4 +1,4 @@
-const find = require('lodash/find')
+const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
 const { merge } = require('@nudj/library')
 
@@ -22,14 +22,6 @@ type Draft = {
   company?: Company,
 }
 
-type SubmitData = {
-  company?: string,
-  comapnies?: Array<string>,
-  draft: Draft,
-  slugs: Array<string>,
-  existingSurvey: Draft
-}
-
 function setSurveyDraft (draft: Draft) {
   return {
     type: SET_SURVEY_DRAFT,
@@ -38,27 +30,21 @@ function setSurveyDraft (draft: Draft) {
 }
 module.exports.setSurveyDraft = (draft) => quickDispatch(setSurveyDraft(draft))
 
-function submitSurvey ({ company, companies, draft, slugs, existingSurvey }: SubmitData) {
+function submitSurvey () {
   return (dispatch, getState) => {
-    const data = company.id ? merge(draft, { company: company.id }) : draft
-    const validCompany = !!find(companies, { id: data.company })
+    const state = getState()
+    const existingId = get(state.app, 'survey.id')
+    const draft = get(state, 'surveyPage.draft', {})
+    const company = get(draft, 'company', {})
 
-    if (!validCompany && !existingSurvey.id) {
-      const notification = { type: 'error', message: 'Please choose a company' }
-      return dispatch(actions.app.showNotification(notification))
-    }
-
-    if (slugs.includes(data.slug)) {
-      const notification = { type: 'error', message: 'Invalid slug' }
-      return dispatch(actions.app.showNotification(notification))
-    }
+    const data = existingId ? merge(draft, { company: company.id }) : draft
 
     let method = 'post'
     let url = '/survey/new'
 
-    if (existingSurvey.id) {
+    if (existingId) {
       method = 'patch'
-      url = `/survey/${existingSurvey.id}`
+      url = `/survey/${existingId}`
     }
     return dispatch(actions.app.postData({ data, url, method }))
   }

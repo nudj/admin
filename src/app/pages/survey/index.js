@@ -68,7 +68,9 @@ const SurveyPage = (props: SurveyPageProps) => {
 
   const onChange = event => {
     const target = event.target || event
-    const data = merge(draft, { [target.name]: target.value })
+    const data = merge(draft, { company: company.id }, {
+      [target.name]: target.value
+    })
     props.dispatch(setSurveyDraft(data))
   }
 
@@ -99,8 +101,9 @@ const SurveyPage = (props: SurveyPageProps) => {
       id='company'
       name='company'
       onChange={onChange}
+      required
     >
-      <option>Choose a company</option>
+      <option value=''>Choose a company</option>
       {companies.map((company, index) => (
         <option key={index} value={company.id}>
           {company.name}
@@ -111,14 +114,7 @@ const SurveyPage = (props: SurveyPageProps) => {
 
   const onSubmit = event => {
     event.preventDefault()
-    const slugs = surveys.map(survey => survey.slug)
-    props.dispatch(submitSurvey({
-      company,
-      companies,
-      draft,
-      slugs,
-      existingSurvey
-    }))
+    props.dispatch(submitSurvey())
   }
 
   const sectionColumns = [
