@@ -161,8 +161,8 @@ const NewSurveyPage = (props: NewSurveyPageProps) => {
       </h3>
       <div className={style.pageContent}>
         <div className={style.pageMain}>
-          <form className={style.pageMain} onSubmit={onSubmit}>
-            <Card>
+          <Card>
+            <form className={style.pageMain} onSubmit={onSubmit}>
               <InputField
                 classNames={fieldStyles}
                 label='Intro Title'
@@ -240,8 +240,8 @@ const NewSurveyPage = (props: NewSurveyPageProps) => {
               <div className={style.formButtons}>
                 <Button type='submit' volume='yell'>SUBMIT</Button>
               </div>
-            </Card>
-          </form>
+            </form>
+          </Card>
           {existingSurvey.id ? (
             <div>
               <h3 className={style.pageHeadline}>

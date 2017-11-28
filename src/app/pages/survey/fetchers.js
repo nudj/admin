@@ -1,7 +1,6 @@
 const { Redirect } = require('@nudj/framework/errors')
 
-function getNew ({ query }) {
-  const filter = query.company || {}
+function getNew () {
   const gql = `
     query NewSurvey {
       surveys {
@@ -13,10 +12,7 @@ function getNew ({ query }) {
       }
     }
   `
-  const variables = {
-    filters: { company: filter }
-  }
-  return { gql, variables }
+  return { gql, variables: {} }
 }
 
 function getOne ({ params }) {
@@ -66,15 +62,6 @@ function postSurvey ({ data, body }) {
         slug: $slug
       }) {
         id
-        slug
-        company {
-          id
-          name
-        }
-        introTitle
-        introDescription
-        outroTitle
-        outroDescription
       }
     }
   `
@@ -108,20 +95,6 @@ function patchSurvey ({ data, body, params }) {
         input: $input
       ) {
         id
-        slug
-        company {
-          id
-          name
-        }
-        sections: surveySections {
-          id
-          title
-          description
-        }
-        introTitle
-        introDescription
-        outroTitle
-        outroDescription
       }
     }
   `

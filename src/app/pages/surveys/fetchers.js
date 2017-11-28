@@ -1,4 +1,4 @@
-function get ({ query }) {
+function get () {
   const gql = `
     query surveyPage {
       surveys {
@@ -14,10 +14,7 @@ function get ({ query }) {
       }
     }
   `
-  const variables = {
-    filters: query
-  }
-  return { gql, variables }
+  return { gql, variables: {} }
 }
 
 module.exports = {
