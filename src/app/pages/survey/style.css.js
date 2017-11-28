@@ -8,7 +8,10 @@ let {
 const styles = merge(mixins.pageLayout, mixins.formStructure, mixins.formElements, {
   link: merge({
     margin: `0 0 0 ${variables.padding.d}`
-  }, mixins.button)
+  }, mixins.button),
+  field: {
+    marginBottom: '1em'
+  }
 })
 
 module.exports = css(styles)

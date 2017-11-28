@@ -77,8 +77,8 @@ function postSurvey ({ data, body }) {
     }
   `
   const variables = {
-    intro: body.intro,
-    outro: body.outro,
+    intro: body.introTitle,
+    outro: body.outroTitle,
     company: body.company,
     slug: body.slug,
     introDescription: body.introDescription,
