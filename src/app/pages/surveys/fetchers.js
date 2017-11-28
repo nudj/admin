@@ -14,7 +14,7 @@ function get () {
       }
     }
   `
-  return { gql, variables: {} }
+  return { gql }
 }
 
 module.exports = {

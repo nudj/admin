@@ -12,7 +12,7 @@ function getNew () {
       }
     }
   `
-  return { gql, variables: {} }
+  return { gql }
 }
 
 function getOne ({ params }) {
@@ -46,16 +46,16 @@ function getOne ({ params }) {
 function postSurvey ({ data, body }) {
   const gql = `
     mutation CreateSurvey (
-      $intro: String
-      $outro: String
+      $introTitle: String
+      $outroTitle: String
       $introDescription: String
       $outroDescription: String
       $company: ID!
       $slug: String!
     ) {
       survey: createSurvey (input: {
-        introTitle: $intro
-        outroTitle: $outro
+        introTitle: $introTitle
+        outroTitle: $outroTitle
         introDescription: $introDescription
         outroDescription: $outroDescription
         company: $company
@@ -66,8 +66,8 @@ function postSurvey ({ data, body }) {
     }
   `
   const variables = {
-    intro: body.introTitle,
-    outro: body.outroTitle,
+    introTitle: body.introTitle,
+    outroTitle: body.outroTitle,
     company: body.company,
     slug: body.slug,
     introDescription: body.introDescription,
