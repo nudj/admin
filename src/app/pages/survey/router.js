@@ -4,15 +4,15 @@ const fetchers = require('./fetchers')
 
 const Router = ({
   ensureLoggedIn,
-  respondWith
+  respondWithGql
 }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.postHandlers('/survey/new', respondWith(fetchers.postSurvey))
-  router.patchHandlers('/survey/:id', respondWith(fetchers.patchSurvey))
-  router.getHandlers('/survey/new', respondWith(fetchers.getNew))
-  router.getHandlers('/survey/:id', respondWith(fetchers.getOne))
+  router.postHandlers('/survey/new', respondWithGql(fetchers.postSurvey))
+  router.patchHandlers('/survey/:id', respondWithGql(fetchers.patchSurvey))
+  router.getHandlers('/survey/new', respondWithGql(fetchers.getNew))
+  router.getHandlers('/survey/:id', respondWithGql(fetchers.getOne))
 
   return router
 }

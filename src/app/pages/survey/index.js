@@ -49,7 +49,6 @@ type NewSurveyPageProps = {
 }
 
 const NewSurveyPage = (props: NewSurveyPageProps) => {
-  console.log(props)
   const existingSurvey = get(props, 'survey', {})
   const query = parse(get(props, 'location.search', ''))
   const companies = get(props, 'companies', [])
@@ -127,11 +126,7 @@ const NewSurveyPage = (props: NewSurveyPageProps) => {
       url = `/survey/${existingSurvey.id}`
     }
 
-    return props.dispatch(
-      actions.app.postData({ url, data, method }, postedData => {
-        window.location = `/survey/${postedData.survey.id}`
-      })
-    )
+    return props.dispatch(actions.app.postData({ url, data, method }))
   }
 
   const sectionColumns = [
@@ -161,7 +156,9 @@ const NewSurveyPage = (props: NewSurveyPageProps) => {
           New Survey
         </Link>
       </PageHeader>
-      <h3 className={style.pageHeadline}>Create survey</h3>
+      <h3 className={style.pageHeadline}>
+        {existingSurvey.id ? 'Edit survey' : 'Create survey'}
+      </h3>
       <div className={style.pageContent}>
         <div className={style.pageMain}>
           <form className={style.pageMain} onSubmit={onSubmit}>

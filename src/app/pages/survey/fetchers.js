@@ -1,3 +1,5 @@
+const { Redirect } = require('@nudj/framework/errors')
+
 function getNew ({ query }) {
   const filter = query.company || {}
   const gql = `
@@ -85,7 +87,14 @@ function postSurvey ({ data, body }) {
     outroDescription: body.outroDescription
   }
 
-  return { gql, variables }
+  const respond = (data) => {
+    throw new Redirect({
+      url: `/survey/${data.survey.id}`,
+      notification: { type: 'success', message: 'Survey created!' }
+    })
+  }
+
+  return { gql, variables, respond }
 }
 
 function patchSurvey ({ data, body, params }) {
@@ -121,7 +130,14 @@ function patchSurvey ({ data, body, params }) {
     input: body
   }
 
-  return { gql, variables }
+  const respond = (data) => {
+    throw new Redirect({
+      url: `/survey/${data.survey.id}`,
+      notification: { type: 'success', message: 'Survey updated' }
+    })
+  }
+
+  return { gql, variables, respond }
 }
 
 module.exports = {
