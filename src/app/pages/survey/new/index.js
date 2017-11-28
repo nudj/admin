@@ -112,7 +112,7 @@ const NewSurveyPage = (props: NewSurveyPageProps) => {
       return props.dispatch(actions.app.showNotification(notification))
     }
 
-    const url = `/surveys`
+    const url = `/survey/new`
     const method = 'post'
     return props.dispatch(actions.app.postData({ url, data, method }, (postedData) => {
       window.location = `/survey/${postedData.survey.id}`
