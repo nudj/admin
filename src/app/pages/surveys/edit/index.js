@@ -1,3 +1,4 @@
+// @flow
 const React = require('react')
 const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
@@ -12,11 +13,45 @@ const getStyle = require('./style.css')
 const Page = require('../../../components/page')
 const PageHeader = require('../../../components/page-header')
 
-const SurveyPage = (props) => {
+type Company = {
+  name: string,
+  id: string
+}
+
+type Draft = {
+  intro?: string,
+  outro?: string,
+  introDescription?: string,
+  outroDescription?: string,
+  slug?: string
+}
+
+type PageProps = {
+  draft?: Draft
+}
+
+type Survey = {
+  id: string | number,
+  introTitle?: string,
+  outroTitle?: string,
+  introDescription?: string,
+  outroDescription?: string,
+  slug?: string,
+  company?: Company
+}
+
+type EditSurveyPageProps = {
+  dispatch: Function,
+  companies?: Array<Company>,
+  survey: Survey,
+  surveyPage: PageProps
+}
+
+const EditSurveyPage = (props: EditSurveyPageProps) => {
   const { survey } = props
   const sections = get(survey, 'sections', [])
   const company = get(survey, 'company', {})
-  const style = getStyle()
+  const style: Object = getStyle()
   const fieldStyles = { root: style.field }
 
   const onChange = (event) => {
@@ -123,4 +158,4 @@ const SurveyPage = (props) => {
   )
 }
 
-module.exports = SurveyPage
+module.exports = EditSurveyPage

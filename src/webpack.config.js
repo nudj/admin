@@ -43,6 +43,7 @@ module.exports = {
         options: {
           presets: [
             'react',
+            'flow',
             ["env", {
               "targets": {
                 "browsers": ["last 2 versions", "safari >= 7"]

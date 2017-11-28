@@ -1,3 +1,4 @@
+// @flow
 const React = require('react')
 const get = require('lodash/get')
 const find = require('lodash/find')
@@ -14,12 +15,45 @@ const Page = require('../../../components/page')
 const { Link } = require('react-router-dom')
 const PageHeader = require('../../../components/page-header')
 
-const SurveyPage = (props) => {
+type Company = {
+  name: string,
+  id: string
+}
+
+type Draft = {
+  intro?: string,
+  outro?: string,
+  introDescription?: string,
+  outroDescription?: string,
+  slug?: string
+}
+
+type PageProps = {
+  draft?: Draft
+}
+
+type Surveys = {
+  intro?: string,
+  outro?: string,
+  introDescription?: string,
+  outroDescription?: string,
+  slug?: string,
+  company?: Company
+}
+
+type NewSurveyPageProps = {
+  dispatch: Function,
+  companies?: Array<Company>,
+  surveys: Array<Surveys>,
+  surveyPage: PageProps
+}
+
+const NewSurveyPage = (props: NewSurveyPageProps) => {
   const query = parse(get(props, 'location.search', ''))
   const companies = get(props, 'companies', [])
   const surveys = get(props, 'surveys', [])
   const company = find(companies, { id: query.company }) || {}
-  const style = getStyle()
+  const style: Object = getStyle()
   const fieldStyles = { root: style.field }
 
   const onChange = (event) => {
@@ -158,4 +192,4 @@ const SurveyPage = (props) => {
   )
 }
 
-module.exports = SurveyPage
+module.exports = NewSurveyPage

@@ -1,3 +1,4 @@
+// @flow
 const React = require('react')
 const get = require('lodash/get')
 const filter = require('lodash/filter')
@@ -10,6 +11,37 @@ const Page = require('../../components/page')
 const { Link } = require('react-router-dom')
 const PageHeader = require('../../components/page-header')
 
+type Draft = {
+  intro?: string,
+  outro?: string,
+  introDescription?: string,
+  outroDescription?: string,
+  slug?: string
+}
+
+type PageProps = {
+  draft?: Draft
+}
+
+type Company = {
+  id: string,
+  name: string
+}
+
+type Surveys = {
+  intro?: string,
+  outro?: string,
+  introDescription?: string,
+  outroDescription?: string,
+  slug?: string,
+  company?: Company
+}
+
+type SurveyPageProps = {
+  surveys: Array<Surveys>,
+  surveyPage: PageProps,
+}
+
 const createFilter = (filter) => {
   const query = parse(filter)
 
@@ -20,11 +52,11 @@ const createFilter = (filter) => {
   return filters
 }
 
-const surveyPage = (props) => {
+const surveyPage = (props: SurveyPageProps) => {
   const surveys = get(props, 'surveys', [])
   const query = get(props, 'location.search', '')
   const data = filter(surveys, createFilter(query))
-  const style = getStyle()
+  const style: Object = getStyle()
 
   const columns = [
     { heading: 'Company', name: 'company.name' },
