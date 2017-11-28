@@ -25,7 +25,7 @@ type PageProps = {
 
 type Company = {
   id: string,
-  name: string
+  name?: string
 }
 
 type Surveys = {
@@ -40,6 +40,7 @@ type Surveys = {
 type SurveyPageProps = {
   surveys: Array<Surveys>,
   surveyPage: PageProps,
+  location: Object
 }
 
 const createFilter = (filter) => {
@@ -52,9 +53,9 @@ const createFilter = (filter) => {
   return filters
 }
 
-const surveyPage = (props: SurveyPageProps) => {
-  const surveys = get(props, 'surveys', [])
-  const query = get(props, 'location.search', '')
+const SurveysPage = (props: SurveyPageProps) => {
+  const { surveys, location } = props
+  const query = get(location, 'search', '')
   const data = filter(surveys, createFilter(query))
   const style: Object = getStyle()
 
@@ -90,4 +91,9 @@ const surveyPage = (props: SurveyPageProps) => {
   )
 }
 
-module.exports = surveyPage
+SurveysPage.defaultProps = {
+  surveys: [],
+  location: {}
+}
+
+module.exports = SurveysPage

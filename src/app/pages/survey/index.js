@@ -32,28 +32,36 @@ type PageProps = {
   draft?: Draft
 }
 
-type Surveys = {
-  intro?: string,
-  outro?: string,
+type Survey = {
+  id: string | number,
+  introTitle?: string,
+  outroTitle?: string,
   introDescription?: string,
   outroDescription?: string,
   slug?: string,
   company?: Company
 }
 
-type NewSurveyPageProps = {
-  dispatch: Function,
-  companies?: Array<Company>,
-  surveys: Array<Surveys>,
+type SurveyPageProps = {
+  dispatch: (Function) => {},
+  companies: Array<Company>,
+  surveys: Array<Survey>,
+  location: Object,
+  survey: Survey,
   surveyPage: PageProps
 }
 
-const NewSurveyPage = (props: NewSurveyPageProps) => {
-  const existingSurvey = get(props, 'survey', {})
-  const query = parse(get(props, 'location.search', ''))
-  const companies = get(props, 'companies', [])
-  const surveys = get(props, 'surveys', [])
-  const draft = get(props, 'surveyPage.draft', {})
+const SurveyPage = (props: SurveyPageProps) => {
+  const {
+    survey: existingSurvey,
+    location,
+    companies,
+    surveys,
+    surveyPage
+  } = props
+
+  const query = parse(get(location, 'search', ''))
+  const draft = get(surveyPage, 'draft', {})
   const company = find(companies, { id: query.company }) || {}
 
   const style: Object = getStyle()
@@ -242,7 +250,7 @@ const NewSurveyPage = (props: NewSurveyPageProps) => {
               </div>
             </form>
           </Card>
-          {existingSurvey.id ? (
+          {existingSurvey.id && (
             <div>
               <h3 className={style.pageHeadline}>
                 Sections{' '}
@@ -256,8 +264,6 @@ const NewSurveyPage = (props: NewSurveyPageProps) => {
                 columns={sectionColumns}
               />
             </div>
-          ) : (
-            ''
           )}
         </div>
       </div>
@@ -265,4 +271,12 @@ const NewSurveyPage = (props: NewSurveyPageProps) => {
   )
 }
 
-module.exports = NewSurveyPage
+SurveyPage.defaultProps = {
+  survey: {},
+  location: {},
+  companies: [],
+  surveys: [],
+  surveyPage: {}
+}
+
+module.exports = SurveyPage
