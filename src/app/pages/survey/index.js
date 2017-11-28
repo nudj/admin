@@ -6,7 +6,7 @@ const get = require('lodash/get')
 const find = require('lodash/find')
 const { parse } = require('query-string')
 
-const { Input, InputField, Card, Table } = require('@nudj/components')
+const { Input, InputField, Card, Table, Button } = require('@nudj/components')
 const actions = require('@nudj/framework/actions')
 const { merge } = require('@nudj/library')
 
@@ -237,10 +237,10 @@ const NewSurveyPage = (props: NewSurveyPageProps) => {
                   {company.name || renderCompaniesList()}
                 </InputField>
               )}
+              <div className={style.formButtons}>
+                <Button type='submit' volume='yell'>SUBMIT</Button>
+              </div>
             </Card>
-            <div className={style.formButtons}>
-              <button className={style.submitButton}>SUBMIT</button>
-            </div>
           </form>
           {existingSurvey.id ? (
             <div>
