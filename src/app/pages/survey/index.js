@@ -7,10 +7,9 @@ const find = require('lodash/find')
 const { parse } = require('query-string')
 
 const { Input, InputField, Card, Table, Button } = require('@nudj/components')
-const actions = require('@nudj/framework/actions')
 const { merge } = require('@nudj/library')
 
-const { setSurveyDraft } = require('./actions')
+const { setSurveyDraft, submitSurvey } = require('./actions')
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const PageHeader = require('../../components/page-header')
@@ -112,29 +111,14 @@ const SurveyPage = (props: SurveyPageProps) => {
 
   const onSubmit = event => {
     event.preventDefault()
-    const data = company.id ? merge(draft, { company: company.id }) : draft
-    const validCompany = !!find(companies, { id: data.company })
-
-    if (!validCompany && !existingSurvey.id) {
-      const notification = { type: 'error', message: 'Please choose a company' }
-      return props.dispatch(actions.app.showNotification(notification))
-    }
-
     const slugs = surveys.map(survey => survey.slug)
-    if (slugs.includes(data.slug)) {
-      const notification = { type: 'error', message: 'Invalid slug' }
-      return props.dispatch(actions.app.showNotification(notification))
-    }
-
-    let method = 'post'
-    let url = '/survey/new'
-
-    if (existingSurvey.id) {
-      method = 'patch'
-      url = `/survey/${existingSurvey.id}`
-    }
-
-    return props.dispatch(actions.app.postData({ url, data, method }))
+    props.dispatch(submitSurvey({
+      company,
+      companies,
+      draft,
+      slugs,
+      existingSurvey
+    }))
   }
 
   const sectionColumns = [
