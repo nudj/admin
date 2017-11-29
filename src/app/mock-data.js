@@ -413,7 +413,7 @@ data.surveySections = data.surveySections.concat([
   },
   {
     id: 'section2',
-    survey: 'survey1',
+    survey: 'survey3',
     title: 'Section Title',
     description: 'Viverra quis iaculis et, ipsum ligula et lacus.'
   },

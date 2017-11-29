@@ -8,6 +8,7 @@ function get () {
         survey {
           id
           company {
+            id
             name
           }
         }
