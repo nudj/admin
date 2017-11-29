@@ -86,17 +86,23 @@ function patchSection ({ body, params }) {
 
 function getOne ({ params }) {
   const gql = `
-    query SurveyPage ($id: ID) {
+    query SectionPage ($id: ID) {
       section: surveySection (id: $id) {
         id
         description
         title
         survey {
+          id
           title: introTitle
           company {
             id
             name
           }
+        }
+        questions: surveyQuestions {
+          id
+          title
+          description
         }
       }
     }

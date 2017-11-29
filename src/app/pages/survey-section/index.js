@@ -28,9 +28,10 @@ const SurveySectionPage = props => {
     surveySectionPage
   } = props
 
-  const query = parse(get(location, 'search', ''))
+  const query = get(location, 'search', '')
   const draft = get(surveySectionPage, 'draft', {})
-  const survey = find(surveys, { id: query.survey })
+  const filters = parse(query)
+  const survey = find(surveys, { id: filters.survey })
 
   const style = getStyle()
   const fieldStyles = { root: style.field }
@@ -52,8 +53,8 @@ const SurveySectionPage = props => {
     props.dispatch(submitSurveySection())
   }
 
-  const sectionColumns = [
-    { heading: 'Title', name: 'title' },
+  const questionColumns = [
+    { heading: 'Question', name: 'title' },
     { heading: 'Description', name: 'description' },
     { name: 'link' }
   ]
@@ -61,7 +62,7 @@ const SurveySectionPage = props => {
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
       return (
-        <Link className={style.link} to={`/survey-section/${row.id}`}>
+        <Link className={style.link} to={`/survey-question/${row.id}`}>
           View/Edit
         </Link>
       )
@@ -91,14 +92,18 @@ const SurveySectionPage = props => {
       </Select>
   ))
 
+  const queryString = (
+    existingSection.id ? `?survey=${existingSection.survey.id}` : query
+  )
+
   return (
     <Page {...props} className={style.pageBody}>
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <Link className={style.link} to='/survey-section/new'>
-          New Survey
+        <Link className={style.link} to={`/survey-section/new${queryString}`}>
+          New Survey Section
         </Link>
       </PageHeader>
       <h3 className={style.pageHeadline}>
@@ -159,15 +164,15 @@ const SurveySectionPage = props => {
           {existingSection.id && (
             <div>
               <h3 className={style.pageHeadline}>
-                Sections{' '}
+                Questions{' '}
                 <span className={style.textHighlight}>
-                  ({get(existingSection, 'sections.length', 0)})
+                  ({get(existingSection, 'questions.length', 0)})
                 </span>
               </h3>
               <Table
                 cellRenderer={cellRenderer}
-                data={get(existingSection, 'sections')}
-                columns={sectionColumns}
+                data={get(existingSection, 'questions')}
+                columns={questionColumns}
               />
             </div>
           )}
