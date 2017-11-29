@@ -6,7 +6,14 @@ const get = require('lodash/get')
 const find = require('lodash/find')
 const { parse } = require('query-string')
 
-const { Input, InputField, Card, Table, Button } = require('@nudj/components')
+const {
+  Input,
+  InputField,
+  Card,
+  Table,
+  Button,
+  Select
+} = require('@nudj/components')
 const { merge } = require('@nudj/library')
 
 const { setSurveyDraft, submitSurvey } = require('./actions')
@@ -96,11 +103,12 @@ const SurveyPage = (props: SurveyPageProps) => {
   }
 
   const renderCompaniesList = () => (
-    <select
+    <Select
       className={style.selectBox}
       id='company'
       name='company'
       onChange={onChange}
+      value={get(draft, 'company', '')}
       required
     >
       <option value=''>Choose a company</option>
@@ -109,7 +117,7 @@ const SurveyPage = (props: SurveyPageProps) => {
           {company.name}
         </option>
       ))}
-    </select>
+    </Select>
   )
 
   const onSubmit = event => {
