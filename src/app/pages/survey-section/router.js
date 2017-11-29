@@ -10,9 +10,10 @@ const Router = ({
   router.use(ensureLoggedIn)
 
   router.getHandlers('/survey-section/new', respondWithGql(fetchers.getNew))
-  router.postHandlers('/survey-section/new', respondWithGql(fetchers.postSurvey))
+  router.getHandlers('/survey-section/:id', respondWithGql(fetchers.getOne))
 
-  router.postHandlers('/survey-section/new', respondWithGql(fetchers.postSurvey))
+  router.postHandlers('/survey-section/new', respondWithGql(fetchers.postSection))
+  router.patchHandlers('/survey-section/:id', respondWithGql(fetchers.patchSection))
 
   return router
 }

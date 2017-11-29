@@ -21,7 +21,7 @@ function getNew () {
   return { gql }
 }
 
-function postSurvey ({ body }) {
+function postSection ({ body }) {
   const gql = `
     mutation CreateSurveySection (
       $title: String!
@@ -37,6 +37,7 @@ function postSurvey ({ body }) {
       }
     }
   `
+
   const variables = {
     title: body.title,
     description: body.description,
@@ -45,7 +46,7 @@ function postSurvey ({ body }) {
 
   const respond = (data) => {
     throw new Redirect({
-      url: `/survey-section/new`, // ${data.survey.id}
+      url: `/survey-section/${data.survey.id}`,
       notification: { type: 'success', message: 'Section created!' }
     })
   }
@@ -53,7 +54,64 @@ function postSurvey ({ body }) {
   return { gql, variables, respond }
 }
 
+function patchSection ({ body, params }) {
+  const gql = `
+    mutation UpdateSection (
+      $id: ID!
+      $input: SurveySectionUpdateInput
+      ) {
+      survey: updateSurveySection (
+        id: $id
+        input: $input
+      ) {
+        id
+      }
+    }
+  `
+
+  const variables = {
+    id: params.id,
+    input: body
+  }
+
+  const respond = (data) => {
+    throw new Redirect({
+      url: `/survey-section/${data.survey.id}`,
+      notification: { type: 'success', message: 'Survey updated' }
+    })
+  }
+
+  return { gql, variables, respond }
+}
+
+function getOne ({ params }) {
+  const gql = `
+    query SurveyPage ($id: ID) {
+      section: surveySection (id: $id) {
+        id
+        description
+        title
+        survey {
+          title: introTitle
+          company {
+            id
+            name
+          }
+        }
+      }
+    }
+  `
+
+  const variables = {
+    id: params.id
+  }
+
+  return { gql, variables }
+}
+
 module.exports = {
   getNew,
-  postSurvey
+  getOne,
+  postSection,
+  patchSection
 }

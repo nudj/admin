@@ -21,9 +21,8 @@ const Page = require('../../components/page')
 const PageHeader = require('../../components/page-header')
 
 const SurveySectionPage = props => {
-  console.log(props)
   const {
-    survey: existingSurvey,
+    section: existingSection,
     location,
     surveys,
     surveySectionPage
@@ -71,23 +70,26 @@ const SurveySectionPage = props => {
   }
 
   const renderSurveyList = () => (
-    <Select
-      id='select'
-      name='survey'
-      value={get(draft, 'survey', '')}
-      onChange={onChange}
-      required
-    >
-      <option value=''>Choose a survey</option>
-      {
-        surveys.map((survey, index) => (
-          <option key={index} value={survey.id}>
-            {`${survey.title} - ${survey.company.name}`}
-          </option>
-        ))
-      }
-    </Select>
-  )
+    survey ? (
+      `${survey.title} - ${survey.company.name}`
+    ) : (
+      <Select
+        id='select'
+        name='survey'
+        value={get(draft, 'survey', '')}
+        onChange={onChange}
+        required
+      >
+        <option value=''>Choose a survey</option>
+        {
+          surveys.map((survey, index) => (
+            <option key={index} value={survey.id}>
+              {`${survey.title} - ${survey.company.name}`}
+            </option>
+          ))
+        }
+      </Select>
+  ))
 
   return (
     <Page {...props} className={style.pageBody}>
@@ -95,12 +97,12 @@ const SurveySectionPage = props => {
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <Link className={style.link} to='/survey/new'>
-          New Section
+        <Link className={style.link} to='/survey-section/new'>
+          New Survey
         </Link>
       </PageHeader>
       <h3 className={style.pageHeadline}>
-        {existingSurvey.id ? 'Edit section' : 'Create section'}
+        {existingSection.id ? 'Edit section' : 'Create section'}
       </h3>
       <div className={style.pageContent}>
         <div className={style.pageMain}>
@@ -116,7 +118,7 @@ const SurveySectionPage = props => {
                   type='text'
                   id='title'
                   name='title'
-                  value={get(draft, 'title', existingSurvey.title)}
+                  value={get(draft, 'title', existingSection.title)}
                   onChange={onChange}
                   required
                 />
@@ -131,7 +133,7 @@ const SurveySectionPage = props => {
                   type='text'
                   id='description'
                   name='description'
-                  value={get(draft, 'description', existingSurvey.description)}
+                  value={get(draft, 'description', existingSection.description)}
                   onChange={onChange}
                 />
               </InputField>
@@ -141,7 +143,11 @@ const SurveySectionPage = props => {
                 htmlFor='survey'
                 required
               >
-                { survey ? `${survey.title} - ${survey.company.name}` : renderSurveyList()}
+                {existingSection.id ? (
+                  `${existingSection.survey.title} - ${existingSection.survey.company.name}`
+                ) : (
+                  renderSurveyList()
+                )}
               </InputField>
               <div className={style.formButtons}>
                 <Button type='submit' volume='yell'>
@@ -150,17 +156,17 @@ const SurveySectionPage = props => {
               </div>
             </form>
           </Card>
-          {existingSurvey.id && (
+          {existingSection.id && (
             <div>
               <h3 className={style.pageHeadline}>
                 Sections{' '}
                 <span className={style.textHighlight}>
-                  ({get(existingSurvey, 'sections.length', 0)})
+                  ({get(existingSection, 'sections.length', 0)})
                 </span>
               </h3>
               <Table
                 cellRenderer={cellRenderer}
-                data={get(existingSurvey, 'sections')}
+                data={get(existingSection, 'sections')}
                 columns={sectionColumns}
               />
             </div>
@@ -172,7 +178,7 @@ const SurveySectionPage = props => {
 }
 
 SurveySectionPage.defaultProps = {
-  survey: {},
+  section: {},
   location: {},
   surveys: [],
   surveySectionPage: {}
