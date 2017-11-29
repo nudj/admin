@@ -143,6 +143,11 @@ const SurveyPage = (props: SurveyPageProps) => {
         <Link className={style.link} to={`/survey/new`}>
           New Survey
         </Link>
+        {existingSurvey.id && (
+          <Link className={style.link} to={`/survey-sections?survey=${existingSurvey.id}`}>
+            All Survey Sections
+          </Link>
+        )}
       </PageHeader>
       <h3 className={style.pageHeadline}>
         {existingSurvey.id ? 'Edit survey' : 'Create survey'}
@@ -226,7 +231,7 @@ const SurveyPage = (props: SurveyPageProps) => {
                 </InputField>
               )}
               <div className={style.formButtons}>
-                <Button type='submit' volume='yell'>SUBMIT</Button>
+                <Button type='submit' volume='yell'>Submit</Button>
               </div>
             </form>
           </Card>

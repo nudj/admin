@@ -105,6 +105,11 @@ const SurveySectionPage = props => {
         <Link className={style.link} to={`/survey-section/new${queryString}`}>
           New Survey Section
         </Link>
+        {existingSection.id && (
+          <Link className={style.link} to={`/survey-questions?section=${existingSection.id}`}>
+            All Survey Questions
+          </Link>
+        )}
       </PageHeader>
       <h3 className={style.pageHeadline}>
         {existingSection.id ? 'Edit section' : 'Create section'}
