@@ -10,6 +10,7 @@ const Router = ({
   router.use(ensureLoggedIn)
 
   router.getHandlers('/survey-section/new', respondWithGql(fetchers.getNew))
+  router.postHandlers('/survey-section/new', respondWithGql(fetchers.postSurvey))
 
   router.postHandlers('/survey-section/new', respondWithGql(fetchers.postSurvey))
 

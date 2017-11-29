@@ -26,11 +26,11 @@ const SurveySectionPage = props => {
     survey: existingSurvey,
     location,
     surveys,
-    surveyPage
+    surveySectionPage
   } = props
 
   const query = parse(get(location, 'search', ''))
-  const draft = get(surveyPage, 'draft', {})
+  const draft = get(surveySectionPage, 'draft', {})
   const survey = find(surveys, { id: query.survey })
 
   const style = getStyle()
@@ -39,7 +39,7 @@ const SurveySectionPage = props => {
   const onChange = event => {
     const target = event.target || event
     const data = merge(
-      { company: get(survey, 'id') },
+      { survey: get(survey, 'id') },
       draft,
       {
         [target.name]: target.value
@@ -73,10 +73,12 @@ const SurveySectionPage = props => {
   const renderSurveyList = () => (
     <Select
       id='select'
-      name='select'
-      value='first'
+      name='survey'
+      value={get(draft, 'survey', '')}
       onChange={onChange}
+      required
     >
+      <option value=''>Choose a survey</option>
       {
         surveys.map((survey, index) => (
           <option key={index} value={survey.id}>
@@ -108,6 +110,7 @@ const SurveySectionPage = props => {
                 classNames={fieldStyles}
                 label='Title'
                 htmlFor='title'
+                required
               >
                 <Input
                   type='text'
@@ -115,6 +118,7 @@ const SurveySectionPage = props => {
                   name='title'
                   value={get(draft, 'title', existingSurvey.title)}
                   onChange={onChange}
+                  required
                 />
               </InputField>
               <InputField
@@ -135,6 +139,7 @@ const SurveySectionPage = props => {
                 classNames={fieldStyles}
                 label='Survey'
                 htmlFor='survey'
+                required
               >
                 { survey ? `${survey.title} - ${survey.company.name}` : renderSurveyList()}
               </InputField>

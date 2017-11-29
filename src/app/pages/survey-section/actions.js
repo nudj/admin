@@ -20,18 +20,17 @@ module.exports.setSurveySectionDraft = (draft) => (
 function submitSurveySection () {
   return (dispatch, getState) => {
     const state = getState()
-    const existingId = get(state.app, 'survey.id')
-    const draft = get(state, 'surveyPage.draft', {})
-    const company = get(draft, 'company', {})
+    const existingId = get(state.app, 'section.id')
+    const draft = get(state, 'surveySectionPage.draft', {})
+    const survey = get(draft, 'survey', {})
 
-    const data = existingId ? merge(draft, { company: company.id }) : draft
-
+    const data = existingId ? merge(draft, { survey: survey.id }) : draft
     let method = 'post'
-    let url = '/survey/new'
+    let url = '/survey-section/new'
 
     if (existingId) {
       method = 'patch'
-      url = `/survey/${existingId}`
+      url = `/survey-section/${existingId}`
     }
     return dispatch(actions.app.postData({ data, url, method }))
   }

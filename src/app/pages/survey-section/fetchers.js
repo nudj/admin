@@ -21,41 +21,32 @@ function getNew () {
   return { gql }
 }
 
-function postSurvey ({ data, body }) {
+function postSurvey ({ body }) {
   const gql = `
-    mutation CreateSurvey (
-      $introTitle: String
-      $outroTitle: String
-      $introDescription: String
-      $outroDescription: String
-      $company: ID!
-      $slug: String!
+    mutation CreateSurveySection (
+      $title: String!
+      $description: String
+      $survey: ID!
     ) {
-      survey: createSurvey (input: {
-        introTitle: $introTitle
-        outroTitle: $outroTitle
-        introDescription: $introDescription
-        outroDescription: $outroDescription
-        company: $company
-        slug: $slug
+      survey: createSurveySection (input: {
+        title: $title
+        description: $description
+        survey: $survey
       }) {
         id
       }
     }
   `
   const variables = {
-    introTitle: body.introTitle,
-    outroTitle: body.outroTitle,
-    company: body.company,
-    slug: body.slug,
-    introDescription: body.introDescription,
-    outroDescription: body.outroDescription
+    title: body.title,
+    description: body.description,
+    survey: body.survey
   }
 
   const respond = (data) => {
     throw new Redirect({
-      url: `/survey/${data.survey.id}`,
-      notification: { type: 'success', message: 'Survey created!' }
+      url: `/survey-section/new`, // ${data.survey.id}
+      notification: { type: 'success', message: 'Section created!' }
     })
   }
 

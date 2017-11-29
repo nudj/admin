@@ -1,13 +1,15 @@
 const { merge } = require('@nudj/library')
 
 const {
-  SET_SURVEY_DRAFT
+  SET_SURVEY_SECTION_DRAFT
 } = require('./actions')
 
-const setSurveyDraft = (state, action) => merge(state, { draft: action.draft })
+const setSurveySectionDraft = (state, action) => (
+  merge(state, { draft: action.draft })
+)
 
 const actions = {
-  [SET_SURVEY_DRAFT]: setSurveyDraft
+  [SET_SURVEY_SECTION_DRAFT]: setSurveySectionDraft
 }
 
 const initialState = {
