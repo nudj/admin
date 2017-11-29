@@ -2,6 +2,7 @@ module.exports = {
   '/': require('../pages/companies'),
   '/people': require('../pages/people'),
   '/surveys': require('../pages/surveys'),
+  '/survey-sections': require('../pages/survey-sections'),
   '/survey/new': require('../pages/survey'),
   '/survey/:id': require('../pages/survey'),
   '/survey-questions': require('../pages/survey'),
