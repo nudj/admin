@@ -1,5 +1,5 @@
-// const peoplePage = require('../pages/people/reducer')
+const surveyPage = require('../pages/survey/reducer')
 
 module.exports = {
-  // peoplePage
+  surveyPage
 }

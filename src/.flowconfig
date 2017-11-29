@@ -1,0 +1,14 @@
+[include]
+
+[ignore]
+.*/catalog/pages/.*
+
+[libs]
+
+[lints]
+
+[options]
+module.name_mapper='.*\(.css\)' -> 'StyleFile'
+module.system=haste
+
+[version]

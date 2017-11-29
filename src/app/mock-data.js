@@ -8,9 +8,21 @@ const data = {
   recommendations: [],
   externalMessages: [],
   surveys: [],
+  surveySections: [],
+  surveyQuestions: [],
   surveyMessages: [],
   tasks: []
 }
+
+const {
+  questionTypes
+} = require('./lib/constants')
+
+const {
+  COMPANIES,
+  CONNECTIONS
+} = questionTypes
+
 data.companies = data.companies.concat([
   {
     id: 'company1',
@@ -362,21 +374,72 @@ data.surveyMessages = data.surveyMessages.concat([
 data.surveys = data.surveys.concat([
   {
     id: 'survey1',
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00',
+    slug: 'aided-recall-baby',
     company: 'company1',
-    link: 'http://surveymonkey.com/123',
-    uuid: '123',
-    type: 'EMPLOYEE_SURVEY'
+    introTitle: 'First Title for the Survey',
+    introDescription: 'Felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    outroTitle: 'Outro Title for the Survey!',
+    outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
   },
   {
     id: 'survey2',
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00',
+    slug: 'aided-recall-baby2',
     company: 'company1',
-    link: 'http://surveymonkey.com/456',
-    uuid: '456',
-    type: 'HIRER_SURVEY'
+    introTitle: 'Second Intro Title',
+    introDescription: 'Felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    outroTitle: 'Outro Title for the Survey!',
+    outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
+  },
+  {
+    id: 'survey3',
+    slug: 'aided-recall-baby3',
+    company: 'company2',
+    introTitle: 'Third Survey',
+    introDescription: 'Felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    outroTitle: 'Outro Title for the Survey!',
+    outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
+  }
+])
+data.surveySections = data.surveySections.concat([
+  {
+    id: 'section1',
+    survey: 'survey1',
+    title: 'Professional + Previous Employers',
+    description: 'First up, the places that you\'ve worked before and the people you know professionally.'
+  },
+  {
+    id: 'section2',
+    survey: 'survey1',
+    title: 'Section Title',
+    description: 'Viverra quis iaculis et, ipsum ligula et lacus.'
+  },
+  {
+    id: 'section1B',
+    survey: 'survey2',
+    title: 'Cash + Money',
+    description: 'Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
+  }
+])
+data.surveyQuestions = data.surveyQuestions.concat([
+  {
+    id: 'question1',
+    surveySection: 'section1',
+    name: 'workBefore',
+    title: 'Where did you work before Fake Company?',
+    description: 'Please list all of your previous employers. Thanks!',
+    type: COMPANIES,
+    required: false,
+    tags: []
+  },
+  {
+    id: 'question2',
+    surveySection: 'section1',
+    name: 'accountManagers',
+    title: 'Do you know any account managers?',
+    description: 'Add them manually or select them from your list of contacts below...',
+    type: CONNECTIONS,
+    required: false,
+    tags: ['Account Management']
   }
 ])
 data.tasks = data.tasks.concat([
