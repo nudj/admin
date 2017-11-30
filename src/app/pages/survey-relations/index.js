@@ -1,6 +1,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const isNil = require('lodash/isNil')
+const isEmpty = require('lodash/isEmpty')
 
 const { Table, Input, Button } = require('@nudj/components')
 const { merge } = require('@nudj/library')
@@ -11,8 +12,12 @@ const PageHeader = require('../../components/page-header')
 const { setListOrder, saveListOrder } = require('./actions')
 
 const SurveyRelationsPage = (props) => {
-  const { survey } = props
-  const { sections, company } = survey
+  const {
+    survey,
+    survey: { sections, company },
+    surveyRelationsPage: { order: newOrder }
+  } = props
+
   const data = sections.map((section, order) => merge(section, { order }))
   const style = getStyle()
 
@@ -34,7 +39,7 @@ const SurveyRelationsPage = (props) => {
       return <Link className={style.link} to={`/survey-section/${row.id}`}>View/Edit</Link>
     }
     if (column.name === 'order') {
-      const order = props.surveyRelationsPage.order[row.id]
+      const order = newOrder[row.id]
       return (
         <Input
           type='text'
@@ -63,11 +68,13 @@ const SurveyRelationsPage = (props) => {
       <div className={style.pageContent}>
         <div className={style.pageMain}>
           <form onSubmit={onSubmit}>
-            <Button volume='yell' type='submit'>
-              Reorder sections
-            </Button>
+            <Table cellRenderer={cellRenderer} data={data} columns={columns} />
+            { !isEmpty(newOrder) && (
+              <Button volume='yell' type='submit'>
+                Reorder sections
+              </Button>
+            ) }
           </form>
-          <Table cellRenderer={cellRenderer} data={data} columns={columns} />
         </div>
       </div>
     </Page>
@@ -77,7 +84,10 @@ const SurveyRelationsPage = (props) => {
 SurveyRelationsPage.defaultProps = {
   survey: {
     sections: [],
-    company: {}
+    company: {},
+    surveyRelationsPage: {
+      order: {}
+    }
   }
 }
 
