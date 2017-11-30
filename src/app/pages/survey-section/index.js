@@ -14,7 +14,7 @@ const {
   Select
 } = require('@nudj/components')
 
-const { setSurveySectionDraft, submitSurveySection } = require('./actions')
+const { setSurveySectionDraft, createOrUpdateSurveySection } = require('./actions')
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const PageHeader = require('../../components/page-header')
@@ -48,7 +48,7 @@ const SurveySectionPage = props => {
 
   const onSubmit = event => {
     event.preventDefault()
-    props.dispatch(submitSurveySection())
+    props.dispatch(createOrUpdateSurveySection())
   }
 
   const renderSurveyList = () => (

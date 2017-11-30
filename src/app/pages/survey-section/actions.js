@@ -16,7 +16,7 @@ module.exports.setSurveySectionDraft = (draft) => (
   quickDispatch(setSurveySectionDraft(draft))
 )
 
-function submitSurveySection () {
+function createOrUpdateSurveySection () {
   return (dispatch, getState) => {
     const state = getState()
     const existingId = get(state.app, 'section.id')
@@ -32,4 +32,4 @@ function submitSurveySection () {
     return dispatch(actions.app.postData({ data, url, method }))
   }
 }
-module.exports.submitSurveySection = submitSurveySection
+module.exports.createOrUpdateSurveySection = createOrUpdateSurveySection
