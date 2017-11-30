@@ -4,6 +4,7 @@ module.exports = {
   '/surveys': require('../pages/surveys'),
   '/survey/new': require('../pages/survey'),
   '/survey/:id': require('../pages/survey'),
+  '/survey/:surveyId/sections': require('../pages/survey-relations'),
   '/survey-questions': require('../pages/survey'),
   '/survey-question/new': require('../pages/survey-question'),
   '/survey-question/:id': require('../pages/survey-question'),

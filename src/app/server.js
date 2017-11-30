@@ -30,9 +30,13 @@ const expressRouters = {
     require('./pages/company/router'),
     require('./pages/surveys/router'),
     require('./pages/survey/router'),
+<<<<<<< HEAD
     require('./pages/survey-section-relations/router'),
     require('./pages/survey-questions/router'),
     require('./pages/survey-question/router'),
+=======
+    require('./pages/survey-relations/router'),
+>>>>>>> Add survey-relations page
     require('./pages/survey-section/router'),
     require('./pages/survey-sections/router'),
     require('./pages/company-job/router'),
