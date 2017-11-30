@@ -36,12 +36,11 @@ const SurveySectionPage = props => {
   const fieldStyles = { root: style.field }
 
   const onChange = event => {
-    const target = event.target || event
     const data = merge(
       { survey: get(survey, 'id') },
       draft,
       {
-        [target.name]: target.value
+        [event.name]: event.value
       }
     )
     props.dispatch(setSurveySectionDraft(data))

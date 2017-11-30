@@ -1,6 +1,5 @@
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
-const { merge } = require('@nudj/library')
 
 const quickDispatch = (action) => (dispatch, getState) => dispatch(action)
 
@@ -21,10 +20,8 @@ function submitSurveySection () {
   return (dispatch, getState) => {
     const state = getState()
     const existingId = get(state.app, 'section.id')
-    const draft = get(state, 'surveySectionPage.draft', {})
-    const survey = get(draft, 'survey', {})
+    const data = get(state, 'surveySectionPage.draft', {})
 
-    const data = existingId ? merge(draft, { survey: survey.id }) : draft
     let method = 'post'
     let url = '/survey-section/new'
 
