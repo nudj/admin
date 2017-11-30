@@ -382,7 +382,8 @@ data.surveys = data.surveys.concat([
     outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.',
     surveySections: [
       'section3',
-      'section1'
+      'section1',
+      'section4'
     ]
   },
   {
@@ -425,6 +426,12 @@ data.surveySections = data.surveySections.concat([
     id: 'section3',
     survey: 'survey1',
     title: 'Cash + Money',
+    description: 'Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
+  },
+  {
+    id: 'section4',
+    survey: 'survey1',
+    title: 'Fourth Section',
     description: 'Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
   }
 ])

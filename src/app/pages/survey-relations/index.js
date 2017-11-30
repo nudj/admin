@@ -1,27 +1,47 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
+const isNil = require('lodash/isNil')
 
-const { Table } = require('@nudj/components')
+const { Table, Input, Button } = require('@nudj/components')
+const { merge } = require('@nudj/library')
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const { Link } = require('react-router-dom')
 const PageHeader = require('../../components/page-header')
+const { setListOrder, saveListOrder } = require('./actions')
 
 const SurveyRelationsPage = (props) => {
   const { survey } = props
   const { sections, company } = survey
-
+  const data = sections.map((section, order) => merge(section, { order }))
   const style = getStyle()
 
   const columns = [
     { heading: 'Title', name: 'title' },
     { heading: 'Description', name: 'description' },
+    { heading: 'List order', name: 'order' },
     { name: 'link' }
   ]
+
+  const onChange = (event) => props.dispatch(setListOrder({
+    [event.name]: event.value
+  }))
+
+  const onSubmit = () => props.dispatch(saveListOrder())
 
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
       return <Link className={style.link} to={`/survey-section/${row.id}`}>View/Edit</Link>
+    }
+    if (column.name === 'order') {
+      const order = props.surveyRelationsPage.order[row.id]
+      return (
+        <Input
+          type='text'
+          name={row.id}
+          value={isNil(order) ? row.order + 1 : order} onChange={onChange}
+        />
+      )
     }
     return defaultRender
   }
@@ -42,11 +62,23 @@ const SurveyRelationsPage = (props) => {
       <h3 className={style.pageHeadline}>Sections <span className={style.textHighlight}>({sections.length})</span></h3>
       <div className={style.pageContent}>
         <div className={style.pageMain}>
-          <Table cellRenderer={cellRenderer} data={sections} columns={columns} />
+          <form onSubmit={onSubmit}>
+            <Button volume='yell' type='submit'>
+              Reorder sections
+            </Button>
+          </form>
+          <Table cellRenderer={cellRenderer} data={data} columns={columns} />
         </div>
       </div>
     </Page>
   )
+}
+
+SurveyRelationsPage.defaultProps = {
+  survey: {
+    sections: [],
+    company: {}
+  }
 }
 
 module.exports = SurveyRelationsPage
