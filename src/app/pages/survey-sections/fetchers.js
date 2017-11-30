@@ -1,5 +1,5 @@
-function get () {
-  const gql = `
+function get ({ query }) {
+  let gql = `
     query surveySectionsPage {
       sections: surveySections {
         id
@@ -15,8 +15,31 @@ function get () {
       }
     }
   `
+  let variables
 
-  return { gql }
+  if (query.survey) {
+    gql = `
+      query surveySectionsPage ($surveyId: ID!) {
+        survey (id: $surveyId) {
+          id
+          company {
+            id
+            name
+          }
+          sections: surveySections {
+            id
+            title
+            description
+          }
+        }
+      }
+    `
+    variables = {
+      surveyId: query.survey
+    }
+  }
+
+  return { gql, variables }
 }
 
 module.exports = {

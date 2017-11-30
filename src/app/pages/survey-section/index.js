@@ -10,7 +10,6 @@ const {
   Input,
   InputField,
   Card,
-  Table,
   Button,
   Select
 } = require('@nudj/components')
@@ -51,23 +50,6 @@ const SurveySectionPage = props => {
   const onSubmit = event => {
     event.preventDefault()
     props.dispatch(submitSurveySection())
-  }
-
-  const questionColumns = [
-    { heading: 'Question', name: 'title' },
-    { heading: 'Description', name: 'description' },
-    { name: 'link' }
-  ]
-
-  const cellRenderer = (column, row, defaultRender) => {
-    if (column.name === 'link') {
-      return (
-        <Link className={style.link} to={`/survey-question/${row.id}`}>
-          View/Edit
-        </Link>
-      )
-    }
-    return defaultRender
   }
 
   const renderSurveyList = () => (
@@ -166,21 +148,6 @@ const SurveySectionPage = props => {
               </div>
             </form>
           </Card>
-          {existingSection.id && (
-            <div>
-              <h3 className={style.pageHeadline}>
-                Questions{' '}
-                <span className={style.textHighlight}>
-                  ({get(existingSection, 'questions.length', 0)})
-                </span>
-              </h3>
-              <Table
-                cellRenderer={cellRenderer}
-                data={get(existingSection, 'questions')}
-                columns={questionColumns}
-              />
-            </div>
-          )}
         </div>
       </div>
     </Page>

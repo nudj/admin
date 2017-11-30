@@ -99,11 +99,6 @@ function getOne ({ params }) {
             name
           }
         }
-        questions: surveyQuestions {
-          id
-          title
-          description
-        }
       }
     }
   `

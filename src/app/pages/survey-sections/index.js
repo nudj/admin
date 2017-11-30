@@ -1,36 +1,17 @@
 const React = require('react')
 const get = require('lodash/get')
-const omit = require('lodash/omit')
-const filter = require('lodash/filter')
 const { Helmet } = require('react-helmet')
-const { parse } = require('query-string')
 
 const { Table } = require('@nudj/components')
-const { merge } = require('@nudj/library')
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const { Link } = require('react-router-dom')
 const PageHeader = require('../../components/page-header')
 
-const createFilter = (filter) => {
-  const query = parse(filter)
-
-  let filters = query
-  if (query.survey) {
-    filters.survey = { id: query.survey }
-  }
-
-  if (query.company) {
-    const cleanFilter = omit(filters, ['company'])
-    filters = merge(cleanFilter, { survey: { company: { id: query.company } } })
-  }
-  return filters
-}
-
 const SurveySectionsPage = (props) => {
-  const { sections, location } = props
-  const query = get(location, 'search', '')
-  const data = filter(sections, createFilter(query))
+  const { sections, survey } = props
+  const data = sections || survey.sections
+  const query = survey ? `?survey=${get(survey, 'id', '')}` : ''
   const style = getStyle()
 
   const columns = [
@@ -63,11 +44,6 @@ const SurveySectionsPage = (props) => {
       </div>
     </Page>
   )
-}
-
-SurveySectionsPage.defaultProps = {
-  sections: [],
-  location: {}
 }
 
 module.exports = SurveySectionsPage
