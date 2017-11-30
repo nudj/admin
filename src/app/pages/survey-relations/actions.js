@@ -15,19 +15,25 @@ function setListOrder (order) {
     order
   }
 }
-module.exports.setListOrder = (order) => (
-  quickDispatch(setListOrder(order))
-)
+module.exports.setListOrder = (order) => quickDispatch(setListOrder(order))
 
 function saveListOrder () {
   return (dispatch, getState) => {
     const state = getState()
     const sections = get(state, 'app.survey.sections', [])
-    const defaultOrder = sections.map((section, index) => ({ [section.id]: index }))
+    const defaultOrder = sections.map((section, index) => ({
+      [section.id]: index + 1
+    }))
     const userOrder = get(state, 'surveyRelationsPage.order', {})
     const order = merge(merge(...defaultOrder), userOrder)
     const indicies = values(order).sort()
     const keys = invert(order)
+
+    if (values(keys).length !== sections.length) {
+      // One or more keys have the same order value
+      const notification = { type: 'error', message: 'Order wrong bro' }
+      return dispatch(actions.app.showNotification(notification))
+    }
 
     const data = { surveySections: indicies.map(index => keys[index]) }
     const url = `/survey/${state.app.survey.id}/sections`

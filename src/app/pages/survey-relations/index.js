@@ -32,7 +32,10 @@ const SurveyRelationsPage = (props) => {
     [event.name]: event.value
   }))
 
-  const onSubmit = () => props.dispatch(saveListOrder())
+  const onSubmit = (event) => {
+    event.preventDefault()
+    props.dispatch(saveListOrder())
+  }
 
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
