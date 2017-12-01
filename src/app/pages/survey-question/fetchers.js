@@ -70,6 +70,22 @@ function patchQuestion ({ body, params }) {
         input: $input
       ) {
         id
+        description
+        title
+        name
+        required
+        type
+        section: surveySection {
+          id
+          title
+        }
+      }
+      notification: setNotification (
+        type: "success"
+        message: "Question updated"
+      ) {
+        type
+        message
       }
     }
   `
@@ -79,14 +95,7 @@ function patchQuestion ({ body, params }) {
     input: omit(body, ['section'])
   }
 
-  const respond = (data) => {
-    throw new Redirect({
-      url: `/survey-question/${data.question.id}`,
-      notification: { type: 'success', message: 'Question updated' }
-    })
-  }
-
-  return { gql, variables, respond }
+  return { gql, variables }
 }
 
 function getOne ({ params }) {
