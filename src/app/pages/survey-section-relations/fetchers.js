@@ -26,9 +26,9 @@ function patch ({ body, params }) {
   const gql = `
     mutation UpdateQuestionOrder (
       $id: ID!
-      $input: SurveyUpdateInput
+      $input: SurveySectionUpdateInput
     ) {
-      survey: updateSurveySection (
+      section: updateSurveySection (
         id: $id
         input: $input
       ) {
@@ -43,7 +43,7 @@ function patch ({ body, params }) {
 
   const respond = (data) => {
     throw new Redirect({
-      url: `/survey/${data.survey.id}/sections`,
+      url: `/section/${data.section.id}/questions`,
       notification: { type: 'success', message: 'Questions reordered' }
     })
   }

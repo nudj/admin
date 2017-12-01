@@ -12,7 +12,6 @@ const PageHeader = require('../../components/page-header')
 const { setListOrder, saveListOrder } = require('./actions')
 
 const SurveySectionRelationsPage = (props) => {
-  console.log(props)
   const {
     section,
     section: { questions },

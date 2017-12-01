@@ -20,23 +20,23 @@ module.exports.setListOrder = (order) => quickDispatch(setListOrder(order))
 function saveListOrder () {
   return (dispatch, getState) => {
     const state = getState()
-    const sections = get(state, 'app.survey.sections', [])
-    const defaultOrder = sections.map((section, index) => ({
-      [section.id]: index + 1
+    const questions = get(state, 'app.section.questions', [])
+    const defaultOrder = questions.map((question, index) => ({
+      [question.id]: index + 1
     }))
-    const userOrder = get(state, 'surveyRelationsPage.order', {})
+    const userOrder = get(state, 'surveySectionRelationsPage.order', {})
     const order = merge(merge(...defaultOrder), userOrder)
     const indicies = values(order).sort()
     const keys = invert(order)
 
-    if (values(keys).length !== sections.length) {
+    if (values(keys).length !== questions.length) {
       // One or more keys have the same order value
-      const notification = { type: 'error', message: 'Order wrong bro' }
+      const notification = { type: 'error', message: 'Two or more questions share an order value' }
       return dispatch(actions.app.showNotification(notification))
     }
 
-    const data = { surveySections: indicies.map(index => keys[index]) }
-    const url = `/survey/${state.app.survey.id}/sections`
+    const data = { surveyQuestions: indicies.map(index => keys[index]) }
+    const url = `/section/${state.app.section.id}/questions`
     const method = 'patch'
     return dispatch(actions.app.postData({ data, url, method }))
   }
