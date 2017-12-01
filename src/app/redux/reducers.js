@@ -8,6 +8,6 @@ module.exports = {
   surveyPage,
   surveyRelationsPage,
   surveyQuestionPage,
-  surveySectionPage
+  surveySectionPage,
   surveySectionRelationsPage
 }
