@@ -25,7 +25,7 @@ function saveListOrder () {
       [question.id]: index + 1
     }))
     const userOrder = get(state, 'surveySectionRelationsPage.order', {})
-    const order = merge(merge(...defaultOrder), userOrder)
+    const order = merge(...defaultOrder, userOrder)
     const indicies = values(order).sort()
     const keys = invert(order)
 
