@@ -41,8 +41,7 @@ const SurveySectionRelationsPage = (props) => {
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
       return <Link className={style.link} to={`/survey-question/${row.id}`}>View/Edit</Link>
-    }
-    if (column.name === 'order') {
+    } else if (column.name === 'order') {
       const order = newOrder[row.id]
       return (
         <Input

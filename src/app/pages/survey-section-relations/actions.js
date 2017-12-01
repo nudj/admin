@@ -30,7 +30,6 @@ function saveListOrder () {
     const keys = invert(order)
 
     if (values(keys).length !== questions.length) {
-      // One or more keys have the same order value
       const notification = { type: 'error', message: 'Two or more questions share an order value' }
       return dispatch(actions.app.showNotification(notification))
     }

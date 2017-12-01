@@ -69,7 +69,7 @@ const SurveyQuestionPage = props => {
         onChange={onChange}
         required
       >
-        <option value=''>Choose a section</option>
+        <option disabled value=''>Choose a section</option>
         {
           surveySections.map((section, index) => (
             <option key={index} value={section.id}>
@@ -161,7 +161,7 @@ const SurveyQuestionPage = props => {
                   onChange={onChange}
                   required
                 >
-                  <option value=''>Choose a type</option>
+                  <option disabled value=''>Choose a type</option>
                   {
                     Object.keys(questionTypes).map((type, index) => (
                       <option key={index} value={type}>
