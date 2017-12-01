@@ -1,19 +1,23 @@
 const { merge } = require('@nudj/library')
 
 const {
-  SET_LIST_ORDER
+  SET_LIST_ORDER,
+  RESET_ORDER
 } = require('./actions')
+
+const initialState = {
+  order: {}
+}
 
 const setListOrder = (state, action) => (
   merge(state, { order: action.order })
 )
 
-const actions = {
-  [SET_LIST_ORDER]: setListOrder
-}
+const resetOrder = (state, action) => initialState
 
-const initialState = {
-  order: {}
+const actions = {
+  [SET_LIST_ORDER]: setListOrder,
+  [RESET_ORDER]: resetOrder
 }
 
 const reducer = (initialState, actions) => (state = initialState, action) => {
