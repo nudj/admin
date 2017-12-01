@@ -1,21 +1,23 @@
+/* global Dispatch */
+// @flow
 const get = require('lodash/get')
 const values = require('lodash/values')
 const invert = require('lodash/invert')
 const actions = require('@nudj/framework/actions')
 const { merge } = require('@nudj/library')
 
-const quickDispatch = (action) => (dispatch, getState) => dispatch(action)
+const quickDispatch = (action: Object) => (dispatch: Dispatch, getState: Function) => dispatch(action)
 
 const SET_LIST_ORDER = 'SET_LIST_ORDER'
 module.exports.SET_LIST_ORDER = SET_LIST_ORDER
 
-function setListOrder (order) {
+function setListOrder (order: Object) {
   return {
     type: SET_LIST_ORDER,
     order
   }
 }
-module.exports.setListOrder = (order) => quickDispatch(setListOrder(order))
+module.exports.setListOrder = (order: Object) => quickDispatch(setListOrder(order))
 
 const RESET_ORDER = 'RESET_ORDER'
 module.exports.RESET_ORDER = RESET_ORDER
@@ -28,7 +30,7 @@ function resetOrder () {
 module.exports.resetOrder = () => quickDispatch(resetOrder())
 
 function saveListOrder () {
-  return (dispatch, getState) => {
+  return (dispatch: Dispatch, getState: Function) => {
     const state = getState()
     const sections = get(state, 'app.survey.sections', [])
     const defaultOrder = sections.map((section, index) => ({

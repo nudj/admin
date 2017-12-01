@@ -23,7 +23,7 @@ declare type Survey = {
   introDescription?: string,
   outroDescription?: string,
   slug?: string,
-  company?: Company,
+  company: Company,
   surveySections?: Array<ID>
 }
 
