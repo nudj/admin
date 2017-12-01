@@ -405,7 +405,11 @@ data.surveySections = data.surveySections.concat([
     id: 'section1',
     survey: 'survey1',
     title: 'Professional + Previous Employers',
-    description: 'First up, the places that you\'ve worked before and the people you know professionally.'
+    description: 'First up, the places that you\'ve worked before and the people you know professionally.',
+    surveyQuestions: [
+      'question1',
+      'question2'
+    ]
   },
   {
     id: 'section2',
@@ -428,8 +432,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
     title: 'Where did you work before Fake Company?',
     description: 'Please list all of your previous employers. Thanks!',
     type: COMPANIES,
-    required: false,
-    tags: []
+    required: true
   },
   {
     id: 'question2',
@@ -438,8 +441,7 @@ data.surveyQuestions = data.surveyQuestions.concat([
     title: 'Do you know any account managers?',
     description: 'Add them manually or select them from your list of contacts below...',
     type: CONNECTIONS,
-    required: false,
-    tags: ['Account Management']
+    required: false
   }
 ])
 data.tasks = data.tasks.concat([
