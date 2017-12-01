@@ -3,8 +3,8 @@ declare type ID = number | string
 declare type Dispatch = (Object) => {}
 
 declare type Company = {
-  id: String,
-  name: String
+  id: string,
+  name: string
 }
 
 declare type Draft = {
@@ -32,7 +32,21 @@ declare type SurveySection = {
   created: Date,
   modified: Date,
   survey: Survey,
-  title: String,
-  description?: String,
+  title: string,
+  description?: string,
+  questions?: Array<ID>,
   surveyQuestions?: Array<ID>
+}
+
+declare type SurveyQuestion = {
+  id?: ID,
+  created?: Date,
+  modified?: Date,
+  surveySection?: SurveySection,
+  title?: string,
+  description?: string,
+  name?: string,
+  type?: string,
+  required?: Boolean,
+  tags?: Array<ID>
 }
