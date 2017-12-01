@@ -30,6 +30,7 @@ const expressRouters = {
     require('./pages/company/router'),
     require('./pages/surveys/router'),
     require('./pages/survey/router'),
+    require('./pages/survey-questions/router'),
     require('./pages/company-job/router'),
     require('./pages/company-survey-message/router'),
     require('./server/routers/catch-all')
