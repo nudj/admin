@@ -1,5 +1,3 @@
-const { Redirect } = require('@nudj/framework/errors')
-
 function get ({ params }) {
   const gql = `
     query surveyPage ($id: ID) {
@@ -38,6 +36,26 @@ function patch ({ body, params }) {
         input: $input
       ) {
         id
+        introTitle
+        introDescription
+        outroTitle
+        outroDescription
+        sections: surveySections {
+          id
+          title
+          description
+        }
+        company {
+          id
+          name
+        }
+      }
+      notification: setNotification (
+        type: "success"
+        message: "Section order updated!"
+      ) {
+        type
+        message
       }
     }
   `
@@ -46,14 +64,7 @@ function patch ({ body, params }) {
     input: body
   }
 
-  const respond = (data) => {
-    throw new Redirect({
-      url: `/survey/${data.survey.id}/sections`,
-      notification: { type: 'success', message: 'Sections reordered' }
-    })
-  }
-
-  return { gql, variables, respond }
+  return { gql, variables }
 }
 
 module.exports = {
