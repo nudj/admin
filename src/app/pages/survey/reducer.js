@@ -1,22 +1,9 @@
+/* global Draft */
 // @flow
 const { merge } = require('@nudj/library')
 
 type Actions = {
   SET_SURVEY_DRAFT?: Function
-}
-
-type Company = {
-  id: string | number,
-  name?: string
-}
-
-type Draft = {
-  introTitle?: string,
-  outroTitle?: string,
-  introDescription?: string,
-  outroDescription?: string,
-  slug?: string,
-  company?: Company,
 }
 
 type State = {

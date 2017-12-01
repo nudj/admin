@@ -1,3 +1,4 @@
+/* global Draft Survey Company */
 // @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
@@ -21,40 +22,15 @@ const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const PageHeader = require('../../components/page-header')
 
-type Company = {
-  name: string,
-  id: string
-}
-
-type Draft = {
-  intro?: string,
-  outro?: string,
-  introDescription?: string,
-  outroDescription?: string,
-  slug?: string
-}
-
-type PageProps = {
-  draft?: Draft
-}
-
-type Survey = {
-  id: string | number,
-  introTitle?: string,
-  outroTitle?: string,
-  introDescription?: string,
-  outroDescription?: string,
-  slug?: string,
-  company?: Company
-}
-
 type SurveyPageProps = {
   dispatch: (Function) => {},
   companies: Array<Company>,
   surveys: Array<Survey>,
   location: Object,
   survey: Survey,
-  surveyPage: PageProps
+  surveyPage: {
+    draft?: Draft
+  }
 }
 
 const SurveyPage = (props: SurveyPageProps) => {

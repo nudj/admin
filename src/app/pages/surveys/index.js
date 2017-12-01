@@ -1,3 +1,4 @@
+/* global Draft Survey */
 // @flow
 const React = require('react')
 const get = require('lodash/get')
@@ -11,36 +12,12 @@ const Page = require('../../components/page')
 const { Link } = require('react-router-dom')
 const PageHeader = require('../../components/page-header')
 
-type Draft = {
-  intro?: string,
-  outro?: string,
-  introDescription?: string,
-  outroDescription?: string,
-  slug?: string
-}
-
-type PageProps = {
-  draft?: Draft
-}
-
-type Company = {
-  id: string,
-  name?: string
-}
-
-type Surveys = {
-  intro?: string,
-  outro?: string,
-  introDescription?: string,
-  outroDescription?: string,
-  slug?: string,
-  company?: Company
-}
-
 type SurveyPageProps = {
-  surveys: Array<Surveys>,
-  surveyPage: PageProps,
-  location: Object
+  surveys: Array<Survey>,
+  location: Object,
+  surveyPage: {
+    draft?: Draft
+  }
 }
 
 const createFilter = (filter) => {
