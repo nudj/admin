@@ -21,7 +21,7 @@ const Page = require('../../components/page')
 const PageHeader = require('../../components/page-header')
 const { questionTypes } = require('../../lib/constants')
 
-const SurveySectionPage = props => {
+const SurveyQuestionPage = props => {
   const {
     question: existingQuestion,
     location,
@@ -208,11 +208,11 @@ const SurveySectionPage = props => {
   )
 }
 
-SurveySectionPage.defaultProps = {
+SurveyQuestionPage.defaultProps = {
   question: {},
   location: {},
   surveySections: [],
   surveyQuestionPage: {}
 }
 
-module.exports = SurveySectionPage
+module.exports = SurveyQuestionPage
