@@ -6,7 +6,14 @@ const get = require('lodash/get')
 const find = require('lodash/find')
 const { parse } = require('query-string')
 
-const { Input, InputField, Card, Table, Button } = require('@nudj/components')
+const {
+  Input,
+  InputField,
+  Card,
+  Table,
+  Button,
+  Select
+} = require('@nudj/components')
 const { merge } = require('@nudj/library')
 
 const { setSurveyDraft, submitSurvey } = require('./actions')
@@ -96,11 +103,12 @@ const SurveyPage = (props: SurveyPageProps) => {
   }
 
   const renderCompaniesList = () => (
-    <select
+    <Select
       className={style.selectBox}
       id='company'
       name='company'
       onChange={onChange}
+      value={get(draft, 'company', '')}
       required
     >
       <option value=''>Choose a company</option>
@@ -109,7 +117,7 @@ const SurveyPage = (props: SurveyPageProps) => {
           {company.name}
         </option>
       ))}
-    </select>
+    </Select>
   )
 
   const onSubmit = event => {
@@ -143,6 +151,11 @@ const SurveyPage = (props: SurveyPageProps) => {
         <Link className={style.link} to={`/survey/new`}>
           New Survey
         </Link>
+        {existingSurvey.id && (
+          <Link className={style.link} to={`/survey/${existingSurvey.id}/sections`}>
+            Survey Sections
+          </Link>
+        )}
       </PageHeader>
       <h3 className={style.pageHeadline}>
         {existingSurvey.id ? 'Edit survey' : 'Create survey'}
@@ -226,7 +239,7 @@ const SurveyPage = (props: SurveyPageProps) => {
                 </InputField>
               )}
               <div className={style.formButtons}>
-                <Button type='submit' volume='yell'>SUBMIT</Button>
+                <Button type='submit' volume='yell'>Submit</Button>
               </div>
             </form>
           </Card>
