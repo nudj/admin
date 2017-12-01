@@ -1,4 +1,4 @@
-/* global Draft Survey Company */
+/* global Draft Dispatch Survey Company */
 // @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
@@ -15,15 +15,16 @@ const {
   Button,
   Select
 } = require('@nudj/components')
+const { css } = require('@nudj/components/lib/css')
 const { merge } = require('@nudj/library')
 
 const { setSurveyDraft, submitSurvey } = require('./actions')
-const getStyle = require('./style.css')
+const style = require('./style.css')
 const Page = require('../../components/page')
 const PageHeader = require('../../components/page-header')
 
 type SurveyPageProps = {
-  dispatch: (Function) => {},
+  dispatch: Dispatch,
   companies: Array<Company>,
   surveys: Array<Survey>,
   location: Object,
@@ -45,8 +46,6 @@ const SurveyPage = (props: SurveyPageProps) => {
   const query = parse(get(location, 'search', ''))
   const draft = get(surveyPage, 'draft', {})
   const company = find(companies, { id: query.company }) || {}
-
-  const style: Object = getStyle()
   const fieldStyles = { root: style.field }
 
   const onChange = event => {
@@ -80,7 +79,7 @@ const SurveyPage = (props: SurveyPageProps) => {
 
   const renderCompaniesList = () => (
     <Select
-      className={style.selectBox}
+      className={css(style.selectBox)}
       id='company'
       name='company'
       onChange={onChange}
@@ -110,7 +109,7 @@ const SurveyPage = (props: SurveyPageProps) => {
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
       return (
-        <Link className={style.link} to={`/sections/${row.id}`}>
+        <Link className={css(style.link)} to={`/sections/${row.id}`}>
           View/Edit
         </Link>
       )
@@ -119,12 +118,12 @@ const SurveyPage = (props: SurveyPageProps) => {
   }
 
   return (
-    <Page {...props} className={style.pageBody}>
+    <Page {...props} className={css(style.pageBody)}>
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <Link className={style.link} to={`/survey/new`}>
+        <Link className={css(style.link)} to={`/survey/new`}>
           New Survey
         </Link>
         {existingSurvey.id && (
@@ -133,15 +132,15 @@ const SurveyPage = (props: SurveyPageProps) => {
           </Link>
         )}
       </PageHeader>
-      <h3 className={style.pageHeadline}>
+      <h3 className={css(style.pageHeadline)}>
         {existingSurvey.id ? 'Edit survey' : 'Create survey'}
       </h3>
-      <div className={style.pageContent}>
-        <div className={style.pageMain}>
+      <div className={css(style.pageContent)}>
+        <div className={css(style.pageMain)}>
           <Card>
-            <form className={style.pageMain} onSubmit={onSubmit}>
+            <form className={css(style.pageMain)} onSubmit={onSubmit}>
               <InputField
-                classNames={fieldStyles}
+                styleSheet={fieldStyles}
                 label='Intro Title'
                 htmlFor='intro-title'
               >
@@ -153,7 +152,7 @@ const SurveyPage = (props: SurveyPageProps) => {
                   onChange={onChangeTitle}
                 />
               </InputField>
-              <InputField classNames={fieldStyles} label='Slug' htmlFor='slug'>
+              <InputField styleSheet={fieldStyles} label='Slug' htmlFor='slug'>
                 <Input
                   required
                   type='text'
@@ -165,7 +164,7 @@ const SurveyPage = (props: SurveyPageProps) => {
                 />
               </InputField>
               <InputField
-                classNames={fieldStyles}
+                styleSheet={fieldStyles}
                 label='Intro Description'
                 htmlFor='intro-description'
               >
@@ -178,7 +177,7 @@ const SurveyPage = (props: SurveyPageProps) => {
                 />
               </InputField>
               <InputField
-                classNames={fieldStyles}
+                styleSheet={fieldStyles}
                 label='Outro Title'
                 htmlFor='outro-title'
               >
@@ -191,7 +190,7 @@ const SurveyPage = (props: SurveyPageProps) => {
                 />
               </InputField>
               <InputField
-                classNames={fieldStyles}
+                styleSheet={fieldStyles}
                 label='Outro Description'
                 htmlFor='outro-description'
               >
@@ -207,23 +206,23 @@ const SurveyPage = (props: SurveyPageProps) => {
                 ''
               ) : (
                 <InputField
-                  classNames={fieldStyles}
+                  styleSheet={fieldStyles}
                   label='Company'
                   htmlFor='company'
                 >
                   {company.name || renderCompaniesList()}
                 </InputField>
               )}
-              <div className={style.formButtons}>
-                <Button type='submit' volume='yell'>Submit</Button>
+              <div className={css(style.formButtons)}>
+                <Button type='submit' volume='yell'>SUBMIT</Button>
               </div>
             </form>
           </Card>
           {existingSurvey.id && (
             <div>
-              <h3 className={style.pageHeadline}>
+              <h3 className={css(style.pageHeadline)}>
                 Sections{' '}
-                <span className={style.textHighlight}>
+                <span className={css(style.textHighlight)}>
                   ({get(existingSurvey, 'sections.length', 0)})
                 </span>
               </h3>

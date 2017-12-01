@@ -1,9 +1,10 @@
 let {
-  css,
   merge,
   mixins,
   variables
 } = require('@nudj/framework/css')
+
+const { StyleSheet } = require('@nudj/components/lib/css')
 
 const styles = merge(mixins.pageLayout, mixins.formStructure, mixins.formElements, {
   link: merge({
@@ -14,4 +15,4 @@ const styles = merge(mixins.pageLayout, mixins.formStructure, mixins.formElement
   }
 })
 
-module.exports = css(styles)
+module.exports = StyleSheet.create(styles)

@@ -1,12 +1,14 @@
+// @flow
 const { merge } = require('@nudj/library')
 
-const {
-  SET_SURVEY_QUESTION_DRAFT
-} = require('./actions')
+type InitialState = {
+  draft: Object
+}
 
-const setSurveyQuestionDraft = (state, action) => (
+const { SET_SURVEY_QUESTION_DRAFT } = require('./actions')
+
+const setSurveyQuestionDraft = (state, action) =>
   merge(state, { draft: action.draft })
-)
 
 const actions = {
   [SET_SURVEY_QUESTION_DRAFT]: setSurveyQuestionDraft
@@ -16,7 +18,10 @@ const initialState = {
   draft: {}
 }
 
-const reducer = (initialState, actions) => (state = initialState, action) => {
+const reducer = (initialState: InitialState, actions: Object) => (
+  state: Object = initialState,
+  action: Object
+) => {
   const { type } = action
   const subreducer = actions[type]
   return subreducer ? subreducer(state, action) : state
