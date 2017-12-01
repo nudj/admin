@@ -1,5 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
+const { Link } = require('react-router-dom')
 const isNil = require('lodash/isNil')
 const isEmpty = require('lodash/isEmpty')
 
@@ -7,7 +8,6 @@ const { Table, Input, Button } = require('@nudj/components')
 const { merge } = require('@nudj/library')
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
-const { Link } = require('react-router-dom')
 const PageHeader = require('../../components/page-header')
 const { setListOrder, saveListOrder } = require('./actions')
 
