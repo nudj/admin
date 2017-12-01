@@ -30,6 +30,7 @@ const expressRouters = {
     require('./pages/company/router'),
     require('./pages/surveys/router'),
     require('./pages/survey/router'),
+    require('./pages/survey-section-relations/router'),
     require('./pages/survey-questions/router'),
     require('./pages/survey-question/router'),
     require('./pages/company-job/router'),

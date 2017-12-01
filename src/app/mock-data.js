@@ -405,7 +405,11 @@ data.surveySections = data.surveySections.concat([
     id: 'section1',
     survey: 'survey1',
     title: 'Professional + Previous Employers',
-    description: 'First up, the places that you\'ve worked before and the people you know professionally.'
+    description: 'First up, the places that you\'ve worked before and the people you know professionally.',
+    surveyQuestions: [
+      'question1',
+      'question2'
+    ]
   },
   {
     id: 'section2',
