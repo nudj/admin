@@ -4,9 +4,7 @@ const get = require('lodash/get')
 const values = require('lodash/values')
 const invert = require('lodash/invert')
 const actions = require('@nudj/framework/actions')
-const { merge } = require('@nudj/library')
-
-const quickDispatch = (action: Object) => (dispatch: Dispatch, getState: Function) => dispatch(action)
+const { merge, quickDispatch } = require('@nudj/library')
 
 const SET_LIST_ORDER = 'SET_LIST_ORDER'
 module.exports.SET_LIST_ORDER = SET_LIST_ORDER

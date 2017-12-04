@@ -2,8 +2,7 @@
 // @flow
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
-
-const quickDispatch = (action) => (dispatch: Dispatch, getState: Function) => dispatch(action)
+const { quickDispatch } = require('@nudj/library')
 
 const SET_SURVEY_QUESTION_DRAFT = 'SET_SURVEY_QUESTION_DRAFT'
 module.exports.SET_SURVEY_QUESTION_DRAFT = SET_SURVEY_QUESTION_DRAFT
