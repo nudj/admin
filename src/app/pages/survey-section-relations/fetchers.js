@@ -5,6 +5,9 @@ function get ({ params }) {
         id
         title
         description
+        survey {
+          id
+        }
         questions: surveyQuestions {
           id
           title

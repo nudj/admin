@@ -80,7 +80,7 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
         onChange={onChange}
         required
       >
-        <option disabled value=''>Choose a section</option>
+        <option value=''>Choose a section</option>
         {
           surveySections.map((section, index) => (
             <option key={index} value={section.id}>
@@ -102,7 +102,7 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
       </Helmet>
       <PageHeader title='Surveys'>
         <Link className={css(style.link)} to={`/survey-question/new${queryString}`}>
-          New Survey Question
+          New Section Question
         </Link>
         {existingQuestion.id && (
           <Link className={css(style.link)} to={`/section/${existingQuestion.section.id}/questions`}>
@@ -172,7 +172,7 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
                   onChange={onChange}
                   required
                 >
-                  <option disabled value=''>Choose a type</option>
+                  <option value=''>Choose a type</option>
                   {
                     Object.keys(questionTypes).map((type, index) => (
                       <option key={index} value={type}>

@@ -114,7 +114,7 @@ const SurveySectionPage = (props: SurveySectionPageProps) => {
         </Link>
         {existingSection.id && (
           <Link className={css(style.link)} to={`/section/${existingSection.id}/questions`}>
-            Survey Questions
+            Section Questions
           </Link>
         )}
         {existingSection.id && (

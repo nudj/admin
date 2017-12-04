@@ -20,6 +20,9 @@ type SectionRelationsProps = {
     id: ID,
     title: string,
     questions: Array<SurveyQuestion>,
+    survey: {
+      id: ID,
+    }
   },
   surveySectionRelationsPage: {
     order: Object
@@ -74,7 +77,8 @@ const SurveySectionRelationsPage = (props: SectionRelationsProps) => {
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <Link className={css(style.link)} to={`/survey-section/new?survey=${section.id}`}>Add Section</Link>
+        <Link className={css(style.link)} to={`/survey-question/new?section=${section.id}`}>Add Question</Link>
+        <Link className={css(style.link)} to={`/survey-section/new?survey=${section.survey.id}`}>Add Section</Link>
         <Link className={css(style.link)} to={`/survey/${section.id}`}>Edit Survey</Link>
       </PageHeader>
       <h3 className={css(style.pageHeadline)}>{section.title}</h3>
