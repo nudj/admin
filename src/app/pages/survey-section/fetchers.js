@@ -46,7 +46,7 @@ function postSection ({ body }) {
 
   const respond = (data) => {
     throw new Redirect({
-      url: `/survey-section/${data.survey.id}`,
+      url: `/survey-sections/${data.survey.id}`,
       notification: { type: 'success', message: 'Section created!' }
     })
   }
@@ -76,7 +76,7 @@ function patchSection ({ body, params }) {
 
   const respond = (data) => {
     throw new Redirect({
-      url: `/survey-section/${data.survey.id}`,
+      url: `/survey-sections/${data.survey.id}`,
       notification: { type: 'success', message: 'Survey updated' }
     })
   }

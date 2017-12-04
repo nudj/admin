@@ -34,7 +34,7 @@ const SurveyQuestionsPage = (props: SurveyQuestionPageType) => {
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
       return (
-        <Link className={css(style.link)} to={`/survey-question/${row.id}`}>
+        <Link className={css(style.link)} to={`/survey-questions/${row.id}`}>
           View/Edit
         </Link>
       )
@@ -48,7 +48,7 @@ const SurveyQuestionsPage = (props: SurveyQuestionPageType) => {
         <title>ADMIN - Questions</title>
       </Helmet>
       <PageHeader title='Questions'>
-        <Link className={css(style.link)} to={`/survey-question/new${query}`}>
+        <Link className={css(style.link)} to={`/survey-questions/new${query}`}>
           New Question
         </Link>
       </PageHeader>

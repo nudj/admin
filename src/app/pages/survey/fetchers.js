@@ -76,7 +76,7 @@ function postSurvey ({ data, body }) {
 
   const respond = (data) => {
     throw new Redirect({
-      url: `/survey/${data.survey.id}`,
+      url: `/surveys/${data.survey.id}`,
       notification: { type: 'success', message: 'Survey created!' }
     })
   }
@@ -105,7 +105,7 @@ function patchSurvey ({ data, body, params }) {
 
   const respond = (data) => {
     throw new Redirect({
-      url: `/survey/${data.survey.id}`,
+      url: `/surveys/${data.survey.id}`,
       notification: { type: 'success', message: 'Survey updated' }
     })
   }

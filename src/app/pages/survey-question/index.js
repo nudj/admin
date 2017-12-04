@@ -101,11 +101,11 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <Link className={css(style.link)} to={`/survey-question/new${queryString}`}>
+        <Link className={css(style.link)} to={`/survey-questions/new${queryString}`}>
           New Section Question
         </Link>
         {existingQuestion.id && (
-          <Link className={css(style.link)} to={`/section/${existingQuestion.section.id}/questions`}>
+          <Link className={css(style.link)} to={`/survey-sections/${existingQuestion.section.id}/questions`}>
             Section Questions
           </Link>
         )}

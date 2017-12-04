@@ -25,11 +25,11 @@ function submitSurvey () {
     const data = existingId ? merge(draft, { company: company.id }) : draft
 
     let method = 'post'
-    let url = '/survey/new'
+    let url = '/surveys/new'
 
     if (existingId) {
       method = 'patch'
-      url = `/survey/${existingId}`
+      url = `/surveys/${existingId}`
     }
     return dispatch(actions.app.postData({ data, url, method }))
   }

@@ -51,7 +51,7 @@ function patch ({ body, params }) {
         }
       }
       notification: setNotification (
-        type: "success"
+        type: success
         message: "Section order updated!"
       ) {
         type

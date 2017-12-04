@@ -54,7 +54,7 @@ const SurveyRelationsPage = (props: SurveyRelationsProps) => {
 
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
-      return <Link className={css(style.link)} to={`/survey-section/${row.id}`}>View/Edit</Link>
+      return <Link className={css(style.link)} to={`/survey-sections/${row.id}`}>View/Edit</Link>
     }
     if (column.name === 'order') {
       const order = newOrder[row.id]
@@ -75,9 +75,9 @@ const SurveyRelationsPage = (props: SurveyRelationsProps) => {
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <Link className={css(style.link)} to={`/survey-section/new?survey=${survey.id}`}>Add Section</Link>
-        <Link className={css(style.link)} to={`/survey/${survey.id}`}>Edit Survey</Link>
-        <Link className={css(style.link)} to={`/survey/new?company=${company.id}`}>New Survey</Link>
+        <Link className={css(style.link)} to={`/survey-sections/new?survey=${survey.id}`}>Add Section</Link>
+        <Link className={css(style.link)} to={`/surveys/${survey.id}`}>Edit Survey</Link>
+        <Link className={css(style.link)} to={`/surveys/new?company=${company.id}`}>New Survey</Link>
       </PageHeader>
       <h3 className={css(style.pageHeadline)}>
         <span className={css(style.textHighlight)}>{company.name}</span> - {survey.introTitle}

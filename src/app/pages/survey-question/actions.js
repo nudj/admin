@@ -31,11 +31,11 @@ function createOrUpdateSurveyQuestion () {
     }
 
     let method = 'post'
-    let url = '/survey-question/new'
+    let url = '/survey-questions/new'
 
     if (existingId) {
       method = 'patch'
-      url = `/survey-question/${existingId}`
+      url = `/survey-questions/${existingId}`
     }
     return dispatch(actions.app.postData({ data, url, method }))
   }

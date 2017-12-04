@@ -32,7 +32,7 @@ const SurveySectionsPage = (props: SurveySectionsPageProps) => {
 
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
-      return <Link className={css(style.link)} to={`/survey-section/${row.id}`}>View/Edit</Link>
+      return <Link className={css(style.link)} to={`/survey-sections/${row.id}`}>View/Edit</Link>
     }
     return defaultRender
   }
@@ -43,7 +43,7 @@ const SurveySectionsPage = (props: SurveySectionsPageProps) => {
         <title>ADMIN - Sections</title>
       </Helmet>
       <PageHeader title='Sections'>
-        <Link className={css(style.link)} to={`/survey-section/new${query}`}>New Section</Link>
+        <Link className={css(style.link)} to={`/survey-sections/new${query}`}>New Section</Link>
       </PageHeader>
       <h3 className={css(style.pageHeadline)}>Sections <span className={css(style.textHighlight)}>({data.length})</span></h3>
       <div className={css(style.pageContent)}>

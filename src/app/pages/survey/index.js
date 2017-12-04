@@ -123,11 +123,11 @@ const SurveyPage = (props: SurveyPageProps) => {
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <Link className={css(style.link)} to={`/survey/new`}>
+        <Link className={css(style.link)} to={`/surveys/new`}>
           New Survey
         </Link>
         {existingSurvey.id && (
-          <Link className={css(style.link)} to={`/survey/${existingSurvey.id}/sections`}>
+          <Link className={css(style.link)} to={`/surveys/${existingSurvey.id}/sections`}>
             Survey Sections
           </Link>
         )}

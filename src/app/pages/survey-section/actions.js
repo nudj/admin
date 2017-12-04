@@ -24,11 +24,11 @@ function createOrUpdateSurveySection () {
     const data = get(state, 'surveySectionPage.draft', {})
 
     let method = 'post'
-    let url = '/survey-section/new'
+    let url = '/survey-sections/new'
 
     if (existingId) {
       method = 'patch'
-      url = `/survey-section/${existingId}`
+      url = `/survey-sections/${existingId}`
     }
     return dispatch(actions.app.postData({ data, url, method }))
   }

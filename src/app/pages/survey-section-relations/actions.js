@@ -35,7 +35,7 @@ function saveListOrder () {
     }
 
     const data = { surveyQuestions: indicies.map(index => keys[index]) }
-    const url = `/section/${state.app.section.id}/questions`
+    const url = `/survey-sections/${state.app.section.id}/questions`
     const method = 'patch'
     return dispatch(actions.app.postData({ data, url, method }))
   }
