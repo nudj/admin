@@ -1,26 +1,11 @@
+/* global Draft Dispatch GetState */
+// @flow
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
-const { merge } = require('@nudj/library')
-
-const quickDispatch = (action) => (dispatch, getState) => dispatch(action)
+const { merge, quickDispatch } = require('@nudj/library')
 
 const SET_SURVEY_DRAFT = 'SET_SURVEY_DRAFT'
 module.exports.SET_SURVEY_DRAFT = SET_SURVEY_DRAFT
-
-type Company = {
-  id: string,
-  name?: string
-}
-
-type Draft = {
-  id?: string | number,
-  introTitle?: string,
-  outroTitle?: string,
-  introDescription?: string,
-  outroDescription?: string,
-  slug?: string,
-  company?: Company,
-}
 
 function setSurveyDraft (draft: Draft) {
   return {
@@ -28,10 +13,10 @@ function setSurveyDraft (draft: Draft) {
     draft
   }
 }
-module.exports.setSurveyDraft = (draft) => quickDispatch(setSurveyDraft(draft))
+module.exports.setSurveyDraft = (draft: Draft) => quickDispatch(setSurveyDraft(draft))
 
 function submitSurvey () {
-  return (dispatch, getState) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState()
     const existingId = get(state.app, 'survey.id')
     const draft = get(state, 'surveyPage.draft', {})
@@ -40,11 +25,11 @@ function submitSurvey () {
     const data = existingId ? merge(draft, { company: company.id }) : draft
 
     let method = 'post'
-    let url = '/survey/new'
+    let url = '/surveys/new'
 
     if (existingId) {
       method = 'patch'
-      url = `/survey/${existingId}`
+      url = `/surveys/${existingId}`
     }
     return dispatch(actions.app.postData({ data, url, method }))
   }

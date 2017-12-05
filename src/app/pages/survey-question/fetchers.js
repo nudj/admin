@@ -46,7 +46,7 @@ function postQuestion ({ body }) {
         }
       }
       notification: setNotification (
-        type: "success"
+        type: success
         message: "Question created!"
       ) {
         type
@@ -89,7 +89,7 @@ function patchQuestion ({ body, params }) {
         }
       }
       notification: setNotification (
-        type: "success"
+        type: success
         message: "Question updated"
       ) {
         type

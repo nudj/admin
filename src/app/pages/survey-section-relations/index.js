@@ -1,3 +1,5 @@
+/* global Dispatch SurveyQuestion ID */
+// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
@@ -5,13 +7,29 @@ const isNil = require('lodash/isNil')
 const isEmpty = require('lodash/isEmpty')
 
 const { Table, Input, Button } = require('@nudj/components')
+const { css } = require('@nudj/components/lib/css')
 const { merge } = require('@nudj/library')
-const getStyle = require('./style.css')
+const style = require('./style.css')
 const Page = require('../../components/page')
 const PageHeader = require('../../components/page-header')
 const { setListOrder, saveListOrder } = require('./actions')
 
-const SurveySectionRelationsPage = (props) => {
+type SectionRelationsProps = {
+  dispatch: Dispatch,
+  section: {
+    id: ID,
+    title: string,
+    questions: Array<SurveyQuestion>,
+    survey: {
+      id: ID,
+    }
+  },
+  surveySectionRelationsPage: {
+    order: Object
+  }
+}
+
+const SurveySectionRelationsPage = (props: SectionRelationsProps) => {
   const {
     section,
     section: { questions },
@@ -19,7 +37,6 @@ const SurveySectionRelationsPage = (props) => {
   } = props
 
   const data = questions.map((section, order) => merge(section, { order }))
-  const style = getStyle()
 
   const columns = [
     { heading: 'Title', name: 'title' },
@@ -40,7 +57,7 @@ const SurveySectionRelationsPage = (props) => {
 
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
-      return <Link className={style.link} to={`/survey-question/${row.id}`}>View/Edit</Link>
+      return <Link className={css(style.link)} to={`/survey-questions/${row.id}`}>View/Edit</Link>
     } else if (column.name === 'order') {
       const order = newOrder[row.id]
       return (
@@ -55,18 +72,19 @@ const SurveySectionRelationsPage = (props) => {
   }
 
   return (
-    <Page {...props} className={style.pageBody}>
+    <Page {...props} className={css(style.pageBody)}>
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <Link className={style.link} to={`/survey-section/new?survey=${section.id}`}>Add Section</Link>
-        <Link className={style.link} to={`/survey/${section.id}`}>Edit Survey</Link>
+        <Link className={css(style.link)} to={`/survey-questions/new?section=${section.id}`}>Add Question</Link>
+        <Link className={css(style.link)} to={`/survey-sections/new?survey=${section.survey.id}`}>Add Section</Link>
+        <Link className={css(style.link)} to={`/survey-sections/${section.id}`}>Edit Section</Link>
       </PageHeader>
-      <h3 className={style.pageHeadline}>{section.title}</h3>
-      <h3 className={style.pageHeadline}>Questions <span className={style.textHighlight}>({questions.length})</span></h3>
-      <div className={style.pageContent}>
-        <div className={style.pageMain}>
+      <h3 className={css(style.pageHeadline)}>{section.title}</h3>
+      <h3 className={css(style.pageHeadline)}>Questions <span className={css(style.textHighlight)}>({questions.length})</span></h3>
+      <div className={css(style.pageContent)}>
+        <div className={css(style.pageMain)}>
           <form onSubmit={onSubmit}>
             <Table cellRenderer={cellRenderer} data={data} columns={columns} />
             { !isEmpty(newOrder) && (

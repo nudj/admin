@@ -5,6 +5,9 @@ function get ({ params }) {
         id
         title
         description
+        survey {
+          id
+        }
         questions: surveyQuestions {
           id
           title
@@ -41,7 +44,7 @@ function patch ({ body, params }) {
         }
       }
       notification: setNotification (
-        type: "success"
+        type: success
         message: "Section questions reordered!"
       ) {
         type

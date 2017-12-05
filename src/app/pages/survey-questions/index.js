@@ -1,18 +1,27 @@
+/* global SurveyQuestion */
+// @flow
 const React = require('react')
 const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
 
+const { css } = require('@nudj/components/lib/css')
 const { Table } = require('@nudj/components')
-const getStyle = require('./style.css')
+const style = require('./style.css')
 const Page = require('../../components/page')
 const { Link } = require('react-router-dom')
 const PageHeader = require('../../components/page-header')
 
-const SurveyQuestionsPage = (props) => {
+type SurveyQuestionPageType = {
+  questions?: Array<SurveyQuestion>,
+  section: {
+    questions: Array<SurveyQuestion>
+  }
+}
+
+const SurveyQuestionsPage = (props: SurveyQuestionPageType) => {
   const { questions, section } = props
   const data = questions || section.questions
   const query = section ? `?survey=${get(section, 'id', '')}` : ''
-  const style = getStyle()
 
   const columns = [
     { heading: 'Title', name: 'title' },
@@ -24,22 +33,30 @@ const SurveyQuestionsPage = (props) => {
 
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
-      return <Link className={style.link} to={`/survey-question/${row.id}`}>View/Edit</Link>
+      return (
+        <Link className={css(style.link)} to={`/survey-questions/${row.id}`}>
+          View/Edit
+        </Link>
+      )
     }
     return defaultRender
   }
 
   return (
-    <Page {...props} className={style.pageBody}>
+    <Page {...props} className={css(style.pageBody)}>
       <Helmet>
         <title>ADMIN - Questions</title>
       </Helmet>
       <PageHeader title='Questions'>
-        <Link className={style.link} to={`/survey-question/new${query}`}>New Question</Link>
+        <Link className={css(style.link)} to={`/survey-questions/new${query}`}>
+          New Question
+        </Link>
       </PageHeader>
-      <h3 className={style.pageHeadline}>Questions <span className={style.textHighlight}>({data.length})</span></h3>
-      <div className={style.pageContent}>
-        <div className={style.pageMain}>
+      <h3 className={css(style.pageHeadline)}>
+        Questions <span className={css(style.textHighlight)}>({data.length})</span>
+      </h3>
+      <div className={css(style.pageContent)}>
+        <div className={css(style.pageMain)}>
           <Table cellRenderer={cellRenderer} data={data} columns={columns} />
         </div>
       </div>

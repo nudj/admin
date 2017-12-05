@@ -1,3 +1,5 @@
+/* global ID Draft Dispatch Company Location */
+// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
@@ -6,6 +8,7 @@ const find = require('lodash/find')
 const { parse } = require('query-string')
 
 const { merge } = require('@nudj/library')
+const { css } = require('@nudj/components/lib/css')
 const {
   Input,
   InputField,
@@ -15,11 +18,36 @@ const {
 } = require('@nudj/components')
 
 const { setSurveySectionDraft, createOrUpdateSurveySection } = require('./actions')
-const getStyle = require('./style.css')
+const style = require('./style.css')
 const Page = require('../../components/page')
 const PageHeader = require('../../components/page-header')
 
-const SurveySectionPage = props => {
+type PageSurvey = {
+  id: ID,
+  title: string,
+  company: Company
+}
+
+type SurveySectionPageProps = {
+  section: {
+    id: ID,
+    survey: {
+      id: ID,
+      title: string,
+      company: Company
+    },
+    title: string,
+    description: string
+  },
+  location: Location,
+  surveys: Array<PageSurvey>,
+  surveySectionPage: {
+    draft: Draft
+  },
+  dispatch: Dispatch
+}
+
+const SurveySectionPage = (props: SurveySectionPageProps) => {
   const {
     section: existingSection,
     location,
@@ -31,8 +59,6 @@ const SurveySectionPage = props => {
   const draft = get(surveySectionPage, 'draft', {})
   const filters = parse(query)
   const survey = find(surveys, { id: filters.survey })
-
-  const style = getStyle()
   const fieldStyles = { root: style.field }
 
   const onChange = event => {
@@ -78,32 +104,32 @@ const SurveySectionPage = props => {
   )
 
   return (
-    <Page {...props} className={style.pageBody}>
+    <Page {...props} className={css(style.pageBody)}>
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <Link className={style.link} to={`/survey-section/new${queryString}`}>
+        <Link className={css(style.link)} to={`/survey-sections/new${queryString}`}>
           New Survey Section
         </Link>
         {existingSection.id && (
-          <Link className={style.link} to={`/section/${existingSection.id}/questions`}>
-            Survey Questions
+          <Link className={css(style.link)} to={`/survey-sections/${existingSection.id}/questions`}>
+            Section Questions
           </Link>
         )}
         {existingSection.id && (
-          <Link className={style.link} to={`/survey/${existingSection.survey.id}/sections`}>
+          <Link className={css(style.link)} to={`/surveys/${existingSection.survey.id}/sections`}>
             Survey Sections
           </Link>
         )}
       </PageHeader>
-      <h3 className={style.pageHeadline}>
+      <h3 className={css(style.pageHeadline)}>
         {existingSection.id ? 'Edit section' : 'Create section'}
       </h3>
-      <div className={style.pageContent}>
-        <div className={style.pageMain}>
+      <div className={css(style.pageContent)}>
+        <div className={css(style.pageMain)}>
           <Card>
-            <form className={style.pageMain} onSubmit={onSubmit}>
+            <form className={css(style.pageMain)} onSubmit={onSubmit}>
               <InputField
                 classNames={fieldStyles}
                 label='Title'
@@ -145,7 +171,7 @@ const SurveySectionPage = props => {
                   renderSurveyList()
                 )}
               </InputField>
-              <div className={style.formButtons}>
+              <div className={css(style.formButtons)}>
                 <Button type='submit' volume='yell'>
                   SUBMIT
                 </Button>

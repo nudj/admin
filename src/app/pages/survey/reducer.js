@@ -1,33 +1,21 @@
+/* global Draft DraftAction State */
 // @flow
 const { merge } = require('@nudj/library')
+const { SET_SURVEY_DRAFT } = require('./actions')
 
-type Actions = {
-  SET_SURVEY_DRAFT?: Function
-}
-
-type Company = {
-  id: string | number,
-  name?: string
-}
-
-type Draft = {
-  introTitle?: string,
-  outroTitle?: string,
-  introDescription?: string,
-  outroDescription?: string,
-  slug?: string,
-  company?: Company,
-}
-
-type State = {
+type Action = {
+  type: string,
   draft: Draft
 }
 
-const {
-  SET_SURVEY_DRAFT
-} = require('./actions')
+type ActionTypes = typeof SET_SURVEY_DRAFT
 
-const setSurveyDraft = (state, action) => merge(state, { draft: action.draft })
+type Actions = {
+  [key: ActionTypes]: (state: State, action: Action) => State
+}
+
+const setSurveyDraft = (state: State, action: Action) =>
+  merge(state, { draft: action.draft })
 
 const actions = {
   [SET_SURVEY_DRAFT]: setSurveyDraft
@@ -37,7 +25,10 @@ const initialState = {
   draft: {}
 }
 
-const reducer = (initialState: State, actions: Actions) => (state: Object = initialState, action: Object) => {
+const reducer = (initialState: State, actions: Actions) => (
+  state: State = initialState,
+  action: DraftAction
+) => {
   const { type } = action
   const subreducer = actions[type]
   return subreducer ? subreducer(state, action) : state

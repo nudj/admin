@@ -9,8 +9,8 @@ const Router = ({
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/section/:sectionId/questions', respondWithGql(fetchers.get))
-  router.patchHandlers('/section/:sectionId/questions', respondWithGql(fetchers.patch))
+  router.getHandlers('/survey-sections/:sectionId/questions', respondWithGql(fetchers.get))
+  router.patchHandlers('/survey-sections/:sectionId/questions', respondWithGql(fetchers.patch))
 
   return router
 }

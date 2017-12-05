@@ -1,3 +1,5 @@
+/* global Dispatch Draft SurveySection SurveyQuestion Location */
+// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
@@ -6,6 +8,7 @@ const find = require('lodash/find')
 const { parse } = require('query-string')
 
 const { merge } = require('@nudj/library')
+const { css } = require('@nudj/components/lib/css')
 const {
   Input,
   InputField,
@@ -16,12 +19,22 @@ const {
 } = require('@nudj/components')
 
 const { setSurveyQuestionDraft, createOrUpdateSurveyQuestion } = require('./actions')
-const getStyle = require('./style.css')
+const style = require('./style.css')
 const Page = require('../../components/page')
 const PageHeader = require('../../components/page-header')
 const { questionTypes } = require('../../lib/constants')
 
-const SurveyQuestionPage = props => {
+type SurveyQuestionPageProps = {
+  question: SurveyQuestion,
+  surveySections: Array<SurveySection>,
+  location: Location,
+  dispatch: Dispatch,
+  surveyQuestionPage: {
+    draft?: Draft
+  }
+}
+
+const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
   const {
     question: existingQuestion,
     location,
@@ -33,8 +46,6 @@ const SurveyQuestionPage = props => {
   const draft = get(surveyQuestionPage, 'draft', {})
   const filters = parse(query)
   const section = find(surveySections, { id: filters.section })
-
-  const style = getStyle()
   const fieldStyles = { root: style.field }
 
   const onChange = event => {
@@ -69,7 +80,7 @@ const SurveyQuestionPage = props => {
         onChange={onChange}
         required
       >
-        <option disabled value=''>Choose a section</option>
+        <option value=''>Choose a section</option>
         {
           surveySections.map((section, index) => (
             <option key={index} value={section.id}>
@@ -80,34 +91,36 @@ const SurveyQuestionPage = props => {
       </Select>
   ))
 
+  const sectionId = get(existingQuestion, 'section.id')
+
   const queryString = (
-    existingQuestion.id ? `?section=${existingQuestion.section.id}` : query
+    existingQuestion.id ? `?section=${sectionId}` : query
   )
 
   return (
-    <Page {...props} className={style.pageBody}>
+    <Page {...props} className={css(style.pageBody)}>
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
       <PageHeader title='Surveys'>
-        <Link className={style.link} to={`/survey-question/new${queryString}`}>
-          New Survey Question
+        <Link className={css(style.link)} to={`/survey-questions/new${queryString}`}>
+          New Section Question
         </Link>
         {existingQuestion.id && (
-          <Link className={style.link} to={`/section/${existingQuestion.section.id}/questions`}>
+          <Link className={css(style.link)} to={`/survey-sections/${sectionId}/questions`}>
             Section Questions
           </Link>
         )}
       </PageHeader>
-      <h3 className={style.pageHeadline}>
+      <h3 className={css(style.pageHeadline)}>
         {existingQuestion.id ? 'Edit question' : 'Create question'}
       </h3>
-      <div className={style.pageContent}>
-        <div className={style.pageMain}>
+      <div className={css(style.pageContent)}>
+        <div className={css(style.pageMain)}>
           <Card>
-            <form className={style.pageMain} onSubmit={onSubmit}>
+            <form className={css(style.pageMain)} onSubmit={onSubmit}>
               <InputField
-                classNames={fieldStyles}
+                styleSheet={fieldStyles}
                 label='Title'
                 htmlFor='title'
                 required
@@ -122,7 +135,7 @@ const SurveyQuestionPage = props => {
                 />
               </InputField>
               <InputField
-                classNames={fieldStyles}
+                styleSheet={fieldStyles}
                 label='Description'
                 htmlFor='description'
               >
@@ -136,7 +149,7 @@ const SurveyQuestionPage = props => {
                 />
               </InputField>
               <InputField
-                classNames={fieldStyles}
+                styleSheet={fieldStyles}
                 label='Name'
                 htmlFor='name'
               >
@@ -150,7 +163,7 @@ const SurveyQuestionPage = props => {
                 />
               </InputField>
               <InputField
-                classNames={fieldStyles}
+                styleSheet={fieldStyles}
                 label='Type'
                 htmlFor='type'
               >
@@ -161,7 +174,7 @@ const SurveyQuestionPage = props => {
                   onChange={onChange}
                   required
                 >
-                  <option disabled value=''>Choose a type</option>
+                  <option value=''>Choose a type</option>
                   {
                     Object.keys(questionTypes).map((type, index) => (
                       <option key={index} value={type}>
@@ -172,7 +185,7 @@ const SurveyQuestionPage = props => {
                 </Select>
               </InputField>
               <InputField
-                classNames={fieldStyles}
+                styleSheet={fieldStyles}
                 label='Section'
                 htmlFor='section'
                 required
@@ -184,7 +197,7 @@ const SurveyQuestionPage = props => {
                 )}
               </InputField>
               <InputField
-                classNames={fieldStyles}
+                styleSheet={fieldStyles}
                 label='Required?'
                 htmlFor='required'
               >
@@ -195,7 +208,7 @@ const SurveyQuestionPage = props => {
                   onChange={onCheck}
                 />
               </InputField>
-              <div className={style.formButtons}>
+              <div className={css(style.formButtons)}>
                 <Button type='submit' volume='yell'>
                   SUBMIT
                 </Button>

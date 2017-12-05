@@ -1,23 +1,24 @@
+/* global Dispatch Draft GetState */
+// @flow
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
-
-const quickDispatch = (action) => (dispatch, getState) => dispatch(action)
+const { quickDispatch } = require('@nudj/library')
 
 const SET_SURVEY_QUESTION_DRAFT = 'SET_SURVEY_QUESTION_DRAFT'
 module.exports.SET_SURVEY_QUESTION_DRAFT = SET_SURVEY_QUESTION_DRAFT
 
-function setSurveyQuestionDraft (draft) {
+function setSurveyQuestionDraft (draft: Draft) {
   return {
     type: SET_SURVEY_QUESTION_DRAFT,
     draft
   }
 }
-module.exports.setSurveyQuestionDraft = (draft) => (
+module.exports.setSurveyQuestionDraft = (draft: Draft) => (
   quickDispatch(setSurveyQuestionDraft(draft))
 )
 
 function createOrUpdateSurveyQuestion () {
-  return (dispatch, getState) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState()
     const existingId = get(state, 'app.question.id')
     const data = get(state, 'surveyQuestionPage.draft', {})
@@ -30,11 +31,11 @@ function createOrUpdateSurveyQuestion () {
     }
 
     let method = 'post'
-    let url = '/survey-question/new'
+    let url = '/survey-questions/new'
 
     if (existingId) {
       method = 'patch'
-      url = `/survey-question/${existingId}`
+      url = `/survey-questions/${existingId}`
     }
     return dispatch(actions.app.postData({ data, url, method }))
   }
