@@ -7,7 +7,7 @@ type Actions = {
   [key: typeof SET_SURVEY_SECTION_DRAFT]: (
     state: State,
     action: DraftAction
-  ) => Object
+  ) => State
 }
 
 const setSurveySectionDraft = (state: Object, action: DraftAction) =>
