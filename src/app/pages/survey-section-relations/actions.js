@@ -1,4 +1,4 @@
-/* global Dispatch */
+/* global Dispatch GetState */
 // @flow
 const get = require('lodash/get')
 const values = require('lodash/values')
@@ -18,7 +18,7 @@ function setListOrder (order) {
 module.exports.setListOrder = (order: Object) => quickDispatch(setListOrder(order))
 
 function saveListOrder () {
-  return (dispatch: Dispatch, getState: Function) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState()
     const questions = get(state, 'app.section.questions', [])
     const defaultOrder = questions.map((question, index) => ({

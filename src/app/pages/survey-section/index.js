@@ -1,4 +1,4 @@
-/* global ID Draft Dispatch Company */
+/* global ID Draft Dispatch Company Location */
 // @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
@@ -39,7 +39,7 @@ type SurveySectionPageProps = {
     title: string,
     description: string
   },
-  location: Object,
+  location: Location,
   surveys: Array<PageSurvey>,
   surveySectionPage: {
     draft: Draft

@@ -1,4 +1,4 @@
-/* global Dispatch Draft */
+/* global Dispatch Draft SurveySection SurveyQuestion Location */
 // @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
@@ -25,9 +25,9 @@ const PageHeader = require('../../components/page-header')
 const { questionTypes } = require('../../lib/constants')
 
 type SurveyQuestionPageProps = {
-  question: Object,
-  surveySections: Array<any>,
-  location: Object,
+  question: SurveyQuestion,
+  surveySections: Array<SurveySection>,
+  location: Location,
   dispatch: Dispatch,
   surveyQuestionPage: {
     draft?: Draft
@@ -91,8 +91,10 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
       </Select>
   ))
 
+  const sectionId = get(existingQuestion, 'section.id')
+
   const queryString = (
-    existingQuestion.id ? `?section=${existingQuestion.section.id}` : query
+    existingQuestion.id ? `?section=${sectionId}` : query
   )
 
   return (
@@ -105,7 +107,7 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
           New Section Question
         </Link>
         {existingQuestion.id && (
-          <Link className={css(style.link)} to={`/survey-sections/${existingQuestion.section.id}/questions`}>
+          <Link className={css(style.link)} to={`/survey-sections/${sectionId}/questions`}>
             Section Questions
           </Link>
         )}

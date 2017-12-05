@@ -1,14 +1,16 @@
-/* global Draft */
+/* global State DraftAction */
 // @flow
 const { merge } = require('@nudj/library')
-
-type InitialState = {
-  draft: Draft
-}
-
 const { SET_SURVEY_SECTION_DRAFT } = require('./actions')
 
-const setSurveySectionDraft = (state: Object, action: Object) =>
+type Actions = {
+  [key: typeof SET_SURVEY_SECTION_DRAFT]: (
+    state: State,
+    action: DraftAction
+  ) => Object
+}
+
+const setSurveySectionDraft = (state: Object, action: DraftAction) =>
   merge(state, { draft: action.draft })
 
 const actions = {
@@ -19,7 +21,7 @@ const initialState = {
   draft: {}
 }
 
-const reducer = (initialState: InitialState, actions: Object) => (
+const reducer = (initialState: State, actions: Actions) => (
   state: Object = initialState,
   action: Object
 ) => {

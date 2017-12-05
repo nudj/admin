@@ -1,4 +1,4 @@
-/* global Dispatch */
+/* global Dispatch GetState */
 // @flow
 const get = require('lodash/get')
 const values = require('lodash/values')
@@ -28,7 +28,7 @@ function resetOrder () {
 module.exports.resetOrder = () => quickDispatch(resetOrder())
 
 function saveListOrder () {
-  return (dispatch: Dispatch, getState: Function) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState()
     const sections = get(state, 'app.survey.sections', [])
     const defaultOrder = sections.map((section, index) => ({
@@ -40,16 +40,21 @@ function saveListOrder () {
     const keys = invert(order)
 
     if (values(keys).length !== sections.length) {
-      const notification = { type: 'error', message: 'One or more sections have the same order' }
+      const notification = {
+        type: 'error',
+        message: 'One or more sections have the same order'
+      }
       return dispatch(actions.app.showNotification(notification))
     }
 
     const data = { surveySections: indicies.map(index => keys[index]) }
     const url = `/surveys/${state.app.survey.id}/sections`
     const method = 'patch'
-    return dispatch(actions.app.postData({ data, url, method }, () => {
-      dispatch(resetOrder())
-    }))
+    return dispatch(
+      actions.app.postData({ data, url, method }, () => {
+        dispatch(resetOrder())
+      })
+    )
   }
 }
 module.exports.saveListOrder = saveListOrder

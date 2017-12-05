@@ -1,11 +1,18 @@
+/* global State */
 // @flow
 const { merge } = require('@nudj/library')
+const { SET_LIST_ORDER } = require('./actions')
 
-type InitialState = {
-  order: Object
+type Action = {
+  type: string,
+  order?: Object
 }
 
-const { SET_LIST_ORDER } = require('./actions')
+type ActionTypes = typeof SET_LIST_ORDER
+
+type Actions = {
+  [key: ActionTypes]: (state: State, action: Action) => State
+}
 
 const setListOrder = (state, action) => merge(state, { order: action.order })
 
@@ -17,7 +24,7 @@ const initialState = {
   order: {}
 }
 
-const reducer = (initialState: InitialState, actions: Object) => (
+const reducer = (initialState: State, actions: Actions) => (
   state: Object = initialState,
   action: Object
 ) => {

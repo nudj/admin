@@ -43,6 +43,10 @@ declare type SurveyQuestion = {
   created?: Date,
   modified?: Date,
   surveySection?: SurveySection,
+  section: {
+    id: string,
+    title: string
+  },
   title?: string,
   description?: string,
   name?: string,
@@ -50,3 +54,39 @@ declare type SurveyQuestion = {
   required?: Boolean,
   tags?: Array<ID>
 }
+
+declare type Location = {
+  pathname: string,
+  search: string,
+  hashname: string,
+  key: string
+}
+
+declare type AppState = {
+  app: Object,
+  router: Object,
+  surveyPage: {
+    draft: Draft
+  },
+  surveyQuestionPage: {
+    draft: Draft
+  },
+  surveyRelationsPage: {
+    order: Object
+  },
+  surveySectionRelationsPage: {
+    order: Object
+  }
+}
+
+declare type DraftAction = {
+  type: string,
+  draft: Draft
+}
+
+declare type State = {
+  draft?: Draft,
+  order?: Object
+}
+
+declare type GetState = () => AppState

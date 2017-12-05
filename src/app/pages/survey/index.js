@@ -1,4 +1,4 @@
-/* global Draft Dispatch Survey Company */
+/* global Draft Dispatch Survey Company Location */
 // @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
@@ -27,7 +27,7 @@ type SurveyPageProps = {
   dispatch: Dispatch,
   companies: Array<Company>,
   surveys: Array<Survey>,
-  location: Object,
+  location: Location,
   survey: Survey,
   surveyPage: {
     draft?: Draft

@@ -1,4 +1,4 @@
-/* global Draft Survey */
+/* global Draft Survey Location */
 // @flow
 const React = require('react')
 const get = require('lodash/get')
@@ -15,7 +15,7 @@ const PageHeader = require('../../components/page-header')
 
 type SurveyPageProps = {
   surveys: Array<Survey>,
-  location: Object,
+  location: Location,
   surveyPage: {
     draft?: Draft
   }
