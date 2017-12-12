@@ -37,7 +37,7 @@ steps:
   push_latest:
     title: Push Latest
     type: push
-    candidate: '${{build}}'
+    candidate: '${{build_latest}}'
     tag: latest
     credentials:
       username: '${{dockerUsername}}'
