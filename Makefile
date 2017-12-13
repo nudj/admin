@@ -5,11 +5,7 @@ CWD=$(shell pwd)
 .PHONY: build ssh test
 
 build:
-	@docker build \
-		-t $(IMAGEDEV) \
-		--build-arg NPM_TOKEN=${NPM_TOKEN} \
-		-f $(CWD)/Dockerfile.dev \
-		.
+	@./build.sh $(IMAGEDEV)
 
 buildLocal:
 	@docker build \
@@ -32,13 +28,14 @@ ssh:
 		-v $(CWD)/.zshrc:/root/.zshrc \
 		-v $(CWD)/src/app:/usr/src/app \
 		-v $(CWD)/src/test:/usr/src/test \
+		-v $(CWD)/src/.flowconfig:/usr/src/.flowconfig \
 		-v $(CWD)/src/.npmrc:/usr/src/.npmrc \
 		-v $(CWD)/src/nodemon.json:/usr/src/nodemon.json \
 		-v $(CWD)/src/package.json:/usr/src/package.json \
-		-v $(CWD)/src/.flowconfig:/usr/src/.flowconfig \
-		-v $(CWD)/src/flow-typed:/usr/src/flow-typed \
 		-v $(CWD)/src/webpack.config.js:/usr/src/webpack.config.js \
 		-v $(CWD)/src/webpack.dll.js:/usr/src/webpack.dll.js \
+		-v $(CWD)/src/yarn.lock:/usr/src/yarn.lock \
+		-v $(CWD)/src/flow-typed:/usr/src/flow-typed \
 		-v $(CWD)/../framework/src:/usr/src/@nudj/framework \
 		-v $(CWD)/../library/src:/usr/src/@nudj/library \
 		-v $(CWD)/../components/src:/usr/src/@nudj/components \
