@@ -109,7 +109,7 @@ const SurveyPage = (props: SurveyPageProps) => {
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
       return (
-        <Link className={css(style.link)} to={`/sections/${row.id}`}>
+        <Link className={css(style.link)} to={`/survey-sections/${row.id}`}>
           View/Edit
         </Link>
       )

@@ -19,21 +19,13 @@ function getNew () {
 function postQuestion ({ body }) {
   const gql = `
     mutation CreateSurveyQuestion (
-      $title: String!
-      $description: String
-      $section: ID!
-      $name: String!
-      $type: SurveyQuestionType!
-      $required: Boolean!
+      $section: ID!,
+      $data: SurveyQuestionCreateInput!
     ) {
-      question: createSurveyQuestion (input: {
-        title: $title
-        description: $description
+      question: createSurveyQuestion (
         surveySection: $section
-        name: $name
-        type: $type
-        required: $required
-      }) {
+        data: $data
+      ) {
         id
         description
         title
@@ -46,7 +38,7 @@ function postQuestion ({ body }) {
         }
       }
       notification: setNotification (
-        type: success
+        type: "success"
         message: "Question created!"
       ) {
         type
@@ -56,12 +48,14 @@ function postQuestion ({ body }) {
   `
 
   const variables = {
-    title: body.title,
-    description: body.description,
-    name: body.name,
-    type: body.type,
     section: body.section,
-    required: body.required || false
+    data: {
+      title: body.title,
+      description: body.description,
+      name: body.name,
+      type: body.type,
+      required: body.required || false
+    }
   }
 
   return { gql, variables }
