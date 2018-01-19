@@ -24,24 +24,24 @@ function getNew () {
 function postSection ({ body }) {
   const gql = `
     mutation CreateSurveySection (
-      $title: String!
-      $description: String
       $survey: ID!
+      $data: SurveySectionCreateInput!
     ) {
-      survey: createSurveySection (input: {
-        title: $title
-        description: $description
-        survey: $survey
-      }) {
+      survey: createSurveySection (
+        survey: $survey,
+        data: $data
+      ) {
         id
       }
     }
   `
 
   const variables = {
-    title: body.title,
-    description: body.description,
-    survey: body.survey
+    survey: body.survey,
+    data: {
+      title: body.title,
+      description: body.description
+    }
   }
 
   const respond = (data) => {

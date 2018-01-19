@@ -25,9 +25,9 @@
     ]
   },
   "dependencies": {
-    "@nudj/components": "1.1.0",
-    "@nudj/framework": "9.0.3",
-    "@nudj/library": "2.1.0",
+    "@nudj/components": "2.1.0",
+    "@nudj/framework": "12.2.0",
+    "@nudj/library": "4.1.0",
     "axios": "^0.16.1",
     "babel-preset-env": "^1.1.10",
     "babel-preset-flow": "^6.23.0",

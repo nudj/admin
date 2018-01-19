@@ -46,32 +46,26 @@ function getOne ({ params }) {
 function postSurvey ({ data, body }) {
   const gql = `
     mutation CreateSurvey (
-      $introTitle: String
-      $outroTitle: String
-      $introDescription: String
-      $outroDescription: String
       $company: ID!
-      $slug: String!
+      $data: SurveyCreateInput!
     ) {
-      survey: createSurvey (input: {
-        introTitle: $introTitle
-        outroTitle: $outroTitle
-        introDescription: $introDescription
-        outroDescription: $outroDescription
+      survey: createSurvey (
         company: $company
-        slug: $slug
-      }) {
+        data: $data
+      ) {
         id
       }
     }
   `
   const variables = {
-    introTitle: body.introTitle,
-    outroTitle: body.outroTitle,
     company: body.company,
-    slug: body.slug,
-    introDescription: body.introDescription,
-    outroDescription: body.outroDescription
+    data: {
+      slug: body.slug,
+      introTitle: body.introTitle,
+      outroTitle: body.outroTitle,
+      introDescription: body.introDescription,
+      outroDescription: body.outroDescription
+    }
   }
 
   const respond = (data) => {

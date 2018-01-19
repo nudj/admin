@@ -106,9 +106,9 @@ const SurveySectionPage = (props: SurveySectionPageProps) => {
   return (
     <Page {...props} className={css(style.pageBody)}>
       <Helmet>
-        <title>ADMIN - Surveys</title>
+        <title>ADMIN - SurveySection</title>
       </Helmet>
-      <PageHeader title='Surveys'>
+      <PageHeader title='Survey section'>
         <Link className={css(style.link)} to={`/survey-sections/new${queryString}`}>
           New Survey Section
         </Link>
