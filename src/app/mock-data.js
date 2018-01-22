@@ -393,7 +393,8 @@ data.surveys = data.surveys.concat([
     introTitle: 'Second Intro Title',
     introDescription: 'Felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
     outroTitle: 'Outro Title for the Survey!',
-    outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
+    outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.',
+    surveySections: []
   },
   {
     id: 'survey3',
@@ -402,7 +403,8 @@ data.surveys = data.surveys.concat([
     introTitle: 'Third Survey',
     introDescription: 'Felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
     outroTitle: 'Outro Title for the Survey!',
-    outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
+    outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.',
+    surveySections: ['section2']
   }
 ])
 data.surveySections = data.surveySections.concat([

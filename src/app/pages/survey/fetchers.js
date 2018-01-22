@@ -7,8 +7,8 @@ function getNew () {
         slug
       }
       companies {
-        name
         id
+        name
       }
     }
   `
@@ -31,8 +31,8 @@ function getOne ({ params }) {
           description
         }
         company {
-          name
           id
+          name
         }
       }
     }
@@ -82,11 +82,11 @@ function patchSurvey ({ data, body, params }) {
   const gql = `
     mutation UpdateSurvey (
       $id: ID!
-      $input: SurveyUpdateInput
+      $data: SurveyUpdateInput!
     ) {
       survey: updateSurvey (
         id: $id
-        input: $input
+        data: $data
       ) {
         id
       }
@@ -94,7 +94,7 @@ function patchSurvey ({ data, body, params }) {
   `
   const variables = {
     id: params.id,
-    input: body
+    data: body
   }
 
   const respond = (data) => {

@@ -29,11 +29,11 @@ function patch ({ body, params }) {
   const gql = `
     mutation UpdateSectionOrder (
       $id: ID!
-      $input: SurveyUpdateInput
+      $data: SurveyUpdateInput!
     ) {
       survey: updateSurvey (
         id: $id
-        input: $input
+        data: $data
       ) {
         id
         introTitle
@@ -51,7 +51,7 @@ function patch ({ body, params }) {
         }
       }
       notification: setNotification (
-        type: success
+        type: "success"
         message: "Section order updated!"
       ) {
         type
@@ -61,7 +61,7 @@ function patch ({ body, params }) {
   `
   const variables = {
     id: params.surveyId,
-    input: body
+    data: body
   }
 
   return { gql, variables }
