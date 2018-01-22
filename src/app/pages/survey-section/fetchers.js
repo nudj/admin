@@ -12,8 +12,8 @@ function getNew () {
         }
       }
       companies {
-        name
         id
+        name
       }
     }
   `
@@ -58,11 +58,11 @@ function patchSection ({ body, params }) {
   const gql = `
     mutation UpdateSection (
       $id: ID!
-      $input: SurveySectionUpdateInput
+      $data: SurveySectionUpdateInput!
       ) {
       survey: updateSurveySection (
         id: $id
-        input: $input
+        data: $data
       ) {
         id
       }
@@ -71,7 +71,7 @@ function patchSection ({ body, params }) {
 
   const variables = {
     id: params.id,
-    input: body
+    data: body
   }
 
   const respond = (data) => {
