@@ -16,7 +16,7 @@ describe('Companies fetchers', () => {
     api
       .get('/companies/filter')
       .query({ client: true })
-      .reply(200, [{ id: 'company1' }])
+      .reply(200, ['getAllResponse'])
   })
   afterEach(() => {
     nock.cleanAll()
@@ -27,7 +27,7 @@ describe('Companies fetchers', () => {
       return expect(fetchers.get({
         data: {}
       })).to.eventually.deep.equal({
-        companies: [{ id: 'company1' }]
+        companies: ['getAllResponse']
       })
     })
 
@@ -38,7 +38,7 @@ describe('Companies fetchers', () => {
         }
       })).to.eventually.deep.equal({
         passed: 'data',
-        companies: [{ id: 'company1' }]
+        companies: ['getAllResponse']
       })
     })
 
@@ -48,7 +48,7 @@ describe('Companies fetchers', () => {
           companies: 'passed'
         }
       })).to.eventually.deep.equal({
-        companies: [{ id: 'company1' }]
+        companies: ['getAllResponse']
       })
     })
   })
@@ -73,7 +73,7 @@ describe('Companies fetchers', () => {
         data: {},
         body
       })).to.eventually.deep.equal({
-        companies: [{ id: 'company1' }],
+        companies: ['getAllResponse'],
         newCompany: postResponse,
         notification: {
           type: 'success',
@@ -89,7 +89,7 @@ describe('Companies fetchers', () => {
         body
       })).to.eventually.deep.equal({
         passed: 'data',
-        companies: [{ id: 'company1' }],
+        companies: ['getAllResponse'],
         newCompany: postResponse,
         notification: {
           type: 'success',
@@ -104,7 +104,7 @@ describe('Companies fetchers', () => {
         },
         body
       })).to.eventually.deep.equal({
-        companies: [{ id: 'company1' }],
+        companies: ['getAllResponse'],
         newCompany: postResponse,
         notification: {
           type: 'success',
