@@ -14,7 +14,8 @@ describe('Companies fetchers', () => {
 
   beforeEach(() => {
     api
-      .get('/companies')
+      .get('/companies/filter')
+      .query({ client: true })
       .reply(200, ['getAllResponse'])
   })
   afterEach(() => {
@@ -57,12 +58,13 @@ describe('Companies fetchers', () => {
       post: 'data'
     }
     const postResponse = {
-      name: 'New name'
+      name: 'New name',
+      client: true
     }
 
     beforeEach(() => {
       api
-        .post('/companies', body)
+        .post('/companies', Object.assign({ client: true }, body))
         .reply(200, postResponse)
     })
 

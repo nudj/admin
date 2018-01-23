@@ -35,7 +35,8 @@ data.companies = data.companies.concat([
     slug: 'fake-company',
     url: 'http://omg.fake-company.com',
     description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
-    onboarded: true
+    onboarded: true,
+    client: true
   },
   {
     id: 'company2',
@@ -48,7 +49,12 @@ data.companies = data.companies.concat([
     slug: 'nudj',
     url: 'https://nudj.co',
     description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
-    onboarded: true
+    onboarded: true,
+    client: true
+  },
+  {
+    id: 'company3',
+    name: 'Not A Client Ltd'
   }
 ])
 data.jobs = data.jobs.concat([
@@ -264,17 +270,26 @@ data.hirers = data.hirers.concat([
   {
     id: 'hirer1',
     person: 'person5',
-    company: 'company1'
+    company: 'company1',
+    created: '2018-01-23T09:08:16.790+00:00',
+    modified: '2018-01-23T09:08:16.790+00:00',
+    onboarded: false
   },
   {
     id: 'hirer2',
     person: 'person6',
-    company: 'company1'
+    company: 'company1',
+    created: '2018-01-23T09:08:16.790+00:00',
+    modified: '2018-01-23T09:08:16.790+00:00',
+    onboarded: false
   },
   {
     id: 'hirer3',
     person: 'person1',
-    company: 'company2'
+    company: 'company2',
+    created: '2018-01-23T09:08:16.790+00:00',
+    modified: '2018-01-23T09:08:16.790+00:00',
+    onboarded: false
   }
 ])
 data.referrals = data.referrals.concat([

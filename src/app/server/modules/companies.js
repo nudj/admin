@@ -19,13 +19,13 @@ module.exports.getById = function (companyId) {
 }
 
 module.exports.getAll = function () {
-  return request(`companies`)
+  return request(`companies/filter?client=true`)
     .then(results => results.sort(common.sortByCreated))
 }
 
 module.exports.post = function (company) {
   return request(`companies`, {
-    data: company,
+    data: Object.assign({ client: true }, company),
     method: 'post'
   })
 }
