@@ -22,7 +22,8 @@ describe('Company put fetcher', () => {
 
   beforeEach(() => {
     api
-      .get('/companies')
+      .get('/companies/filter')
+      .query({ client: true })
       .reply(200, ['allCompanies'])
 
     api

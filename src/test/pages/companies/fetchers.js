@@ -14,8 +14,9 @@ describe('Companies fetchers', () => {
 
   beforeEach(() => {
     api
-      .get('/companies')
-      .reply(200, ['getAllResponse'])
+      .get('/companies/filter')
+      .query({ client: true })
+      .reply(200, [{ id: 'company1' }])
   })
   afterEach(() => {
     nock.cleanAll()
@@ -26,7 +27,7 @@ describe('Companies fetchers', () => {
       return expect(fetchers.get({
         data: {}
       })).to.eventually.deep.equal({
-        companies: ['getAllResponse']
+        companies: [{ id: 'company1' }]
       })
     })
 
@@ -37,7 +38,7 @@ describe('Companies fetchers', () => {
         }
       })).to.eventually.deep.equal({
         passed: 'data',
-        companies: ['getAllResponse']
+        companies: [{ id: 'company1' }]
       })
     })
 
@@ -47,7 +48,7 @@ describe('Companies fetchers', () => {
           companies: 'passed'
         }
       })).to.eventually.deep.equal({
-        companies: ['getAllResponse']
+        companies: [{ id: 'company1' }]
       })
     })
   })
@@ -57,12 +58,13 @@ describe('Companies fetchers', () => {
       post: 'data'
     }
     const postResponse = {
-      name: 'New name'
+      name: 'New name',
+      client: true
     }
 
     beforeEach(() => {
       api
-        .post('/companies', body)
+        .post('/companies', Object.assign({ client: true }, body))
         .reply(200, postResponse)
     })
 
@@ -71,7 +73,7 @@ describe('Companies fetchers', () => {
         data: {},
         body
       })).to.eventually.deep.equal({
-        companies: ['getAllResponse'],
+        companies: [{ id: 'company1' }],
         newCompany: postResponse,
         notification: {
           type: 'success',
@@ -87,7 +89,7 @@ describe('Companies fetchers', () => {
         body
       })).to.eventually.deep.equal({
         passed: 'data',
-        companies: ['getAllResponse'],
+        companies: [{ id: 'company1' }],
         newCompany: postResponse,
         notification: {
           type: 'success',
@@ -102,7 +104,7 @@ describe('Companies fetchers', () => {
         },
         body
       })).to.eventually.deep.equal({
-        companies: ['getAllResponse'],
+        companies: [{ id: 'company1' }],
         newCompany: postResponse,
         notification: {
           type: 'success',

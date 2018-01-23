@@ -22,7 +22,8 @@ describe('Company postHirer fetcher', () => {
 
   beforeEach(() => {
     api
-      .get('/companies')
+      .get('/companies/filter')
+      .query({ client: true })
       .reply(200, ['allCompanies'])
 
     api
