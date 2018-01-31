@@ -1,5 +1,5 @@
 const request = require('@nudj/framework/request')
-const { LogThenNotFound } = require('@nudj/framework/errors')
+const { NotFound } = require('@nudj/framework/errors')
 const { promiseMap } = require('@nudj/library')
 
 function fetchPeople () {
@@ -9,7 +9,7 @@ function fetchPeople () {
 function fetchPerson (personId) {
   return request(`people/${personId}`)
     .catch(error => {
-      throw new LogThenNotFound('Person not found by id', personId, error)
+      throw new NotFound('Person not found by id', personId, error)
     })
 }
 
