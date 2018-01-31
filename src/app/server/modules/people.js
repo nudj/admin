@@ -1,6 +1,7 @@
 const request = require('@nudj/framework/request')
 const { NotFound } = require('@nudj/framework/errors')
 const { promiseMap } = require('@nudj/library')
+const omit = require('lodash/omit')
 
 function fetchPeople () {
   return request(`people`)
@@ -24,9 +25,11 @@ function savePerson (data) {
   return request('people', { data, method })
 }
 
-function editPerson (data) {
-  const method = 'patch'
-  return request(`people/${data.id}`, { data, method })
+function editPerson (person) {
+  return request(`people/${person.id}`, {
+    data: omit(person, ['id']),
+    method: 'patch'
+  })
 }
 
 module.exports.getAll = function (data) {

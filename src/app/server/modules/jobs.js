@@ -4,6 +4,7 @@ const {
   merge,
   promiseMap
 } = require('@nudj/library')
+const omit = require('lodash/omit')
 
 const request = require('@nudj/framework/request')
 const common = require('./common')
@@ -19,7 +20,7 @@ function createJob (data, job) {
 
 function editJob (data, job) {
   data.savedJob = request(`jobs/${job.id}`, {
-    data: job,
+    data: omit(job, ['id']),
     method: 'patch'
   })
 
@@ -79,7 +80,7 @@ function patchJobWith (patch) {
       headers: {
         'Content-Type': 'application/json'
       },
-      data: patch
+      data: omit(patch, ['id'])
     })
     return promiseMap(data)
   }

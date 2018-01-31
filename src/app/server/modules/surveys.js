@@ -1,5 +1,6 @@
 const request = require('@nudj/framework/request')
 const { promiseMap } = require('@nudj/library')
+const omit = require('lodash/omit')
 
 module.exports.post = function (data, survey) {
   data.survey = request(`surveys`, {
@@ -12,7 +13,7 @@ module.exports.post = function (data, survey) {
 module.exports.patch = function (data, surveyId, survey) {
   data.survey = request(`surveys/${surveyId}`, {
     method: 'patch',
-    data: survey
+    data: omit(survey, ['id'])
   })
   return promiseMap(data)
 }
