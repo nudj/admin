@@ -1,5 +1,6 @@
 const request = require('@nudj/framework/request')
 const { LogThenNotFound } = require('@nudj/framework/errors')
+const omit = require('lodash/omit')
 const common = require('./common')
 
 module.exports.get = function (companySlug) {
@@ -37,7 +38,7 @@ module.exports.post = function (company) {
 
 module.exports.put = function (company) {
   return request(`companies/${company.id}`, {
-    data: company,
+    data: omit(company, ['id']),
     method: 'patch'
   })
 }
