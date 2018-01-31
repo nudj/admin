@@ -19,12 +19,17 @@ module.exports.getById = function (companyId) {
 }
 
 module.exports.getAll = function () {
-  return request(`companies/filter?client=true`)
+  return request('companies')
+    .then(results => results.sort(common.sortByCreated))
+}
+
+module.exports.getAllClients = function () {
+  return request('companies/filter?client=true')
     .then(results => results.sort(common.sortByCreated))
 }
 
 module.exports.post = function (company) {
-  return request(`companies`, {
+  return request('companies', {
     data: Object.assign({ client: true }, company),
     method: 'post'
   })

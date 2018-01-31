@@ -38,6 +38,7 @@ module.exports = class CompaniesPage extends React.Component {
   }
 
   render () {
+    const clientCompanies = get(this.props, 'clientCompanies', [])
     const companies = get(this.props, 'companies', [])
     const tooltip = get(this.props, 'tooltip')
 
@@ -58,7 +59,7 @@ module.exports = class CompaniesPage extends React.Component {
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
             <ul className={this.style.jobs}>
-              {companies.map((company) => {
+              {clientCompanies.map((company) => {
                 const minutes = differenceInMinutes(rightNow, get(company, 'created'))
                 const rowClass = minutes < 10 ? 'rowHighlight' : 'row'
                 return (<RowItem

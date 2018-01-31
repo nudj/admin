@@ -3,7 +3,8 @@ const { actionMapAssign } = require('@nudj/library')
 const companies = require('../../server/modules/companies')
 
 const pageData = {
-  companies: () => companies.getAll()
+  companies: () => companies.getAll(),
+  clientCompanies: () => companies.getAllClients()
 }
 
 const get = ({
