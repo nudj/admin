@@ -25,9 +25,9 @@ function savePerson (data) {
   return request('people', { data, method })
 }
 
-function editPerson (data) {
-  return request(`people/${data.id}`, {
-    data: omit(data, ['id']),
+function editPerson (person) {
+  return request(`people/${person.id}`, {
+    data: omit(person, ['id']),
     method: 'patch'
   })
 }
