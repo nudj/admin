@@ -14,9 +14,12 @@ describe('Companies fetchers', () => {
 
   beforeEach(() => {
     api
+      .get('/companies')
+      .reply(200, ['getAllResponse'])
+    api
       .get('/companies/filter')
       .query({ client: true })
-      .reply(200, ['getAllResponse'])
+      .reply(200, ['getAllClientsResponse'])
   })
   afterEach(() => {
     nock.cleanAll()
@@ -27,7 +30,8 @@ describe('Companies fetchers', () => {
       return expect(fetchers.get({
         data: {}
       })).to.eventually.deep.equal({
-        companies: ['getAllResponse']
+        companies: ['getAllResponse'],
+        clientCompanies: ['getAllClientsResponse']
       })
     })
 
@@ -38,7 +42,8 @@ describe('Companies fetchers', () => {
         }
       })).to.eventually.deep.equal({
         passed: 'data',
-        companies: ['getAllResponse']
+        companies: ['getAllResponse'],
+        clientCompanies: ['getAllClientsResponse']
       })
     })
 
@@ -48,7 +53,8 @@ describe('Companies fetchers', () => {
           companies: 'passed'
         }
       })).to.eventually.deep.equal({
-        companies: ['getAllResponse']
+        companies: ['getAllResponse'],
+        clientCompanies: ['getAllClientsResponse']
       })
     })
   })
@@ -74,6 +80,7 @@ describe('Companies fetchers', () => {
         body
       })).to.eventually.deep.equal({
         companies: ['getAllResponse'],
+        clientCompanies: ['getAllClientsResponse'],
         newCompany: postResponse,
         notification: {
           type: 'success',
@@ -90,6 +97,7 @@ describe('Companies fetchers', () => {
       })).to.eventually.deep.equal({
         passed: 'data',
         companies: ['getAllResponse'],
+        clientCompanies: ['getAllClientsResponse'],
         newCompany: postResponse,
         notification: {
           type: 'success',
@@ -105,6 +113,7 @@ describe('Companies fetchers', () => {
         body
       })).to.eventually.deep.equal({
         companies: ['getAllResponse'],
+        clientCompanies: ['getAllClientsResponse'],
         newCompany: postResponse,
         notification: {
           type: 'success',
