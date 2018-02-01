@@ -1,7 +1,6 @@
 const express = require('express')
 const passport = require('passport')
-const { LogThenError } = require('@nudj/framework/errors')
-const { promiseMap } = require('@nudj/library')
+const { AppError } = require('@nudj/framework/errors')
 const people = require('../modules/people')
 
 function cacheReturnTo (req, res, next) {
@@ -12,14 +11,12 @@ function cacheReturnTo (req, res, next) {
 }
 
 function fetchPerson (email) {
-  const data = {}
-  people.getByEmail(data, email)
+  return people
+    .getByEmail({}, email)
     .then(data => {
-      if (data.person.error) throw new LogThenError('Unable to fetch person')
-      return data
+      if (!data.person || data.person.error) throw new AppError('Unable to fetch person')
+      return data.person
     })
-
-  return promiseMap(data)
 }
 
 const Router = ({
@@ -47,16 +44,16 @@ const Router = ({
     passport.authenticate('auth0', { failureRedirect: '/login' }),
     (req, res, next) => {
       if (!req.user) {
-        return next(new LogThenError('User not returned from Auth0'))
+        return next(new AppError('User not returned from Auth0'))
       }
 
       fetchPerson(req.user._json.email)
-        .then((data) => {
-          req.session.data = data
+        .then(person => {
+          req.session.data = { person }
           res.redirect(req.session.returnTo || '/')
         })
-        .catch((error) => {
-          next(new LogThenError('Unable to login', req.user._json.email, error))
+        .catch(error => {
+          next(new AppError('Unable to login', req.user._json.email, error))
         })
     }
   )

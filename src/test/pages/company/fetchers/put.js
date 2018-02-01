@@ -14,7 +14,8 @@ const fetchers = require('../../../../app/pages/company/fetchers')
 describe('Company put fetcher', () => {
   const api = nock('http://api:81')
   const body = {
-    id: 'companyId'
+    id: 'companyId',
+    newValue: 123
   }
   const params = {
     companySlug: 'fake-company'
@@ -26,7 +27,9 @@ describe('Company put fetcher', () => {
       .reply(200, ['allCompanies'])
 
     api
-      .patch('/companies/companyId')
+      .patch('/companies/companyId', {
+        newValue: 123
+      })
       .reply(200, { id: 'companyId', name: 'Testing Inc.' })
 
     api

@@ -29,7 +29,10 @@ function fetchHirersByPerson (person) {
 
 function saveHirer (data) {
   const method = 'post'
-  return request('hirers', { data, method })
+  return request('hirers', {
+    data: Object.assign({ onboarded: false }, data),
+    method
+  })
 }
 
 module.exports.getAll = function (data) {

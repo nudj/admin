@@ -1,5 +1,6 @@
 const request = require('@nudj/framework/request')
 const { LogThenNotFound } = require('@nudj/framework/errors')
+const omit = require('lodash/omit')
 const common = require('./common')
 
 module.exports.get = function (companySlug) {
@@ -19,20 +20,25 @@ module.exports.getById = function (companyId) {
 }
 
 module.exports.getAll = function () {
-  return request(`companies`)
+  return request('companies')
+    .then(results => results.sort(common.sortByCreated))
+}
+
+module.exports.getAllClients = function () {
+  return request('companies/filter?client=true')
     .then(results => results.sort(common.sortByCreated))
 }
 
 module.exports.post = function (company) {
-  return request(`companies`, {
-    data: company,
+  return request('companies', {
+    data: Object.assign({ client: true }, company),
     method: 'post'
   })
 }
 
 module.exports.put = function (company) {
   return request(`companies/${company.id}`, {
-    data: company,
+    data: omit(company, ['id']),
     method: 'patch'
   })
 }

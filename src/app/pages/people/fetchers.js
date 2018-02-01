@@ -1,12 +1,20 @@
 const { actionMapAssign } = require('@nudj/library')
 
 const people = require('../../server/modules/people')
+const { getAll: getAllHirers } = require('../../server/modules/hirers')
 
 function get ({ data }) {
   return actionMapAssign(
     data,
     {
-      people: () => people.getAll({}).then(data => data.people)
+      people: () => getAllHirers({}).then(({ hirers }) => {
+        const allHirers = hirers.map(hirer => {
+          return people.get({}, hirer.person)
+            .then(result => result.person)
+        })
+
+        return Promise.all(allHirers)
+      })
     }
   )
 }

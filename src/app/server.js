@@ -2,7 +2,11 @@ require('envkey')
 require('babel-register')({
   presets: ['react'],
   ignore: function (filename) {
-    if (filename.match(/@nudj/) || filename.match(/app/)) {
+    if (
+      filename.match(
+        /\/usr\/src\/((?=.*@nudj)(?!.*\/node_modules).*)|\/usr\/src\/app/
+      )
+    ) {
       return false
     }
     return true
@@ -10,9 +14,10 @@ require('babel-register')({
 })
 const path = require('path')
 const server = require('@nudj/framework/server')
+const logger = require('@nudj/framework/logger')
 const find = require('lodash/find')
 
-const App = require('./redux')
+const reactApp = require('./redux')
 const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
 const LoadingComponent = require('./components/loading')
@@ -28,6 +33,14 @@ const expressRouters = {
     require('./pages/people/router'),
     require('./pages/person/router'),
     require('./pages/company/router'),
+    require('./pages/surveys/router'),
+    require('./pages/survey/router'),
+    require('./pages/survey-relations/router'),
+    require('./pages/survey-section/router'),
+    require('./pages/survey-sections/router'),
+    require('./pages/survey-section-relations/router'),
+    require('./pages/survey-questions/router'),
+    require('./pages/survey-question/router'),
     require('./pages/company-job/router'),
     require('./pages/company-survey-message/router'),
     require('./server/routers/catch-all')
@@ -43,8 +56,8 @@ const spoofLoggedIn = (req, res, next) => {
 }
 const errorHandlers = {}
 
-server({
-  App,
+const { app, getMockApiApps } = server({
+  App: reactApp,
   reduxRoutes,
   reduxReducers,
   mockData,
@@ -55,3 +68,19 @@ server({
   errorHandlers,
   LoadingComponent
 })
+
+app.listen(80, () => {
+  logger.log('info', 'Application running')
+})
+
+if (process.env.USE_MOCKS === 'true') {
+  const { jsonServer, gqlServer } = getMockApiApps({ data: mockData })
+
+  jsonServer.listen(81, () => {
+    logger.log('info', 'JSONServer running')
+  })
+
+  gqlServer.listen(82, () => {
+    logger.log('info', 'Mock GQL running')
+  })
+}

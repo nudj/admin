@@ -21,8 +21,7 @@ function get ({
 function put ({
   data,
   params,
-  body,
-  req
+  body
 }) {
   return people.put(data, body)
     .then(data => {
@@ -31,10 +30,6 @@ function put ({
         type: 'success'
       }
       data.person = data.savedPerson
-      // if the updated person is the logged in person, update the session object too
-      if (data.person.id === req.session.data.person.id) {
-        req.session.data.person = data.person
-      }
       return promiseMap(data)
     })
     .then(data => genericPersonHandler(data, params.personId))

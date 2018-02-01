@@ -1,8 +1,13 @@
 /* eslint-env mocha */
-let chai = require('chai')
-let dirtyChai = require('dirty-chai')
-let expect = chai.expect
+const chai = require('chai')
+const dirtyChai = require('dirty-chai')
+const nock = require('nock')
+const expect = chai.expect
 chai.use(dirtyChai)
+
+nock.emitter.on('no match', function (req) {
+  console.log('No match for request:', req)
+})
 
 describe('This', function () {
   it('should work', function () {

@@ -8,9 +8,21 @@ const data = {
   recommendations: [],
   externalMessages: [],
   surveys: [],
+  surveySections: [],
+  surveyQuestions: [],
   surveyMessages: [],
   tasks: []
 }
+
+const {
+  questionTypes
+} = require('./lib/constants')
+
+const {
+  COMPANIES,
+  CONNECTIONS
+} = questionTypes
+
 data.companies = data.companies.concat([
   {
     id: 'company1',
@@ -23,7 +35,8 @@ data.companies = data.companies.concat([
     slug: 'fake-company',
     url: 'http://omg.fake-company.com',
     description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
-    onboarded: true
+    onboarded: true,
+    client: true
   },
   {
     id: 'company2',
@@ -36,7 +49,12 @@ data.companies = data.companies.concat([
     slug: 'nudj',
     url: 'https://nudj.co',
     description: 'OMG this company is SO hot right now. Ut nec massa vitae dui ullamcorper malesuada nec in neque. Suspendisse nec sapien faucibus, mollis metus ac, tempus eros. Praesent at nisl consequat ligula auctor eleifend nec sit amet eros. Fusce consequat, ante ac maximus auctor, felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
-    onboarded: true
+    onboarded: true,
+    client: true
+  },
+  {
+    id: 'company3',
+    name: 'Not A Client Ltd'
   }
 ])
 data.jobs = data.jobs.concat([
@@ -252,17 +270,26 @@ data.hirers = data.hirers.concat([
   {
     id: 'hirer1',
     person: 'person5',
-    company: 'company1'
+    company: 'company1',
+    created: '2018-01-23T09:08:16.790+00:00',
+    modified: '2018-01-23T09:08:16.790+00:00',
+    onboarded: false
   },
   {
     id: 'hirer2',
     person: 'person6',
-    company: 'company1'
+    company: 'company1',
+    created: '2018-01-23T09:08:16.790+00:00',
+    modified: '2018-01-23T09:08:16.790+00:00',
+    onboarded: false
   },
   {
     id: 'hirer3',
     person: 'person1',
-    company: 'company2'
+    company: 'company2',
+    created: '2018-01-23T09:08:16.790+00:00',
+    modified: '2018-01-23T09:08:16.790+00:00',
+    onboarded: false
   }
 ])
 data.referrals = data.referrals.concat([
@@ -362,21 +389,87 @@ data.surveyMessages = data.surveyMessages.concat([
 data.surveys = data.surveys.concat([
   {
     id: 'survey1',
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00',
+    slug: 'aided-recall-baby',
     company: 'company1',
-    link: 'http://surveymonkey.com/123',
-    uuid: '123',
-    type: 'EMPLOYEE_SURVEY'
+    introTitle: 'First Title for the Survey',
+    introDescription: 'Felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    outroTitle: 'Outro Title for the Survey!',
+    outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.',
+    surveySections: [
+      'section3',
+      'section1',
+      'section4'
+    ]
   },
   {
     id: 'survey2',
-    created: '2017-06-08T11:38:19.485+00:00',
-    modified: '2017-06-08T11:38:19.485+00:00',
+    slug: 'aided-recall-baby2',
     company: 'company1',
-    link: 'http://surveymonkey.com/456',
-    uuid: '456',
-    type: 'HIRER_SURVEY'
+    introTitle: 'Second Intro Title',
+    introDescription: 'Felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    outroTitle: 'Outro Title for the Survey!',
+    outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.',
+    surveySections: []
+  },
+  {
+    id: 'survey3',
+    slug: 'aided-recall-baby3',
+    company: 'company2',
+    introTitle: 'Third Survey',
+    introDescription: 'Felis justo vestibulum elit, congue congue ipsum ligula et lacus. Vivamus est risus, viverra quis iaculis et, eleifend eget est.',
+    outroTitle: 'Outro Title for the Survey!',
+    outroDescription: 'Congue congue, viverra quis iaculis et, ipsum ligula et lacus. Felis justo vestibulum elit, vivamus est risus, eleifend eget est.',
+    surveySections: ['section2']
+  }
+])
+data.surveySections = data.surveySections.concat([
+  {
+    id: 'section1',
+    survey: 'survey1',
+    title: 'Professional + Previous Employers',
+    description: 'First up, the places that you\'ve worked before and the people you know professionally.',
+    surveyQuestions: [
+      'question1',
+      'question2'
+    ]
+  },
+  {
+    id: 'section2',
+    survey: 'survey3',
+    title: 'Section Title',
+    description: 'Viverra quis iaculis et, ipsum ligula et lacus.'
+  },
+  {
+    id: 'section3',
+    survey: 'survey1',
+    title: 'Cash + Money',
+    description: 'Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
+  },
+  {
+    id: 'section4',
+    survey: 'survey1',
+    title: 'Fourth Section',
+    description: 'Felis justo vestibulum elit, vivamus est risus, eleifend eget est.'
+  }
+])
+data.surveyQuestions = data.surveyQuestions.concat([
+  {
+    id: 'question1',
+    surveySection: 'section1',
+    name: 'workBefore',
+    title: 'Where did you work before Fake Company?',
+    description: 'Please list all of your previous employers. Thanks!',
+    type: COMPANIES,
+    required: true
+  },
+  {
+    id: 'question2',
+    surveySection: 'section1',
+    name: 'accountManagers',
+    title: 'Do you know any account managers?',
+    description: 'Add them manually or select them from your list of contacts below...',
+    type: CONNECTIONS,
+    required: false
   }
 ])
 data.tasks = data.tasks.concat([

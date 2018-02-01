@@ -1,9 +1,9 @@
 const React = require('react')
 const get = require('lodash/get')
 const getStyle = require('./notification.css')
-const { hideNotification } = require('../../redux/actions')
+const actions = require('@nudj/framework/actions')
 
-const onClickClose = (props) => (event) => props.dispatch(hideNotification())
+const onClickClose = (props) => (event) => props.dispatch(actions.app.hideNotification())
 
 class Notification extends React.Component {
   constructor (props) {

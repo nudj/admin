@@ -424,7 +424,9 @@ module.exports = class CompanyPage extends React.Component {
         <Helmet>
           <title>{`ADMIN - ${companyName}`}</title>
         </Helmet>
-        <PageHeader title={companyName} subtitle={`Jobs and Hirers`} />
+        <PageHeader title={companyName} subtitle={`Jobs and Hirers`}>
+          <Link className={this.style.nudj} to={`/surveys?company=${company.id}`}>Company Surveys</Link>
+        </PageHeader>
         <h3 className={this.style.pageHeadline}>
           <span className={this.style.pageHeadlineHighlight}>{companyName}</span>
         </h3>
