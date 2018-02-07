@@ -55,7 +55,7 @@ module.exports = class CompaniesPage extends React.Component {
           <title>ADMIN - Companies</title>
         </Helmet>
         <PageHeader title='Companies' />
-        <h3 className={this.style.pageHeadline}>Companies listed on nudj <span className={this.style.textHighlight}>({companies.length})</span></h3>
+        <h3 className={this.style.pageHeadline}>Companies listed on nudj <span className={this.style.textHighlight}>({clientCompanies.length})</span></h3>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
             <ul className={this.style.jobs}>
@@ -87,7 +87,7 @@ module.exports = class CompaniesPage extends React.Component {
             {tooltip ? <Tooltip {...tooltip} /> : ''}
           </div>
         </div>
-        <h4 className={this.style.pageHeadline}>Add <Plural zero='a' singular='another' count={companies.length} /> company</h4>
+        <h4 className={this.style.pageHeadline}>Add <Plural zero='a' singular='another' count={clientCompanies.length} /> company</h4>
         <div className={this.style.pageContent}>
           {addCompanyForm}
           <div className={this.style.pageSidebar} />
