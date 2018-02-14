@@ -1,5 +1,6 @@
-var path = require('path')
-var webpack = require('webpack')
+require('envkey')
+const path = require('path')
+const webpack = require('webpack')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 process.noDeprecation = true
@@ -39,16 +40,22 @@ module.exports = {
           path.join(__dirname, '@nudj'),
           path.join(__dirname, 'node_modules', '@nudj')
         ],
+        exclude: /\/usr\/src\/(node_modules\/)?@nudj\/.*\/node_modules\/.*/,
         loader: 'babel-loader',
         options: {
+          babelrc: false,
           presets: [
             'react',
             'flow',
-            ["env", {
-              "targets": {
-                "browsers": ["last 2 versions", "safari >= 7"]
+            ['env', {
+              targets: {
+                browsers: ['last 2 versions', 'safari >= 7']
               }
             }]
+          ],
+          plugins: [
+            'transform-class-properties',
+            'transform-object-rest-spread'
           ]
         }
       }
