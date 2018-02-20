@@ -37,16 +37,6 @@ down:
 	@$(DOCKERCOMPOSE) rm -f -s $(APP)
 
 test:
-	-@docker rm -f $(APP)-test 2> /dev/null || true
-	@docker run --rm -it \
-		--name $(APP)-test \
-		-v $(CWD)/src/app:/usr/src/app \
-		-v $(CWD)/src/test:/usr/src/test \
-		-v $(CWD)/src/.flowconfig:/usr/src/.flowconfig \
-		-v $(CWD)/src/.babelrc:/usr/src/.babelrc \
-		-v $(CWD)/src/flow-typed:/usr/src/flow-typed \
-		-v $(CWD)/src/package.json:/usr/src/package.json \
-		$(IMAGEDEV) \
-		/bin/sh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
-		  && ./node_modules/.bin/flow --quiet \
-		  && ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test'
+	@$(DOCKERCOMPOSE) exec $(APP) /bin/sh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
+		&& ./node_modules/.bin/flow --quiet \
+		&& ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test'
