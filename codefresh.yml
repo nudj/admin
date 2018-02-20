@@ -17,7 +17,7 @@ steps:
     working_directory: 'IMAGE_WORK_DIR'
     commands:
       - ./node_modules/.bin/standard
-      - ./node_modules/.bin/mocha --recursive test
+      - ./node_modules/.bin/mocha --recursive test/unit
 
   build_latest:
     title: Build Latest
