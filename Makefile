@@ -1,14 +1,16 @@
 APP:=admin
 IMAGE:=nudj/$(APP)
 IMAGEDEV:=nudj/$(APP)-dev
+IMAGEUI:=nudj/$(APP)-ui
 CWD=$(shell pwd)
 COREAPPS:=server api redis db
 DOCKERCOMPOSE:=docker-compose -f $(CWD)/../server/local/docker-compose-dev.yml -f $(CWD)/core-override.yml
 
-.PHONY: build buildLocal coreUp coreDown coreLogs up ssh down test
+.PHONY: build buildLocal coreUp coreDown coreLogs up ssh test ui cmd down
 
 build:
 	@./build.sh $(IMAGEDEV)
+	@docker build -t $(IMAGEUI) -f ./Dockerfile.ui .
 
 buildLocal:
 	@docker build \
@@ -25,7 +27,7 @@ coreDown:
 	@$(DOCKERCOMPOSE) rm -f -s $(COREAPPS)
 
 coreLogs:
-	@$(DOCKERCOMPOSE) logs -f
+	@$(DOCKERCOMPOSE) logs -f $(COREAPPS)
 
 up:
 	@$(DOCKERCOMPOSE) up -d --force-recreate --no-deps $(APP)
@@ -33,10 +35,20 @@ up:
 ssh:
 	@$(DOCKERCOMPOSE) exec $(APP) /bin/zsh
 
-down:
-	@$(DOCKERCOMPOSE) rm -f -s $(APP)
-
 test:
 	@$(DOCKERCOMPOSE) exec $(APP) /bin/sh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
 		&& ./node_modules/.bin/flow --quiet \
-		&& ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test'
+		&& ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/unit'
+
+ui:
+	@$(DOCKERCOMPOSE) run --rm \
+		-v $(CWD)/src/test/ui:/usr/src/ui \
+		-v $(CWD)/src/test/output:/usr/src/output \
+		ui \
+		node /usr/src/ui/index.js
+
+cmd:
+	@$(DOCKERCOMPOSE) run --force-recreate --rm --no-deps $(APP) wget http://$(APP)/
+
+down:
+	@$(DOCKERCOMPOSE) rm -f -s $(APP)

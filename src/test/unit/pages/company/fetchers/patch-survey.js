@@ -9,7 +9,7 @@ chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
 const { standardPatchSurveyResponse } = require('../helpers/responses')
-const fetchers = require('../../../../app/pages/company/fetchers')
+const fetchers = require('../../../../../app/pages/company/fetchers')
 
 describe('Company patchSurvey fetcher', () => {
   const api = nock('http://api:81')

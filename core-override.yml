@@ -3,3 +3,7 @@ services:
   admin:
     stdin_open: true
     command: /bin/zsh
+  ui:
+    image: nudj/admin-ui
+    shm_size: 1gb
+    cap_add: ['SYS_ADMIN']

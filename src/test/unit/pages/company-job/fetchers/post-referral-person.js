@@ -8,17 +8,14 @@ const expect = chai.expect
 chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
-const { standardPostReferralResponse } = require('../helpers/responses')
-const fetchers = require('../../../../app/pages/company-job/fetchers')
+const { standardPostReferralPersonResponse } = require('../helpers/responses')
+const fetchers = require('../../../../../app/pages/company-job/fetchers')
 
-describe('Company-job postReferral fetcher', () => {
+describe('Company-job postReferralPerson fetcher', () => {
   const api = nock('http://api:81')
-  const body = {
-    id: 'jobId',
-    email: 'test@email.com'
-  }
   const params = {
     companySlug: 'fake-company',
+    personId: 'personId',
     jobSlug: 'fake-job'
   }
 
@@ -64,30 +61,30 @@ describe('Company-job postReferral fetcher', () => {
   })
 
   it('should return the page data', () => {
-    return expect(fetchers.postReferral({
+    return expect(fetchers.postReferralPerson({
       data: {},
       params,
-      body
-    })).to.eventually.deep.equal(standardPostReferralResponse)
+      body: {}
+    })).to.eventually.deep.equal(standardPostReferralPersonResponse)
   })
 
   it('should append any passed data', () => {
-    return expect(fetchers.postReferral({
+    return expect(fetchers.postReferralPerson({
       data: {
         provided: 'important-data'
       },
       params,
-      body
-    })).to.eventually.deep.equal(merge(standardPostReferralResponse, { provided: 'important-data' }))
+      body: {}
+    })).to.eventually.deep.equal(merge(standardPostReferralPersonResponse, { provided: 'important-data' }))
   })
 
   it('should overwrite passed data with page data', () => {
-    return expect(fetchers.postReferral({
+    return expect(fetchers.postReferralPerson({
       data: {
         job: 'Tester'
       },
       params,
-      body
-    })).to.eventually.deep.equal(standardPostReferralResponse)
+      body: {}
+    })).to.eventually.deep.equal(standardPostReferralPersonResponse)
   })
 })

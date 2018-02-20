@@ -5,8 +5,7 @@
     "app/server/assets/js/vendors.js",
     "app/server/assets/css/app*",
     "ignore*",
-    "app/ignore*",
-    "test"
+    "app/ignore*"
   ],
   "ext": "js css"
 }

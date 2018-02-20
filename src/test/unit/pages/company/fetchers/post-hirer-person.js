@@ -8,10 +8,10 @@ const expect = chai.expect
 chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
-const { standardPostTaskResponse } = require('../helpers/responses')
-const fetchers = require('../../../../app/pages/company/fetchers')
+const { standardPostHirerPersonResponse } = require('../helpers/responses')
+const fetchers = require('../../../../../app/pages/company/fetchers')
 
-describe('Company postTask fetcher', () => {
+describe('Company postHirerPerson fetcher', () => {
   const api = nock('http://api:81')
   const body = {
     id: 'companyId'
@@ -27,8 +27,8 @@ describe('Company postTask fetcher', () => {
       .reply(200, ['allCompanies'])
 
     api
-      .post('/tasks')
-      .reply(200, { id: 'taskId', type: 'TEST' })
+      .post('/hirers')
+      .reply(200, { id: 'hirerId' })
 
     api
       .get('/surveys/filter')
@@ -75,30 +75,30 @@ describe('Company postTask fetcher', () => {
   })
 
   it('should resolve with the page data', () => {
-    return expect(fetchers.postTask({
+    return expect(fetchers.postHirerPerson({
       data: {},
       params,
       body
-    })).to.eventually.deep.equal(standardPostTaskResponse)
+    })).to.eventually.deep.equal(standardPostHirerPersonResponse)
   })
 
   it('should append any passed data', () => {
-    return expect(fetchers.postTask({
+    return expect(fetchers.postHirerPerson({
       data: {
         provided: 'important-data'
       },
       params,
       body
-    })).to.eventually.deep.equal(merge(standardPostTaskResponse, { provided: 'important-data' }))
+    })).to.eventually.deep.equal(merge(standardPostHirerPersonResponse, { provided: 'important-data' }))
   })
 
   it('should overwrite passed data with page data', () => {
-    return expect(fetchers.postTask({
+    return expect(fetchers.postHirerPerson({
       data: {
         jobs: ['Testing Job']
       },
       params,
       body
-    })).to.eventually.deep.equal(standardPostTaskResponse)
+    })).to.eventually.deep.equal(standardPostHirerPersonResponse)
   })
 })

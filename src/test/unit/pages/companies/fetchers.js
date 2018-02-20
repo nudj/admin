@@ -7,7 +7,7 @@ const expect = chai.expect
 chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
-const fetchers = require('../../../app/pages/companies/fetchers')
+const fetchers = require('../../../../app/pages/companies/fetchers')
 
 describe('Companies fetchers', () => {
   const api = nock('http://api:81')

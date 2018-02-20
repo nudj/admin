@@ -8,16 +8,17 @@ const expect = chai.expect
 chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
-const { standardPostJobResponse } = require('../helpers/responses')
-const fetchers = require('../../../../app/pages/company/fetchers')
+const { standardPostTaskResponse } = require('../helpers/responses')
+const fetchers = require('../../../../../app/pages/company/fetchers')
 
-describe('Company postJob fetcher', () => {
+describe('Company postTask fetcher', () => {
   const api = nock('http://api:81')
   const body = {
     id: 'companyId'
   }
   const params = {
-    companySlug: 'fake-company'
+    companySlug: 'fake-company',
+    person: 'TestMan'
   }
 
   beforeEach(() => {
@@ -26,12 +27,8 @@ describe('Company postJob fetcher', () => {
       .reply(200, ['allCompanies'])
 
     api
-      .post('/jobs')
-      .reply(200, { title: 'jobTitle' })
-
-    api
-      .patch('/companies/companyId')
-      .reply(200, { id: 'companyId', name: 'Testing Inc.' })
+      .post('/tasks')
+      .reply(200, { id: 'taskId', type: 'TEST' })
 
     api
       .get('/surveys/filter')
@@ -78,30 +75,30 @@ describe('Company postJob fetcher', () => {
   })
 
   it('should resolve with the page data', () => {
-    return expect(fetchers.postJob({
+    return expect(fetchers.postTask({
       data: {},
       params,
       body
-    })).to.eventually.deep.equal(standardPostJobResponse)
+    })).to.eventually.deep.equal(standardPostTaskResponse)
   })
 
   it('should append any passed data', () => {
-    return expect(fetchers.postJob({
+    return expect(fetchers.postTask({
       data: {
         provided: 'important-data'
       },
       params,
       body
-    })).to.eventually.deep.equal(merge(standardPostJobResponse, { provided: 'important-data' }))
+    })).to.eventually.deep.equal(merge(standardPostTaskResponse, { provided: 'important-data' }))
   })
 
   it('should overwrite passed data with page data', () => {
-    return expect(fetchers.postJob({
+    return expect(fetchers.postTask({
       data: {
-        people: ['List of Testers']
+        jobs: ['Testing Job']
       },
       params,
       body
-    })).to.eventually.deep.equal(standardPostJobResponse)
+    })).to.eventually.deep.equal(standardPostTaskResponse)
   })
 })
