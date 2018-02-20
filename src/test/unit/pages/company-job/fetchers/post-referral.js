@@ -2,28 +2,31 @@
 const chai = require('chai')
 const dirtyChai = require('dirty-chai')
 const chaiAsPromised = require('chai-as-promised')
-const { merge } = require('@nudj/library')
 const nock = require('nock')
+const { merge } = require('@nudj/library')
 const expect = chai.expect
 chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
-const { standardPutResponse } = require('../helpers/responses')
-const fetchers = require('../../../../app/pages/company-job/fetchers')
+const { standardPostReferralResponse } = require('../helpers/responses')
+const fetchers = require('../../../../../app/pages/company-job/fetchers')
 
-describe('Company-job put fetcher', () => {
+describe('Company-job postReferral fetcher', () => {
   const api = nock('http://api:81')
   const body = {
-    id: 'jobId'
+    id: 'jobId',
+    email: 'test@email.com'
   }
   const params = {
-    companySlug: 'fake-company'
+    companySlug: 'fake-company',
+    jobSlug: 'fake-job'
   }
 
   beforeEach(() => {
     api
-      .patch('/jobs/jobId')
-      .reply(200, { id: 'jobId', title: 'Job Title' })
+      .get('/jobs/filter')
+      .query({ slug: 'fake-job', company: 'companyId' })
+      .reply(200, [{ id: 'jobId' }])
     api
       .get('/companies/filter')
       .query({ slug: 'fake-company' })
@@ -37,10 +40,16 @@ describe('Company-job put fetcher', () => {
       .times(2)
       .reply(200, [{ person: 'personId' }])
     api
+      .post('/referrals')
+      .reply(200, { id: 'referralId' })
+    api
       .get('/referrals/filter')
       .query({ job: 'jobId' })
       .times(2)
       .reply(200, [{ person: 'personId' }])
+    api
+      .post('/people')
+      .reply(200, ['peoplePostResponse'])
     api
       .get('/people')
       .reply(200, ['peopleResponse'])
@@ -55,30 +64,30 @@ describe('Company-job put fetcher', () => {
   })
 
   it('should return the page data', () => {
-    return expect(fetchers.put({
+    return expect(fetchers.postReferral({
       data: {},
       params,
       body
-    })).to.eventually.deep.equal(standardPutResponse)
+    })).to.eventually.deep.equal(standardPostReferralResponse)
   })
 
   it('should append any passed data', () => {
-    return expect(fetchers.put({
+    return expect(fetchers.postReferral({
       data: {
         provided: 'important-data'
       },
       params,
       body
-    })).to.eventually.deep.equal(merge(standardPutResponse, { provided: 'important-data' }))
+    })).to.eventually.deep.equal(merge(standardPostReferralResponse, { provided: 'important-data' }))
   })
 
   it('should overwrite passed data with page data', () => {
-    return expect(fetchers.put({
+    return expect(fetchers.postReferral({
       data: {
         job: 'Tester'
       },
       params,
       body
-    })).to.eventually.deep.equal(standardPutResponse)
+    })).to.eventually.deep.equal(standardPostReferralResponse)
   })
 })

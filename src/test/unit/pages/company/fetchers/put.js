@@ -8,23 +8,29 @@ const expect = chai.expect
 chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
-const { standardPostSurveyResponse } = require('../helpers/responses')
-const fetchers = require('../../../../app/pages/company/fetchers')
+const { standardPutResponse } = require('../helpers/responses')
+const fetchers = require('../../../../../app/pages/company/fetchers')
 
-describe('Company postSurvey fetcher', () => {
+describe('Company put fetcher', () => {
   const api = nock('http://api:81')
   const body = {
-    id: 'companyId'
+    id: 'companyId',
+    newValue: 123
   }
   const params = {
-    companySlug: 'fake-company',
-    person: 'TestMan'
+    companySlug: 'fake-company'
   }
 
   beforeEach(() => {
     api
       .get('/companies')
       .reply(200, ['allCompanies'])
+
+    api
+      .patch('/companies/companyId', {
+        newValue: 123
+      })
+      .reply(200, { id: 'companyId', name: 'Testing Inc.' })
 
     api
       .get('/surveys/filter')
@@ -58,11 +64,6 @@ describe('Company postSurvey fetcher', () => {
       .reply(200, ['taskResponse'])
 
     api
-      .get('/companies/filter')
-      .query({ slug: 'fake-company' })
-      .reply(200, [{ id: 'companyId' }])
-
-    api
       .get('/people')
       .reply(200, ['peopleResponse'])
   })
@@ -71,30 +72,30 @@ describe('Company postSurvey fetcher', () => {
   })
 
   it('should resolve with the page data', () => {
-    return expect(fetchers.postSurvey({
+    return expect(fetchers.put({
       data: {},
       params,
       body
-    })).to.eventually.deep.equal(standardPostSurveyResponse)
+    })).to.eventually.deep.equal(standardPutResponse)
   })
 
   it('should append any passed data', () => {
-    return expect(fetchers.postSurvey({
+    return expect(fetchers.put({
       data: {
         provided: 'important-data'
       },
       params,
       body
-    })).to.eventually.deep.equal(merge(standardPostSurveyResponse, { provided: 'important-data' }))
+    })).to.eventually.deep.equal(merge(standardPutResponse, { provided: 'important-data' }))
   })
 
   it('should overwrite passed data with page data', () => {
-    return expect(fetchers.postSurvey({
+    return expect(fetchers.put({
       data: {
-        jobs: ['Testing Job']
+        people: ['List of Testers']
       },
       params,
       body
-    })).to.eventually.deep.equal(standardPostSurveyResponse)
+    })).to.eventually.deep.equal(standardPutResponse)
   })
 })

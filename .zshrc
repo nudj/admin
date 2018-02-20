@@ -7,6 +7,7 @@ alias run="node ."
 alias dev='webpack --config ./webpack.dll.js --bail --hide-modules && nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "webpack --config ./webpack.config.js --bail --hide-modules && node ."'
 alias test="standard && flow && mocha --recursive test"
 alias tdd='nodemon \
+	--config ./nodemon-tdd.json \
 	--quiet \
 	--watch ./ \
 	--delay 250ms \
@@ -14,6 +15,7 @@ alias tdd='nodemon \
 alias flow='flow --quiet'
 
 alias fdd='nodemon \
+	--config ./nodemon-tdd.json \
 	--quiet \
 	--watch ./ \
 	--delay 250ms \
