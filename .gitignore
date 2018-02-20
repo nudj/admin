@@ -7,3 +7,5 @@ db.json
 src/vendors-manifest.json
 tmp/*
 !tmp/readme.md
+src/test/output/*
+!src/test/output/readme.md
