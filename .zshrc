@@ -5,13 +5,13 @@ PROMPT='admin» '
 
 alias run="node ."
 alias dev='webpack --config ./webpack.dll.js --bail --hide-modules && nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "webpack --config ./webpack.config.js --bail --hide-modules && node ."'
-alias test="standard && flow && mocha --recursive test"
+alias test="standard && flow && mocha --recursive test/unit"
 alias tdd='nodemon \
 	--config ./nodemon-tdd.json \
 	--quiet \
 	--watch ./ \
 	--delay 250ms \
-	-x "standard && mocha --recursive test || exit 1"'
+	-x "standard && mocha --recursive test/unit || exit 1"'
 alias flow='flow --quiet'
 
 alias fdd='nodemon \

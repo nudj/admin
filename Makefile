@@ -1,16 +1,14 @@
 APP:=admin
 IMAGE:=nudj/$(APP)
-IMAGEDEV:=nudj/$(APP)-dev
-IMAGEUI:=nudj/$(APP)-ui
+IMAGEDEV:=nudj/$(APP):development
 CWD=$(shell pwd)
 COREAPPS:=server api redis db
-DOCKERCOMPOSE:=docker-compose -f $(CWD)/../server/local/docker-compose-dev.yml -f $(CWD)/core-override.yml
+DOCKERCOMPOSE:=docker-compose -p nudj -f $(CWD)/../server/compose-core.yml -f $(CWD)/docker-compose.yml
 
-.PHONY: build buildLocal coreUp coreDown coreLogs up ssh test ui cmd down
+.PHONY: build buildLocal coreUp coreDown coreLogs up ssh ui cmd down test
 
 build:
 	@./build.sh $(IMAGEDEV)
-	@docker build -t $(IMAGEUI) -f ./Dockerfile.ui .
 
 buildLocal:
 	@docker build \
@@ -35,11 +33,6 @@ up:
 ssh:
 	@$(DOCKERCOMPOSE) exec $(APP) /bin/zsh
 
-test:
-	@$(DOCKERCOMPOSE) exec $(APP) /bin/sh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
-		&& ./node_modules/.bin/flow --quiet \
-		&& ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/unit'
-
 ui:
 	@$(DOCKERCOMPOSE) run --rm \
 		-v $(CWD)/src/test/ui:/usr/src/ui \
@@ -47,8 +40,10 @@ ui:
 		ui \
 		node /usr/src/ui/index.js
 
-cmd:
-	@$(DOCKERCOMPOSE) run --force-recreate --rm --no-deps $(APP) wget http://$(APP)/
-
 down:
 	@$(DOCKERCOMPOSE) rm -f -s $(APP)
+
+test:
+	@$(DOCKERCOMPOSE) exec $(APP) /bin/ssh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
+		&& ./node_modules/.bin/flow --quiet \
+		&& ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/unit'
