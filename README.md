@@ -31,13 +31,27 @@ Nudj admin for nudj employees only
 
 ### Getting started
 
+#### Setup the Core Applications
+
 1. `git pull git@github.com:nudj/server.git ../server` to ensure you have the `server` repo checked out
 1. `(cd ../server && make build)` to ensure you have a current build of the `server` application
 1. `make up` to spin up the Core apps (`server`, `redis` and `db`)
 1. You will need a `nudj` database and `nudjtech` user setup in your local Arango (ask a colleague for help here)
+
+#### Setup the `api` Application
+
 1. `git pull git@github.com:nudj/api.git ../api` to ensure you have the `api` repo checked out
 1. `(cd ../api && make build)` to ensure you have a current build of the `api` application
-1. `make build` to ensure you have a current build of the admin application
-1. `make up` to spin up the `admin` container in development mode
+1. `make build` to ensure you have a current build of the `api` application
+1. `make up` to spin up the `api` container
+1. `make ssh` to ssh into the `api` container
+1. `dev` to run the `api` application in development mode
+
+#### Setup the `admin` Application
+
+1. `git pull git@github.com:nudj/admin.git ../admin` to ensure you have the `admin` repo checked out
+1. `(cd ../admin && make build)` to ensure you have a current build of the `admin` application
+1. `make build` to ensure you have a current build of the `admin` application
+1. `make up` to spin up the `admin` container
 1. `make ssh` to ssh into the `admin` container
 1. `dev` to run the `admin` application in development mode
