@@ -2,10 +2,9 @@ APP:=admin
 IMAGE:=nudj/$(APP)
 IMAGEDEV:=nudj/$(APP):development
 CWD=$(shell pwd)
-COREAPPS:=server api redis db
-DOCKERCOMPOSE:=docker-compose -p nudj -f $(CWD)/../server/compose-core.yml -f $(CWD)/docker-compose.yml
+DOCKERCOMPOSE:=docker-compose -p nudj
 
-.PHONY: build buildLocal coreUp coreDown coreLogs up ssh ui cmd down test
+.PHONY: build buildLocal up ssh ui cmd down test
 
 build:
 	@./build.sh $(IMAGEDEV)
@@ -17,15 +16,6 @@ buildLocal:
 		--build-arg NPM_TOKEN=${NPM_TOKEN} \
 		-f $(CWD)/Dockerfile \
 		.
-
-coreUp:
-	@$(DOCKERCOMPOSE) up -d --force-recreate --no-deps $(COREAPPS)
-
-coreDown:
-	@$(DOCKERCOMPOSE) rm -f -s $(COREAPPS)
-
-coreLogs:
-	@$(DOCKERCOMPOSE) logs -f $(COREAPPS)
 
 up:
 	@$(DOCKERCOMPOSE) up -d --force-recreate --no-deps $(APP)
