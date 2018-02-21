@@ -14,5 +14,8 @@ services:
       - ../admin/src/package.json:/usr/src/package.json
       - ../admin/src/webpack.config.js:/usr/src/webpack.config.js
       - ../admin/src/webpack.dll.js:/usr/src/webpack.dll.js
+      - ../framework/src:/usr/src/@nudj/framework
+      - ../library/src:/usr/src/@nudj/library
+      - ../components/src:/usr/src/@nudj/components
     stdin_open: true
     command: /bin/zsh
