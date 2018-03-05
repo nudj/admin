@@ -1,11 +1,9 @@
-const client = require('@nudj/framework/client')
+const initialiseClient = require('@nudj/framework/client')
+const createReactRoutes = require('@nudj/framework/lib/redux/create-react-routes')
 
 const App = require('./redux')
-const reduxRoutes = require('./redux/routes')
-const reduxReducers = require('./redux/reducers')
+const routes = createReactRoutes(require('./redux/routes'))
+const reducers = require('./redux/reducers')
 
-client({
-  App,
-  reduxRoutes,
-  reduxReducers
-})
+const { render } = initialiseClient(reducers)
+render(App, routes)
