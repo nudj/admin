@@ -1,5 +1,6 @@
 FROM node:8-alpine
 ARG NPM_TOKEN
+ARG ENVKEY
 ARG NODE_ENV
 ARG DEBUG
 RUN mkdir -p /usr/src && apk add --no-cache ca-certificates
