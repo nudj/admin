@@ -1,22 +1,25 @@
 source /root/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+export PATH=$PATH:/usr/src/node_modules/.bin
 
 PROMPT='admin» '
 
 alias run="node ."
-alias dev='./node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
-alias test="standard && flow && mocha --recursive test"
-alias tdd='./node_modules/.bin/nodemon \
+alias dev='webpack --config ./webpack.dll.js --bail --hide-modules && nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "webpack --config ./webpack.config.js --bail --hide-modules && node ."'
+alias test="standard && flow && mocha --recursive test/unit"
+alias tdd='nodemon \
+	--config ./nodemon-tdd.json \
 	--quiet \
 	--watch ./ \
 	--delay 250ms \
-	-x "./node_modules/.bin/standard && ./node_modules/.bin/mocha --recursive test || exit 1"'
-alias flow='./node_modules/.bin/flow --quiet'
+	-x "standard && mocha --recursive test/unit || exit 1"'
+alias flow='flow --quiet'
 
-alias fdd='./node_modules/.bin/nodemon \
+alias fdd='nodemon \
+	--config ./nodemon-tdd.json \
 	--quiet \
 	--watch ./ \
 	--delay 250ms \
-	-x "./node_modules/.bin/flow --quiet || exit 1"'
+	-x "flow --quiet || exit 1"'
 
 yank () {
 	cd ./@nudj/$1 && yarn link && cd ../.. && yarn link @nudj/$1

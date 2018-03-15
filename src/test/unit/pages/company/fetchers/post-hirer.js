@@ -8,23 +8,26 @@ const expect = chai.expect
 chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
-const { standardPostHirerPersonResponse } = require('../helpers/responses')
-const fetchers = require('../../../../app/pages/company/fetchers')
+const { standardPostHirerResponse } = require('../helpers/responses')
+const fetchers = require('../../../../../app/pages/company/fetchers')
 
-describe('Company postHirerPerson fetcher', () => {
+describe('Company postHirer fetcher', () => {
   const api = nock('http://api:81')
   const body = {
     id: 'companyId'
   }
   const params = {
-    companySlug: 'fake-company',
-    person: 'TestMan'
+    companySlug: 'fake-company'
   }
 
   beforeEach(() => {
     api
       .get('/companies')
       .reply(200, ['allCompanies'])
+
+    api
+      .post('/people')
+      .reply(200, { id: 'personId' })
 
     api
       .post('/hirers')
@@ -75,30 +78,30 @@ describe('Company postHirerPerson fetcher', () => {
   })
 
   it('should resolve with the page data', () => {
-    return expect(fetchers.postHirerPerson({
+    return expect(fetchers.postHirer({
       data: {},
       params,
       body
-    })).to.eventually.deep.equal(standardPostHirerPersonResponse)
+    })).to.eventually.deep.equal(standardPostHirerResponse)
   })
 
   it('should append any passed data', () => {
-    return expect(fetchers.postHirerPerson({
+    return expect(fetchers.postHirer({
       data: {
         provided: 'important-data'
       },
       params,
       body
-    })).to.eventually.deep.equal(merge(standardPostHirerPersonResponse, { provided: 'important-data' }))
+    })).to.eventually.deep.equal(merge(standardPostHirerResponse, { provided: 'important-data' }))
   })
 
   it('should overwrite passed data with page data', () => {
-    return expect(fetchers.postHirerPerson({
+    return expect(fetchers.postHirer({
       data: {
-        jobs: ['Testing Job']
+        people: ['List of Testers']
       },
       params,
       body
-    })).to.eventually.deep.equal(standardPostHirerPersonResponse)
+    })).to.eventually.deep.equal(standardPostHirerResponse)
   })
 })

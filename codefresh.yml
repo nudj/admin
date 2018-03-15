@@ -17,7 +17,7 @@ steps:
     working_directory: 'IMAGE_WORK_DIR'
     commands:
       - ./node_modules/.bin/standard
-      - ./node_modules/.bin/mocha --recursive test
+      - ./node_modules/.bin/mocha --recursive test/unit
 
   build_latest:
     title: Build Latest
@@ -79,7 +79,7 @@ steps:
     title: Push
     type: push
     candidate: '${{build}}'
-    tag: 7.1.0
+    tag: 8.0.0
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'

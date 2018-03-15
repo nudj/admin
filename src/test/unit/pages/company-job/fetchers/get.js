@@ -2,32 +2,34 @@
 const chai = require('chai')
 const dirtyChai = require('dirty-chai')
 const chaiAsPromised = require('chai-as-promised')
-const nock = require('nock')
+const proxyquire = require('proxyquire')
 const { merge } = require('@nudj/library')
+const nock = require('nock')
 const expect = chai.expect
 chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
-const { standardPostReferralPersonResponse } = require('../helpers/responses')
-const fetchers = require('../../../../app/pages/company-job/fetchers')
+const { standardGetResponse } = require('../helpers/responses')
+const fetchers = proxyquire('../../../../../app/pages/company-job/fetchers', {
+  '../../server/modules/prismic': () => ({ fetchAllJobTags: () => 'prismicTagsResponse' })
+})
 
-describe('Company-job postReferralPerson fetcher', () => {
+describe('Company-job get fetcher', () => {
   const api = nock('http://api:81')
   const params = {
-    companySlug: 'fake-company',
-    personId: 'personId',
-    jobSlug: 'fake-job'
+    jobSlug: 'fake-test-job',
+    companySlug: 'fake-company'
   }
 
   beforeEach(() => {
     api
-      .get('/jobs/filter')
-      .query({ slug: 'fake-job', company: 'companyId' })
-      .reply(200, [{ id: 'jobId' }])
-    api
       .get('/companies/filter')
       .query({ slug: 'fake-company' })
       .reply(200, [{ id: 'companyId' }])
+    api
+      .get('/jobs/filter')
+      .query({ slug: 'fake-test-job', company: 'companyId' })
+      .reply(200, [{ id: 'jobId' }])
     api
       .get('/jobs')
       .reply(200, ['jobsResponse'])
@@ -37,16 +39,10 @@ describe('Company-job postReferralPerson fetcher', () => {
       .times(2)
       .reply(200, [{ person: 'personId' }])
     api
-      .post('/referrals')
-      .reply(200, { id: 'referralId' })
-    api
       .get('/referrals/filter')
       .query({ job: 'jobId' })
       .times(2)
       .reply(200, [{ person: 'personId' }])
-    api
-      .post('/people')
-      .reply(200, ['peoplePostResponse'])
     api
       .get('/people')
       .reply(200, ['peopleResponse'])
@@ -55,36 +51,32 @@ describe('Company-job postReferralPerson fetcher', () => {
       .times(2)
       .reply(200, { email: 'test@email.com', firstName: 'Test', lastName: 'McTest' })
   })
-
   afterEach(() => {
     nock.cleanAll()
   })
 
-  it('should return the page data', () => {
-    return expect(fetchers.postReferralPerson({
+  it('should resolve with the page data', () => {
+    return expect(fetchers.get({
       data: {},
-      params,
-      body: {}
-    })).to.eventually.deep.equal(standardPostReferralPersonResponse)
+      params
+    })).to.eventually.deep.equal(standardGetResponse)
   })
 
   it('should append any passed data', () => {
-    return expect(fetchers.postReferralPerson({
+    return expect(fetchers.get({
       data: {
         provided: 'important-data'
       },
-      params,
-      body: {}
-    })).to.eventually.deep.equal(merge(standardPostReferralPersonResponse, { provided: 'important-data' }))
+      params
+    })).to.eventually.deep.equal(merge(standardGetResponse, { provided: 'important-data' }))
   })
 
   it('should overwrite passed data with page data', () => {
-    return expect(fetchers.postReferralPerson({
+    return expect(fetchers.get({
       data: {
-        job: 'Tester'
+        company: 'Testing Inc.'
       },
-      params,
-      body: {}
-    })).to.eventually.deep.equal(standardPostReferralPersonResponse)
+      params
+    })).to.eventually.deep.equal(standardGetResponse)
   })
 })

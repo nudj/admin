@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@nudj/api@8.2.1":
-  version "8.2.1"
-  resolved "https://registry.yarnpkg.com/@nudj/api/-/api-8.2.1.tgz#c78cdb55be84495564caf8d0f8a3598a10cb94d2"
+"@nudj/api@10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/api/-/api-10.0.0.tgz#7f17d4312cd4de2b388434212cd41b8b89ca08cd"
   dependencies:
     "@nudj/library" "4.2.0"
     apollo-server-express "^1.2.0"
@@ -22,6 +22,7 @@
     graphql "0.10.3"
     graphql-server-express "1.0.0"
     graphql-tools "1.1.0"
+    hash-generator "^0.1.0"
     intercom-client "^2.8.7"
     js-base64 "^2.1.9"
     json-server "0.11.2"
@@ -53,9 +54,9 @@
     react-dom "15.6.2"
     react-dropzone "4.2.3"
 
-"@nudj/components@2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-2.2.0.tgz#91460bebc9417866cdda3bb69436e819568916ea"
+"@nudj/components@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@nudj/components/-/components-2.4.0.tgz#d2ba0ac7b762b9de05d9c2995fdbbb4e2fb9eca7"
   dependencies:
     "@nudj/library" "1.1.0"
     aphrodite "^1.2.0"
@@ -72,11 +73,11 @@
     react-modal "^3.1.10"
     react-textarea-autosize "^5.2.1"
 
-"@nudj/framework@13.2.1":
-  version "13.2.1"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-13.2.1.tgz#846a07ef2f505b41a18ec04fd259e2614542134d"
+"@nudj/framework@14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-14.0.0.tgz#76f881cd83e16c0eae60b9ca02960e8c1f00e8f4"
   dependencies:
-    "@nudj/api" "8.2.1"
+    "@nudj/api" "10.0.0"
     "@nudj/components" "2.0.0"
     "@nudj/library" "4.1.0"
     "@nudj/react-router-redux" "0.2.0--5.0.0-alpha.6"
@@ -87,6 +88,7 @@
     connect-ensure-login "^0.1.1"
     connect-redis "^3.2.0"
     consolidate "^0.14.5"
+    cookie-parser "^1.4.3"
     csurf "^1.9.0"
     date-fns "^1.28.3"
     express "^4.14.1"
@@ -849,7 +851,7 @@ babel-plugin-transform-async-to-generator@^6.22.0:
     babel-plugin-syntax-async-functions "^6.8.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-class-properties@6.24.1:
+babel-plugin-transform-class-properties@6.24.1, babel-plugin-transform-class-properties@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-class-properties/-/babel-plugin-transform-class-properties-6.24.1.tgz#6a79763ea61d33d36f37b611aa9def81a81b46ac"
   dependencies:
@@ -1983,6 +1985,13 @@ content-type@~1.0.2, content-type@~1.0.4:
 convert-source-map@^1.5.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.5.1.tgz#b8278097b9bc229365de5c62cf5fcaed8b5599e5"
+
+cookie-parser@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/cookie-parser/-/cookie-parser-1.4.3.tgz#0fe31fa19d000b95f4aadf1f53fdc2b8a203baa5"
+  dependencies:
+    cookie "0.3.1"
+    cookie-signature "1.0.6"
 
 cookie-signature@1.0.6:
   version "1.0.6"
@@ -3921,6 +3930,10 @@ hash-base@^3.0.0:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
+
+hash-generator@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/hash-generator/-/hash-generator-0.1.0.tgz#80e9daffce1a8ffa32e57c44590d233669d53898"
 
 hash.js@^1.0.0, hash.js@^1.0.3:
   version "1.1.3"

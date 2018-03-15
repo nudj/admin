@@ -10,7 +10,7 @@ chai.use(chaiAsPromised)
 chai.use(dirtyChai)
 
 const { standardGetResponse } = require('../helpers/responses')
-const fetchers = proxyquire('../../../../app/pages/company/fetchers', {
+const fetchers = proxyquire('../../../../../app/pages/company/fetchers', {
   '../../server/modules/prismic': () => ({ fetchAllJobTags: () => 'prismicTagsResponse' })
 })
 
