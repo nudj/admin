@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM node:8.9.4-alpine
 ARG NPM_TOKEN
 ARG ENVKEY
 ARG NODE_ENV
