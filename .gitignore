@@ -9,3 +9,5 @@ tmp/*
 !tmp/readme.md
 src/test/output/*
 !src/test/output/readme.md
+src/app/server/hot/
+hot-build.js

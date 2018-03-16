@@ -12,8 +12,10 @@ require('babel-register')({
     return true
   }
 })
+
+const http = require('http')
 const path = require('path')
-const server = require('@nudj/framework/server')
+const createNudjApps = require('@nudj/framework/server')
 const logger = require('@nudj/framework/logger')
 const find = require('lodash/find')
 
@@ -23,8 +25,11 @@ const reduxReducers = require('./redux/reducers')
 const LoadingComponent = require('./components/loading')
 const mockData = require('./mock-data')
 
-const expressAssetPath = path.join(__dirname, 'server/assets')
-const buildAssetPath = path.join(__dirname, 'server/build')
+const useDevServer = process.env.USE_DEV_SERVER === 'true'
+
+const expressAssetPath = path.resolve('./app/server/assets')
+const buildAssetPath = !useDevServer && path.resolve('./app/server/build')
+
 const expressRouters = {
   insecure: [],
   secure: [
@@ -56,7 +61,7 @@ const spoofLoggedIn = (req, res, next) => {
 }
 const errorHandlers = {}
 
-const { app, getMockApiApps } = server({
+let { app, getMockApiApps } = createNudjApps({
   App: reactApp,
   reduxRoutes,
   reduxReducers,
@@ -68,6 +73,8 @@ const { app, getMockApiApps } = server({
   errorHandlers,
   LoadingComponent
 })
+
+const server = http.createServer(app)
 
 app.listen(80, () => {
   logger.log('info', 'Application running')
@@ -82,5 +89,36 @@ if (process.env.USE_MOCKS === 'true') {
 
   gqlServer.listen(82, () => {
     logger.log('info', 'Mock GQL running')
+  })
+}
+
+if (module.hot) {
+  module.hot.accept([
+    './redux',
+    './redux/routes',
+    './redux/reducers',
+    path.resolve('./pages'),
+    path.resolve('./components')
+  ], () => {
+    const updatedReactApp = require('./redux')
+    const updatedReduxRoutes = require('./redux/routes')
+    const updatedReduxReducers = require('./redux/reducers')
+    const updatedLoadingPage = require('./components/loading')
+
+    server.removeListener('request', app)
+    const { app: newApp } = createNudjApps({
+      App: updatedReactApp,
+      reduxRoutes: updatedReduxRoutes,
+      reduxReducers: updatedReduxReducers,
+      expressAssetPath,
+      buildAssetPath,
+      expressRouters,
+      spoofLoggedIn,
+      errorHandlers,
+      LoadingComponent: updatedLoadingPage
+    })
+
+    server.on('request', newApp)
+    app = newApp
   })
 }
