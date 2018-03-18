@@ -19,6 +19,7 @@ const Page = (props) => {
     dispatch,
     title,
     description,
+    actions,
     children
   } = props
 
@@ -37,7 +38,9 @@ const Page = (props) => {
           <Header
             title={title}
             description={description}
-          />
+          >
+            {actions}
+          </Header>
           <div className={css(style.body)}>
             {children}
           </div>

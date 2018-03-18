@@ -20,7 +20,6 @@ const {
 const { setSurveySectionDraft, createOrUpdateSurveySection } = require('./actions')
 const style = require('./style.css')
 const Page = require('../../components/page')
-const PageHeader = require('../../components/page-header')
 
 type PageSurvey = {
   id: ID,
@@ -104,25 +103,40 @@ const SurveySectionPage = (props: SurveySectionPageProps) => {
   )
 
   return (
-    <Page {...props} className={css(style.pageBody)}>
+    <Page
+      {...props}
+      title='Survey section'
+      actions={[
+        <Link
+          key='new-survey-section'
+          className={css(style.link)}
+          to={`/survey-sections/new${queryString}`}
+        >
+          New Survey Section
+        </Link>,
+        existingSection.id && (
+          <Link
+            key='section-questions'
+            className={css(style.link)}
+            to={`/survey-sections/${existingSection.id}/questions`}
+          >
+            Section Questions
+          </Link>
+        ),
+        existingSection.id && (
+          <Link
+            key='survey-sections'
+            className={css(style.link)}
+            to={`/surveys/${existingSection.survey.id}/sections`}
+          >
+            Survey Sections
+          </Link>
+        )
+      ].filter(Boolean)}
+    >
       <Helmet>
         <title>ADMIN - SurveySection</title>
       </Helmet>
-      <PageHeader title='Survey section'>
-        <Link className={css(style.link)} to={`/survey-sections/new${queryString}`}>
-          New Survey Section
-        </Link>
-        {existingSection.id && (
-          <Link className={css(style.link)} to={`/survey-sections/${existingSection.id}/questions`}>
-            Section Questions
-          </Link>
-        )}
-        {existingSection.id && (
-          <Link className={css(style.link)} to={`/surveys/${existingSection.survey.id}/sections`}>
-            Survey Sections
-          </Link>
-        )}
-      </PageHeader>
       <h3 className={css(style.pageHeadline)}>
         {existingSection.id ? 'Edit section' : 'Create section'}
       </h3>

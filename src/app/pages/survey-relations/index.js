@@ -11,7 +11,6 @@ const { merge } = require('@nudj/library')
 const style = require('./style.css')
 const Page = require('../../components/page')
 const { Link } = require('react-router-dom')
-const PageHeader = require('../../components/page-header')
 const { setListOrder, saveListOrder } = require('./actions')
 
 type SurveyRelationsProps = {
@@ -70,15 +69,36 @@ const SurveyRelationsPage = (props: SurveyRelationsProps) => {
   }
 
   return (
-    <Page {...props} className={css(style.pageBody)}>
+    <Page
+      {...props}
+      title='Surveys'
+      actions={[
+        <Link
+          key='add-section'
+          className={css(style.link)}
+          to={`/survey-sections/new?survey=${survey.id}`}
+        >
+          Add Section
+        </Link>,
+        <Link
+          key='edit-survey'
+          className={css(style.link)}
+          to={`/surveys/${survey.id}`}
+        >
+          Edit Survey
+        </Link>,
+        <Link
+          key='new-survey'
+          className={css(style.link)}
+          to={`/surveys/new?company=${company.id}`}
+        >
+          New Survey
+        </Link>
+      ]}
+    >
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
-      <PageHeader title='Surveys'>
-        <Link className={css(style.link)} to={`/survey-sections/new?survey=${survey.id}`}>Add Section</Link>
-        <Link className={css(style.link)} to={`/surveys/${survey.id}`}>Edit Survey</Link>
-        <Link className={css(style.link)} to={`/surveys/new?company=${company.id}`}>New Survey</Link>
-      </PageHeader>
       <h3 className={css(style.pageHeadline)}>
         <span className={css(style.textHighlight)}>{company.name}</span> - {survey.introTitle}
       </h3>

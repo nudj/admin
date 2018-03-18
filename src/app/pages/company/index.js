@@ -10,7 +10,6 @@ const actions = require('@nudj/framework/actions')
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const Autocomplete = require('../../components/autocomplete')
-const PageHeader = require('../../components/page-header')
 const RowItem = require('../../components/row-item')
 const Tooltip = require('../../components/tooltip')
 const CompanyForm = require('../../components/company-form')
@@ -420,13 +419,22 @@ module.exports = class CompanyPage extends React.Component {
     const publishedJobs = jobs.filter(job => job.status === 'PUBLISHED')
 
     return (
-      <Page {...this.props} className={this.style.pageBody}>
+      <Page
+        {...this.props}
+        title={companyName}
+        description='Jobs and Hirers'
+        actions={(
+          <Link
+            className={this.style.nudj}
+            to={`/surveys?company=${company.id}`}
+          >
+            Company Surveys
+          </Link>
+        )}
+      >
         <Helmet>
           <title>{`ADMIN - ${companyName}`}</title>
         </Helmet>
-        <PageHeader title={companyName} subtitle={`Jobs and Hirers`}>
-          <Link className={this.style.nudj} to={`/surveys?company=${company.id}`}>Company Surveys</Link>
-        </PageHeader>
         <h3 className={this.style.pageHeadline}>
           <span className={this.style.pageHeadlineHighlight}>{companyName}</span>
         </h3>
