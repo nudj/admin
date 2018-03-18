@@ -1,21 +1,28 @@
-const { css, merge } = require('@nudj/framework/css')
-const { variables, mixins } = require('../../lib/css')
+const { StyleSheet, colors } = require('@nudj/components/lib/css')
 
-module.exports = css({
-  body: merge({
-    minHeight: '100vh',
-    paddingLeft: variables.sizing.fixedHeaderWidth,
-    position: 'relative'
-  }, mixins.sansSerif),
-  header: merge({
+const sidebarWidth = '7.5rem'
+
+const styleSheet = StyleSheet.create({
+  htmlBody: {
+    backgroundColor: colors.greyLightest
+  },
+  root: {
+    position: 'relative',
+    backgroundColor: colors.greyLightest,
+    minHeight: '100%',
+    paddingLeft: sidebarWidth
+  },
+  sidebar: {
     height: '100%',
     left: 0,
     position: 'fixed',
     top: 0,
-    width: variables.sizing.fixedHeaderWidth
-  }, mixins.sansSerif),
+    width: sidebarWidth
+  },
   content: {
     minHeight: '100vh',
-    width: `calc(100vw - ${variables.sizing.fixedHeaderWidth})`
+    width: `calc(100vw - ${sidebarWidth})`
   }
 })
+
+module.exports = styleSheet
