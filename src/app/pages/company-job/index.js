@@ -9,7 +9,6 @@ const actions = require('@nudj/framework/actions')
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const Autocomplete = require('../../components/autocomplete')
-const PageHeader = require('../../components/page-header')
 const RowItem = require('../../components/row-item')
 const CopyToClipboard = require('../../components/copy-to-clipboard')
 const JobForm = require('../../components/job-form')
@@ -331,15 +330,25 @@ module.exports = class JobPage extends React.Component {
       submitLabel='Save changes' />)
 
     return (
-      <Page {...this.props} className={this.style.pageBody}>
+      <Page
+        {...this.props}
+        title={jobTitle}
+        description={(
+          <span>
+            @{' '}
+            <Link
+              className={this.style.headerLink}
+              to={`/companies/${companySlug}`}
+            >
+              {companyName}
+            </Link>
+          </span>
+        )}
+        actions={<h4>{get(this.props, 'job.status')}</h4>}
+      >
         <Helmet>
           <title>{`ADMIN - ${jobTitle} @ ${companyName}`}</title>
         </Helmet>
-        <PageHeader
-          title={jobTitle}
-          subtitle={<span>@ <Link className={this.style.headerLink} to={`/companies/${companySlug}`}>{companyName}</Link></span>}>
-          <h4>{get(this.props, 'job.status')}</h4>
-        </PageHeader>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMainContainer}>
             {jobActivityGroup}

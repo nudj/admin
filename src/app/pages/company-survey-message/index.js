@@ -5,7 +5,6 @@ const { cssProcessor } = require('@nudj/framework/css')
 
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
-const PageHeader = require('../../components/page-header')
 const EmailForm = require('../../components/email-form')
 
 module.exports = (props) => {
@@ -18,11 +17,14 @@ module.exports = (props) => {
   const body = get(surveyMessage, 'body')
 
   return (
-    <Page {...props} className={style.pageBody}>
+    <Page
+      {...props}
+      title='Survey Email'
+      description={hirer}
+    >
       <Helmet>
         <title>ADMIN - survey email</title>
       </Helmet>
-      <PageHeader title='Survey Email' subtitle={hirer} />
       <div className={style.pageContent}>
         <div className={style.pageMain}>
           <EmailForm

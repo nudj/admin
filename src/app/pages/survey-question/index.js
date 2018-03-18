@@ -28,7 +28,6 @@ const {
 } = require('./actions')
 const style = require('./style.css')
 const Page = require('../../components/page')
-const PageHeader = require('../../components/page-header')
 const { questionTypes, expertiseTags } = require('../../lib/constants')
 
 type SurveyQuestionPageProps = {
@@ -111,20 +110,31 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
   )
 
   return (
-    <Page {...props} className={css(style.pageBody)}>
+    <Page
+      {...props}
+      title='Surveys'
+      actions={[
+        <Link
+          key='new-section-question'
+          className={css(style.link)}
+          to={`/survey-questions/new${queryString}`}
+        >
+          New Section Question
+        </Link>,
+        existingQuestion.id && (
+          <Link
+            key='section-question'
+            className={css(style.link)}
+            to={`/survey-sections/${sectionId}/questions`}
+          >
+            Section Questions
+          </Link>
+        )
+      ].filter(Boolean)}
+    >
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
-      <PageHeader title='Surveys'>
-        <Link className={css(style.link)} to={`/survey-questions/new${queryString}`}>
-          New Section Question
-        </Link>
-        {existingQuestion.id && (
-          <Link className={css(style.link)} to={`/survey-sections/${sectionId}/questions`}>
-            Section Questions
-          </Link>
-        )}
-      </PageHeader>
       <h3 className={css(style.pageHeadline)}>
         {existingQuestion.id ? 'Edit question' : 'Create question'}
       </h3>

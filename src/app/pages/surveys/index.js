@@ -11,7 +11,6 @@ const { css } = require('@nudj/components/lib/css')
 const style = require('./style.css')
 const Page = require('../../components/page')
 const { Link } = require('react-router-dom')
-const PageHeader = require('../../components/page-header')
 
 type SurveyPageProps = {
   surveys: Array<Survey>,
@@ -51,13 +50,21 @@ const SurveysPage = (props: SurveyPageProps) => {
   }
 
   return (
-    <Page {...props} className={css(style.pageBody)}>
+    <Page
+      {...props}
+      title='Surveys'
+      actions={(
+        <Link
+          className={css(style.link)}
+          to={`/surveys/new${query}`}
+        >
+          New Survey
+        </Link>
+      )}
+    >
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
-      <PageHeader title='Surveys'>
-        <Link className={css(style.link)} to={`/surveys/new${query}`}>New Survey</Link>
-      </PageHeader>
       <h3 className={css(style.pageHeadline)}>Surveys <span className={css(style.textHighlight)}>({data.length})</span></h3>
       <div className={css(style.pageContent)}>
         <div className={css(style.pageMain)}>
