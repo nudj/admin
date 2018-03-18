@@ -1,20 +1,33 @@
 const React = require('react')
-const get = require('lodash/get')
-const getStyle = require('./page-header.css')
+const { css, mergeStyleSheets } = require('@nudj/components/lib/css')
 
-const PageHeader = (props) => {
-  const style = getStyle()
+const defaultStyleSheet = require('./style.css')
+
+const Header = (props) => {
+  const {
+    title,
+    description,
+    children,
+    styleSheet
+  } = props
+
+  const style = mergeStyleSheets(defaultStyleSheet, styleSheet)
+
   return (
-    <header className={style.header}>
-      <div className={style.main}>
-        <h1 className={style.title}>{get(props, 'title', '')}</h1>
-        <h2 className={style.subtitle}>{get(props, 'subtitle', '')}</h2>
+    <header className={css(style.root)}>
+      <div className={css(style.main)}>
+        <h1 className={css(style.title)}>
+          {title}
+        </h1>
+        <div className={css(style.description)}>
+          {description}
+        </div>
       </div>
-      <div className={style.sub}>
-        {get(props, 'children', '')}
+      <div className={css(style.sub)}>
+        {children}
       </div>
     </header>
   )
 }
 
-module.exports = PageHeader
+module.exports = Header
