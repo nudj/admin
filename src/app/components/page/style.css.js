@@ -1,4 +1,4 @@
-const { StyleSheet, colors } = require('@nudj/components/lib/css')
+const { StyleSheet, sizes, colors } = require('@nudj/components/lib/css')
 
 const sidebarWidth = '7.5rem'
 
@@ -19,9 +19,15 @@ const styleSheet = StyleSheet.create({
     top: 0,
     width: sidebarWidth
   },
-  content: {
+  main: {
     minHeight: '100vh',
     width: `calc(100vw - ${sidebarWidth})`
+  },
+  body: {
+    marginTop: sizes.regular,
+    paddingLeft: sizes.regular,
+    paddingRight: sizes.regular,
+    paddingBottom: sizes.regular
   }
 })
 
