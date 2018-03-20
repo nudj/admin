@@ -40,7 +40,7 @@ module.exports = {
           path.join(__dirname, '@nudj'),
           path.join(__dirname, 'node_modules', '@nudj')
         ],
-        exclude: /\/usr\/src\/(node_modules\/)?@nudj\/.*\/node_modules\/.*/,
+        exclude: /node_modules\/(?!@nudj)/,
         loader: 'babel-loader',
         options: {
           babelrc: false,

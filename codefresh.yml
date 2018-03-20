@@ -27,9 +27,7 @@ steps:
     dockerfile: Dockerfile
     build_arguments:
       - NPM_TOKEN=${{NPM_TOKEN}}
-      - ENVKEY=${{ENVKEY}}
-      - NODE_ENV=production
-      - DEBUG=true
+      - ENVKEY=${{ENVKEY_STAGING}}
     when:
       branch:
         only:
@@ -56,8 +54,7 @@ steps:
     dockerfile: Dockerfile
     build_arguments:
       - NPM_TOKEN=${{NPM_TOKEN}}
-      - ENVKEY=${{ENVKEY}}
-      - NODE_ENV=production
+      - ENVKEY=${{ENVKEY_PRODUCTION}}
     when:
       branch:
         only:
@@ -81,7 +78,7 @@ steps:
     title: Push
     type: push
     candidate: '${{build}}'
-    tag: 8.0.1
+    tag: 8.0.2
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'
