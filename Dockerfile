@@ -1,4 +1,4 @@
-FROM node:8.9.4-alpine
+FROM node:8-alpine
 ARG NPM_TOKEN
 ARG ENVKEY
 RUN mkdir -p /usr/src && apk add --no-cache ca-certificates
