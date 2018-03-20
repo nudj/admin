@@ -38,6 +38,40 @@
     semi "^4.0.5"
     striptags "^3.1.1"
 
+"@nudj/api@12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/api/-/api-12.0.0.tgz#f3d721b2dfa60d7abf66157bfed2d9e345e41ce8"
+  dependencies:
+    "@nudj/library" "5.0.0"
+    apollo-server-express "^1.2.0"
+    arangojs "^6.0.1"
+    axios "^0.17.1"
+    body-parser "1.17.2"
+    date-fns "1.28.2"
+    dedent "^0.7.0"
+    email-addresses "^3.0.1"
+    entities "^1.1.1"
+    envkey "^1.0.0"
+    express "4.15.3"
+    glob "^7.1.2"
+    googleapis "^21.3.0"
+    graphql "0.10.3"
+    graphql-tools "1.1.0"
+    hash-generator "^0.1.0"
+    intercom-client "^2.8.7"
+    js-base64 "^2.1.9"
+    lodash "4.17.4"
+    mailgun-js "^0.14.1"
+    morgan "1.8.2"
+    node-fetch "1.6.3"
+    pad-right "^0.2.2"
+    pluralize "5.0.0"
+    prismic.io "^3.5.6"
+    random-words "^0.0.1"
+    restify "4.3.0"
+    semi "^4.0.5"
+    striptags "^3.1.1"
+
 "@nudj/components@2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@nudj/components/-/components-2.0.0.tgz#f3a18132847b6b3d0ed31406d564db86811a45f4"
@@ -139,6 +173,15 @@
 "@nudj/library@4.2.0":
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@nudj/library/-/library-4.2.0.tgz#f568d5d98e4b0f8a1f08d53f13109ca1829a95e7"
+  dependencies:
+    axios "^0.16.2"
+    deepmerge "^1.5.0"
+    mailbuild "^0.3.7"
+    shortid "^2.2.8"
+
+"@nudj/library@5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-5.0.0.tgz#a1ce9170867febd3235ab2e666bc29f017332fcb"
   dependencies:
     axios "^0.16.2"
     deepmerge "^1.5.0"
