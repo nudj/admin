@@ -11,13 +11,13 @@ const { parse } = require('query-string')
 
 const { merge } = require('@nudj/library')
 const { css } = require('@nudj/components/lib/css')
+const CheckboxGroup = require('@nudj/components/lib/components/checkbox-group')
 const {
   Input,
   InputField,
   Card,
   Button,
   Checkbox,
-  CheckboxGroup,
   Select
 } = require('@nudj/components')
 
