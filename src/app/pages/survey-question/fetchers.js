@@ -32,6 +32,7 @@ function postQuestion ({ body }) {
         name
         required
         type
+        tags
         section: surveySection {
           id
           title
@@ -54,6 +55,7 @@ function postQuestion ({ body }) {
       description: body.description,
       name: body.name,
       type: body.type,
+      tags: body.tags,
       required: body.required || false
     }
   }
@@ -77,6 +79,7 @@ function patchQuestion ({ body, params }) {
         name
         required
         type
+        tags
         section: surveySection {
           id
           title
@@ -110,6 +113,7 @@ function getOne ({ params }) {
         name
         required
         type
+        tags
         section: surveySection {
           id
           title

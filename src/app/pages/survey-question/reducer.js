@@ -1,7 +1,10 @@
 /* global DraftAction State */
 // @flow
 const { merge } = require('@nudj/library')
-const { SET_SURVEY_QUESTION_DRAFT } = require('./actions')
+const {
+  SET_SURVEY_QUESTION_DRAFT,
+  SET_SURVEY_QUESTION_TAGS
+} = require('./actions')
 
 type Actions = {
   [key: typeof SET_SURVEY_QUESTION_DRAFT]: (
@@ -13,12 +16,21 @@ type Actions = {
 const setSurveyQuestionDraft = (state, action) =>
   merge(state, { draft: action.draft })
 
+const setSurveyQuestionTags = (state, action) => ({
+  ...state,
+  tagsUpdated: true,
+  tags: action.tags
+})
+
 const actions = {
-  [SET_SURVEY_QUESTION_DRAFT]: setSurveyQuestionDraft
+  [SET_SURVEY_QUESTION_DRAFT]: setSurveyQuestionDraft,
+  [SET_SURVEY_QUESTION_TAGS]: setSurveyQuestionTags
 }
 
 const initialState = {
-  draft: {}
+  draft: {},
+  tagsUpdated: false,
+  tags: []
 }
 
 const reducer = (initialState: State, actions: Actions) => (
