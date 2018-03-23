@@ -1,3 +1,7 @@
+const omit = require('lodash/omit')
+
+const { Redirect } = require('@nudj/framework/errors')
+
 const {
   merge,
   actionMapAssign
@@ -90,46 +94,108 @@ const get = ({ params }) => {
 }
 
 function put ({
-  data,
   params,
   body
 }) {
-  return actionMapAssign(
-    data,
-    {
-      company: () => companies.put(body)
-    },
-    {
-      notification: data => ({
-        message: `${data.company.name} saved`,
-        type: 'success'
-      })
-    },
-    ...addPageData(params.companySlug)
-  )
+  const { id } = body
+  const companyData = omit(body, ['id'])
+  const gql = `
+    mutation UpdateCompany ($id: ID!, $companyData: CompanyUpdateInput!) {
+      company: updateCompany(id: $id, companyUpdate: $companyData) {
+        slug
+      }
+    }
+  `
+  const variables = { id, companyData }
+  const respond = ({ company }) => {
+    throw new Redirect({
+      url: `/companies/${company.slug}`,
+      notification: { type: 'success', message: 'Company updated!' }
+    })
+  }
+
+  return { gql, variables, respond }
 }
 
 function postJob ({
-  data,
   params,
   body
 }) {
-  return actionMapAssign(
-    data,
-    {
-      company: () => companies.get(params.companySlug)
-    },
-    {
-      newJob: data => jobs.post({}, merge(body, { company: data.company.id })).then(data => data.newJob)
-    },
-    {
-      notification: data => ({
-        message: `${data.newJob.title} added`,
-        type: 'success'
-      })
-    },
-    ...addPageData(params.companySlug)
-  )
+  const gql = `
+    query CreateCompanyJob ($slug: String!, $jobData: JobCreateInput!) {
+      company: companyByFilters(filters: { slug: $slug }) {
+        id
+        name
+        slug
+        logo
+        mission
+        description
+        industry
+        location
+        url
+        facebook
+        twitter
+        linkedin
+        onboarded
+        newJob: createJob(data: $jobData) {
+          id
+        }
+        jobs {
+          id
+          created
+          bonus
+          location
+          slug
+          status
+          title
+          company {
+            id
+          }
+        }
+        hirers {
+          id
+          person {
+            id
+            firstName
+            lastName
+            email
+          }
+        }
+      }
+      companies {
+        name
+        slug
+      }
+      people {
+        email
+        id
+        firstName
+        lastName
+      }
+      jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
+    }
+  `
+  const variables = {
+    jobData: body,
+    slug: params.companySlug
+  }
+  return { gql, variables }
+  // return actionMapAssign(
+  //   data,
+  //   {
+  //     company: () => companies.get(params.companySlug)
+  //   },
+  //   {
+  //     newJob: data => jobs.post({}, merge(body, { company: data.company.id })).then(data => data.newJob)
+  //   },
+  //   {
+  //     notification: data => ({
+  //       message: `${data.newJob.title} added`,
+  //       type: 'success'
+  //     })
+  //   },
+  //   ...addPageData(params.companySlug)
+  // )
 }
 
 function postHirer ({
@@ -137,8 +203,68 @@ function postHirer ({
   params,
   body
 }) {
-  const companySlug = params.companySlug
-  const email = body.email
+  const gql = `
+    mutation GetCompanyPage ($slug: String!, $hirerData: HirerCreateInput!) {
+      company: companyByFilters(filters: { slug: $slug }) {
+        newHirer: createHirerByEmail(hirer: $hirerData) {
+          id
+        }
+        id
+        name
+        slug
+        logo
+        mission
+        description
+        industry
+        location
+        url
+        facebook
+        twitter
+        linkedin
+        onboarded
+        jobs {
+          id
+          created
+          bonus
+          location
+          slug
+          status
+          title
+          company {
+            id
+          }
+        }
+        hirers {
+          id
+          person {
+            id
+            firstName
+            lastName
+            email
+          }
+        }
+      }
+      companies {
+        name
+        slug
+      }
+      people {
+        email
+        id
+        firstName
+        lastName
+      }
+      jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
+      notification: setNotification(type: "success", message: "New hirer created") {
+        type
+        message
+      }
+    }
+  `
+  const variables = {
+    slug: params.companySlug,
+    hirerData: body
+  }
 
   return actionMapAssign(
     data,
@@ -191,95 +317,10 @@ function postHirerPerson ({
   )
 }
 
-function postSurvey ({
-  data,
-  params,
-  body
-}) {
-  const companySlug = params.companySlug
-
-  return actionMapAssign(
-    data,
-    {
-      company: () => companies.get(companySlug)
-    },
-    {
-      survey: data => body.type === 'EMPLOYEE_SURVEY' ? surveys.post({}, merge(body, { company: data.company.id })).then(data => data.survey) : null,
-      hirerSurvey: data => body.type === 'HIRER_SURVEY' ? surveys.post({}, merge(body, { company: data.company.id })).then(data => data.survey) : null
-    },
-    {
-      notification: data => ({
-        message: `Survey added`,
-        type: 'success'
-      })
-    },
-    ...addPageData(companySlug)
-  )
-}
-
-function patchSurvey ({
-  data,
-  params,
-  body
-}) {
-  const companySlug = params.companySlug
-  const surveyId = params.surveyId
-
-  return actionMapAssign(
-    data,
-    {
-      company: () => companies.get(companySlug)
-    },
-    {
-      survey: data => body.type === 'EMPLOYEE_SURVEY' ? surveys.patch({}, surveyId, merge(body, { company: data.company.id })).then(data => data.survey) : null,
-      hirerSurvey: data => body.type === 'HIRER_SURVEY' ? surveys.patch({}, surveyId, merge(body, { company: data.company.id })).then(data => data.survey) : null
-    },
-    {
-      notification: data => ({
-        message: `Survey updated`,
-        type: 'success'
-      })
-    },
-    ...addPageData(companySlug)
-  )
-}
-
-function postTask ({
-  data,
-  params,
-  body
-}) {
-  const companySlug = params.companySlug
-  const type = params.taskType
-
-  return actionMapAssign(
-    data,
-    {
-      company: () => companies.get(companySlug)
-    },
-    {
-      newTask: data => {
-        const company = data.company.id
-        return tasks.post({}, { company, type }).then(data => data.newTask)
-      }
-    },
-    {
-      notification: data => ({
-        message: `New ${data.newTask.type} task saved`,
-        type: 'success'
-      })
-    },
-    ...addPageData(companySlug)
-  )
-}
-
 module.exports = {
   get,
   put,
   postJob,
   postHirer,
-  postHirerPerson,
-  postSurvey,
-  patchSurvey,
-  postTask
+  postHirerPerson
 }

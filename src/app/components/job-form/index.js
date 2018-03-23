@@ -65,7 +65,7 @@ module.exports = class JobForm extends React.Component {
       type: 'PERMANENT', // 'Contract', 'Freelance'
       remuneration: '',
       templateTags: [],
-      tags: [],
+      labels: [],
       location: '',
       companyId: get(this.props, 'company.id'),
       relatedJobs: []
@@ -354,8 +354,8 @@ module.exports = class JobForm extends React.Component {
             <input className={this.style.inputBox} type='text' placeholder='eg: London' id='newJobLocation' required name='location' onChange={this.onChangeGeneric.bind(this)} value={job.location} />
           </li>
           <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobTags'>Tags</label>
-            <input className={this.style.inputBox} type='text' placeholder='eg: finance, tech' id='newJobTags' name='tags' onChange={this.onChangeGeneric.bind(this)} value={job.tags} />
+            <label className={this.style.label} htmlFor='newJobLabels'>Labels</label>
+            <input className={this.style.inputBox} type='text' placeholder='eg: finance, tech' id='newJobLabels' name='labels' onChange={this.onChangeGeneric.bind(this)} value={job.labels} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobTemplateTags'>Template tags</label>
