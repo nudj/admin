@@ -4,12 +4,13 @@ const fetchers = require('./fetchers')
 
 const Router = ({
   ensureLoggedIn,
-  respondWith
+  respondWith,
+  respondWithGql
 }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/companies/:companySlug', respondWith(fetchers.get))
+  router.getHandlers('/companies/:companySlug', respondWithGql(fetchers.get))
   router.putHandlers('/companies/:companySlug', respondWith(fetchers.put))
   router.postHandlers('/companies/:companySlug/hirers', respondWith(fetchers.postHirer))
   router.postHandlers('/companies/:companySlug/hirers/:person', respondWith(fetchers.postHirerPerson))

@@ -6,7 +6,6 @@ const {
 const companies = require('../../server/modules/companies')
 const people = require('../../server/modules/people')
 const jobs = require('../../server/modules/jobs')
-const messages = require('../../server/modules/messages')
 const tasks = require('../../server/modules/tasks')
 const surveys = require('../../server/modules/surveys')
 const hirers = require('../../server/modules/hirers')
@@ -27,23 +26,67 @@ const addPageData = (companySlug) => [
     jobTemplateTags: data => prismic.fetchAllJobTags()
   },
   {
-    survey: data => data.survey || surveys.getSurveyForCompany({}, data.company.id).then(data => data.survey),
-    hirerSurvey: data => data.hirerSurvey || surveys.getSurveyForCompany({}, data.company.id, 'HIRER_SURVEY').then(data => data.survey),
     jobs: data => jobs.getAll({}, data.company.id).then(data => data.jobs),
-    hirers: data => hirers.getAllByCompany(data, data.company.id).then(data => addPeopleToHirers(data.hirers, data.people)),
-    surveyMessages: data => messages.getAllFor({}, data.company.id).then(data => data.surveyMessages),
-    tasks: data => tasks.getAllByCompany({}, data.company.id).then(data => data.tasks)
+    hirers: data => hirers.getAllByCompany(data, data.company.id).then(data => addPeopleToHirers(data.hirers, data.people))
   }
 ]
 
-function get ({
-  data,
-  params
-}) {
-  return actionMapAssign(
-    data,
-    ...addPageData(params.companySlug)
-  )
+const get = ({ params }) => {
+  const gql = `
+    query GetCompanyPage ($slug: String!) {
+      company: companyByFilters(filters: { slug: $slug }) {
+        id
+        name
+        slug
+        logo
+        mission
+        description
+        industry
+        location
+        url
+        facebook
+        twitter
+        linkedin
+        onboarded
+        jobs {
+          id
+          created
+          bonus
+          location
+          slug
+          status
+          title
+          company {
+            id
+          }
+        }
+        hirers {
+          id
+          person {
+            id
+            firstName
+            lastName
+            email
+          }
+        }
+      }
+      companies {
+        name
+        slug
+      }
+      people {
+        email
+        id
+        firstName
+        lastName
+      }
+      jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
+    }
+  `
+  const variables = {
+    slug: params.companySlug
+  }
+  return { gql, variables }
 }
 
 function put ({

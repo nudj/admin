@@ -290,7 +290,11 @@ module.exports = class JobForm extends React.Component {
     const companyId = get(this.props, 'company.id')
     const jobId = get(job, 'id')
 
-    const relatedJobs = get(this.props, 'jobs', [])
+    const relatedJobsList = get(this.props, 'jobs', [])
+    const relatedJobs = relatedJobsList.map(job => ({
+      ...job,
+      company: get(job, 'company.id')
+    }))
       .filter(relatedJob => this.filterOutUnrelatableJobs(relatedJob, jobId, companyId))
       .sort(this.sortJobsAlphabeticallyByTitle)
 
