@@ -1,6 +1,7 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
+const omit = require('lodash/omit')
 const format = require('date-fns/format')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
@@ -233,12 +234,13 @@ module.exports = class CompanyPage extends React.Component {
   }
 
   render () {
-    const company = get(this.props.app, 'company', {})
+    const companyData = get(this.props.app, 'company', {})
+    const company = omit(companyData, ['jobs', 'hirers'])
     const companies = get(this.props.app, 'companies', [])
     const templateTags = get(this.props.app, 'jobTemplateTags', [])
-    const jobs = get(company, 'jobs', [])
-    const hirers = get(company, 'hirers', [])
-    const companyName = get(company, 'name')
+    const jobs = get(companyData, 'jobs', [])
+    const hirers = get(companyData, 'hirers', [])
+    const companyName = get(companyData, 'name')
 
     const editCompanyForm = (<CompanyForm
       companies={companies}
