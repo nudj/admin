@@ -67,7 +67,6 @@ module.exports = class JobForm extends React.Component {
       templateTags: [],
       labels: [],
       location: '',
-      companyId: get(this.props, 'company.id'),
       relatedJobs: []
     }
   }

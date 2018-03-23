@@ -122,7 +122,7 @@ function postJob ({
   body
 }) {
   const gql = `
-    query CreateCompanyJob ($slug: String!, $jobData: JobCreateInput!) {
+    mutation CreateCompanyJob ($slug: String!, $jobData: JobCreateInput!) {
       company: companyByFilters(filters: { slug: $slug }) {
         id
         name
@@ -173,6 +173,9 @@ function postJob ({
         lastName
       }
       jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
+      setNotification(type: "success", message: "${body.title} created") {
+        message
+      }
     }
   `
   const variables = {
@@ -180,22 +183,6 @@ function postJob ({
     slug: params.companySlug
   }
   return { gql, variables }
-  // return actionMapAssign(
-  //   data,
-  //   {
-  //     company: () => companies.get(params.companySlug)
-  //   },
-  //   {
-  //     newJob: data => jobs.post({}, merge(body, { company: data.company.id })).then(data => data.newJob)
-  //   },
-  //   {
-  //     notification: data => ({
-  //       message: `${data.newJob.title} added`,
-  //       type: 'success'
-  //     })
-  //   },
-  //   ...addPageData(params.companySlug)
-  // )
 }
 
 function postHirer ({
