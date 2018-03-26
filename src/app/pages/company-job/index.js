@@ -1,6 +1,7 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
+const omit = require('lodash/omit')
 const { Helmet } = require('react-helmet')
 const isEmail = require('validator/lib/isEmail')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
@@ -204,7 +205,8 @@ module.exports = class JobPage extends React.Component {
     this.setState({referralValue})
   }
 
-  onSubmitJob (data) {
+  onSubmitJob (jobData) {
+    const data = omit(jobData, ['created', 'applications', 'referrals'])
     const companySlug = get(this.props.app, 'company.slug')
     const jobSlug = get(this.props.app, 'company.job.slug')
     const url = `/companies/${companySlug}/jobs/${jobSlug}`

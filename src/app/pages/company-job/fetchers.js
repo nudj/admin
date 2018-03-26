@@ -1,5 +1,6 @@
 const isThisWeek = require('date-fns/is_this_week')
 const differenceInCalendarWeeks = require('date-fns/difference_in_calendar_weeks')
+const omit = require('lodash/omit')
 
 const { actionMapAssign } = require('@nudj/library')
 
@@ -33,6 +34,22 @@ const formatActivityStatistics = (data) => {
   return activity
 }
 
+const addActivities = ({ gql, variables }) => {
+  return {
+    gql,
+    variables,
+    transformData: (data) => {
+      const { applications, referrals } = data.company.job
+      const activities = {
+        applications: formatActivityStatistics(applications),
+        referrers: formatActivityStatistics(referrals)
+      }
+
+      return { ...data, activities }
+    }
+  }
+}
+
 const addPageData = (companySlug) => [
   {
     jobs: () => jobs.getAll({}).then(data => data.jobs),
@@ -58,9 +75,23 @@ function get ({
         slug
         job: jobByFilters(filters: { slug: $jobSlug }) {
           id
+          created
           title
+          type
+          url
           slug
           status
+          bonus
+          candidateDescription
+          roleDescription
+          description
+          experience
+          labels
+          location
+          remuneration
+          requirements
+          roleDescription
+          templateTags
           referrals {
             id
             created
@@ -108,20 +139,8 @@ function get ({
       jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
     }
   `
-
   const variables = { companySlug, jobSlug }
-
-  const transformData = (data) => {
-    const { applications, referrals } = data.company.job
-    const activities = {
-      applications: formatActivityStatistics(applications),
-      referrers: formatActivityStatistics(referrals)
-    }
-
-    return { ...data, activities }
-  }
-
-  return { gql, variables, transformData }
+  return addActivities({ gql, variables })
 }
 
 function put ({
@@ -129,22 +148,91 @@ function put ({
   params,
   body
 }) {
-  const companySlug = params.companySlug
-
-  return actionMapAssign(
-    data,
-    {
-      savedJob: () => jobs.put({}, body).then(data => data.savedJob)
-    },
-    {
-      job: data => data.savedJob,
-      notification: data => ({
-        message: `${data.savedJob.title} saved`,
-        type: 'success'
-      })
-    },
-    ...addPageData(companySlug)
-  )
+  const gql = `
+    mutation GetCompanyJob (
+      $companySlug: String!,
+      $jobId: ID!,
+      $jobData: JobUpdateInput!
+    ) {
+      company: companyByFilters(filters: { slug: $companySlug }) {
+        id
+        name
+        slug
+        job: updateJob(id: $jobId, data: $jobData) {
+          id
+          created
+          title
+          type
+          url
+          slug
+          status
+          bonus
+          candidateDescription
+          roleDescription
+          description
+          experience
+          labels
+          location
+          remuneration
+          requirements
+          roleDescription
+          templateTags
+          referrals {
+            id
+            created
+            parent {
+              id
+            }
+            person {
+              id
+              email
+              firstName
+              lastName
+            }
+          }
+          applications {
+            id
+            created
+            referral {
+              id
+            }
+            person {
+              id
+              email
+              firstName
+              lastName
+            }
+          }
+        }
+      }
+      jobs {
+        id
+        created
+        bonus
+        location
+        slug
+        status
+        title
+        company {
+          id
+        }
+      }
+      people {
+        id
+        email
+      }
+      jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
+      notification: setNotification(type: "success", message: "${body.title} updated") {
+        message
+      }
+    }
+  `
+  const variables = {
+    companySlug: params.companySlug,
+    jobId: body.id,
+    jobData: omit(body, ['id'])
+  }
+  return addActivities({ gql, variables })
 }
 
 function postReferral ({

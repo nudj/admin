@@ -28,6 +28,7 @@ module.exports = class JobForm extends React.Component {
     this.style = getStyle()
     this.submit = get(props, 'onSubmit')
     const job = normaliseJob(get(props, 'job', this.cleanJob()))
+    console.log("JOB_FORM", job)
     this.state = { job }
   }
 
@@ -354,7 +355,7 @@ module.exports = class JobForm extends React.Component {
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobLabels'>Labels</label>
-            <input className={this.style.inputBox} type='text' placeholder='eg: finance, tech' id='newJobLabels' name='labels' onChange={this.onChangeGeneric.bind(this)} value={job.labels} />
+            <input className={this.style.inputBox} type='text' placeholder='eg: finance, tech' id='newJobLabels' name='labels' onChange={this.onChangeGeneric.bind(this)} value={job.labels.join(', ')} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobTemplateTags'>Template tags</label>
