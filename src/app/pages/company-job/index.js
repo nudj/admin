@@ -248,11 +248,11 @@ module.exports = class JobPage extends React.Component {
     if (referral) {
       const referralLink = this.generateReferralLink(referral)
       button = (<CopyToClipboard className={this.style.copyLinkNew} data-clipboard-text={referralLink}>Copy link</CopyToClipboard>)
-      info = (<p className={this.style.copy}>This person's already had a referreral for this job 💅🏼 They should be in the referrals list above ⬆️ <br />Their referral link is <a href={referralLink} className={this.style.link}>{referralLink}</a>.</p>)
+      info = (<p className={this.style.copy}>This person&#39;s already had a referreral for this job 💅🏼 They should be in the referrals list above ⬆️ <br />Their referral link is <a href={referralLink} className={this.style.link}>{referralLink}</a>.</p>)
     } else if (existingPerson) {
       //  if so make the referral
       button = (<button className={this.style.copyLinkNew} onClick={this.saveReferral.bind(this)}>Generate referral link</button>)
-      info = (<p className={this.style.copy}>This person's already in our database 😎 Click the button above to generate a referral link for them 💅🏼</p>)
+      info = (<p className={this.style.copy}>This person&#39;s already in our database 😎 Click the button above to generate a referral link for them 💅🏼</p>)
     } else {
       button = (<button className={this.style.copyLinkNew} onClick={this.saveReferral.bind(this)}>Save as a user and generate referral link</button>)
       info = (<p className={this.style.copy}>Got no idea who this is 🤷‍ Click the button above to save them as a user and generate a referral link you can copy 💅🏼</p>)
