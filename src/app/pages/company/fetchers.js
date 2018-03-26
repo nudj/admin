@@ -1,39 +1,7 @@
 const omit = require('lodash/omit')
 
+const { merge } = require('@nudj/library')
 const { Redirect } = require('@nudj/framework/errors')
-
-const {
-  merge,
-  actionMapAssign
-} = require('@nudj/library')
-
-const companies = require('../../server/modules/companies')
-const people = require('../../server/modules/people')
-const jobs = require('../../server/modules/jobs')
-const tasks = require('../../server/modules/tasks')
-const surveys = require('../../server/modules/surveys')
-const hirers = require('../../server/modules/hirers')
-const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
-const repo = process.env.PRISMICIO_REPO
-const prismic = require('../../server/modules/prismic')({accessToken, repo})
-
-const addPeopleToHirers = (hirers, people) => hirers.map(hirer => {
-  const person = people.find(person => person.id === hirer.person)
-  return merge(hirer, { person })
-})
-
-const addPageData = (companySlug) => [
-  {
-    company: data => data.company || companies.get(companySlug),
-    companies: data => companies.getAll(),
-    people: data => people.getAll(data).then(data => data.people),
-    jobTemplateTags: data => prismic.fetchAllJobTags()
-  },
-  {
-    jobs: data => jobs.getAll({}, data.company.id).then(data => data.jobs),
-    hirers: data => hirers.getAllByCompany(data, data.company.id).then(data => addPeopleToHirers(data.hirers, data.people))
-  }
-]
 
 const get = ({ params }) => {
   const gql = `
@@ -253,61 +221,12 @@ function postHirer ({
     hirerData: body
   }
 
-  return actionMapAssign(
-    data,
-    {
-      company: () => companies.get(companySlug),
-      newPerson: () => people.post({}, { email }).then(data => data.newPerson)
-    },
-    {
-      newHirer: data => hirers.post({}, {
-        company: data.company.id,
-        person: data.newPerson.id
-      }).then(data => data.newHirer)
-    },
-    {
-      notification: data => ({
-        message: `New person and hirer added`,
-        type: 'success'
-      })
-    },
-    ...addPageData(companySlug)
-  )
-}
-
-function postHirerPerson ({
-  data,
-  params,
-  body
-}) {
-  const companySlug = params.companySlug
-  const person = params.person
-
-  return actionMapAssign(
-    data,
-    {
-      company: () => companies.get(companySlug)
-    },
-    {
-      newHirer: data => hirers.post({}, {
-        company: data.company.id,
-        person
-      }).then(data => data.newHirer)
-    },
-    {
-      notification: data => ({
-        message: `New hirer added`,
-        type: 'success'
-      })
-    },
-    ...addPageData(companySlug)
-  )
+  return { gql, variables }
 }
 
 module.exports = {
   get,
   put,
   postJob,
-  postHirer,
-  postHirerPerson
+  postHirer
 }
