@@ -16,6 +16,7 @@ services:
       - ../admin/src/webpack.config.server.js:/usr/src/webpack.config.server.js
       - ../admin/src/webpack.config.dll.js:/usr/src/webpack.config.dll.js
       - ../framework/src:/usr/src/@nudj/framework
+      - ../api/src:/usr/src/@nudj/api
       - ../library/src:/usr/src/@nudj/library
       - ../components/src:/usr/src/@nudj/components
     stdin_open: true

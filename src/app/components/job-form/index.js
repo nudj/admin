@@ -28,7 +28,6 @@ module.exports = class JobForm extends React.Component {
     this.style = getStyle()
     this.submit = get(props, 'onSubmit')
     const job = normaliseJob(get(props, 'job', this.cleanJob()))
-    console.log("JOB_FORM", job)
     this.state = { job }
   }
 

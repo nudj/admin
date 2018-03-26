@@ -29,7 +29,7 @@ module.exports = class CompanyPage extends React.Component {
   componentWillReceiveProps (nextProps) {
     const resetCompanyForm = !!get(nextProps, 'savedCompany')
     const resetJobForm = !!get(nextProps, 'app.company.newJob')
-    const resetHirerForm = !!get(nextProps, 'newHirer')
+    const resetHirerForm = !!get(nextProps, 'app.company.newHirer')
 
     if (resetCompanyForm && resetCompanyForm !== this.state.resetCompanyForm) {
       this.setState({ resetCompanyForm })

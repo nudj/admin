@@ -26,7 +26,7 @@ module.exports = class JobPage extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const resetReferral = !!get(nextProps, 'referral')
+    const resetReferral = !!get(nextProps, 'company.job.referral')
 
     if (resetReferral === this.state.resetReferral) {
       return
@@ -215,35 +215,14 @@ module.exports = class JobPage extends React.Component {
     this.props.dispatch(actions.app.postData({ url, data, method }))
   }
 
-  getPersonFromEmail (email) {
-    const suggestions = get(this.props.app, 'people', [])
-    return suggestions.find(suggestion => suggestion.email === email)
-  }
-
-  saveLink (event) {
-    const companySlug = get(this.props.app, 'company.slug')
-    const jobSlug = get(this.props.app, 'company.job.slug', '')
-
-    const person = this.getPersonFromEmail(this.state.referralValue)
-    const personId = person.id
-
-    const url = `/companies/${companySlug}/jobs/${jobSlug}/referrals/${personId}`
-    const method = 'post'
-    const data = {}
-
-    this.setState({
-      referralValue: ''
-    }, () => this.props.dispatch(actions.app.postData({ url, data, method })))
-  }
-
-  saveUser (event) {
+  saveReferral (event) {
     const companySlug = get(this.props.app, 'company.slug')
     const jobSlug = get(this.props.app, 'company.job.slug', '')
     const email = this.state.referralValue.toString()
 
     const url = `/companies/${companySlug}/jobs/${jobSlug}/referrals`
     const method = 'post'
-    const data = {email}
+    const data = { email }
 
     this.setState({
       value: ''
@@ -272,10 +251,10 @@ module.exports = class JobPage extends React.Component {
       info = (<p className={this.style.copy}>This person's already had a referreral for this job 💅🏼 They should be in the referrals list above ⬆️ <br />Their referral link is <a href={referralLink} className={this.style.link}>{referralLink}</a>.</p>)
     } else if (existingPerson) {
       //  if so make the referral
-      button = (<button className={this.style.copyLinkNew} onClick={this.saveLink.bind(this)}>Generate referral link</button>)
+      button = (<button className={this.style.copyLinkNew} onClick={this.saveReferral.bind(this)}>Generate referral link</button>)
       info = (<p className={this.style.copy}>This person's already in our database 😎 Click the button above to generate a referral link for them 💅🏼</p>)
     } else {
-      button = (<button className={this.style.copyLinkNew} onClick={this.saveUser.bind(this)}>Save as a user and generate referral link</button>)
+      button = (<button className={this.style.copyLinkNew} onClick={this.saveReferral.bind(this)}>Save as a user and generate referral link</button>)
       info = (<p className={this.style.copy}>Got no idea who this is 🤷‍ Click the button above to save them as a user and generate a referral link you can copy 💅🏼</p>)
     }
 
@@ -284,7 +263,6 @@ module.exports = class JobPage extends React.Component {
 
   renderJobActivitiyGroup () {
     const jobStatus = get(this.props.app, 'company.job.status')
-
 
     if (jobStatus !== 'PUBLISHED') {
       return (<span />)
@@ -304,7 +282,6 @@ module.exports = class JobPage extends React.Component {
     const referralsList = this.renderReferralsList()
 
     const jobActivityGroup = this.renderJobActivitiyGroup()
-
 
     const { referralValue, resetReferral } = this.state
 

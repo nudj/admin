@@ -1,6 +1,5 @@
 const omit = require('lodash/omit')
 
-const { merge } = require('@nudj/library')
 const { Redirect } = require('@nudj/framework/errors')
 
 const get = ({ params }) => {
@@ -142,6 +141,7 @@ function postJob ({
       }
       jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
       notification: setNotification(type: "success", message: "${body.title} created") {
+        type
         message
       }
     }
