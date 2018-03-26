@@ -141,7 +141,7 @@ function postJob ({
         lastName
       }
       jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
-      setNotification(type: "success", message: "${body.title} created") {
+      notification: setNotification(type: "success", message: "${body.title} created") {
         message
       }
     }
