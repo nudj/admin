@@ -19,6 +19,7 @@
     "ignore": [
       "app/server/assets",
       "app/server/build*",
+      "app/server/hot*",
       "app/node_modules",
       "flow-typed",
       "webpack*"

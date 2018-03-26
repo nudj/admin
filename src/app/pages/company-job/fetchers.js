@@ -2,15 +2,6 @@ const isThisWeek = require('date-fns/is_this_week')
 const differenceInCalendarWeeks = require('date-fns/difference_in_calendar_weeks')
 const omit = require('lodash/omit')
 
-const { actionMapAssign } = require('@nudj/library')
-
-const companies = require('../../server/modules/companies')
-const people = require('../../server/modules/people')
-const jobs = require('../../server/modules/jobs')
-const accessToken = process.env.PRISMICIO_ACCESS_TOKEN
-const repo = process.env.PRISMICIO_REPO
-const prismic = require('../../server/modules/prismic')({accessToken, repo})
-
 const formatActivityStatistics = (data) => {
   const today = new Date()
 
@@ -50,22 +41,7 @@ const addActivities = ({ gql, variables }) => {
   }
 }
 
-const addPageData = (companySlug) => [
-  {
-    jobs: () => jobs.getAll({}).then(data => data.jobs),
-    referrals: data => jobs.getReferrals({}, data.job.id).then(data => data.referrals),
-    applications: data => jobs.getApplications({}, data.job.id).then(data => data.applications),
-    company: data => data.company || companies.get(companySlug),
-    people: data => people.getAll({}).then(data => data.people),
-    activities: data => jobs.getJobActivities({}, data.job.id),
-    jobTemplateTags: data => prismic.fetchAllJobTags()
-  }
-]
-
-function get ({
-  data,
-  params
-}) {
+function get ({ params }) {
   const { companySlug, jobSlug } = params
   const gql = `
     query GetCompanyJob ($companySlug: String!, $jobSlug: String!) {
@@ -135,6 +111,8 @@ function get ({
       people {
         id
         email
+        firstName
+        lastName
       }
       jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
     }
@@ -144,7 +122,6 @@ function get ({
 }
 
 function put ({
-  data,
   params,
   body
 }) {
@@ -220,9 +197,12 @@ function put ({
       people {
         id
         email
+        firstName
+        lastName
       }
       jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
       notification: setNotification(type: "success", message: "${body.title} updated") {
+        type
         message
       }
     }
@@ -236,67 +216,104 @@ function put ({
 }
 
 function postReferral ({
-  data,
   params,
   body
 }) {
-  const email = body.email
-  const companySlug = params.companySlug
-
-  return actionMapAssign(
-    data,
-    {
-      company: () => companies.get(companySlug),
-      newPerson: () => people.post({}, {email}).then(data => data.newPerson)
-    },
-    {
-      job: data => jobs.get(data, params.jobSlug, data.company.id).then(data => data.job)
-    },
-    {
-      referral: data => jobs.addReferral({}, data.job.id, data.newPerson.id).then(data => data.referral)
-    },
-    {
-      notification: data => ({
-        message: `New referral ${data.referral.id} saved`,
-        type: 'success'
-      })
-    },
-    ...addPageData(companySlug)
-  )
-}
-
-function postReferralPerson ({
-  data,
-  params,
-  body
-}) {
-  const person = params.personId
-  const companySlug = params.companySlug
-
-  return actionMapAssign(
-    data,
-    {
-      company: () => companies.get(companySlug)
-    },
-    {
-      job: data => jobs.get(data, params.jobSlug, data.company.id).then(data => data.job)
-    },
-    {
-      referral: data => jobs.addReferral({}, data.job.id, person).then(data => data.referral)
-    },
-    {
-      notification: data => ({
-        message: `New referral ${data.referral.id} saved`,
-        type: 'success'
-      })
-    },
-    ...addPageData(companySlug)
-  )
+  const gql = `
+    mutation GetCompanyJob (
+      $companySlug: String!,
+      $jobSlug: String!,
+      $email: String!
+    ) {
+      company: companyByFilters(filters: { slug: $companySlug }) {
+        id
+        name
+        slug
+        job: jobByFilters(filters: { slug: $jobSlug }) {
+          referral: createReferralByEmail(email: $email) {
+            id
+          }
+          id
+          created
+          title
+          type
+          url
+          slug
+          status
+          bonus
+          candidateDescription
+          roleDescription
+          description
+          experience
+          labels
+          location
+          remuneration
+          requirements
+          roleDescription
+          templateTags
+          referrals {
+            id
+            created
+            parent {
+              id
+            }
+            person {
+              id
+              email
+              firstName
+              lastName
+            }
+          }
+          applications {
+            id
+            created
+            referral {
+              id
+            }
+            person {
+              id
+              email
+              firstName
+              lastName
+            }
+          }
+        }
+      }
+      jobs {
+        id
+        created
+        bonus
+        location
+        slug
+        status
+        title
+        company {
+          id
+        }
+      }
+      people {
+        id
+        email
+        firstName
+        lastName
+      }
+      jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
+      notification: setNotification(type: "success", message: "New referral saved") {
+        type
+        message
+      }
+    }
+  `
+  const variables = {
+    email: body.email,
+    companySlug: params.companySlug,
+    jobSlug: params.jobSlug
+  }
+  return addActivities({ gql, variables })
 }
 
 module.exports = {
   get,
   put,
-  postReferral,
-  postReferralPerson
+  postReferral
 }
