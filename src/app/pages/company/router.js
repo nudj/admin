@@ -12,8 +12,7 @@ const Router = ({
 
   router.getHandlers('/companies/:companySlug', respondWithGql(fetchers.get))
   router.putHandlers('/companies/:companySlug', respondWithGql(fetchers.put))
-  router.postHandlers('/companies/:companySlug/hirers', respondWith(fetchers.postHirer))
-  router.postHandlers('/companies/:companySlug/hirers/:person', respondWith(fetchers.postHirerPerson))
+  router.postHandlers('/companies/:companySlug/hirers', respondWithGql(fetchers.postHirer))
   router.postHandlers('/companies/:companySlug/jobs', respondWithGql(fetchers.postJob))
 
   return router

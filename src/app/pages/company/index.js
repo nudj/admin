@@ -79,11 +79,12 @@ module.exports = class CompanyPage extends React.Component {
     this.props.dispatch(actions.app.postData({ url, data, method }))
   }
 
-  saveHirerCommon ({email, personId}) {
-    const companySlug = get(this.props, 'company.slug')
-    const url = personId ? `/companies/${companySlug}/hirers/${personId}` : `/companies/${companySlug}/hirers`
+  saveHirerCommon ({ email, personId }) {
+    const companySlug = get(this.props.app, 'company.slug')
+    const companyId = get(this.props.app, 'company.id')
+    const url = `/companies/${companySlug}/hirers`
     const method = 'post'
-    const data = {email}
+    const data = { email, company: companyId }
 
     this.setState({
       hirerValue: ''
@@ -99,7 +100,7 @@ module.exports = class CompanyPage extends React.Component {
 
   saveUser (event) {
     const email = this.state.hirerValue.toString()
-    this.saveHirerCommon({email})
+    this.saveHirerCommon({ email })
   }
 
   addHirerForm () {
