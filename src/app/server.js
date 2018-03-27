@@ -76,7 +76,7 @@ let { app, getMockApiApps } = createNudjApps({
 
 const server = http.createServer(app)
 
-app.listen(80, () => {
+server.listen(80, () => {
   logger.log('info', 'Application running')
 })
 
@@ -98,21 +98,58 @@ if (module.hot) {
     './redux/routes',
     './redux/reducers',
     path.resolve('./pages'),
-    path.resolve('./components')
+    path.resolve('./components'),
+    './server/routers/auth',
+    './pages/companies/router',
+    './pages/people/router',
+    './pages/person/router',
+    './pages/company/router',
+    './pages/surveys/router',
+    './pages/survey/router',
+    './pages/survey-relations/router',
+    './pages/survey-section/router',
+    './pages/survey-sections/router',
+    './pages/survey-section-relations/router',
+    './pages/survey-questions/router',
+    './pages/survey-question/router',
+    './pages/company-job/router',
+    './pages/company-survey-message/router',
+    './server/routers/catch-all'
   ], () => {
     const updatedReactApp = require('./redux')
     const updatedReduxRoutes = require('./redux/routes')
     const updatedReduxReducers = require('./redux/reducers')
     const updatedLoadingPage = require('./components/loading')
+    const updatedExpressRouters = {
+      insecure: [],
+      secure: [
+        require('./server/routers/auth'),
+        require('./pages/companies/router'),
+        require('./pages/people/router'),
+        require('./pages/person/router'),
+        require('./pages/company/router'),
+        require('./pages/surveys/router'),
+        require('./pages/survey/router'),
+        require('./pages/survey-relations/router'),
+        require('./pages/survey-section/router'),
+        require('./pages/survey-sections/router'),
+        require('./pages/survey-section-relations/router'),
+        require('./pages/survey-questions/router'),
+        require('./pages/survey-question/router'),
+        require('./pages/company-job/router'),
+        require('./pages/company-survey-message/router'),
+        require('./server/routers/catch-all')
+      ]
+    }
 
     server.removeListener('request', app)
     const { app: newApp } = createNudjApps({
       App: updatedReactApp,
       reduxRoutes: updatedReduxRoutes,
       reduxReducers: updatedReduxReducers,
+      expressRouters: updatedExpressRouters,
       expressAssetPath,
       buildAssetPath,
-      expressRouters,
       spoofLoggedIn,
       errorHandlers,
       LoadingComponent: updatedLoadingPage
