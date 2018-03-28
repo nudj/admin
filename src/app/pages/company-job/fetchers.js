@@ -68,6 +68,7 @@ function get ({ params }) {
           requirements
           roleDescription
           templateTags
+          tags
           referrals {
             id
             created
@@ -154,6 +155,7 @@ function put ({
           requirements
           roleDescription
           templateTags
+          tags
           referrals {
             id
             created
@@ -251,6 +253,7 @@ function postReferral ({
           requirements
           roleDescription
           templateTags
+          tags
           referrals {
             id
             created
