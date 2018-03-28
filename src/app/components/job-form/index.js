@@ -1,14 +1,18 @@
 const React = require('react')
 const get = require('lodash/get')
+const startCase = require('lodash/startCase')
 const difference = require('lodash/difference')
+const values = require('lodash/values')
 const compact = require('lodash/compact')
 const { merge } = require('@nudj/library')
+const CheckboxGroup = require('@nudj/components/lib/components/checkbox-group')
 
+const { expertiseTags } = require('../../lib/constants')
 const getStyle = require('./job-form.css')
 
 const normaliseItem = (item) => item ? item.join(', ') : ''
 const normaliseJob = (job) => merge(job, {
-  tags: normaliseItem(job.tags),
+  labels: normaliseItem(job.labels),
   templateTags: normaliseItem(job.templateTags)
 })
 const denormaliseItem = (item) => {
@@ -18,7 +22,7 @@ const denormaliseItem = (item) => {
   return item.replace(/\s/g, '').split(',')
 }
 const denormaliseJob = (job) => merge(job, {
-  tags: denormaliseItem(job.tags),
+  labels: denormaliseItem(job.labels),
   templateTags: denormaliseItem(job.templateTags)
 })
 
@@ -65,6 +69,7 @@ module.exports = class JobForm extends React.Component {
       type: 'PERMANENT', // 'Contract', 'Freelance'
       remuneration: '',
       templateTags: [],
+      tags: [],
       labels: [],
       location: '',
       relatedJobs: []
@@ -151,6 +156,10 @@ module.exports = class JobForm extends React.Component {
     this.updateValidation(validation)
   }
 
+  onChangeTags (event) {
+    return this.updateJob({ [event.name]: event.values })
+  }
+
   onChangeGeneric (event) {
     const value = event.target.value
     const key = event.target.name
@@ -227,7 +236,11 @@ module.exports = class JobForm extends React.Component {
   }
 
   updateJob (newStuff) {
-    const job = merge({}, get(this.state, 'job', {}), newStuff)
+    const jobState = get(this.state, 'job', {})
+    const job = {
+      ...jobState,
+      ...newStuff
+    }
     this.setState({ job })
   }
 
@@ -354,7 +367,7 @@ module.exports = class JobForm extends React.Component {
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobLabels'>Labels</label>
-            <input className={this.style.inputBox} type='text' placeholder='eg: finance, tech' id='newJobLabels' name='labels' onChange={this.onChangeGeneric.bind(this)} value={job.labels.join(', ')} />
+            <input className={this.style.inputBox} type='text' placeholder='eg: finance, tech' id='newJobLabels' name='labels' onChange={this.onChangeGeneric.bind(this)} value={job.labels} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='newJobTemplateTags'>Template tags</label>
@@ -367,6 +380,24 @@ module.exports = class JobForm extends React.Component {
               {relatedJobs.map((relatedJob, index) => (<option key={index} value={relatedJob.id}>{relatedJob.title}</option>))}
             </select>
             <button type='button' className={this.style.secondaryButton} onClick={this.clearRelatedJobs.bind(this)}>Clear all</button>
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='tags'>Tags</label>
+            <CheckboxGroup
+              id='tags'
+              name='tags'
+              onChange={this.onChangeTags.bind(this)}
+              values={job.tags}
+            >
+              {
+                checkbox => values(expertiseTags).map(tag => checkbox({
+                  id: tag,
+                  key: tag,
+                  value: tag,
+                  label: startCase(tag)
+                }))
+              }
+            </CheckboxGroup>
           </li>
         </ul>
         <div className={this.style.formButtons}>
