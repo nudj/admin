@@ -1,4 +1,4 @@
-const { values: expertiseTags } = require('@nudj/api//gql/schema/enums/expertise-tags')
+const { values: expertiseTags } = require('@nudj/api/gql/schema/enums/expertise-tags')
 
 const questionTypes = {
   COMPANIES: 'COMPANIES',
