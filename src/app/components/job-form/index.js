@@ -6,9 +6,10 @@ const values = require('lodash/values')
 const compact = require('lodash/compact')
 const { merge } = require('@nudj/library')
 const CheckboxGroup = require('@nudj/components/lib/components/checkbox-group')
+const { css } = require('@nudj/components/lib/css')
 
 const { expertiseTags } = require('../../lib/constants')
-const getStyle = require('./job-form.css')
+const style = require('./job-form.css')
 
 const normaliseItem = (item) => item ? item.join(', ') : ''
 const normaliseJob = (job) => merge(job, {
@@ -29,7 +30,6 @@ const denormaliseJob = (job) => merge(job, {
 module.exports = class JobForm extends React.Component {
   constructor (props) {
     super(props)
-    this.style = getStyle()
     this.submit = get(props, 'onSubmit')
     const job = normaliseJob(get(props, 'job', this.cleanJob()))
     this.state = { job }
@@ -250,7 +250,7 @@ module.exports = class JobForm extends React.Component {
   }
 
   renderErrorLabel (text, htmlFor) {
-    return (<label className={this.style.errorLabel} htmlFor={htmlFor}>{text}</label>)
+    return (<label className={css(style.errorLabel)} htmlFor={htmlFor}>{text}</label>)
   }
 
   renderErrorLabels () {
@@ -290,10 +290,10 @@ module.exports = class JobForm extends React.Component {
 
     const errorLabels = this.renderErrorLabels()
     const submitLabel = get(this.props, 'submitLabel', 'Add job')
-    let submitButton = (<button className={this.style.submitButton}>{submitLabel}</button>)
+    let submitButton = (<button className={css(style.submitButton)}>{submitLabel}</button>)
 
     if (!this.isJobValid()) {
-      submitButton = (<button className={this.style.submitButton} disabled>{submitLabel}</button>)
+      submitButton = (<button className={css(style.submitButton)} disabled>{submitLabel}</button>)
     }
 
     const statuses = ['DRAFT', 'PUBLISHED', 'ARCHIVED']
@@ -312,82 +312,83 @@ module.exports = class JobForm extends React.Component {
 
     const expandedDescriptionRequired = !this.state.job.description // If an old description exists, you don't need to add candidateDescription or roleDescription. Otherwise, they're required.
 
-    return (<form className={this.style.pageMain} onSubmit={this.onSubmit.bind(this)} ref='jobForm'>
-      <div className={this.style.formCard}>
-        <ul className={this.style.formList}>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobTitle'>Title</label>
-            <input className={this.style.inputBox} type='text' id='newJobTitle' name='title' required onChange={this.onChangeTitle.bind(this)} value={job.title} />
+    return (<form className={css(style.pageMain)} onSubmit={this.onSubmit.bind(this)} ref='jobForm'>
+      <div className={css(style.formCard)}>
+        <ul className={css(style.formList)}>
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobTitle'>Title</label>
+            <input className={css(style.inputBox)} type='text' id='newJobTitle' name='title' required onChange={this.onChangeTitle.bind(this)} value={job.title} />
             {errorLabels.jobTitleNotUniqueLabel}
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobSlug'>Slug</label>
-            <input className={this.style.inputBox} type='text' id='newJobSlug' name='slug' required onChange={this.onChangeSlug.bind(this)} value={job.slug} />
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobSlug'>Slug</label>
+            <input className={css(style.inputBox)} type='text' id='newJobSlug' name='slug' required onChange={this.onChangeSlug.bind(this)} value={job.slug} />
             {errorLabels.jobSlugNotUniqueLabel}
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobUrl'>URL</label>
-            <input className={this.style.inputBoxUrl} type='uri' placeholder='eg: https://www.company.com/link-to-job' id='newJobUrl' name='url' onChange={this.onChangeGeneric.bind(this)} value={job.url} />
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobUrl'>URL</label>
+            <input className={css(style.inputBoxUrl)} type='uri' placeholder='eg: https://www.company.com/link-to-job' id='newJobUrl' name='url' onChange={this.onChangeGeneric.bind(this)} value={job.url} />
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobBonus'>Bonus (without currency symbol)</label>
-            <input className={this.style.inputBox} type='number' placeholder='eg: 200' id='newJobBonus' name='bonus' required onChange={this.onChangeGeneric.bind(this)} value={job.bonus} />
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobBonus'>Bonus (without currency symbol)</label>
+            <input className={css(style.inputBox)} type='number' placeholder='eg: 200' id='newJobBonus' name='bonus' required onChange={this.onChangeGeneric.bind(this)} value={job.bonus} />
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobType'>Type</label>
-            <select className={this.style.selectBox} id='newJobType' name='type' onChange={this.onChangeGeneric.bind(this)} value={job.type || types[0]}>
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobType'>Type</label>
+            <select className={css(style.selectBox)} id='newJobType' name='type' onChange={this.onChangeGeneric.bind(this)} value={job.type || types[0]}>
               {types.map((type, index) => (<option key={index} value={type}>{type}</option>))}
             </select>
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobStatus'>Status</label>
-            <select className={this.style.selectBox} id='newJobStatus' name='status' onChange={this.onChangeGeneric.bind(this)} value={job.status || statuses[0]}>
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobStatus'>Status</label>
+            <select className={css(style.selectBox)} id='newJobStatus' name='status' onChange={this.onChangeGeneric.bind(this)} value={job.status || statuses[0]}>
               {statuses.map((status, index) => (<option key={index} value={status}>{status}</option>))}
             </select>
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobRoleDescription'>Role Description</label>
-            <textarea className={this.style.inputTextarea} id='newJobRoleDescription' name='roleDescription' required={expandedDescriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.roleDescription} />
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobRoleDescription'>Role Description</label>
+            <textarea className={css(style.inputTextarea)} id='newJobRoleDescription' name='roleDescription' required={expandedDescriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.roleDescription} />
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobDescription'>Candidate Description</label>
-            <textarea className={this.style.inputTextarea} id='newJobCandidateDescription' name='candidateDescription' required={expandedDescriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.candidateDescription} />
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobDescription'>Candidate Description</label>
+            <textarea className={css(style.inputTextarea)} id='newJobCandidateDescription' name='candidateDescription' required={expandedDescriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.candidateDescription} />
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='description'>Old Description</label>
-            <textarea className={this.style.inputTextarea} id='description' name='description' onChange={this.onChangeGeneric.bind(this)} value={job.description} />
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='description'>Old Description</label>
+            <textarea className={css(style.inputTextarea)} id='description' name='description' onChange={this.onChangeGeneric.bind(this)} value={job.description} />
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobRemuneration'>Remuneration</label>
-            <textarea className={this.style.inputTextarea} id='newJobRemuneration' name='remuneration' required onChange={this.onChangeGeneric.bind(this)} value={job.remuneration} />
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobRemuneration'>Remuneration</label>
+            <textarea className={css(style.inputTextarea)} id='newJobRemuneration' name='remuneration' required onChange={this.onChangeGeneric.bind(this)} value={job.remuneration} />
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobLocation'>Location</label>
-            <input className={this.style.inputBox} type='text' placeholder='eg: London' id='newJobLocation' required name='location' onChange={this.onChangeGeneric.bind(this)} value={job.location} />
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobLocation'>Location</label>
+            <input className={css(style.inputBox)} type='text' placeholder='eg: London' id='newJobLocation' required name='location' onChange={this.onChangeGeneric.bind(this)} value={job.location} />
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobLabels'>Labels</label>
-            <input className={this.style.inputBox} type='text' placeholder='eg: finance, tech' id='newJobLabels' name='labels' onChange={this.onChangeGeneric.bind(this)} value={job.labels} />
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobLabels'>Labels</label>
+            <input className={css(style.inputBox)} type='text' placeholder='eg: finance, tech' id='newJobLabels' name='labels' onChange={this.onChangeGeneric.bind(this)} value={job.labels} />
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobTemplateTags'>Template tags</label>
-            <input className={this.style.inputBox} type='text' placeholder='eg: food, movies' id='newJobTemplateTags' name='templateTags' onChange={this.onChangeTemplateTags.bind(this)} value={job.templateTags} />
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobTemplateTags'>Template tags</label>
+            <input className={css(style.inputBox)} type='text' placeholder='eg: food, movies' id='newJobTemplateTags' name='templateTags' onChange={this.onChangeTemplateTags.bind(this)} value={job.templateTags} />
             {errorLabels.templateTagsInvalidLabel}
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='newJobRelatedJobs'>Related jobs</label>
-            <select className={this.style.selectBoxMultiple} id='newJobRelatedJobs' name='relatedJobs' multiple onChange={this.onChangeMultiSelect.bind(this)} value={job.relatedJobs}>
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='newJobRelatedJobs'>Related jobs</label>
+            <select className={css(style.selectBoxMultiple)} id='newJobRelatedJobs' name='relatedJobs' multiple onChange={this.onChangeMultiSelect.bind(this)} value={job.relatedJobs}>
               {relatedJobs.map((relatedJob, index) => (<option key={index} value={relatedJob.id}>{relatedJob.title}</option>))}
             </select>
-            <button type='button' className={this.style.secondaryButton} onClick={this.clearRelatedJobs.bind(this)}>Clear all</button>
+            <button type='button' className={css(style.secondaryButton)} onClick={this.clearRelatedJobs.bind(this)}>Clear all</button>
           </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='tags'>Tags</label>
+          <li className={css(style.formListItem)}>
+            <label className={css(style.label)} htmlFor='tags'>Tags</label>
             <CheckboxGroup
               id='tags'
               name='tags'
               onChange={this.onChangeTags.bind(this)}
               values={job.tags}
+              styles={style.tags}
             >
               {
                 checkbox => values(expertiseTags).map(tag => checkbox({
@@ -400,7 +401,7 @@ module.exports = class JobForm extends React.Component {
             </CheckboxGroup>
           </li>
         </ul>
-        <div className={this.style.formButtons}>
+        <div className={css(style.formButtons)}>
           {submitButton}
         </div>
       </div>

@@ -12,6 +12,14 @@ const styles = merge(mixins.pageLayout, mixins.formStructure, mixins.formElement
   }, mixins.button),
   field: {
     marginBottom: '1em'
+  },
+  tags: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    maxWidth: '42rem',
+    ':nth-child(n) > *': {
+      flexBasis: '50%'
+    }
   }
 })
 

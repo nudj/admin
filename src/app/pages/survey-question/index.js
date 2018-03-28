@@ -240,6 +240,7 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
                   id='tags'
                   name='tags'
                   onChange={onChangeTags}
+                  styles={style.tags}
                   values={tagsUpdated ? tags : existingQuestion.tags}
                 >
                   {
