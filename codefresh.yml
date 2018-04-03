@@ -78,7 +78,7 @@ steps:
     title: Push
     type: push
     candidate: '${{build}}'
-    tag: 9.0.0
+    tag: 9.0.1
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'
