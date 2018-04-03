@@ -1,8 +1,6 @@
 const React = require('react')
 const get = require('lodash/get')
-const startCase = require('lodash/startCase')
 const difference = require('lodash/difference')
-const values = require('lodash/values')
 const compact = require('lodash/compact')
 const { merge } = require('@nudj/library')
 const CheckboxGroup = require('@nudj/components/lib/components/checkbox-group')
@@ -391,11 +389,11 @@ module.exports = class JobForm extends React.Component {
               styles={style.tags}
             >
               {
-                checkbox => values(expertiseTags).map(tag => checkbox({
+                checkbox => Object.keys(expertiseTags).map(tag => checkbox({
                   id: tag,
                   key: tag,
                   value: tag,
-                  label: startCase(tag)
+                  label: expertiseTags[tag]
                 }))
               }
             </CheckboxGroup>

@@ -5,8 +5,6 @@ const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const find = require('lodash/find')
-const values = require('lodash/values')
-const startCase = require('lodash/startCase')
 const { parse } = require('query-string')
 
 const { merge } = require('@nudj/library')
@@ -244,11 +242,11 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
                   values={tagsUpdated ? tags : existingQuestion.tags}
                 >
                   {
-                    checkbox => values(expertiseTags).map(tag => checkbox({
+                    checkbox => Object.keys(expertiseTags).map(tag => checkbox({
                       id: tag,
                       key: tag,
                       value: tag,
-                      label: startCase(tag)
+                      label: expertiseTags[tag]
                     }))
                   }
                 </CheckboxGroup>
