@@ -12,9 +12,11 @@ services:
       - ../admin/src/.npmrc:/usr/src/.npmrc
       - ../admin/src/nodemon.json:/usr/src/nodemon.json
       - ../admin/src/package.json:/usr/src/package.json
-      - ../admin/src/webpack.config.js:/usr/src/webpack.config.js
-      - ../admin/src/webpack.dll.js:/usr/src/webpack.dll.js
+      - ../admin/src/webpack.config.client.js:/usr/src/webpack.config.client.js
+      - ../admin/src/webpack.config.server.js:/usr/src/webpack.config.server.js
+      - ../admin/src/webpack.config.dll.js:/usr/src/webpack.config.dll.js
       - ../framework/src:/usr/src/@nudj/framework
+      - ../api/src:/usr/src/@nudj/api
       - ../library/src:/usr/src/@nudj/library
       - ../components/src:/usr/src/@nudj/components
     stdin_open: true

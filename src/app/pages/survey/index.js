@@ -21,7 +21,6 @@ const { merge } = require('@nudj/library')
 const { setSurveyDraft, submitSurvey } = require('./actions')
 const style = require('./style.css')
 const Page = require('../../components/page')
-const PageHeader = require('../../components/page-header')
 
 type SurveyPageProps = {
   dispatch: Dispatch,
@@ -118,20 +117,27 @@ const SurveyPage = (props: SurveyPageProps) => {
   }
 
   return (
-    <Page {...props} className={css(style.pageBody)}>
+    <Page
+      {...props}
+      title='Surveys'
+      actions={[
+        <Link key='new-survey' className={css(style.link)} to='/surveys/new'>
+          New Survey
+        </Link>,
+        existingSurvey.id && (
+          <Link
+            key='survey-sections'
+            className={css(style.link)}
+            to={`/surveys/${existingSurvey.id}/sections`}
+          >
+            Survey Sections
+          </Link>
+        )
+      ].filter(Boolean)}
+    >
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
-      <PageHeader title='Surveys'>
-        <Link className={css(style.link)} to={`/surveys/new`}>
-          New Survey
-        </Link>
-        {existingSurvey.id && (
-          <Link className={css(style.link)} to={`/surveys/${existingSurvey.id}/sections`}>
-            Survey Sections
-          </Link>
-        )}
-      </PageHeader>
       <h3 className={css(style.pageHeadline)}>
         {existingSurvey.id ? 'Edit survey' : 'Create survey'}
       </h3>

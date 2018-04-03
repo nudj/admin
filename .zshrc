@@ -3,8 +3,8 @@ export PATH=$PATH:/usr/src/node_modules/.bin
 
 PROMPT='admin» '
 
-alias run="node ."
-alias dev='webpack --config ./webpack.dll.js --bail --hide-modules && nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "webpack --config ./webpack.config.js --bail --hide-modules && node ."'
+alias run="yarn start"
+alias dev="yarn run dev"
 alias test="standard && flow && mocha --recursive test/unit"
 alias tdd='nodemon \
 	--config ./nodemon-tdd.json \

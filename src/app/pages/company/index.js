@@ -1,6 +1,7 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
+const omit = require('lodash/omit')
 const format = require('date-fns/format')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const { Helmet } = require('react-helmet')
@@ -10,15 +11,10 @@ const actions = require('@nudj/framework/actions')
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const Autocomplete = require('../../components/autocomplete')
-const PageHeader = require('../../components/page-header')
 const RowItem = require('../../components/row-item')
-const Tooltip = require('../../components/tooltip')
 const CompanyForm = require('../../components/company-form')
 const JobForm = require('../../components/job-form')
 const Plural = require('../../components/plural')
-const CopyToClipboard = require('../../components/copy-to-clipboard')
-const TasksList = require('../../components/tasks-list')
-const TaskAdder = require('../../components/task-adder')
 
 module.exports = class CompanyPage extends React.Component {
   constructor (props) {
@@ -27,21 +23,13 @@ module.exports = class CompanyPage extends React.Component {
     const resetCompanyForm = false
     const resetJobForm = false
 
-    const survey = this.makeSurveyObject(get(this.props, 'survey', {}), 'EMPLOYEE_SURVEY')
-    const hirerSurvey = this.makeSurveyObject(get(this.props, 'hirerSurvey', {}), 'HIRER_SURVEY')
-
-    this.state = { resetCompanyForm, resetJobForm, survey, hirerSurvey }
+    this.state = { resetCompanyForm, resetJobForm }
   }
 
   componentWillReceiveProps (nextProps) {
     const resetCompanyForm = !!get(nextProps, 'savedCompany')
-    const resetJobForm = !!get(nextProps, 'newJob')
-    const resetHirerForm = !!get(nextProps, 'newHirer')
-
-    const survey = this.makeSurveyObject(get(nextProps, 'survey', {}), 'EMPLOYEE_SURVEY')
-    const hirerSurvey = this.makeSurveyObject(get(nextProps, 'hirerSurvey', {}), 'HIRER_SURVEY')
-
-    this.setState({ survey, hirerSurvey })
+    const resetJobForm = !!get(nextProps, 'app.company.newJob')
+    const resetHirerForm = !!get(nextProps, 'app.company.newHirer')
 
     if (resetCompanyForm && resetCompanyForm !== this.state.resetCompanyForm) {
       this.setState({ resetCompanyForm })
@@ -62,24 +50,6 @@ module.exports = class CompanyPage extends React.Component {
   getPersonFromEmail (email) {
     const people = get(this.props, 'people', [])
     return people.find(person => person.email === email)
-  }
-
-  makeSurveyObject (survey, surveyType) {
-    return {
-      link: get(survey, 'link', ''),
-      uuid: get(survey, 'uuid', ''),
-      type: get(survey, 'type', surveyType)
-    }
-  }
-
-  onAddTask (task) {
-    const companySlug = get(this.props, 'company.slug', '')
-    const taskType = get(task, 'type', '')
-    const url = `/companies/${companySlug}/tasks/${taskType}`
-    const data = {}
-    const method = 'post'
-
-    this.props.dispatch(actions.app.postData({ url, data, method }))
   }
 
   onChangeHirer (value, matches) {
@@ -109,11 +79,12 @@ module.exports = class CompanyPage extends React.Component {
     this.props.dispatch(actions.app.postData({ url, data, method }))
   }
 
-  saveHirerCommon ({email, personId}) {
-    const companySlug = get(this.props, 'company.slug')
-    const url = personId ? `/companies/${companySlug}/hirers/${personId}` : `/companies/${companySlug}/hirers`
+  saveHirerCommon ({ email, personId }) {
+    const companySlug = get(this.props.app, 'company.slug')
+    const companyId = get(this.props.app, 'company.id')
+    const url = `/companies/${companySlug}/hirers`
     const method = 'post'
-    const data = {email}
+    const data = { email, company: companyId }
 
     this.setState({
       hirerValue: ''
@@ -129,7 +100,7 @@ module.exports = class CompanyPage extends React.Component {
 
   saveUser (event) {
     const email = this.state.hirerValue.toString()
-    this.saveHirerCommon({email})
+    this.saveHirerCommon({ email })
   }
 
   addHirerForm () {
@@ -158,13 +129,9 @@ module.exports = class CompanyPage extends React.Component {
     </div>)
   }
 
-  addTaskForm () {
-    return (<span />)
-  }
-
   renderJobsList () {
-    const jobs = get(this.props, 'jobs', [])
-    const companySlug = get(this.props, 'company.slug')
+    const jobs = get(this.props.app, 'company.jobs', [])
+    const companySlug = get(this.props.app, 'company.slug')
     const rightNow = new Date()
     const webHostname = get(this.props, 'web.hostname')
 
@@ -208,120 +175,6 @@ module.exports = class CompanyPage extends React.Component {
     </ul>)
   }
 
-  getSurveyFromType (type) {
-    let prop
-
-    switch (type) {
-      case 'HIRER_SURVEY':
-        prop = 'hirerSurvey'
-        break
-      case 'EMPLOYEE_SURVEY':
-      default:
-        prop = 'survey'
-    }
-
-    const survey = this.state[prop]
-    const original = get(this.props, prop)
-    return {original, prop, survey}
-  }
-
-  onChangeSurvey (event, type) {
-    const value = event.target.value
-    const key = event.target.name
-
-    const {prop, survey} = this.getSurveyFromType(type)
-    survey[key] = value
-
-    this.setState({
-      [prop]: survey
-    })
-  }
-
-  onSubmitLink (type) {
-    const company = get(this.props, 'company')
-    const {original, survey} = this.getSurveyFromType(type)
-    const url = `/companies/${company.slug}/surveys${original ? `/${original.id}` : ''}`
-    const method = original ? 'patch' : 'post'
-
-    this.props.dispatch(actions.app.postData({
-      url,
-      method,
-      data: {
-        link: get(survey, 'link'),
-        uuid: get(survey, 'uuid'),
-        type: get(survey, 'type')
-      }
-    }))
-  }
-
-  renderSurveyLink (survey, type) {
-    const surveyLink = get(survey, 'link')
-    const surveyUuid = get(survey, 'uuid')
-    const surveyType = get(survey, 'type', type)
-
-    return (
-      <div className={this.style.missing}>
-        <ul className={this.style.formList}>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor={`${surveyType}_surveyLink`}>Link</label>
-            <input className={this.style.inputBoxUrl} type='text' id={`${surveyType}_surveyLink`} name='link' onChange={(event) => this.onChangeSurvey(event, surveyType)} value={surveyLink} />
-          </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor={`${surveyType}_surveyUuid`}>Typeform UUID</label>
-            <input className={this.style.inputBoxUrl} type='text' id={`${surveyType}_surveyUuid`} name='uuid' onChange={(event) => this.onChangeSurvey(event, surveyType)} value={surveyUuid} />
-          </li>
-        </ul>
-        <input type='hidden' id='' name='type' value={surveyType} />
-        <div className={this.style.formButtons}>
-          <CopyToClipboard className={this.style.nudj} data-clipboard-text={surveyLink}>Copy link</CopyToClipboard>
-          <button className={this.style.nudj} type='button' onClick={() => this.onSubmitLink(surveyType)}>Update</button>
-        </div>
-      </div>
-    )
-  }
-
-  renderSurveyEmailsList () {
-    const emails = get(this.props, 'surveyMessages', [])
-    const companySlug = get(this.props, 'company.slug')
-
-    const emailsList = emails.map((email) => {
-      const id = get(email, 'id')
-      const hirer = get(email, 'hirer')
-      const subject = get(email, 'subject')
-      const sendDate = format(get(email, 'created'), 'DD.MM.YYYY - HH:mm')
-      const recipients = get(email, 'recipients', [])
-      const recipientsList = recipients.join(', ')
-      const amountSent = recipients.length
-
-      return (
-        <RowItem
-          key={id}
-          title={hirer}
-          details={[{
-            term: 'Date',
-            description: sendDate
-          }, {
-            term: 'Subject',
-            description: subject
-          }, {
-            term: 'Sent To',
-            description: recipientsList
-          }, {
-            term: 'No. Sent',
-            description: amountSent
-          }]}
-          actions={[
-            <Link className={this.style.nudj} to={`/companies/${companySlug}/messages/${id}`}>View email</Link>
-          ]}
-        />
-      )
-    })
-
-    return (<ul className={this.style.jobs}>
-      {emailsList}
-    </ul>)
-  }
-
   renderHirerActions (value) {
     const hirers = get(this.props, 'hirers', [])
 
@@ -335,7 +188,11 @@ module.exports = class CompanyPage extends React.Component {
 
     const person = this.getPersonFromEmail(value)
     const personId = get(person, 'id')
-    const hirer = hirers.find(hirer => hirer.person === personId)
+    const hirersList = hirers.map(hirer => ({
+      ...hirer,
+      person: get(hirer, 'person.id')
+    }))
+    const hirer = hirersList.find(hirer => hirer.person === personId)
 
     // if so is it already in the referrals?
     if (hirer) {
@@ -353,7 +210,7 @@ module.exports = class CompanyPage extends React.Component {
   }
 
   renderHirersList () {
-    const hirers = get(this.props, 'hirers', [])
+    const hirers = get(this.props.app, 'company.hirers', [])
 
     const hirersList = hirers.map(hirer => {
       const id = get(hirer, 'id')
@@ -378,14 +235,13 @@ module.exports = class CompanyPage extends React.Component {
   }
 
   render () {
-    const jobs = get(this.props, 'jobs', [])
-    const hirers = get(this.props, 'hirers', [])
-    const companies = get(this.props, 'companies', [])
-    const company = get(this.props, 'company', {})
-    const templateTags = get(this.props, 'jobTemplateTags', [])
-    const tooltip = get(this.props, 'tooltip')
-
-    const companyName = get(company, 'name')
+    const companyData = get(this.props.app, 'company', {})
+    const company = omit(companyData, ['jobs', 'hirers'])
+    const companies = get(this.props.app, 'companies', [])
+    const templateTags = get(this.props.app, 'jobTemplateTags', [])
+    const jobs = get(companyData, 'jobs', [])
+    const hirers = get(companyData, 'hirers', [])
+    const companyName = get(companyData, 'name')
 
     const editCompanyForm = (<CompanyForm
       companies={companies}
@@ -397,17 +253,7 @@ module.exports = class CompanyPage extends React.Component {
     const hirersList = this.renderHirersList()
     const addHirerForm = this.addHirerForm()
 
-    const tasksList = (<TasksList {...this.props} />)
-    const addTaskForm = (<TaskAdder {...this.props} onSubmit={this.onAddTask.bind(this)} submitLabel='Add task for this company' />)
-
     const jobsList = this.renderJobsList()
-
-    const {survey, hirerSurvey} = this.state
-
-    const surveyLink = this.renderSurveyLink(survey)
-    const hirerSurveyLink = this.renderSurveyLink(hirerSurvey)
-
-    const surveyEmailsList = this.renderSurveyEmailsList()
 
     const addJobForm = (<JobForm
       company={company}
@@ -420,13 +266,22 @@ module.exports = class CompanyPage extends React.Component {
     const publishedJobs = jobs.filter(job => job.status === 'PUBLISHED')
 
     return (
-      <Page {...this.props} className={this.style.pageBody}>
+      <Page
+        {...this.props}
+        title={companyName}
+        description='Jobs and Hirers'
+        actions={(
+          <Link
+            className={this.style.nudj}
+            to={`/surveys?company=${company.id}`}
+          >
+            Company Surveys
+          </Link>
+        )}
+      >
         <Helmet>
           <title>{`ADMIN - ${companyName}`}</title>
         </Helmet>
-        <PageHeader title={companyName} subtitle={`Jobs and Hirers`}>
-          <Link className={this.style.nudj} to={`/surveys?company=${company.id}`}>Company Surveys</Link>
-        </PageHeader>
         <h3 className={this.style.pageHeadline}>
           <span className={this.style.pageHeadlineHighlight}>{companyName}</span>
         </h3>
@@ -449,13 +304,6 @@ module.exports = class CompanyPage extends React.Component {
           <div className={this.style.pageSidebar} />
         </div>
         <hr className={this.style.sectionDivider} />
-        <h3 className={this.style.pageHeadline}>Tasks</h3>
-        <div className={this.style.pageMain}>
-          {tasksList}
-        </div>
-        <h4 className={this.style.pageHeadline}>Add <Plural zero='a' singular='another' count={get(this.props, 'tasks', []).length} /> task</h4>
-        {addTaskForm}
-        <hr className={this.style.sectionDivider} />
         <h3 className={this.style.pageHeadline}>
           Jobs: published <span className={this.style.pageHeadlineHighlight}>({publishedJobs.length})</span> / total <span className={this.style.pageHeadlineHighlight}>({jobs.length})</span>
         </h3>
@@ -463,34 +311,10 @@ module.exports = class CompanyPage extends React.Component {
           <div className={this.style.pageMain}>
             {jobsList}
           </div>
-          <div className={this.style.pageSidebar}>
-            {tooltip ? <Tooltip {...tooltip} /> : ''}
-          </div>
         </div>
         <h4 className={this.style.pageHeadline}>Add <Plural zero='a' singular='another' count={jobs.length} /> job</h4>
         <div className={this.style.pageContent}>
           {addJobForm}
-          <div className={this.style.pageSidebar} />
-        </div>
-        <h4 className={this.style.pageHeadline}>Employee survey</h4>
-        <div className={this.style.pageContent}>
-          <div className={this.style.pageMain}>
-            {surveyLink}
-          </div>
-          <div className={this.style.pageSidebar} />
-        </div>
-        <h4 className={this.style.pageHeadline}>Survey Emails</h4>
-        <div className={this.style.pageContent}>
-          <div className={this.style.pageMain}>
-            {surveyEmailsList}
-          </div>
-          <div className={this.style.pageSidebar} />
-        </div>
-        <h4 className={this.style.pageHeadline}>Hirer survey</h4>
-        <div className={this.style.pageContent}>
-          <div className={this.style.pageMain}>
-            {hirerSurveyLink}
-          </div>
           <div className={this.style.pageSidebar} />
         </div>
       </Page>

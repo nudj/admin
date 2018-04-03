@@ -11,7 +11,6 @@ const { css } = require('@nudj/components/lib/css')
 const { merge } = require('@nudj/library')
 const style = require('./style.css')
 const Page = require('../../components/page')
-const PageHeader = require('../../components/page-header')
 const { setListOrder, saveListOrder } = require('./actions')
 
 type SectionRelationsProps = {
@@ -72,15 +71,36 @@ const SurveySectionRelationsPage = (props: SectionRelationsProps) => {
   }
 
   return (
-    <Page {...props} className={css(style.pageBody)}>
+    <Page
+      {...props}
+      title='Surveys'
+      actions={[
+        <Link
+          key='add-question'
+          className={css(style.link)}
+          to={`/survey-questions/new?section=${section.id}`}
+        >
+          Add Question
+        </Link>,
+        <Link
+          key='add-section'
+          className={css(style.link)}
+          to={`/survey-sections/new?survey=${section.survey.id}`}
+        >
+          Add Section
+        </Link>,
+        <Link
+          key='edit-section'
+          className={css(style.link)}
+          to={`/survey-sections/${section.id}`}
+        >
+          Edit Section
+        </Link>
+      ]}
+    >
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
-      <PageHeader title='Surveys'>
-        <Link className={css(style.link)} to={`/survey-questions/new?section=${section.id}`}>Add Question</Link>
-        <Link className={css(style.link)} to={`/survey-sections/new?survey=${section.survey.id}`}>Add Section</Link>
-        <Link className={css(style.link)} to={`/survey-sections/${section.id}`}>Edit Section</Link>
-      </PageHeader>
       <h3 className={css(style.pageHeadline)}>{section.title}</h3>
       <h3 className={css(style.pageHeadline)}>Questions <span className={css(style.textHighlight)}>({questions.length})</span></h3>
       <div className={css(style.pageContent)}>

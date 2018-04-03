@@ -5,10 +5,13 @@ const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 const find = require('lodash/find')
+const values = require('lodash/values')
+const startCase = require('lodash/startCase')
 const { parse } = require('query-string')
 
 const { merge } = require('@nudj/library')
 const { css } = require('@nudj/components/lib/css')
+const CheckboxGroup = require('@nudj/components/lib/components/checkbox-group')
 const {
   Input,
   InputField,
@@ -18,11 +21,14 @@ const {
   Select
 } = require('@nudj/components')
 
-const { setSurveyQuestionDraft, createOrUpdateSurveyQuestion } = require('./actions')
+const {
+  setSurveyQuestionDraft,
+  setSurveyQuestionTags,
+  createOrUpdateSurveyQuestion
+} = require('./actions')
 const style = require('./style.css')
 const Page = require('../../components/page')
-const PageHeader = require('../../components/page-header')
-const { questionTypes } = require('../../lib/constants')
+const { questionTypes, expertiseTags } = require('../../lib/constants')
 
 type SurveyQuestionPageProps = {
   question: SurveyQuestion,
@@ -44,9 +50,15 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
 
   const query = get(location, 'search', '')
   const draft = get(surveyQuestionPage, 'draft', {})
+  const tagsUpdated = get(surveyQuestionPage, 'tagsUpdated', false)
+  const tags = get(surveyQuestionPage, 'tags')
   const filters = parse(query)
   const section = find(surveySections, { id: filters.section })
   const fieldStyles = { root: style.field }
+
+  const onChangeTags = event => {
+    props.dispatch(setSurveyQuestionTags(event.values))
+  }
 
   const onChange = event => {
     const data = merge(
@@ -98,20 +110,31 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
   )
 
   return (
-    <Page {...props} className={css(style.pageBody)}>
+    <Page
+      {...props}
+      title='Surveys'
+      actions={[
+        <Link
+          key='new-section-question'
+          className={css(style.link)}
+          to={`/survey-questions/new${queryString}`}
+        >
+          New Section Question
+        </Link>,
+        existingQuestion.id && (
+          <Link
+            key='section-question'
+            className={css(style.link)}
+            to={`/survey-sections/${sectionId}/questions`}
+          >
+            Section Questions
+          </Link>
+        )
+      ].filter(Boolean)}
+    >
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
-      <PageHeader title='Surveys'>
-        <Link className={css(style.link)} to={`/survey-questions/new${queryString}`}>
-          New Section Question
-        </Link>
-        {existingQuestion.id && (
-          <Link className={css(style.link)} to={`/survey-sections/${sectionId}/questions`}>
-            Section Questions
-          </Link>
-        )}
-      </PageHeader>
       <h3 className={css(style.pageHeadline)}>
         {existingQuestion.id ? 'Edit question' : 'Create question'}
       </h3>
@@ -207,6 +230,28 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
                   name='required'
                   onChange={onCheck}
                 />
+              </InputField>
+              <InputField
+                styleSheet={fieldStyles}
+                label='Tags'
+                htmlFor='tags'
+              >
+                <CheckboxGroup
+                  id='tags'
+                  name='tags'
+                  onChange={onChangeTags}
+                  styles={style.tags}
+                  values={tagsUpdated ? tags : existingQuestion.tags}
+                >
+                  {
+                    checkbox => values(expertiseTags).map(tag => checkbox({
+                      id: tag,
+                      key: tag,
+                      value: tag,
+                      label: startCase(tag)
+                    }))
+                  }
+                </CheckboxGroup>
               </InputField>
               <div className={css(style.formButtons)}>
                 <Button type='submit' volume='yell'>

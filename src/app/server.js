@@ -12,8 +12,10 @@ require('babel-register')({
     return true
   }
 })
+
+const http = require('http')
 const path = require('path')
-const server = require('@nudj/framework/server')
+const createNudjApps = require('@nudj/framework/server')
 const logger = require('@nudj/framework/logger')
 const find = require('lodash/find')
 
@@ -23,8 +25,11 @@ const reduxReducers = require('./redux/reducers')
 const LoadingComponent = require('./components/loading')
 const mockData = require('./mock-data')
 
-const expressAssetPath = path.join(__dirname, 'server/assets')
-const buildAssetPath = path.join(__dirname, 'server/build')
+const useDevServer = process.env.USE_DEV_SERVER === 'true'
+
+const expressAssetPath = path.resolve('./app/server/assets')
+const buildAssetPath = !useDevServer && path.resolve('./app/server/build')
+
 const expressRouters = {
   insecure: [],
   secure: [
@@ -56,7 +61,7 @@ const spoofLoggedIn = (req, res, next) => {
 }
 const errorHandlers = {}
 
-const { app, getMockApiApps } = server({
+let { app, getMockApiApps } = createNudjApps({
   App: reactApp,
   reduxRoutes,
   reduxReducers,
@@ -69,7 +74,9 @@ const { app, getMockApiApps } = server({
   LoadingComponent
 })
 
-app.listen(80, () => {
+const server = http.createServer(app)
+
+server.listen(80, () => {
   logger.log('info', 'Application running')
 })
 
@@ -82,5 +89,73 @@ if (process.env.USE_MOCKS === 'true') {
 
   gqlServer.listen(82, () => {
     logger.log('info', 'Mock GQL running')
+  })
+}
+
+if (module.hot) {
+  module.hot.accept([
+    './redux',
+    './redux/routes',
+    './redux/reducers',
+    path.resolve('./pages'),
+    path.resolve('./components'),
+    './server/routers/auth',
+    './pages/companies/router',
+    './pages/people/router',
+    './pages/person/router',
+    './pages/company/router',
+    './pages/surveys/router',
+    './pages/survey/router',
+    './pages/survey-relations/router',
+    './pages/survey-section/router',
+    './pages/survey-sections/router',
+    './pages/survey-section-relations/router',
+    './pages/survey-questions/router',
+    './pages/survey-question/router',
+    './pages/company-job/router',
+    './pages/company-survey-message/router',
+    './server/routers/catch-all'
+  ], () => {
+    const updatedReactApp = require('./redux')
+    const updatedReduxRoutes = require('./redux/routes')
+    const updatedReduxReducers = require('./redux/reducers')
+    const updatedLoadingPage = require('./components/loading')
+    const updatedExpressRouters = {
+      insecure: [],
+      secure: [
+        require('./server/routers/auth'),
+        require('./pages/companies/router'),
+        require('./pages/people/router'),
+        require('./pages/person/router'),
+        require('./pages/company/router'),
+        require('./pages/surveys/router'),
+        require('./pages/survey/router'),
+        require('./pages/survey-relations/router'),
+        require('./pages/survey-section/router'),
+        require('./pages/survey-sections/router'),
+        require('./pages/survey-section-relations/router'),
+        require('./pages/survey-questions/router'),
+        require('./pages/survey-question/router'),
+        require('./pages/company-job/router'),
+        require('./pages/company-survey-message/router'),
+        require('./server/routers/catch-all')
+      ]
+    }
+
+    server.removeListener('request', app)
+    const { app: newApp } = createNudjApps({
+      App: updatedReactApp,
+      reduxRoutes: updatedReduxRoutes,
+      reduxReducers: updatedReduxReducers,
+      expressRouters: updatedExpressRouters,
+      expressAssetPath,
+      buildAssetPath,
+      spoofLoggedIn,
+      errorHandlers,
+      LoadingComponent: updatedLoadingPage
+    })
+
+    server.on('request', newApp)
+    app = newApp
   })
 }

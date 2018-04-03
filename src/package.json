@@ -19,14 +19,23 @@
     "ignore": [
       "app/server/assets",
       "app/server/build*",
+      "app/server/hot*",
       "app/node_modules",
       "flow-typed",
       "webpack*"
     ]
   },
+  "scripts": {
+    "start": "yarn run build:dlls && yarn run build:client && node .",
+    "dev": "yarn run build:dlls && USE_DEV_SERVER=true DEV_SERVER_PATH=https://admin-wds.local.nudj.co yarn run watch:all",
+    "build:client": "webpack --config ./webpack.config.client.js --bail --hide-modules",
+    "build:dlls": "webpack --config ./webpack.config.dll.js --bail --hide-modules",
+    "watch:all": "webpack-dev-server --config ./webpack.config.client.js & webpack --config ./webpack.config.server.js"
+  },
   "dependencies": {
+    "@nudj/api": "12.0.0",
     "@nudj/components": "2.4.0",
-    "@nudj/framework": "14.0.0",
+    "@nudj/framework": "15.0.0",
     "@nudj/library": "4.2.0",
     "axios": "^0.16.1",
     "babel-preset-env": "^1.1.10",
@@ -70,14 +79,19 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "chai": "^3.5.0",
     "chai-as-promised": "^7.1.1",
+    "clean-webpack-plugin": "^0.1.19",
     "dirty-chai": "^1.2.2",
     "eslint-plugin-flowtype": "2.39.1",
     "mocha": "^3.2.0",
     "nock": "^9.0.14",
     "nodemon": "^1.11.0",
     "proxyquire": "^1.8.0",
+    "react-hot-loader": "^4.0.0",
     "standard": "^9.0.0",
+    "start-server-webpack-plugin": "^2.2.1",
     "uglifyjs-webpack-plugin": "^0.4.6",
-    "webpack": "^2.2.1"
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1",
+    "webpack-node-externals": "^1.6.0"
   }
 }

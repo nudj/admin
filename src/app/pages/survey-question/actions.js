@@ -6,6 +6,8 @@ const { quickDispatch } = require('@nudj/library')
 
 const SET_SURVEY_QUESTION_DRAFT = 'SET_SURVEY_QUESTION_DRAFT'
 module.exports.SET_SURVEY_QUESTION_DRAFT = SET_SURVEY_QUESTION_DRAFT
+const SET_SURVEY_QUESTION_TAGS = 'SET_SURVEY_QUESTION_TAGS'
+module.exports.SET_SURVEY_QUESTION_TAGS = SET_SURVEY_QUESTION_TAGS
 
 function setSurveyQuestionDraft (draft: Draft) {
   return {
@@ -17,11 +19,22 @@ module.exports.setSurveyQuestionDraft = (draft: Draft) => (
   quickDispatch(setSurveyQuestionDraft(draft))
 )
 
+function setSurveyQuestionTags (tags) {
+  return {
+    type: SET_SURVEY_QUESTION_TAGS,
+    tags
+  }
+}
+module.exports.setSurveyQuestionTags = (tags) => (
+  quickDispatch(setSurveyQuestionTags(tags))
+)
+
 function createOrUpdateSurveyQuestion () {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState()
     const existingId = get(state, 'app.question.id')
     const data = get(state, 'surveyQuestionPage.draft', {})
+    const tags = get(state, 'surveyQuestionPage.tags', [])
     const questions = get(state, 'app.surveyQuestions', [])
     const names = questions.map(question => question.name)
 
@@ -37,7 +50,14 @@ function createOrUpdateSurveyQuestion () {
       method = 'patch'
       url = `/survey-questions/${existingId}`
     }
-    return dispatch(actions.app.postData({ data, url, method }))
+    return dispatch(actions.app.postData({
+      data: {
+        ...data,
+        tags
+      },
+      url,
+      method
+    }))
   }
 }
 module.exports.createOrUpdateSurveyQuestion = createOrUpdateSurveyQuestion

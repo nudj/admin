@@ -8,7 +8,6 @@ const actions = require('@nudj/framework/actions')
 
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
-const PageHeader = require('../../components/page-header')
 const RowItem = require('../../components/row-item')
 const Tooltip = require('../../components/tooltip')
 const CompanyForm = require('../../components/company-form')
@@ -50,11 +49,13 @@ module.exports = class CompaniesPage extends React.Component {
     const rightNow = new Date()
 
     return (
-      <Page {...this.props} className={this.style.pageBody}>
+      <Page
+        {...this.props}
+        title='Companies'
+      >
         <Helmet>
           <title>ADMIN - Companies</title>
         </Helmet>
-        <PageHeader title='Companies' />
         <h3 className={this.style.pageHeadline}>Companies listed on nudj <span className={this.style.textHighlight}>({clientCompanies.length})</span></h3>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>

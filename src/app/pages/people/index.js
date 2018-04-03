@@ -8,7 +8,6 @@ const actions = require('@nudj/framework/actions')
 
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
-const PageHeader = require('../../components/page-header')
 const RowItem = require('../../components/row-item')
 const Tooltip = require('../../components/tooltip')
 const PersonForm = require('../../components/person-form')
@@ -78,11 +77,13 @@ module.exports = class PeoplePage extends React.Component {
     const peopleList = this.renderPeopleList()
 
     return (
-      <Page {...this.props} className={this.style.pageBody}>
+      <Page
+        {...this.props}
+        title='People'
+      >
         <Helmet>
           <title>ADMIN - People</title>
         </Helmet>
-        <PageHeader title='People' />
         <h3 className={this.style.pageHeadline}>Hirers on nudj <span className={this.style.textHighlight}>({people.length})</span></h3>
         <div className={this.style.pageContent}>
           {peopleList}

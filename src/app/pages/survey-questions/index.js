@@ -9,7 +9,6 @@ const { Table } = require('@nudj/components')
 const style = require('./style.css')
 const Page = require('../../components/page')
 const { Link } = require('react-router-dom')
-const PageHeader = require('../../components/page-header')
 
 type SurveyQuestionPageType = {
   questions?: Array<SurveyQuestion>,
@@ -43,15 +42,21 @@ const SurveyQuestionsPage = (props: SurveyQuestionPageType) => {
   }
 
   return (
-    <Page {...props} className={css(style.pageBody)}>
+    <Page
+      {...props}
+      title='Questions'
+      actions={(
+        <Link
+          className={css(style.link)}
+          to={`/survey-questions/new${query}`}
+        >
+          New Question
+        </Link>
+      )}
+    >
       <Helmet>
         <title>ADMIN - Questions</title>
       </Helmet>
-      <PageHeader title='Questions'>
-        <Link className={css(style.link)} to={`/survey-questions/new${query}`}>
-          New Question
-        </Link>
-      </PageHeader>
       <h3 className={css(style.pageHeadline)}>
         Questions <span className={css(style.textHighlight)}>({data.length})</span>
       </h3>

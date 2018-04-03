@@ -9,7 +9,6 @@ const getStyle = require('./style.css')
 const Page = require('../../components/page')
 const CopyToClipboard = require('../../components/copy-to-clipboard')
 const Autocomplete = require('../../components/autocomplete')
-const PageHeader = require('../../components/page-header')
 const PersonForm = require('../../components/person-form')
 const RowItem = require('../../components/row-item')
 const Plural = require('../../components/plural')
@@ -398,13 +397,14 @@ module.exports = class PersonPage extends React.Component {
     const taskSection = this.renderTasksSection()
 
     return (
-      <Page {...this.props} className={this.style.pageBody}>
+      <Page
+        {...this.props}
+        title={personName}
+        actions={<h4>{get(this.props, 'person.email')}</h4>}
+      >
         <Helmet>
           <title>{`ADMIN - ${personName}`}</title>
         </Helmet>
-        <PageHeader title={personName}>
-          <h4>{get(this.props, 'person.email')}</h4>
-        </PageHeader>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMainContainer}>
             <h3 className={this.style.pageHeadline}>Edit person details</h3>
