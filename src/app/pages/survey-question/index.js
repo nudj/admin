@@ -49,7 +49,7 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
   const query = get(location, 'search', '')
   const draft = get(surveyQuestionPage, 'draft', {})
   const tagsUpdated = get(surveyQuestionPage, 'tagsUpdated', false)
-  const tags = get(surveyQuestionPage, 'tags')
+  const tags = get(surveyQuestionPage, 'tags', [])
   const filters = parse(query)
   const section = find(surveySections, { id: filters.section })
   const fieldStyles = { root: style.field }
@@ -239,7 +239,7 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
                   name='tags'
                   onChange={onChangeTags}
                   styles={style.tags}
-                  values={tagsUpdated ? tags : existingQuestion.tags}
+                  values={tagsUpdated ? tags : existingQuestion.tags.map(tag => tag.name)}
                 >
                   {
                     checkbox => Object.keys(expertiseTags).map(tag => checkbox({
