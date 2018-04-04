@@ -32,7 +32,11 @@ function postQuestion ({ body }) {
         name
         required
         type
-        tags
+        tags {
+          id
+          name
+          type
+        }
         section: surveySection {
           id
           title
@@ -79,7 +83,11 @@ function patchQuestion ({ body, params }) {
         name
         required
         type
-        tags
+        tags {
+          id
+          name
+          type
+        }
         section: surveySection {
           id
           title
@@ -113,7 +121,11 @@ function getOne ({ params }) {
         name
         required
         type
-        tags
+        tags {
+          id
+          name
+          type
+        }
         section: surveySection {
           id
           title
