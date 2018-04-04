@@ -6,6 +6,8 @@ const {
   SET_SURVEY_QUESTION_TAGS
 } = require('./actions')
 
+const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
+
 type Actions = {
   [key: typeof SET_SURVEY_QUESTION_DRAFT]: (
     state: State,
@@ -22,9 +24,14 @@ const setSurveyQuestionTags = (state, action) => ({
   tags: action.tags
 })
 
+const handleLocationChange = () => {
+  return initialState
+}
+
 const actions = {
   [SET_SURVEY_QUESTION_DRAFT]: setSurveyQuestionDraft,
-  [SET_SURVEY_QUESTION_TAGS]: setSurveyQuestionTags
+  [SET_SURVEY_QUESTION_TAGS]: setSurveyQuestionTags,
+  [ROUTER_LOCATION_CHANGE]: handleLocationChange
 }
 
 const initialState = {
