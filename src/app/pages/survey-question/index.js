@@ -265,7 +265,9 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
 }
 
 SurveyQuestionPage.defaultProps = {
-  question: {},
+  question: {
+    tags: []
+  },
   location: {},
   surveySections: [],
   surveyQuestionPage: {}
