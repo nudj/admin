@@ -1,5 +1,7 @@
 const omit = require('lodash/omit')
 
+const { Redirect } = require('@nudj/framework/errors')
+
 function getNew () {
   const gql = `
     query NewQuestion {
@@ -42,13 +44,6 @@ function postQuestion ({ body }) {
           title
         }
       }
-      notification: setNotification (
-        type: "success"
-        message: "Question created!"
-      ) {
-        type
-        message
-      }
     }
   `
 
@@ -64,7 +59,14 @@ function postQuestion ({ body }) {
     }
   }
 
-  return { gql, variables }
+  const respond = (data) => {
+    throw new Redirect({
+      url: `/survey-questions/${data.question.id}`,
+      notification: { type: 'success', message: 'Question created!' }
+    })
+  }
+
+  return { gql, variables, respond }
 }
 
 function patchQuestion ({ body, params }) {
