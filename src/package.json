@@ -1,6 +1,6 @@
 {
   "name": "admin",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Nudj admin",
   "main": "app/server",
   "repository": {
