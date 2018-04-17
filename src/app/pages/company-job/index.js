@@ -106,6 +106,7 @@ module.exports = class JobPage extends React.Component {
       {applications.map(application => {
         const name = `${get(application, 'person.firstName')} ${get(application, 'person.lastName')}`
         const referralId = get(application, 'referral.id')
+        const personLink = `/people/${get(application, 'person.id')}`
         const parentReferral = this.findParentReferral(referralId)
         const referralPerson = get(parentReferral, 'person', {})
         const parentReferralInfo = parentReferral ? `${parentReferral.id} (${referralPerson.firstName} ${referralPerson.lastName})` : '-'
@@ -121,6 +122,9 @@ module.exports = class JobPage extends React.Component {
               term: 'Referral',
               description: parentReferralInfo
             }
+          ]}
+          actions={[
+            <Link className={this.style.nudjLink} to={personLink}>See person</Link>
           ]}
         />)
       })}
