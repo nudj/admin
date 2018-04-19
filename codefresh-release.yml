@@ -2,8 +2,8 @@ version: '1.0'
 
 steps:
 
-  build:
-    title: Build
+  build_production:
+    title: Build production
     type: build
     image_name: nudj/admin
     tag: production
@@ -12,11 +12,30 @@ steps:
       - NPM_TOKEN=${{NPM_TOKEN}}
       - ENVKEY=${{ENVKEY_PRODUCTION}}
 
-  push:
-    title: Push
+  push_production:
+    title: Push production
     type: push
-    candidate: '${{build}}'
+    candidate: '${{build_production}}'
     tag: ${{CF_BRANCH}}
+    credentials:
+      username: '${{dockerUsername}}'
+      password: '${{dockerPassword}}'
+
+  build_demo:
+    title: Build demo
+    type: build
+    image_name: nudj/admin
+    tag: demo
+    dockerfile: Dockerfile
+    build_arguments:
+      - NPM_TOKEN=${{NPM_TOKEN}}
+      - ENVKEY=${{ENVKEY_DEMO}}
+
+  push_demo:
+    title: Push demo
+    type: push
+    candidate: '${{build_demo}}'
+    tag: demo
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'
