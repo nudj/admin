@@ -15,6 +15,7 @@ const RowItem = require('../../components/row-item')
 const CompanyForm = require('../../components/company-form')
 const JobForm = require('../../components/job-form')
 const Plural = require('../../components/plural')
+const { hirerTypes } = require('../../lib/constants')
 
 module.exports = class CompanyPage extends React.Component {
   constructor (props) {
@@ -84,7 +85,8 @@ module.exports = class CompanyPage extends React.Component {
     const companyId = get(this.props.app, 'company.id')
     const url = `/companies/${companySlug}/hirers`
     const method = 'post'
-    const data = { email, company: companyId }
+    const type = hirerTypes.ADMIN
+    const data = { email, type, company: companyId }
 
     this.setState({
       hirerValue: ''
