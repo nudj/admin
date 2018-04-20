@@ -1,4 +1,5 @@
 const { values: expertiseTags } = require('@nudj/api/gql/schema/enums/expertise-tags')
+const { values: hirerTypes } = require('@nudj/api/gql/schema/enums/hirer-types')
 
 const questionTypes = {
   COMPANIES: 'COMPANIES',
@@ -7,5 +8,6 @@ const questionTypes = {
 
 module.exports = {
   questionTypes,
-  expertiseTags
+  expertiseTags,
+  hirerTypes
 }
