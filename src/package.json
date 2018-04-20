@@ -33,7 +33,7 @@
     "watch:all": "webpack-dev-server --config ./webpack.config.client.js & webpack --config ./webpack.config.server.js"
   },
   "dependencies": {
-    "@nudj/api": "14.0.0",
+    "@nudj/api": "16.0.0",
     "@nudj/components": "2.4.0",
     "@nudj/framework": "15.0.0",
     "@nudj/library": "4.2.0",
