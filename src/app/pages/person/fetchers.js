@@ -1,3 +1,6 @@
+const omit = require('lodash/omit')
+
+const { Redirect } = require('@nudj/framework/errors')
 const {
   merge,
   addDataKeyValue,
@@ -11,28 +14,66 @@ const hirers = require('../../server/modules/hirers')
 const network = require('../../server/modules/network')
 const tasks = require('../../server/modules/tasks')
 
-function get ({
-  data,
-  params
-}) {
-  return genericPersonHandler(data, params.personId)
+function get ({ params }) {
+  const gql = `
+    query getPersonPage ($personId: ID!) {
+      person(id: $personId) {
+        id
+        firstName
+        lastName
+        email
+        url
+        role {
+          name
+        }
+        company {
+          name
+        }
+      }
+    }
+  `
+  const variables = {
+    personId: params.personId
+  }
+  const transformData = async ({ person }) => {
+    const referralData = await genericPersonHandler({}, params.personId)
+    return {
+      ...referralData,
+      person
+    }
+  }
+
+  return { gql, variables, transformData }
 }
 
 function put ({
-  data,
   params,
   body
 }) {
-  return people.put(data, body)
-    .then(data => {
-      data.notification = {
-        message: `${data.savedPerson.firstName} ${data.savedPerson.lastName} saved`,
-        type: 'success'
+  const gql = `
+    mutation updatePerson ($personId: ID!, $personData: PersonUpdateInput!) {
+      person: updatePerson(id: $personId, data: $personData) {
+        id
+        firstName
+        lastName
       }
-      data.person = data.savedPerson
-      return promiseMap(data)
+    }
+  `
+  const variables = {
+    personId: params.personId,
+    personData: omit(body, ['id'])
+  }
+  const respond = ({ person }) => {
+    throw new Redirect({
+      url: `/people/${person.id}`,
+      notification: {
+        type: 'success',
+        message: `${person.firstName} ${person.lastName} updated!`
+      }
     })
-    .then(data => genericPersonHandler(data, params.personId))
+  }
+
+  return { gql, variables, respond }
 }
 
 function postReferral ({
@@ -45,45 +86,6 @@ function postReferral ({
     .then(data => {
       data.notification = {
         message: `New referral ${data.referral.id} saved`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(data => genericPersonHandler(data, params.personId))
-}
-
-function postTask ({
-  data,
-  params
-}) {
-  return people.get(data, params.personId)
-    .then(data => hirers.getFirstByPerson(data, data.person.id))
-    .then(data => {
-      const hirer = data.hirer.id
-      const type = params.taskType
-      const task = {hirer, type}
-      return tasks.post(data, task)
-    })
-    .then(data => {
-      data.notification = {
-        message: `New ${data.newTask.type} task saved`,
-        type: 'success'
-      }
-      return promiseMap(data)
-    })
-    .then(data => genericPersonHandler(data, data.person.id))
-}
-
-function postRecommendation ({
-  data,
-  params,
-  body
-}) {
-  return jobs.getById(data, params.jobId)
-    .then(data => network.post(data, body.hirer, data.job.id, params.personId))
-    .then(data => {
-      data.notification = {
-        message: `New recommendation ${data.recommendation.id} saved`,
         type: 'success'
       }
       return promiseMap(data)
@@ -128,7 +130,5 @@ function smooshJobs (data) {
 module.exports = {
   get,
   put,
-  postReferral,
-  postRecommendation,
-  postTask
+  postReferral
 }
