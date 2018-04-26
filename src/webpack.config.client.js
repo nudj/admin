@@ -1,6 +1,7 @@
 require('envkey')
 var path = require('path')
 var webpack = require('webpack')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 process.noDeprecation = true
 
@@ -13,7 +14,8 @@ const plugins = [
   }),
   new webpack.EnvironmentPlugin(['NODE_ENV', 'USE_DEV_SERVER', 'DEV_SERVER_PATH']),
   process.env.USE_DEV_SERVER && new webpack.HotModuleReplacementPlugin(),
-  process.env.USE_DEV_SERVER && new webpack.NamedModulesPlugin()
+  process.env.USE_DEV_SERVER && new webpack.NamedModulesPlugin(),
+  process.env.DEBUG !== 'true' && new UglifyJSPlugin()
 ].filter(plugin => plugin)
 
 const config = {
@@ -42,7 +44,7 @@ const config = {
           path.join(__dirname, '@nudj'),
           path.join(__dirname, 'node_modules', '@nudj')
         ],
-        exclude: /\/usr\/src\/(node_modules\/)?@nudj\/.*\/node_modules\/.*/,
+        exclude: /node_modules\/(?!@nudj)/,
         loader: 'babel-loader',
         options: {
           babelrc: false,
