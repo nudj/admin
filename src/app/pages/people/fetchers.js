@@ -1,44 +1,47 @@
-const { actionMapAssign } = require('@nudj/library')
-
-const people = require('../../server/modules/people')
-const { getAll: getAllHirers } = require('../../server/modules/hirers')
-
-const getAllHirerPeople = () => {
-  return getAllHirers({}).then(({ hirers }) => {
-    const allHirers = hirers.map(hirer => {
-      return people.get({}, hirer.person)
-        .then(result => result.person)
-    })
-    return Promise.all(allHirers)
-  })
-}
+const { Redirect } = require('@nudj/framework/errors')
 
 function get ({ data }) {
-  return actionMapAssign(
-    data,
-    {
-      people: () => getAllHirerPeople()
+  const gql = `
+    query getPersonHirers {
+      people: hirersAsPeople {
+        id
+        created
+        email
+        firstName
+        lastName
+      }
     }
-  )
+  `
+  return { gql }
 }
 
 function post ({
   data,
   body
 }) {
-  return actionMapAssign(
-    data,
-    {
-      newPerson: () => people.post({}, body).then(data => data.newPerson)
-    },
-    {
-      notification: data => ({
-        message: `${data.newPerson.firstName} ${data.newPerson.lastName} added`,
-        type: 'success'
-      }),
-      people: () => getAllHirerPeople()
+  const gql = `
+    mutation createPerson ($input: PersonCreateInput!) {
+      newPerson: createPerson(input: $input) {
+        id
+        firstName
+        lastName
+      }
     }
-  )
+  `
+  const variables = {
+    input: body
+  }
+  const respond = ({ newPerson }) => {
+    throw new Redirect({
+      url: '/people',
+      notification: {
+        type: 'success',
+        message: `${newPerson.firstName} ${newPerson.lastName} added`
+      }
+    })
+  }
+
+  return { gql, variables, respond }
 }
 
 module.exports = {

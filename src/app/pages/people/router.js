@@ -4,13 +4,13 @@ const fetchers = require('./fetchers')
 
 const Router = ({
   ensureLoggedIn,
-  respondWith
+  respondWithGql
 }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/people', respondWith(fetchers.get))
-  router.postHandlers('/people', respondWith(fetchers.post))
+  router.getHandlers('/people', respondWithGql(fetchers.get))
+  router.postHandlers('/people', respondWithGql(fetchers.post))
 
   return router
 }
