@@ -89,6 +89,7 @@
     "react-hot-loader": "^4.0.0",
     "standard": "^9.0.0",
     "start-server-webpack-plugin": "^2.2.1",
+    "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.11.1",
     "webpack-node-externals": "^1.6.0"
