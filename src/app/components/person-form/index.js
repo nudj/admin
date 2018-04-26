@@ -39,10 +39,8 @@ module.exports = class PeoplePage extends React.Component {
       lastName: '',
       email: '',
       url: '',
-      title: '',
-      type: '', // 'external', 'internal'
-      company: '', // just a string
-      status: '' // 'user', 'lead'
+      role: null,
+      company: null
     }
   }
 
@@ -78,6 +76,17 @@ module.exports = class PeoplePage extends React.Component {
     this.updatePerson({ [key]: value })
   }
 
+  onChangeNested (event) {
+    const value = event.target.value
+    const key = event.target.name
+
+    this.updatePerson({
+      [key]: {
+        name: value
+      }
+    })
+  }
+
   isPersonValid () {
     const emailEmpty = get(this.state.validation, 'email.empty', false)
     const emailFail = get(this.state.validation, 'email.notUnique', false)
@@ -105,7 +114,11 @@ module.exports = class PeoplePage extends React.Component {
     }
 
     const submit = get(this.props, 'onSubmit', () => {})
-    const data = get(this.state, 'person', {})
+    const data = {
+      ...get(this.state, 'person', {}),
+      role: get(this.state, 'person.role.name', ''),
+      company: get(this.state, 'person.company.name', '')
+    }
 
     submit(data)
   }
@@ -147,9 +160,6 @@ module.exports = class PeoplePage extends React.Component {
       submitButton = (<button className={this.style.submitButton} disabled>{submitLabel}</button>)
     }
 
-    const statuses = ['User', 'Lead']
-    const types = ['External', 'Internal']
-
     return (<form className={this.style.pageMain} onSubmit={this.onSubmit.bind(this)} ref='personForm'>
       <div className={this.style.formCard}>
         <ul className={this.style.formList}>
@@ -171,24 +181,12 @@ module.exports = class PeoplePage extends React.Component {
             <input className={this.style.inputBoxUrl} type='uri' placeholder='eg: https://www.person.com/portfolio' id='personUrl' name='url' onChange={this.onChangeGeneric.bind(this)} value={person.url} />
           </li>
           <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='personTitle'>Title</label>
-            <input className={this.style.inputBox} type='text' id='personTitle' name='title' onChange={this.onChangeGeneric.bind(this)} value={person.title} />
+            <label className={this.style.label} htmlFor='personRole'>Role</label>
+            <input className={this.style.inputBox} type='text' id='personRole' name='role' onChange={this.onChangeNested.bind(this)} value={get(person, 'role.name', '')} />
           </li>
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='personCompany'>Company</label>
-            <input className={this.style.inputBox} type='text' id='personCompany' name='company' onChange={this.onChangeGeneric.bind(this)} value={person.company} />
-          </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='personType'>Type</label>
-            <select className={this.style.selectBox} id='personType' name='type' onChange={this.onChangeGeneric.bind(this)} value={person.type || types[0]}>
-              {types.map((type, index) => (<option key={index} value={type}>{type}</option>))}
-            </select>
-          </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='personStatus'>Status</label>
-            <select className={this.style.selectBox} id='personStatus' name='status' onChange={this.onChangeGeneric.bind(this)} value={person.status || statuses[0]}>
-              {statuses.map((status, index) => (<option key={index} value={status}>{status}</option>))}
-            </select>
+            <input className={this.style.inputBox} type='text' id='personCompany' name='company' onChange={this.onChangeNested.bind(this)} value={get(person, 'company.name', '')} />
           </li>
         </ul>
         <div className={this.style.formButtons}>
