@@ -33,4 +33,4 @@ steps:
       - eval "$(ssh-agent -s)"
       - ssh-add ~/.ssh/id_nudj_staging
       - ssh-keyscan ${{NUDJ_STAGING_HOSTNAME}} >> ~/.ssh/known_hosts
-      - ssh -t ${{NUDJ_STAGING_USER}}@${{NUDJ_STAGING_HOSTNAME}} /bin/sh -c 'echo 'Deploying' && docker pull ${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}:demo && docker-compose -f /home/${{NUDJ_STAGING_USER}}/staging/docker-compose.yml up -d --force-recreate --no-deps ${{CF_REPO_NAME}}'
+      - ssh -t ${{NUDJ_STAGING_USER}}@${{NUDJ_STAGING_HOSTNAME}} /bin/sh -c 'echo 'Deploying' && docker pull ${{CF_REPO_OWNER}}/${{CF_REPO_NAME}} && docker-compose -f /home/${{NUDJ_STAGING_USER}}/staging/docker-compose.yml up -d --force-recreate --no-deps ${{CF_REPO_NAME}}'
