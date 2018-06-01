@@ -46,7 +46,7 @@ function getOne ({ params }) {
 function postSurvey ({ data, body }) {
   const gql = `
     mutation CreateSurvey (
-      $company: ID!
+      $company: ID
       $data: SurveyCreateInput!
     ) {
       survey: createSurvey (
