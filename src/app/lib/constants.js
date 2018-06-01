@@ -6,8 +6,11 @@ const questionTypes = {
   CONNECTIONS: 'CONNECTIONS'
 }
 
+const DEFAULT_SURVEY_SLUG = 'default'
+
 module.exports = {
   questionTypes,
   expertiseTags,
-  hirerTypes
+  hirerTypes,
+  DEFAULT_SURVEY_SLUG
 }

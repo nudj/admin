@@ -83,7 +83,6 @@ const SurveyPage = (props: SurveyPageProps) => {
       name='company'
       onChange={onChange}
       value={get(draft, 'company', '')}
-      required
     >
       <option value=''>Choose a company</option>
       {companies.map((company, index) => (

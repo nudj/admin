@@ -3,6 +3,7 @@ function get () {
     query surveyPage {
       surveys {
         id
+        slug
         introTitle
         introDescription
         outroTitle

@@ -35,6 +35,15 @@ const Sidebar = ({ styleSheet }) => {
         </li>
         <li className={css(style.menuItem)}>
           <NavLink
+            className={css(style.link)}
+            to='/surveys'
+          >
+            <Icon name='chevron' style={style.icon} />
+            Surveys
+          </NavLink>
+        </li>
+        <li className={css(style.menuItem)}>
+          <NavLink
             className={css(style.link, style.candidatesLink)}
             to='/people'
           >
