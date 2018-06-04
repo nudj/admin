@@ -3,7 +3,8 @@ const get = require('lodash/get')
 const difference = require('lodash/difference')
 const compact = require('lodash/compact')
 const { merge } = require('@nudj/library')
-const CheckboxGroup = require('@nudj/components/lib/components/checkbox-group')
+
+const { Text, CheckboxGroup } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
 const { expertiseTags } = require('../../lib/constants')
@@ -57,7 +58,6 @@ module.exports = class JobForm extends React.Component {
   cleanJob () {
     return {
       title: '',
-      slug: '',
       url: '',
       status: 'DRAFT', // 'Published', 'Archived'
       bonus: 0,
@@ -75,13 +75,8 @@ module.exports = class JobForm extends React.Component {
   }
 
   cleanValidation () {
-    const slug = get(this.state, 'job.slug', '')
     const title = get(this.state, 'job.title', '')
     return {
-      slug: {
-        empty: !slug,
-        notUnique: !this.isSlugUnique(slug)
-      },
       title: {
         empty: !title,
         notUnique: !this.isTitleUnique(title)
@@ -95,42 +90,15 @@ module.exports = class JobForm extends React.Component {
     this.setState({ job })
   }
 
-  makeSlugFromName (name) {
-    return name.toLowerCase()
-      .replace(/\s+/g, ' ')
-      .replace(/\s/g, '-')
-      .replace(/[^a-z0-9-]/g, '')
-  }
-
   onChangeTitle (event) {
     const title = event.target.value
-    const slug = this.makeSlugFromName(title)
 
-    this.updateJob({ slug, title })
+    this.updateJob({ title })
 
     const validation = {
-      slug: {
-        empty: !slug,
-        notUnique: !this.isSlugUnique(slug)
-      },
       title: {
         empty: !title,
         notUnique: !this.isTitleUnique(title)
-      }
-    }
-
-    this.updateValidation(validation)
-  }
-
-  onChangeSlug (event) {
-    const slug = this.makeSlugFromName(event.target.value)
-
-    this.updateJob({ slug })
-
-    const validation = {
-      slug: {
-        empty: !slug,
-        notUnique: !this.isSlugUnique(slug)
       }
     }
 
@@ -186,18 +154,16 @@ module.exports = class JobForm extends React.Component {
   }
 
   isJobValid () {
-    const slugEmpty = get(this.state.validation, 'slug.empty', false)
     const titleEmpty = get(this.state.validation, 'title.empty', false)
     const invalidTemplateTags = get(this.state.validation, 'templateTags.invalid', false)
 
-    if (slugEmpty || titleEmpty || invalidTemplateTags) {
+    if (titleEmpty || invalidTemplateTags) {
       return false
     }
 
-    const slugFail = get(this.state.validation, 'slug.notUnique', false)
     const titleFail = get(this.state.validation, 'title.notUnique', false)
 
-    if (slugFail || titleFail) {
+    if (titleFail) {
       return false
     }
 
@@ -210,10 +176,6 @@ module.exports = class JobForm extends React.Component {
     const existingJobValue = get(this.props, `job.${propKey}`, '').toLowerCase()
     // If it was found, but it also matches the existing job then it's inferred that it's still unique
     return existingJobValue && found ? existingJobValue === value.toLowerCase() : !found
-  }
-
-  isSlugUnique (slug) {
-    return this.isPropUnique(slug, 'slug')
   }
 
   isTitleUnique (title) {
@@ -254,12 +216,7 @@ module.exports = class JobForm extends React.Component {
   renderErrorLabels () {
     const errorLabels = {
       jobTitleNotUniqueLabel: (<span />),
-      jobSlugNotUniqueLabel: (<span />),
       templateTagsInvalidLabel: (<span />)
-    }
-
-    if (get(this.state.validation, 'slug.notUnique', false)) {
-      errorLabels.jobSlugNotUniqueLabel = this.renderErrorLabel('There\'s already another job with that slug', 'jobSlug')
     }
 
     if (get(this.state.validation, 'templateTags.invalid', false)) {
@@ -318,11 +275,12 @@ module.exports = class JobForm extends React.Component {
             <input className={css(style.inputBox)} type='text' id='newJobTitle' name='title' required onChange={this.onChangeTitle.bind(this)} value={job.title} />
             {errorLabels.jobTitleNotUniqueLabel}
           </li>
-          <li className={css(style.formListItem)}>
-            <label className={css(style.label)} htmlFor='newJobSlug'>Slug</label>
-            <input className={css(style.inputBox)} type='text' id='newJobSlug' name='slug' required onChange={this.onChangeSlug.bind(this)} value={job.slug} />
-            {errorLabels.jobSlugNotUniqueLabel}
-          </li>
+          {job.slug && (
+            <li className={css(style.formListItem)}>
+              <label className={css(style.label)} htmlFor='newJobSlug'>Slug</label>
+              <Text>{job.slug}</Text>
+            </li>
+          )}
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobUrl'>URL</label>
             <input className={css(style.inputBoxUrl)} type='uri' placeholder='eg: https://www.company.com/link-to-job' id='newJobUrl' name='url' onChange={this.onChangeGeneric.bind(this)} value={job.url} />
