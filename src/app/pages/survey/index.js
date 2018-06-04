@@ -106,7 +106,7 @@ const SurveyPage = (props: SurveyPageProps) => {
           <Link
             key='surveys'
             className={css(style.link)}
-            to={`/surveys`}
+            to='/surveys'
           >
             Surveys
           </Link>
