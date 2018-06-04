@@ -24,7 +24,7 @@ type SurveyPageProps = {
 
 function ensureDefaultIsFirst (surveys) {
   const indexOfDefault = findIndex(surveys, { slug: DEFAULT_SURVEY_SLUG })
-  if (indexOfDefault !== 0) {
+  if (indexOfDefault > 0) {
     surveys = [
       surveys[indexOfDefault],
       ...surveys.slice(0, indexOfDefault),
