@@ -286,8 +286,8 @@ module.exports = class JobForm extends React.Component {
             <input className={css(style.inputBoxUrl)} type='uri' placeholder='eg: https://www.company.com/link-to-job' id='newJobUrl' name='url' onChange={this.onChangeGeneric.bind(this)} value={job.url} />
           </li>
           <li className={css(style.formListItem)}>
-            <label className={css(style.label)} htmlFor='newJobBonus'>Bonus (without currency symbol)</label>
-            <input className={css(style.inputBox)} type='number' placeholder='eg: 200' id='newJobBonus' name='bonus' required onChange={this.onChangeGeneric.bind(this)} value={job.bonus} />
+            <label className={css(style.label)} htmlFor='newJobBonus'>Bonus</label>
+            <input className={css(style.inputBox)} type='number' placeholder='eg: £200' id='newJobBonus' name='bonus' required onChange={this.onChangeGeneric.bind(this)} value={job.bonus} />
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobType'>Type</label>
