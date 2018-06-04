@@ -68,40 +68,39 @@ const SurveyRelationsPage = (props: SurveyRelationsProps) => {
     return defaultRender
   }
 
+  let pageHeadline
+  if (company) {
+    pageHeadline = (
+      <h3 className={css(style.pageHeadline)}>
+        <span className={css(style.textHighlight)}>{company.name}</span> - {survey.introTitle}
+      </h3>
+    )
+  } else {
+    pageHeadline = (
+      <h3 className={css(style.pageHeadline)}>
+        {survey.introTitle}
+      </h3>
+    )
+  }
+
   return (
     <Page
       {...props}
       title='Surveys'
       actions={[
         <Link
-          key='add-section'
-          className={css(style.link)}
-          to={`/survey-sections/new?survey=${survey.id}`}
-        >
-          Add Section
-        </Link>,
-        <Link
-          key='edit-survey'
+          key='survey'
           className={css(style.link)}
           to={`/surveys/${survey.id}`}
         >
-          Edit Survey
-        </Link>,
-        <Link
-          key='new-survey'
-          className={css(style.link)}
-          to={`/surveys/new?company=${company.id}`}
-        >
-          New Survey
+          Survey
         </Link>
       ]}
     >
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
-      <h3 className={css(style.pageHeadline)}>
-        <span className={css(style.textHighlight)}>{company.name}</span> - {survey.introTitle}
-      </h3>
+      {pageHeadline}
       <h3 className={css(style.pageHeadline)}>Sections <span className={css(style.textHighlight)}>({sections.length})</span></h3>
       <div className={css(style.pageContent)}>
         <div className={css(style.pageMain)}>
@@ -113,6 +112,12 @@ const SurveyRelationsPage = (props: SurveyRelationsProps) => {
               </Button>
             ) }
           </form>
+          <Link
+            className={css(style.addButton)}
+            to={`/survey-sections/new?survey=${survey.id}`}
+          >
+            Add Section
+          </Link>
         </div>
       </div>
     </Page>
@@ -122,7 +127,7 @@ const SurveyRelationsPage = (props: SurveyRelationsProps) => {
 SurveyRelationsPage.defaultProps = {
   survey: {
     sections: [],
-    company: {},
+    company: null,
     surveyRelationsPage: {
       order: {}
     }

@@ -57,8 +57,10 @@ const SurveySectionPage = (props: SurveySectionPageProps) => {
   const query = get(location, 'search', '')
   const draft = get(surveySectionPage, 'draft', {})
   const filters = parse(query)
-  const survey = find(surveys, { id: filters.survey })
+  const survey = (existingSection && existingSection.survey) || find(surveys, { id: filters.survey })
   const fieldStyles = { root: style.field }
+  const companySuffix = survey.company ? ` - ${survey.company.name}` : ''
+  const existingSectionSurveyCompanySuffix = existingSection.survey && existingSection.survey.company ? ` - ${existingSection.survey.company.name}` : ''
 
   const onChange = event => {
     const data = merge(
@@ -78,7 +80,7 @@ const SurveySectionPage = (props: SurveySectionPageProps) => {
 
   const renderSurveyList = () => (
     survey ? (
-      `${survey.title} - ${survey.company.name}`
+      `${survey.title}${companySuffix}`
     ) : (
       <Select
         id='select'
@@ -91,15 +93,12 @@ const SurveySectionPage = (props: SurveySectionPageProps) => {
         {
           surveys.map((survey, index) => (
             <option key={index} value={survey.id}>
-              {`${survey.title} - ${survey.company.name}`}
+              {`${survey.title}${companySuffix}`}
             </option>
           ))
         }
       </Select>
-  ))
-
-  const queryString = (
-    existingSection.id ? `?survey=${existingSection.survey.id}` : query
+    )
   )
 
   return (
@@ -107,22 +106,6 @@ const SurveySectionPage = (props: SurveySectionPageProps) => {
       {...props}
       title='Survey section'
       actions={[
-        <Link
-          key='new-survey-section'
-          className={css(style.link)}
-          to={`/survey-sections/new${queryString}`}
-        >
-          New Survey Section
-        </Link>,
-        existingSection.id && (
-          <Link
-            key='section-questions'
-            className={css(style.link)}
-            to={`/survey-sections/${existingSection.id}/questions`}
-          >
-            Section Questions
-          </Link>
-        ),
         existingSection.id && (
           <Link
             key='survey-sections'
@@ -180,7 +163,7 @@ const SurveySectionPage = (props: SurveySectionPageProps) => {
                 required
               >
                 {existingSection.id ? (
-                  `${existingSection.survey.title} - ${existingSection.survey.company.name}`
+                  `${existingSection.survey.title}${existingSectionSurveyCompanySuffix}`
                 ) : (
                   renderSurveyList()
                 )}
@@ -192,6 +175,14 @@ const SurveySectionPage = (props: SurveySectionPageProps) => {
               </div>
             </form>
           </Card>
+          {existingSection.id && (
+            <Link
+              className={css(style.childrenButton)}
+              to={`/survey-sections/${existingSection.id}/questions`}
+            >
+              Section Questions
+            </Link>
+          )}
         </div>
       </div>
     </Page>

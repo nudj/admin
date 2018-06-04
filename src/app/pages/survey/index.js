@@ -11,7 +11,6 @@ const {
   Input,
   InputField,
   Card,
-  Table,
   Button,
   Select
 } = require('@nudj/components')
@@ -98,38 +97,18 @@ const SurveyPage = (props: SurveyPageProps) => {
     props.dispatch(submitSurvey())
   }
 
-  const sectionColumns = [
-    { heading: 'Title', name: 'title' },
-    { heading: 'Description', name: 'description' },
-    { name: 'link' }
-  ]
-
-  const cellRenderer = (column, row, defaultRender) => {
-    if (column.name === 'link') {
-      return (
-        <Link className={css(style.link)} to={`/survey-sections/${row.id}`}>
-          View/Edit
-        </Link>
-      )
-    }
-    return defaultRender
-  }
-
   return (
     <Page
       {...props}
       title='Surveys'
       actions={[
-        <Link key='new-survey' className={css(style.link)} to='/surveys/new'>
-          New Survey
-        </Link>,
         existingSurvey.id && (
           <Link
-            key='survey-sections'
+            key='surveys'
             className={css(style.link)}
-            to={`/surveys/${existingSurvey.id}/sections`}
+            to={`/surveys`}
           >
-            Survey Sections
+            Surveys
           </Link>
         )
       ].filter(Boolean)}
@@ -224,19 +203,12 @@ const SurveyPage = (props: SurveyPageProps) => {
             </form>
           </Card>
           {existingSurvey.id && (
-            <div>
-              <h3 className={css(style.pageHeadline)}>
-                Sections{' '}
-                <span className={css(style.textHighlight)}>
-                  ({get(existingSurvey, 'sections.length', 0)})
-                </span>
-              </h3>
-              <Table
-                cellRenderer={cellRenderer}
-                data={get(existingSurvey, 'sections')}
-                columns={sectionColumns}
-              />
-            </div>
+            <Link
+              className={css(style.childrenButton)}
+              to={`/surveys/${existingSurvey.id}/sections`}
+            >
+              Survey Sections
+            </Link>
           )}
         </div>
       </div>

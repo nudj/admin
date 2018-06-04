@@ -76,25 +76,11 @@ const SurveySectionRelationsPage = (props: SectionRelationsProps) => {
       title='Surveys'
       actions={[
         <Link
-          key='add-question'
-          className={css(style.link)}
-          to={`/survey-questions/new?section=${section.id}`}
-        >
-          Add Question
-        </Link>,
-        <Link
-          key='add-section'
-          className={css(style.link)}
-          to={`/survey-sections/new?survey=${section.survey.id}`}
-        >
-          Add Section
-        </Link>,
-        <Link
-          key='edit-section'
+          key='survey-section'
           className={css(style.link)}
           to={`/survey-sections/${section.id}`}
         >
-          Edit Section
+          Section
         </Link>
       ]}
     >
@@ -113,6 +99,12 @@ const SurveySectionRelationsPage = (props: SectionRelationsProps) => {
               </Button>
             ) }
           </form>
+          <Link
+            className={css(style.addButton)}
+            to={`/survey-questions/new?section=${section.id}`}
+          >
+            Add Question
+          </Link>
         </div>
       </div>
     </Page>
