@@ -3,6 +3,8 @@
 const { merge } = require('@nudj/library')
 const { SET_SURVEY_DRAFT } = require('./actions')
 
+const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
+
 type Action = {
   type: string,
   draft: Draft
@@ -17,8 +19,13 @@ type Actions = {
 const setSurveyDraft = (state: State, action: Action) =>
   merge(state, { draft: action.draft })
 
+const handleLocationChange = () => {
+  return initialState
+}
+
 const actions = {
-  [SET_SURVEY_DRAFT]: setSurveyDraft
+  [SET_SURVEY_DRAFT]: setSurveyDraft,
+  [ROUTER_LOCATION_CHANGE]: handleLocationChange
 }
 
 const initialState = {
