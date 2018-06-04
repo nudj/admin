@@ -25,11 +25,6 @@ function getOne ({ params }) {
         introDescription
         outroTitle
         outroDescription
-        sections: surveySections {
-          id
-          title
-          description
-        }
         company {
           id
           name

@@ -69,14 +69,6 @@ const SurveysPage = (props: SurveyPageProps) => {
     <Page
       {...props}
       title='Surveys'
-      actions={(
-        <Link
-          className={css(style.link)}
-          to={`/surveys/new${query}`}
-        >
-          New Survey
-        </Link>
-      )}
     >
       <Helmet>
         <title>ADMIN - Surveys</title>
@@ -85,6 +77,12 @@ const SurveysPage = (props: SurveyPageProps) => {
       <div className={css(style.pageContent)}>
         <div className={css(style.pageMain)}>
           <Table cellRenderer={cellRenderer} data={data} columns={columns} />
+          <Link
+            className={css(style.addButton)}
+            to={`/surveys/new${query}`}
+          >
+            New Survey
+          </Link>
         </div>
       </div>
     </Page>

@@ -99,26 +99,16 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
           ))
         }
       </Select>
-  ))
+    )
+  )
 
   const sectionId = get(existingQuestion, 'section.id')
-
-  const queryString = (
-    existingQuestion.id ? `?section=${sectionId}` : query
-  )
 
   return (
     <Page
       {...props}
       title='Surveys'
       actions={[
-        <Link
-          key='new-section-question'
-          className={css(style.link)}
-          to={`/survey-questions/new${queryString}`}
-        >
-          New Section Question
-        </Link>,
         existingQuestion.id && (
           <Link
             key='section-question'
