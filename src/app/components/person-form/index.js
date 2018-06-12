@@ -9,7 +9,12 @@ module.exports = class PeoplePage extends React.Component {
     this.style = getStyle()
     this.submit = get(props, 'onSubmit')
     const person = merge({}, this.cleanPerson(), get(props, 'person', this.cleanPerson()))
-    this.state = {person}
+    const hirer = get(props, 'hirer')
+
+    this.state = {
+      person,
+      hirer
+    }
   }
 
   componentDidMount () {
@@ -87,6 +92,24 @@ module.exports = class PeoplePage extends React.Component {
     })
   }
 
+  onHirerChange = event => {
+    const value = event.target.value
+    const key = event.target.name
+
+    this.updateHirer({
+      [key]: value
+    })
+  }
+
+  toggleHirerOnboarded = event => {
+    this.setState(state => ({
+      hirer: {
+        ...state.hirer,
+        onboarded: !state.hirer.onboarded
+      }
+    }))
+  }
+
   isPersonValid () {
     const emailEmpty = get(this.state.validation, 'email.empty', false)
     const emailFail = get(this.state.validation, 'email.notUnique', false)
@@ -116,6 +139,7 @@ module.exports = class PeoplePage extends React.Component {
     const submit = get(this.props, 'onSubmit', () => {})
     const data = {
       ...get(this.state, 'person', {}),
+      hirer: get(this.state, 'hirer', null),
       role: get(this.state, 'person.role.name', ''),
       company: get(this.state, 'person.company.name', '')
     }
@@ -126,6 +150,15 @@ module.exports = class PeoplePage extends React.Component {
   updatePerson (newStuff) {
     const person = merge({}, get(this.state, 'person', {}), newStuff)
     this.setState({ person })
+  }
+
+  updateHirer = update => {
+    this.setState(state => ({
+      hirer: {
+        ...state.hirer,
+        ...update
+      }
+    }))
   }
 
   updateValidation (newStuff) {
@@ -151,6 +184,7 @@ module.exports = class PeoplePage extends React.Component {
 
   render () {
     const person = get(this.state, 'person', {})
+    const hirer = get(this.state, 'hirer', {})
 
     const errorLabels = this.renderErrorLabels()
     const submitLabel = get(this.props, 'submitLabel', 'Add person')
@@ -189,6 +223,44 @@ module.exports = class PeoplePage extends React.Component {
             <input className={this.style.inputBox} type='text' id='personCompany' name='company' onChange={this.onChangeNested.bind(this)} value={get(person, 'company.name', '')} />
           </li>
         </ul>
+        { hirer && (
+          <ul className={this.style.formList}>
+            <li className={this.style.formListItem}>
+              <label
+                className={this.style.label}
+                htmlFor='hirerType'
+              >
+                Permission level
+              </label>
+              <select
+                className={this.style.inputBox}
+                type='text'
+                id='hirerType'
+                name='type'
+                value={hirer.type}
+                onChange={this.onHirerChange}
+              >
+                <option value='MEMBER'>Member</option>
+                <option value='ADMIN'>Admin</option>
+              </select>
+            </li>
+            <li className={this.style.formListItem}>
+              <label
+                className={this.style.label}
+                htmlFor='onboarded'
+              >
+                Onboarded?
+              </label>
+              <input
+                type='checkbox'
+                id='hirerOnboarded'
+                name='onboarded'
+                checked={hirer.onboarded}
+                onChange={this.toggleHirerOnboarded}
+              />
+            </li>
+          </ul>
+        ) }
         <div className={this.style.formButtons}>
           {submitButton}
         </div>

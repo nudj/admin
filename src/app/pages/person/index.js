@@ -198,15 +198,20 @@ module.exports = class PersonPage extends React.Component {
   render () {
     const people = get(this.props, 'people', [])
     const person = get(this.props, 'person', {})
+    const hirer = get(person, 'hirer', {})
 
     const personName = `${get(person, 'firstName', '')} ${get(person, 'lastName', '')}`
 
-    const editPersonForm = (<PersonForm
-      people={people}
-      person={person}
-      reset={this.state.resetForm}
-      onSubmit={this.onSubmit.bind(this)}
-      submitLabel='Save changes' />)
+    const editPersonForm = (
+      <PersonForm
+        people={people}
+        person={person}
+        hirer={hirer}
+        reset={this.state.resetForm}
+        onSubmit={this.onSubmit.bind(this)}
+        submitLabel='Save changes'
+      />
+    )
 
     const referralsList = this.renderReferralsList()
     const referralsAdder = this.renderReferralAdder()
