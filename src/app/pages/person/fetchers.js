@@ -23,6 +23,11 @@ function get ({ params }) {
         lastName
         email
         url
+        hirer {
+          id
+          type
+          onboarded
+        }
         role {
           name
         }
@@ -50,19 +55,50 @@ function put ({
   params,
   body
 }) {
-  const gql = `
-    mutation updatePerson ($personId: ID!, $personData: PersonUpdateInput!) {
-      person: updatePerson(id: $personId, data: $personData) {
-        id
-        firstName
-        lastName
-      }
-    }
-  `
-  const variables = {
+  let gql
+  let variables = {
     personId: params.personId,
-    personData: omit(body, ['id'])
+    personData: omit(body, ['id', 'hirer'])
   }
+
+  if (body.hirer) {
+    gql = `
+      mutation updatePerson (
+        $personId: ID!,
+        $personData: PersonUpdateInput!,
+        $type: HirerType!,
+        $onboarded: Boolean!
+      ) {
+        person: updatePerson(id: $personId, data: $personData) {
+          id
+          firstName
+          lastName
+          hirer {
+            updateType(type: $type) {
+              id
+            }
+            setOnboarded(onboard: $onboarded)
+          }
+        }
+      }
+    `
+
+    variables = {
+      ...variables,
+      ...body.hirer
+    }
+  } else {
+    gql = `
+      mutation updatePerson ($personId: ID!, $personData: PersonUpdateInput!) {
+        person: updatePerson(id: $personId, data: $personData) {
+          id
+          firstName
+          lastName
+        }
+      }
+    `
+  }
+
   const respond = ({ person }) => {
     throw new Redirect({
       url: `/people/${person.id}`,
