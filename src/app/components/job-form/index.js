@@ -64,7 +64,6 @@ module.exports = class JobForm extends React.Component {
       bonus: 0,
       description: '',
       type: 'PERMANENT', // 'Contract', 'Freelance'
-      remuneration: '',
       templateTags: [],
       tags: [],
       labels: [],
@@ -320,7 +319,7 @@ module.exports = class JobForm extends React.Component {
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobRemuneration'>Remuneration</label>
-            <textarea className={css(style.inputTextarea)} id='newJobRemuneration' name='remuneration' required onChange={this.onChangeGeneric.bind(this)} value={job.remuneration} />
+            <textarea className={css(style.inputTextarea)} id='newJobRemuneration' name='remuneration' onChange={this.onChangeGeneric.bind(this)} value={job.remuneration} />
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobLocation'>Location</label>
