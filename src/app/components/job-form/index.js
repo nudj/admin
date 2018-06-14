@@ -2,6 +2,7 @@ const React = require('react')
 const get = require('lodash/get')
 const difference = require('lodash/difference')
 const compact = require('lodash/compact')
+const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
 
 const { Text, CheckboxGroup } = require('@nudj/components')
@@ -62,8 +63,6 @@ module.exports = class JobForm extends React.Component {
       status: 'DRAFT', // 'Published', 'Archived'
       bonus: 0,
       description: '',
-      roleDescription: '',
-      candidateDescription: '',
       type: 'PERMANENT', // 'Contract', 'Freelance'
       remuneration: '',
       templateTags: [],
@@ -265,7 +264,9 @@ module.exports = class JobForm extends React.Component {
       .filter(relatedJob => this.filterOutUnrelatableJobs(relatedJob, jobId, companyId))
       .sort(this.sortJobsAlphabeticallyByTitle)
 
-    const expandedDescriptionRequired = !this.state.job.description // If an old description exists, you don't need to add candidateDescription or roleDescription. Otherwise, they're required.
+    // If a candidateDescription or roleDescription exists, don't need a description. Otherwise, it's required.
+    const { roleDescription, candidateDescription } = this.state.job
+    const descriptionRequired = isNil(roleDescription) && isNil(candidateDescription)
 
     return (<form className={css(style.pageMain)} onSubmit={this.onSubmit.bind(this)} ref='jobForm'>
       <div className={css(style.formCard)}>
@@ -301,17 +302,21 @@ module.exports = class JobForm extends React.Component {
               {statuses.map((status, index) => (<option key={index} value={status}>{status}</option>))}
             </select>
           </li>
+          {!isNil(job.roleDescription) && (
+            <li className={css(style.formListItem)}>
+              <label className={css(style.label)} htmlFor='newJobRoleDescription'>Role Description (Old)</label>
+              <textarea className={css(style.inputTextarea)} id='newJobRoleDescription' name='roleDescription' required={!descriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.roleDescription} />
+            </li>
+          )}
+          {!isNil(job.candidateDescription) && (
+            <li className={css(style.formListItem)}>
+              <label className={css(style.label)} htmlFor='newJobDescription'>Candidate Description (Old)</label>
+              <textarea className={css(style.inputTextarea)} id='newJobCandidateDescription' name='candidateDescription' required={!descriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.candidateDescription} />
+            </li>
+          )}
           <li className={css(style.formListItem)}>
-            <label className={css(style.label)} htmlFor='newJobRoleDescription'>Role Description</label>
-            <textarea className={css(style.inputTextarea)} id='newJobRoleDescription' name='roleDescription' required={expandedDescriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.roleDescription} />
-          </li>
-          <li className={css(style.formListItem)}>
-            <label className={css(style.label)} htmlFor='newJobDescription'>Candidate Description</label>
-            <textarea className={css(style.inputTextarea)} id='newJobCandidateDescription' name='candidateDescription' required={expandedDescriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.candidateDescription} />
-          </li>
-          <li className={css(style.formListItem)}>
-            <label className={css(style.label)} htmlFor='description'>Old Description</label>
-            <textarea className={css(style.inputTextarea)} id='description' name='description' onChange={this.onChangeGeneric.bind(this)} value={job.description} />
+            <label className={css(style.label)} htmlFor='description'>Description</label>
+            <textarea className={css(style.inputTextarea)} id='description' name='description' required={descriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.description} />
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobRemuneration'>Remuneration</label>
