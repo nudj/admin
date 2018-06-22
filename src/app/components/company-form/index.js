@@ -38,15 +38,10 @@ module.exports = class CompanyForm extends React.Component {
       name: '',
       slug: '',
       logo: '',
-      mission: '',
       description: '',
-      industry: '',
       location: '',
       url: '',
-      facebook: '',
-      twitter: '',
-      linkedin: '',
-      onboarded: false
+      client: true
     }
   }
 
@@ -226,14 +221,6 @@ module.exports = class CompanyForm extends React.Component {
             <textarea className={this.style.inputTextarea} id='companyDescription' name='description' onChange={this.onChangeGeneric.bind(this)} value={company.description} />
           </li>
           <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='mission'>Mission</label>
-            <input className={this.style.inputBox} type='text' id='mission' name='mission' onChange={this.onChangeGeneric.bind(this)} value={company.mission} />
-          </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='companyIndustry'>Industry</label>
-            <input className={this.style.inputBox} type='text' id='companyIndustry' name='industry' onChange={this.onChangeGeneric.bind(this)} value={company.industry} />
-          </li>
-          <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='companyLocation'>Location</label>
             <input className={this.style.inputBox} type='text' id='companyLocation' name='location' onChange={this.onChangeGeneric.bind(this)} value={company.location} />
           </li>
@@ -242,23 +229,8 @@ module.exports = class CompanyForm extends React.Component {
             <input className={this.style.inputBoxUrl} type='uri' placeholder='eg: https://www.company.com' id='companyUrl' name='url' onChange={this.onChangeGeneric.bind(this)} value={company.url} />
           </li>
           <li className={this.style.formListItem}>
-            <h4 className={this.style.formListItemHeading}>Social</h4>
-          </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='companyFacebook'>Facebook</label>
-            <input className={this.style.inputBoxUrl} type='uri' placeholder='eg: https://facebook.com/company' id='companyFacebook' name='facebook' onChange={this.onChangeGeneric.bind(this)} value={company.facebook} />
-          </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='companyTwitter'>Twitter</label>
-            <input className={this.style.inputBoxUrl} type='uri' placeholder='eg: https://twitter.com/company' id='companyTwitter' name='twitter' onChange={this.onChangeGeneric.bind(this)} value={company.twitter} />
-          </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='companyLinkedIn'>LinkedIn</label>
-            <input className={this.style.inputBoxUrl} type='uri' placeholder='eg: https://linkedin.com/company' id='companyLinkedIn' name='linkedin' onChange={this.onChangeGeneric.bind(this)} value={company.linkedin} />
-          </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='companyOnboarded'>Onboarded</label>
-            <input type='checkbox' id='companyOnboarded' name='onboarded' onChange={this.onChangeGeneric.bind(this)} checked={company.onboarded} />
+            <label className={this.style.label} htmlFor='companyClient'>Client</label>
+            <input type='checkbox' id='companyClient' name='client' onChange={this.onChangeGeneric.bind(this)} checked={company.client} disabled />
           </li>
         </ul>
         <div className={this.style.formButtons}>

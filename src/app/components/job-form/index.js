@@ -1,7 +1,5 @@
 const React = require('react')
 const get = require('lodash/get')
-const difference = require('lodash/difference')
-const compact = require('lodash/compact')
 const isNil = require('lodash/isNil')
 const { merge } = require('@nudj/library')
 
@@ -13,8 +11,7 @@ const style = require('./job-form.css')
 
 const normaliseItem = (item) => item ? item.join(', ') : ''
 const normaliseJob = (job) => merge(job, {
-  labels: normaliseItem(job.labels),
-  templateTags: normaliseItem(job.templateTags)
+  template: normaliseItem(job.template)
 })
 const denormaliseItem = (item) => {
   if (!item || !item.replace(/\s/g, '')) {
@@ -23,8 +20,7 @@ const denormaliseItem = (item) => {
   return item.replace(/\s/g, '').split(',')
 }
 const denormaliseJob = (job) => merge(job, {
-  labels: denormaliseItem(job.labels),
-  templateTags: denormaliseItem(job.templateTags)
+  template: denormaliseItem(job.template)
 })
 
 module.exports = class JobForm extends React.Component {
@@ -63,10 +59,8 @@ module.exports = class JobForm extends React.Component {
       status: 'DRAFT', // 'Published', 'Archived'
       bonus: 0,
       description: '',
-      type: 'PERMANENT', // 'Contract', 'Freelance'
-      templateTags: [],
+      template: '',
       tags: [],
-      labels: [],
       location: '',
       relatedJobs: []
     }
@@ -103,18 +97,16 @@ module.exports = class JobForm extends React.Component {
     this.updateValidation(validation)
   }
 
-  onChangeTemplateTags (event) {
+  onChangeTemplate (event) {
     const value = event.target.value
     const key = event.target.name
     const validTags = get(this.props, 'templateTags')
-    const tags = compact(value.replace(/\s/g, '').split(','))
-    const validity = difference(tags, validTags) // Produces array of tags that aren't included in validTags
-
+    const validity = validTags.includes(value)
     this.updateJob({ [key]: value })
 
     const validation = {
-      templateTags: {
-        invalid: !!validity.length
+      template: {
+        invalid: !validity
       }
     }
     this.updateValidation(validation)
@@ -153,9 +145,9 @@ module.exports = class JobForm extends React.Component {
 
   isJobValid () {
     const titleEmpty = get(this.state.validation, 'title.empty', false)
-    const invalidTemplateTags = get(this.state.validation, 'templateTags.invalid', false)
+    const invalidTemplate = get(this.state.validation, 'template.invalid', false)
 
-    if (titleEmpty || invalidTemplateTags) {
+    if (titleEmpty || invalidTemplate) {
       return false
     }
 
@@ -214,11 +206,11 @@ module.exports = class JobForm extends React.Component {
   renderErrorLabels () {
     const errorLabels = {
       jobTitleNotUniqueLabel: (<span />),
-      templateTagsInvalidLabel: (<span />)
+      templateInvalidLabel: (<span />)
     }
 
-    if (get(this.state.validation, 'templateTags.invalid', false)) {
-      errorLabels.templateTagsInvalidLabel = this.renderErrorLabel('Those tags don\'t exist', 'jobTemplateTags')
+    if (get(this.state.validation, 'template.invalid', false)) {
+      errorLabels.templateInvalidLabel = this.renderErrorLabel('Those tags don\'t exist', 'jobTemplate')
     }
 
     if (get(this.state.validation, 'title.notUnique', false)) {
@@ -250,7 +242,6 @@ module.exports = class JobForm extends React.Component {
     }
 
     const statuses = ['DRAFT', 'PUBLISHED', 'ARCHIVED']
-    const types = ['PERMANENT', 'CONTRACT', 'FREELANCE']
 
     const companyId = get(this.props, 'company.id')
     const jobId = get(job, 'id')
@@ -290,12 +281,6 @@ module.exports = class JobForm extends React.Component {
             <input className={css(style.inputBox)} type='text' placeholder='eg: £200' id='newJobBonus' name='bonus' required onChange={this.onChangeGeneric.bind(this)} value={job.bonus} />
           </li>
           <li className={css(style.formListItem)}>
-            <label className={css(style.label)} htmlFor='newJobType'>Type</label>
-            <select className={css(style.selectBox)} id='newJobType' name='type' onChange={this.onChangeGeneric.bind(this)} value={job.type || types[0]}>
-              {types.map((type, index) => (<option key={index} value={type}>{type}</option>))}
-            </select>
-          </li>
-          <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobStatus'>Status</label>
             <select className={css(style.selectBox)} id='newJobStatus' name='status' onChange={this.onChangeGeneric.bind(this)} value={job.status || statuses[0]}>
               {statuses.map((status, index) => (<option key={index} value={status}>{status}</option>))}
@@ -326,13 +311,9 @@ module.exports = class JobForm extends React.Component {
             <input className={css(style.inputBox)} type='text' placeholder='eg: London' id='newJobLocation' required name='location' onChange={this.onChangeGeneric.bind(this)} value={job.location} />
           </li>
           <li className={css(style.formListItem)}>
-            <label className={css(style.label)} htmlFor='newJobLabels'>Labels</label>
-            <input className={css(style.inputBox)} type='text' placeholder='eg: finance, tech' id='newJobLabels' name='labels' onChange={this.onChangeGeneric.bind(this)} value={job.labels} />
-          </li>
-          <li className={css(style.formListItem)}>
-            <label className={css(style.label)} htmlFor='newJobTemplateTags'>Template tags</label>
-            <input className={css(style.inputBox)} type='text' placeholder='eg: food, movies' id='newJobTemplateTags' name='templateTags' onChange={this.onChangeTemplateTags.bind(this)} value={job.templateTags} />
-            {errorLabels.templateTagsInvalidLabel}
+            <label className={css(style.label)} htmlFor='newJobTemplate'>Template</label>
+            <input className={css(style.inputBox)} type='text' placeholder='eg: food or challenge' id='newJobTemplate' name='template' onChange={this.onChangeTemplate.bind(this)} value={job.template} />
+            {errorLabels.templateInvalidLabel}
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobRelatedJobs'>Related jobs</label>
