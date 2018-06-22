@@ -20,8 +20,8 @@ function getOne ({ params }) {
     query SurveyPage ($id: ID) {
       survey (id: $id) {
         id
-        introTitle
         slug
+        introTitle
         introDescription
         outroTitle
         outroDescription
@@ -55,7 +55,6 @@ function postSurvey ({ data, body }) {
   const variables = {
     company: body.company,
     data: {
-      slug: body.slug,
       introTitle: body.introTitle,
       outroTitle: body.outroTitle,
       introDescription: body.introDescription,

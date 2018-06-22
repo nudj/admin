@@ -1,6 +1,7 @@
 /* global Dispatch GetState Draft */
 // @flow
 const get = require('lodash/get')
+const omit = require('lodash/omit')
 const actions = require('@nudj/framework/actions')
 const { quickDispatch } = require('@nudj/library')
 
@@ -21,14 +22,15 @@ function createOrUpdateSurveySection () {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState()
     const existingId = get(state.app, 'section.id')
-    const data = get(state, 'surveySectionPage.draft', {})
 
     let method = 'post'
     let url = '/survey-sections/new'
+    let data = get(state, 'surveySectionPage.draft', {})
 
     if (existingId) {
       method = 'patch'
       url = `/survey-sections/${existingId}`
+      data = omit(data, ['survey'])
     }
     return dispatch(actions.app.postData({ data, url, method }))
   }

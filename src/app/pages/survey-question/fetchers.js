@@ -9,9 +9,6 @@ function getNew () {
         id
         title
       }
-      surveyQuestions {
-        name
-      }
     }
   `
 
@@ -29,9 +26,9 @@ function postQuestion ({ body }) {
         data: $data
       ) {
         id
+        slug
         description
         title
-        name
         required
         type
         tags {
@@ -80,9 +77,9 @@ function patchQuestion ({ body, params }) {
         data: $data
       ) {
         id
+        slug
         description
         title
-        name
         required
         type
         tags {
@@ -115,12 +112,12 @@ function patchQuestion ({ body, params }) {
 
 function getOne ({ params }) {
   const gql = `
-    query SectionPage ($id: ID) {
+    query QuestionPage ($id: ID) {
       question: surveyQuestion (id: $id) {
         id
+        slug
         description
         title
-        name
         required
         type
         tags {
