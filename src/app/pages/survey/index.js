@@ -27,7 +27,6 @@ const SurveyPage = props => {
     survey: existingSurvey,
     location,
     companies,
-    surveys,
     surveyPage
   } = props
 
@@ -42,27 +41,6 @@ const SurveyPage = props => {
       [target.name]: target.value
     })
     props.dispatch(setSurveyDraft(data))
-  }
-
-  const makeSlugFromTitle = title => {
-    return title
-      .toLowerCase()
-      .replace(/\s+/g, ' ')
-      .replace(/\s/g, '-')
-      .replace(/[^a-z0-9-]/g, '')
-  }
-
-  const onChangeTitle = event => {
-    const title = event.value
-    const slug = makeSlugFromTitle(title)
-    const data = merge(draft, { [event.name]: title, slug })
-    props.dispatch(setSurveyDraft(data))
-  }
-
-  const validateSlug = () => {
-    const draftSlug = get(draft, 'slug', '')
-    const slugs = surveys.map(survey => survey.slug)
-    return slugs.includes(draftSlug) ? 'This slug already exists' : ''
   }
 
   const renderCompaniesList = () => (
@@ -115,17 +93,6 @@ const SurveyPage = props => {
                   id='intro-title'
                   name='introTitle'
                   value={get(draft, 'introTitle', existingSurvey.introTitle)}
-                  onChange={onChangeTitle}
-                />
-              </InputField>
-              <InputField styleSheet={fieldStyles} label='Slug' htmlFor='slug'>
-                <Input
-                  required
-                  type='text'
-                  id='slug'
-                  name='slug'
-                  error={validateSlug()}
-                  value={get(draft, 'slug', existingSurvey.slug)}
                   onChange={onChange}
                 />
               </InputField>
@@ -213,7 +180,6 @@ SurveyPage.defaultProps = {
   survey: {},
   location: {},
   companies: [],
-  surveys: [],
   surveyPage: {}
 }
 

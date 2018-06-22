@@ -43,9 +43,9 @@ function postQuestion ({ body, params }) {
         data: $data
       ) {
         id
+        slug
         description
         title
-        name
         required
         type
         tags {
@@ -93,9 +93,9 @@ function patchQuestion ({ body, params }) {
         data: $data
       ) {
         id
+        slug
         description
         title
-        name
         required
         type
         tags {
@@ -131,9 +131,9 @@ function getOne ({ params }) {
     query SurveyQuestionPage ($id: ID) {
       question: surveyQuestion (id: $id) {
         id
+        slug
         description
         title
-        name
         required
         type
         tags {
