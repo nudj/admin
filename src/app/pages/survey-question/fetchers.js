@@ -35,6 +35,7 @@ function postQuestion ({ body, params }) {
         data: $data
       ) {
         id
+        slug
         description
         title
         required
@@ -83,6 +84,7 @@ function patchQuestion ({ body, params }) {
         data: $data
       ) {
         id
+        slug
         description
         title
         required
@@ -120,6 +122,7 @@ function getOne ({ params }) {
     query SurveyQuestionPage ($id: ID) {
       question: surveyQuestion (id: $id) {
         id
+        slug
         description
         title
         required

@@ -17,8 +17,8 @@ function getOne ({ params }) {
     query SurveyPage ($id: ID) {
       survey (id: $id) {
         id
-        introTitle
         slug
+        introTitle
         introDescription
         outroTitle
         outroDescription
