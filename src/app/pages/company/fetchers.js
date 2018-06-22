@@ -9,9 +9,7 @@ const get = ({ params }) => {
         name
         slug
         logo
-        mission
         description
-        industry
         location
         url
         facebook
@@ -19,6 +17,7 @@ const get = ({ params }) => {
         linkedin
         onboarded
         hash
+        client
         jobs {
           id
           created
@@ -104,15 +103,10 @@ function postJob ({
         name
         slug
         logo
-        mission
         description
-        industry
         location
         url
-        facebook
-        twitter
-        linkedin
-        onboarded
+        client
         newJob: createJob(data: $jobData) {
           id
           title
@@ -233,15 +227,10 @@ function postHirer ({
         name
         slug
         logo
-        mission
         description
-        industry
         location
         url
-        facebook
-        twitter
-        linkedin
-        onboarded
+        client
         jobs {
           id
           created

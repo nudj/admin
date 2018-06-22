@@ -54,9 +54,9 @@ module.exports = class CompaniesPage extends React.Component {
         title='Companies'
       >
         <Helmet>
-          <title>ADMIN - Companies</title>
+          <title>ADMIN - Clients</title>
         </Helmet>
-        <h3 className={this.style.pageHeadline}>Companies listed on nudj <span className={this.style.textHighlight}>({clientCompanies.length})</span></h3>
+        <h3 className={this.style.pageHeadline}>Clients <span className={this.style.textHighlight}>({clientCompanies.length})</span></h3>
         <div className={this.style.pageContent}>
           <div className={this.style.pageMain}>
             <ul className={this.style.jobs}>
@@ -68,9 +68,6 @@ module.exports = class CompaniesPage extends React.Component {
                   rowClass={rowClass}
                   title={get(company, 'name')}
                   details={[{
-                    term: 'Industry',
-                    description: get(company, 'industry')
-                  }, {
                     term: 'Location',
                     description: get(company, 'location')
                   }, {
@@ -78,7 +75,7 @@ module.exports = class CompaniesPage extends React.Component {
                     description: format(get(company, 'created'), 'DD.MM.YYYY')
                   }]}
                   actions={[
-                    <Link className={this.style.nudj} to={`/companies/${get(company, 'slug')}`}>View Company</Link>
+                    <Link className={this.style.nudj} to={`/companies/${get(company, 'slug')}`}>View company</Link>
                   ]}
                 />)
               })}
