@@ -21,6 +21,35 @@ function get ({ params }) {
         company {
           name
         }
+        referrals {
+          id
+          created
+          slug
+          job {
+            id
+            title
+            slug
+            company {
+              name
+              slug
+            }
+          }
+          parent {
+            id
+            slug
+            person {
+              firstName
+              lastName
+            }
+          }
+        }
+      }
+      jobs {
+        id
+        title
+        company {
+          name
+        }
       }
       # person's referrals - needs to be moved under query.person.referrals (currently no resolver for this though)
       referrals: referralsByFilters(filters: {

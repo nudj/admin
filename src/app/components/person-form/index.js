@@ -4,6 +4,15 @@ const merge = require('lodash/merge')
 const { omitUndefined } = require('@nudj/library')
 const getStyle = require('./person-form.css')
 
+const personReset = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  url: '',
+  role: null,
+  company: null
+}
+
 module.exports = class PeoplePage extends React.Component {
   constructor (props) {
     super(props)
@@ -40,14 +49,7 @@ module.exports = class PeoplePage extends React.Component {
   }
 
   cleanPerson () {
-    return {
-      firstName: '',
-      lastName: '',
-      email: '',
-      url: '',
-      role: null,
-      company: null
-    }
+    return { ...personReset }
   }
 
   cleanValidation () {
