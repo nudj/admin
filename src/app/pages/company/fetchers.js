@@ -96,6 +96,15 @@ function postJob ({
         client
         newJob: createJob(data: $jobData) {
           id
+          created
+          bonus
+          location
+          slug
+          status
+          title
+          company {
+            id
+          }
         }
         jobs {
           id

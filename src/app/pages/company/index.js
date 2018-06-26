@@ -133,11 +133,13 @@ module.exports = class CompanyPage extends React.Component {
 
   renderJobsList () {
     const jobs = get(this.props.app, 'company.jobs', [])
+    const newJob = get(this.props.app, 'company.newJob')
     const companySlug = get(this.props.app, 'company.slug')
     const rightNow = new Date()
     const webHostname = get(this.props, 'web.hostname')
+    const allJobs = newJob ? jobs.concat(newJob) : jobs
 
-    const jobsList = jobs.map((job) => {
+    const jobsList = allJobs.map((job) => {
       const jobBonus = get(job, 'bonus')
       const jobCreatedDate = format(get(job, 'created'), 'DD.MM.YYYY')
       const jobLocation = get(job, 'location')

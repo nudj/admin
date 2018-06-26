@@ -61,13 +61,15 @@ function get ({ params }) {
           roleDescription
           description
           experience
-          labels
           location
           remuneration
           requirements
           roleDescription
           template
           tags
+          relatedJobs {
+            id
+          }
           referrals {
             id
             slug
@@ -141,7 +143,6 @@ function put ({
           id
           created
           title
-          type
           url
           slug
           status
@@ -150,13 +151,15 @@ function put ({
           roleDescription
           description
           experience
-          labels
           location
           remuneration
           requirements
           roleDescription
-          templateTags
+          template
           tags
+          relatedJobs {
+            id
+          }
           referrals {
             id
             slug
@@ -237,11 +240,21 @@ function postReferral ({
         job: jobByFilters(filters: { slug: $jobSlug }) {
           referral: createReferralByEmail(email: $email) {
             id
+            slug
+            created
+            parent {
+              id
+            }
+            person {
+              id
+              email
+              firstName
+              lastName
+            }
           }
           id
           created
           title
-          type
           url
           slug
           status
@@ -250,13 +263,15 @@ function postReferral ({
           roleDescription
           description
           experience
-          labels
           location
           remuneration
           requirements
           roleDescription
-          templateTags
+          template
           tags
+          relatedJobs {
+            id
+          }
           referrals {
             id
             slug

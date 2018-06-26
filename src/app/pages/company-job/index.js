@@ -147,8 +147,10 @@ module.exports = class JobPage extends React.Component {
 
   renderReferralsList () {
     const referrals = get(this.props.app, 'company.job.referrals', [])
+    const newReferral = get(this.props.app, 'company.job.referral')
+    const allReferrals = newReferral ? referrals.concat(newReferral) : referrals
 
-    if (!referrals.length) {
+    if (!allReferrals.length) {
       return (<p className={this.style.copy}>💩 No one here</p>)
     }
 
@@ -157,7 +159,7 @@ module.exports = class JobPage extends React.Component {
     const rightNow = new Date()
 
     return (<div>
-      {referrals.map(referral => {
+      {allReferrals.map(referral => {
         const person = get(referral, 'person', {})
         const name = `${person.firstName || '-'} ${person.lastName || '-'}`
         const slug = `${companySlug}+${jobSlug}+${get(referral, 'slug', '')}`
