@@ -60,7 +60,7 @@ module.exports = class CompanyPage extends React.Component {
       const email = get(matches[0], 'id', '')
       hirerValue = value.indexOf(email) === 0 ? email : hirerValue
     }
-    this.setState({hirerValue})
+    this.setState({ hirerValue })
   }
 
   onSubmitJob (data) {
@@ -96,7 +96,7 @@ module.exports = class CompanyPage extends React.Component {
     const email = this.state.hirerValue.toString()
     const person = this.getPersonFromEmail(email)
     const personId = get(person, 'id')
-    this.saveHirerCommon({email, personId})
+    this.saveHirerCommon({ email, personId })
   }
 
   saveUser (event) {

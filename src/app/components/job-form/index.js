@@ -14,6 +14,7 @@ module.exports = class JobForm extends React.Component {
     super(props)
     this.submit = get(props, 'onSubmit')
     const job = get(props, 'job', this.cleanJob())
+    job.relatedJobs = get(props, 'job.relatedJobs', []).map(({ id }) => id)
     this.state = { job }
   }
 
