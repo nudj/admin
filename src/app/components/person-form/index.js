@@ -1,7 +1,17 @@
 const React = require('react')
 const get = require('lodash/get')
 const merge = require('lodash/merge')
+const pick = require('lodash/pick')
 const getStyle = require('./person-form.css')
+
+const personReset = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  url: '',
+  role: null,
+  company: null
+}
 
 module.exports = class PeoplePage extends React.Component {
   constructor (props) {
@@ -39,14 +49,7 @@ module.exports = class PeoplePage extends React.Component {
   }
 
   cleanPerson () {
-    return {
-      firstName: '',
-      lastName: '',
-      email: '',
-      url: '',
-      role: null,
-      company: null
-    }
+    return { ...personReset }
   }
 
   cleanValidation () {
@@ -137,8 +140,9 @@ module.exports = class PeoplePage extends React.Component {
     }
 
     const submit = get(this.props, 'onSubmit', () => {})
+    const person = get(this.state, 'person', {})
     const data = {
-      ...get(this.state, 'person', {}),
+      ...pick(person, ['id', ...Object.keys(personReset)]),
       hirer: get(this.state, 'hirer', null),
       role: get(this.state, 'person.role.name', ''),
       company: get(this.state, 'person.company.name', '')

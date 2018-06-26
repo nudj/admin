@@ -4,6 +4,7 @@ const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const actions = require('@nudj/framework/actions')
+const { getJobUrl } = require('@nudj/library')
 
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
@@ -38,15 +39,6 @@ module.exports = class PersonPage extends React.Component {
     }
   }
 
-  findRelatedReferral (referralId) {
-    const referrals = get(this.props, 'referrals', [])
-    return referrals.find(referral => referral.parent === referralId)
-  }
-
-  findRelatedJob (jobId) {
-    return get(this.props, 'expandedJobs', []).find(job => job.id === jobId)
-  }
-
   generateReferralLink (referral, expandedJob) {
     const companySlug = get(expandedJob, 'company.slug', '')
     const jobSlug = get(expandedJob, 'slug', '')
@@ -64,7 +56,8 @@ module.exports = class PersonPage extends React.Component {
   }
 
   renderReferralsList () {
-    const referrals = get(this.props, 'referrals', [])
+    const hostname = get(this.props, 'web.hostname')
+    const referrals = get(this.props, 'person.referrals', [])
 
     if (!referrals.length) {
       return (<p className={this.style.copy}>💩 None here</p>)
@@ -74,21 +67,24 @@ module.exports = class PersonPage extends React.Component {
 
     return (<div>
       {referrals.map(referral => {
-        const parent = get(referral, 'parent', '')
-        const relatedReferral = this.findRelatedReferral(parent)
-
+        const parent = get(referral, 'parent')
         const job = get(referral, 'job')
-        const relatedJob = this.findRelatedJob(job)
+        const company = get(job, 'company')
 
-        const {link, slug} = this.generateReferralLink(referral, relatedJob)
+        const parentInfo = parent ? `${parent.id} (${parent.firstName} ${parent.lastName})` : '-'
 
-        const relatedReferralInfo = relatedReferral ? `${relatedReferral.id} (${relatedReferral.firstName} ${relatedReferral.lastName})` : '-'
+        const jobSlug = get(job, 'slug', '')
+        const jobTitle = get(job, 'title', '')
+        const companyName = get(company, 'name', '')
+        const companySlug = get(company, 'slug', '')
+        const referralSlug = get(referral, 'slug')
 
-        const companyName = get(relatedJob, 'company.name', '')
-        const companySlug = get(relatedJob, 'company.slug', '')
-        const jobSlug = get(relatedJob, 'slug', '')
-        const jobTitle = get(relatedJob, 'title', '')
-
+        const link = getJobUrl({
+          hostname,
+          company: companySlug,
+          job: jobSlug,
+          referral: referralSlug
+        })
         const jobLink = `/companies/${companySlug}/jobs/${jobSlug}`
 
         const minutes = differenceInMinutes(rightNow, get(referral, 'created'))
@@ -97,7 +93,7 @@ module.exports = class PersonPage extends React.Component {
         const title = `${jobTitle} (${companyName})`
 
         return (<RowItem
-          key={slug}
+          key={referralSlug}
           rowClass={rowClass}
           title={title}
           uri={link}
@@ -112,7 +108,7 @@ module.exports = class PersonPage extends React.Component {
             },
             {
               term: 'Related referral',
-              description: relatedReferralInfo
+              description: parentInfo
             }
           ]}
           actions={[
@@ -132,9 +128,11 @@ module.exports = class PersonPage extends React.Component {
   saveLink (event) {
     const personId = get(this.props, 'person.id', '')
 
-    const url = `/people/${personId}/referrals/${this.state.referralJobId}`
+    const url = `/people/${personId}/refer`
     const method = 'post'
-    const data = {}
+    const data = {
+      jobId: this.state.referralJobId
+    }
 
     this.setState({
       referralJobId: ''
@@ -149,12 +147,17 @@ module.exports = class PersonPage extends React.Component {
       return { button, info }
     }
 
-    const referral = get(this.props, 'referrals', []).find(referral => referral.job === referralJobId)
-    const existingJob = get(this.props, 'expandedJobs', []).find(job => job.id === referralJobId)
+    const referral = get(this.props, 'person.referrals', []).find(referral => referral.job.id === referralJobId)
+    const existingJob = get(this.props, 'jobs', []).find(job => job.id === referralJobId)
 
     // Does this person already have a referral for this job?
     if (referral) {
-      const {link} = this.generateReferralLink(referral, existingJob)
+      const link = getJobUrl({
+        hostname: get(this.props, 'web.hostname'),
+        company: referral.job.company.slug,
+        job: referral.job.slug,
+        referral: referral.slug
+      })
       button = (<CopyToClipboard className={this.style.copyLinkNew} data-clipboard-text={link}>Copy link</CopyToClipboard>)
       info = (<p className={this.style.copy}>This person's already had a referreral for this job 💅🏼 It should be in the referrals list above ⬆️ <br />Their referral link is <a href={link} className={this.style.link}>{link}</a>.</p>)
     } else if (existingJob) {
@@ -166,7 +169,7 @@ module.exports = class PersonPage extends React.Component {
   }
 
   simpleJobsList () {
-    return get(this.props, 'expandedJobs', []).map(job => {
+    return get(this.props, 'jobs', []).map(job => {
       const jobTitle = get(job, 'title')
       const companyName = get(job, 'company.name')
       const value = `${companyName} - ${jobTitle}`
