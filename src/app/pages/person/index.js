@@ -63,7 +63,7 @@ module.exports = class PersonPage extends React.Component {
   }
 
   renderReferralsList () {
-    const referrals = get(this.props, 'referrals', [])
+    const referrals = get(this.props, 'person.referrals', [])
 
     if (!referrals.length) {
       return (<p className={this.style.copy}>💩 None here</p>)
@@ -115,15 +115,17 @@ module.exports = class PersonPage extends React.Component {
 
   onChangeReferral (value, matches) {
     const referralJobId = matches.length === 1 ? get(matches[0], 'id') : ''
-    this.setState({referralJobId})
+    this.setState({ referralJobId })
   }
 
   saveLink (event) {
     const personId = get(this.props, 'person.id', '')
 
-    const url = `/people/${personId}/referrals/${this.state.referralJobId}`
+    const url = `/people/${personId}/refer`
     const method = 'post'
-    const data = {}
+    const data = {
+      jobId: this.state.referralJobId
+    }
 
     this.setState({
       referralJobId: ''
@@ -162,7 +164,7 @@ module.exports = class PersonPage extends React.Component {
       const companyName = get(job, 'company.name')
       const value = `${companyName} - ${jobTitle}`
       const id = get(job, 'id')
-      return {id, value}
+      return { id, value }
     })
   }
 
