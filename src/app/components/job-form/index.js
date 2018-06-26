@@ -9,25 +9,11 @@ const { css } = require('@nudj/components/lib/css')
 const { expertiseTags } = require('../../lib/constants')
 const style = require('./job-form.css')
 
-const normaliseItem = (item) => item ? item.join(', ') : ''
-const normaliseJob = (job) => merge(job, {
-  template: normaliseItem(job.template)
-})
-const denormaliseItem = (item) => {
-  if (!item || !item.replace(/\s/g, '')) {
-    return []
-  }
-  return item.replace(/\s/g, '').split(',')
-}
-const denormaliseJob = (job) => merge(job, {
-  template: denormaliseItem(job.template)
-})
-
 module.exports = class JobForm extends React.Component {
   constructor (props) {
     super(props)
     this.submit = get(props, 'onSubmit')
-    const job = normaliseJob(get(props, 'job', this.cleanJob()))
+    const job = get(props, 'job', this.cleanJob())
     this.state = { job }
   }
 
@@ -46,7 +32,7 @@ module.exports = class JobForm extends React.Component {
     const jobForm = this.refs.jobForm
     jobForm.reset()
 
-    const job = normaliseJob(get(nextProps, 'job', this.cleanJob()))
+    const job = get(nextProps, 'job', this.cleanJob())
     const validation = this.cleanValidation()
 
     this.setState({ job, validation })
@@ -182,7 +168,7 @@ module.exports = class JobForm extends React.Component {
     const submit = get(this.props, 'onSubmit', () => {})
     const job = get(this.state, 'job')
 
-    submit(denormaliseJob(job))
+    submit(job)
   }
 
   updateJob (newStuff) {

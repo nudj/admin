@@ -53,7 +53,6 @@ function get ({ params }) {
           id
           created
           title
-          type
           url
           slug
           status
@@ -67,10 +66,11 @@ function get ({ params }) {
           remuneration
           requirements
           roleDescription
-          templateTags
+          template
           tags
           referrals {
             id
+            slug
             created
             parent {
               id
@@ -87,6 +87,7 @@ function get ({ params }) {
             created
             referral {
               id
+              slug
             }
             person {
               id
@@ -158,6 +159,7 @@ function put ({
           tags
           referrals {
             id
+            slug
             created
             parent {
               id
@@ -174,6 +176,7 @@ function put ({
             created
             referral {
               id
+              slug
             }
             person {
               id
@@ -256,6 +259,7 @@ function postReferral ({
           tags
           referrals {
             id
+            slug
             created
             parent {
               id
@@ -272,6 +276,7 @@ function postReferral ({
             created
             referral {
               id
+              slug
             }
             person {
               id

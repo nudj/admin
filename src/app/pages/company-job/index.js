@@ -6,6 +6,7 @@ const { Helmet } = require('react-helmet')
 const isEmail = require('validator/lib/isEmail')
 const differenceInMinutes = require('date-fns/difference_in_minutes')
 const actions = require('@nudj/framework/actions')
+const { getJobUrl } = require('@nudj/library')
 
 const getStyle = require('./style.css')
 const Page = require('../../components/page')
@@ -132,12 +133,16 @@ module.exports = class JobPage extends React.Component {
   }
 
   generateReferralLink (referral) {
-    const companySlug = get(this.props.app, 'company.slug')
-    const jobSlug = get(this.props.app, 'company.job.slug', '')
-    const slug = `${companySlug}+${jobSlug}+${get(referral, 'id', '')}`
-    const webHostname = get(this.props, 'web.hostname')
-    const referralLink = `https://${webHostname}/jobs/${slug}`
-    return referralLink
+    const company = get(this.props.app, 'company.slug')
+    const job = get(this.props.app, 'company.job.slug', '')
+    referral = get(referral, 'slug', '')
+    const hostname = get(this.props, 'web.hostname')
+    return getJobUrl({
+      hostname,
+      company,
+      job,
+      referral
+    })
   }
 
   renderReferralsList () {
@@ -155,7 +160,7 @@ module.exports = class JobPage extends React.Component {
       {referrals.map(referral => {
         const person = get(referral, 'person', {})
         const name = `${person.firstName || '-'} ${person.lastName || '-'}`
-        const slug = `${companySlug}+${jobSlug}+${get(referral, 'id', '')}`
+        const slug = `${companySlug}+${jobSlug}+${get(referral, 'slug', '')}`
         const parentId = get(referral, 'parent.id')
         const parentReferral = this.findParentReferral(parentId)
         const referralLink = this.generateReferralLink(referral)
