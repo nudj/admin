@@ -56,7 +56,7 @@ module.exports = class PersonPage extends React.Component {
   }
 
   onSubmit (data) {
-    const url = `/people/${data.id}`
+    const url = `/people/${this.props.app.person.id}`
     const method = 'put'
 
     this.props.dispatch(actions.app.postData({ url, data, method }))
@@ -189,9 +189,9 @@ module.exports = class PersonPage extends React.Component {
   }
 
   render () {
+    const companies = get(this.props, 'companies', [])
     const people = get(this.props, 'people', [])
     const person = get(this.props, 'person', {})
-    const hirer = get(person, 'hirer', {})
 
     const personName = `${get(person, 'firstName', '')} ${get(person, 'lastName', '')}`
 
@@ -199,10 +199,10 @@ module.exports = class PersonPage extends React.Component {
       <PersonForm
         people={people}
         person={person}
-        hirer={hirer}
         reset={this.state.resetForm}
         onSubmit={this.onSubmit.bind(this)}
         submitLabel='Save changes'
+        companies={companies}
       />
     )
 
