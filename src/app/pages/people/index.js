@@ -66,13 +66,16 @@ module.exports = class PeoplePage extends React.Component {
   }
 
   render () {
+    const companies = get(this.props, 'companies', [])
     const people = get(this.props, 'people', [])
     const tooltip = get(this.props, 'tooltip')
 
     const addPersonForm = (<PersonForm
       people={people}
       reset={this.state.resetForm}
-      onSubmit={this.onSubmit.bind(this)} />)
+      onSubmit={this.onSubmit.bind(this)}
+      companies={companies}
+      isHirer />)
 
     const peopleList = this.renderPeopleList()
 

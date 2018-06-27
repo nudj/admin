@@ -8,9 +8,12 @@ const personReset = {
   firstName: '',
   lastName: '',
   email: '',
-  url: '',
-  role: null,
-  company: null
+  url: ''
+}
+const hirerReset = {
+  type: 'MEMBER',
+  onboarded: false,
+  company: ''
 }
 
 module.exports = class PeoplePage extends React.Component {
@@ -18,8 +21,11 @@ module.exports = class PeoplePage extends React.Component {
     super(props)
     this.style = getStyle()
     this.submit = get(props, 'onSubmit')
-    const person = merge({}, this.cleanPerson(), get(props, 'person', this.cleanPerson()))
-    const hirer = get(props, 'hirer')
+    const person = merge({}, this.cleanPerson(), get(props, 'person', {}))
+    const hirerData = get(props, 'person.hirer', {})
+    const hirer = merge({}, this.cleanHirer(), hirerData, {
+      company: get(hirerData, 'company.id', hirerReset.company)
+    })
 
     this.state = {
       person,
@@ -50,6 +56,10 @@ module.exports = class PeoplePage extends React.Component {
 
   cleanPerson () {
     return { ...personReset }
+  }
+
+  cleanHirer () {
+    return { ...hirerReset }
   }
 
   cleanValidation () {
@@ -99,9 +109,13 @@ module.exports = class PeoplePage extends React.Component {
     const value = event.target.value
     const key = event.target.name
 
-    this.updateHirer({
-      [key]: value
-    })
+    if (key === 'company' && value === '') {
+      this.updateHirer(this.cleanHirer())
+    } else {
+      this.updateHirer({
+        [key]: value
+      })
+    }
   }
 
   toggleHirerOnboarded = event => {
@@ -141,11 +155,10 @@ module.exports = class PeoplePage extends React.Component {
 
     const submit = get(this.props, 'onSubmit', () => {})
     const person = get(this.state, 'person', {})
+    const hirer = get(this.state, 'hirer')
     const data = {
-      ...pick(person, ['id', ...Object.keys(personReset)]),
-      hirer: get(this.state, 'hirer', null),
-      role: get(this.state, 'person.role.name', ''),
-      company: get(this.state, 'person.company.name', '')
+      person: pick(person, Object.keys(personReset)),
+      hirer: hirer.company ? pick(hirer, Object.keys(hirerReset)) : undefined
     }
 
     submit(data)
@@ -187,6 +200,7 @@ module.exports = class PeoplePage extends React.Component {
   }
 
   render () {
+    const companies = get(this.props, 'companies', [])
     const person = get(this.state, 'person', {})
     const hirer = get(this.state, 'hirer', {})
 
@@ -219,15 +233,26 @@ module.exports = class PeoplePage extends React.Component {
             <input className={this.style.inputBoxUrl} type='uri' placeholder='eg: https://www.person.com/portfolio' id='personUrl' name='url' onChange={this.onChangeGeneric.bind(this)} value={person.url} />
           </li>
           <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='personRole'>Role</label>
-            <input className={this.style.inputBox} type='text' id='personRole' name='role' onChange={this.onChangeNested.bind(this)} value={get(person, 'role.name', '')} />
-          </li>
-          <li className={this.style.formListItem}>
-            <label className={this.style.label} htmlFor='personCompany'>Company</label>
-            <input className={this.style.inputBox} type='text' id='personCompany' name='company' onChange={this.onChangeNested.bind(this)} value={get(person, 'company.name', '')} />
+            <label
+              className={this.style.label}
+              htmlFor='hirerCompany'
+              >
+              Hirer for...
+            </label>
+            <select
+              className={this.style.inputBox}
+              type='text'
+              id='hirerCompany'
+              name='company'
+              value={get(hirer, 'company', '')}
+              onChange={this.onHirerChange}
+              >
+              <option value=''>Not a hirer</option>
+              {companies.map(company => <option key={company.id} value={company.id}>{company.name}</option>)}
+            </select>
           </li>
         </ul>
-        { hirer && (
+        { hirer.company && (
           <ul className={this.style.formList}>
             <li className={this.style.formListItem}>
               <label

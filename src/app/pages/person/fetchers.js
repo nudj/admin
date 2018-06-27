@@ -1,4 +1,3 @@
-const omit = require('lodash/omit')
 const { Redirect } = require('@nudj/framework/errors')
 
 function get ({ params }) {
@@ -14,12 +13,10 @@ function get ({ params }) {
           id
           type
           onboarded
-        }
-        role {
-          name
-        }
-        company {
-          name
+          company {
+            id
+            name
+          }
         }
         referrals {
           id
@@ -44,6 +41,10 @@ function get ({ params }) {
           }
         }
       }
+      companies {
+        id
+        name
+      }
       jobs {
         id
         title
@@ -64,48 +65,36 @@ function put ({
   params,
   body
 }) {
-  let gql
-  let variables = {
-    personId: params.personId,
-    personData: omit(body, ['id', 'hirer'])
-  }
-
-  if (body.hirer) {
-    gql = `
-      mutation updatePerson (
-        $personId: ID!,
-        $personData: PersonUpdateInput!,
-        $type: HirerType!,
-        $onboarded: Boolean!
+  const {
+    person: personData,
+    hirer: hirerData
+  } = body
+  const gql = `
+    mutation updatePersonAndHirer (
+      $personId: ID!
+      $personData: PersonCreateInput!
+      $hirerData: HirerCreateInput
+    ) {
+      person: updatePersonAndHirer (
+        personId: $personId
+        personData: $personData
+        hirerData: $hirerData
       ) {
-        person: updatePerson(id: $personId, data: $personData) {
+        id
+        firstName
+        lastName
+        hirer {
           id
-          firstName
-          lastName
-          hirer {
-            updateType(type: $type) {
-              id
-            }
-            setOnboarded(onboard: $onboarded)
-          }
+          onboarded
         }
       }
-    `
-
-    variables = {
-      ...variables,
-      ...body.hirer
     }
-  } else {
-    gql = `
-      mutation updatePerson ($personId: ID!, $personData: PersonUpdateInput!) {
-        person: updatePerson(id: $personId, data: $personData) {
-          id
-          firstName
-          lastName
-        }
-      }
-    `
+  `
+
+  const variables = {
+    personId: params.personId,
+    personData,
+    hirerData
   }
 
   const respond = ({ person }) => {

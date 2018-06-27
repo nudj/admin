@@ -10,6 +10,14 @@ function get ({ data }) {
         firstName
         lastName
       }
+      companies: companiesByFilters(
+        filters: {
+          client: true
+        }
+      ) {
+        id
+        name
+      }
     }
   `
   return { gql }
@@ -20,16 +28,27 @@ function post ({
   body
 }) {
   const gql = `
-    mutation createPerson ($input: PersonCreateInput!) {
-      newPerson: createPerson(input: $input) {
+    mutation createPersonAndHirer (
+      $person: PersonCreateInput!
+      $hirer: HirerCreateInput
+    ) {
+      newPerson: createPersonAndHirer(
+        person: $person
+        hirer: $hirer
+      ) {
         id
         firstName
         lastName
       }
     }
   `
+  const {
+    person,
+    hirer
+  } = body
   const variables = {
-    input: body
+    person,
+    hirer
   }
   const respond = ({ newPerson }) => {
     throw new Redirect({
