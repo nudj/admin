@@ -218,9 +218,16 @@ function postHirer ({
   body
 }) {
   const gql = `
-    mutation GetCompanyPage ($slug: String!, $hirerData: HirerCreateByEmailInput!) {
+    mutation GetCompanyPage (
+      $slug: String!
+      $hirerEmail: String!
+      $hirerData: HirerCreateInput!
+    ) {
       company: companyByFilters(filters: { slug: $slug }) {
-        newHirer: createHirerByEmail(hirer: $hirerData) {
+        newHirer: createHirerByEmail(
+          email: $hirerEmail
+          hirer: $hirerData
+        ) {
           id
         }
         id
@@ -270,9 +277,14 @@ function postHirer ({
       }
     }
   `
+  const {
+    email: hirerEmail,
+    ...hirerData
+  } = body
   const variables = {
     slug: params.companySlug,
-    hirerData: body
+    hirerEmail,
+    hirerData
   }
 
   return { gql, variables }
