@@ -8,7 +8,9 @@ const personReset = {
   firstName: '',
   lastName: '',
   email: '',
-  url: ''
+  url: '',
+  role: '',
+  company: ''
 }
 const hirerReset = {
   type: 'MEMBER',
@@ -21,7 +23,11 @@ module.exports = class PeoplePage extends React.Component {
     super(props)
     this.style = getStyle()
     this.submit = get(props, 'onSubmit')
-    const person = merge({}, this.cleanPerson(), get(props, 'person', {}))
+    const personData = get(props, 'person', {})
+    const person = merge({}, this.cleanPerson(), personData, {
+      role: get(personData, 'role.name', personReset.role),
+      company: get(personData, 'company.name', personReset.company)
+    })
     const hirerData = get(props, 'person.hirer', {})
     const hirer = merge({}, this.cleanHirer(), hirerData, {
       company: get(hirerData, 'company.id', hirerReset.company)
@@ -201,6 +207,7 @@ module.exports = class PeoplePage extends React.Component {
 
   render () {
     const { person, hirer } = this.state
+    const { companies } = this.props
 
     const errorLabels = this.renderErrorLabels()
     const submitLabel = get(this.props, 'submitLabel', 'Add person')
@@ -229,6 +236,33 @@ module.exports = class PeoplePage extends React.Component {
           <li className={this.style.formListItem}>
             <label className={this.style.label} htmlFor='personUrl'>URL</label>
             <input className={this.style.inputBoxUrl} type='uri' placeholder='eg: https://www.person.com/portfolio' id='personUrl' name='url' onChange={this.onChangeGeneric.bind(this)} value={person.url} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='personRole'>Role</label>
+            <input className={this.style.inputBox} type='text' id='personRole' name='role' onChange={this.onChangeGeneric.bind(this)} value={person.role} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label className={this.style.label} htmlFor='personCompany'>Company</label>
+            <input className={this.style.inputBox} type='text' id='personCompany' name='company' onChange={this.onChangeGeneric.bind(this)} value={person.company} />
+          </li>
+          <li className={this.style.formListItem}>
+            <label
+              className={this.style.label}
+              htmlFor='hirerCompany'
+            >
+              Hirer for...
+            </label>
+            <select
+              className={this.style.inputBox}
+              type='text'
+              id='hirerCompany'
+              name='company'
+              value={get(hirer, 'company', '')}
+              onChange={this.onHirerChange}
+            >
+              <option value=''>Not a hirer</option>
+              {companies.map(company => <option key={company.id} value={company.id}>{company.name}</option>)}
+            </select>
           </li>
         </ul>
         { hirer.company && (
