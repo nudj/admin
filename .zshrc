@@ -5,7 +5,7 @@ PROMPT='admin» '
 
 alias run="yarn start"
 alias dev="yarn run dev"
-alias test="standard && flow && mocha --recursive test/unit"
+alias test="standard && mocha --recursive test/unit"
 alias tdd='nodemon \
 	--config ./nodemon-tdd.json \
 	--quiet \
