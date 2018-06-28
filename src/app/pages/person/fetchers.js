@@ -9,6 +9,12 @@ function get ({ params }) {
         lastName
         email
         url
+        role {
+          name
+        }
+        company {
+          name
+        }
         hirer {
           id
           type
