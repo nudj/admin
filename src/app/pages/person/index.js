@@ -71,7 +71,7 @@ module.exports = class PersonPage extends React.Component {
         const job = get(referral, 'job')
         const company = get(job, 'company')
 
-        const parentInfo = parent ? `${parent.id} (${parent.firstName} ${parent.lastName})` : '-'
+        const parentInfo = parent ? `${parent.id} (${parent.person.firstName} ${parent.person.lastName})` : '-'
 
         const jobSlug = get(job, 'slug', '')
         const jobTitle = get(job, 'title', '')
