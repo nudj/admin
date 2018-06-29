@@ -47,7 +47,11 @@ function get ({ params }) {
           }
         }
       }
-      companies {
+      companies: companiesByFilters(
+        filters: {
+          client: true
+        }
+      ) {
         id
         name
       }
