@@ -31,7 +31,9 @@ const expressAssetPath = path.resolve('./app/server/assets')
 const buildAssetPath = !useDevServer && path.resolve('./app/server/build')
 
 const expressRouters = {
-  insecure: [],
+  insecure: [
+    require('./server/routers/health-check')
+  ],
   secure: [
     require('./server/routers/auth'),
     require('./pages/companies/router'),
