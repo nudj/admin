@@ -82,11 +82,10 @@ module.exports = class CompanyPage extends React.Component {
 
   saveHirerCommon ({ email, personId }) {
     const companySlug = get(this.props.app, 'company.slug')
-    const companyId = get(this.props.app, 'company.id')
     const url = `/companies/${companySlug}/hirers`
     const method = 'post'
-    const type = hirerTypes.ADMIN
-    const data = { email, type, company: companyId }
+    const type = hirerTypes.MEMBER
+    const data = { email, type }
 
     this.setState({
       hirerValue: ''

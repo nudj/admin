@@ -159,7 +159,7 @@ function postHirer ({
   body
 }) {
   const gql = `
-    mutation GetCompanyPage ($slug: String!, $hirerData: HirerCreateInput!) {
+    mutation GetCompanyPage ($slug: String!, $hirerData: HirerCreateByEmailInput!) {
       company: companyByFilters(filters: { slug: $slug }) {
         newHirer: createHirerByEmail(hirer: $hirerData) {
           id
