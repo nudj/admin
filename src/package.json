@@ -35,7 +35,7 @@
   "dependencies": {
     "@nudj/api": "16.0.0",
     "@nudj/components": "2.12.0",
-    "@nudj/framework": "15.0.0",
+    "@nudj/framework": "17.6.1",
     "@nudj/library": "4.2.0",
     "axios": "^0.16.1",
     "babel-preset-env": "^1.1.10",

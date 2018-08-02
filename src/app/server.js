@@ -63,7 +63,40 @@ const spoofLoggedIn = (req, res, next) => {
 }
 const errorHandlers = {}
 
-let { app, getMockApiApps } = createNudjApps({
+const helmetConfig = {
+  contentSecurityPolicy: {
+    directives: {
+      scriptSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        'tagmanager.google.com',
+        'www.googletagmanager.com'
+      ],
+      connectSrc: [
+        "'self'"
+      ],
+      styleSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        'cdnjs.cloudflare.com'
+      ],
+      fontSrc: [
+        "'self'"
+      ],
+      imgSrc: [
+        "'self'"
+      ]
+    }
+  }
+}
+if (useDevServer) {
+  helmetConfig.contentSecurityPolicy.directives.scriptSrc.push('admin-wds.local.nudj.co')
+  helmetConfig.contentSecurityPolicy.directives.connectSrc.push('admin-wds.local.nudj.co')
+  helmetConfig.contentSecurityPolicy.directives.connectSrc.push('wss://admin-wds.local.nudj.co')
+  helmetConfig.contentSecurityPolicy.directives.scriptSrc.push("'unsafe-eval'")
+}
+
+let app = createNudjApps({
   App: reactApp,
   reduxRoutes,
   reduxReducers,
@@ -73,7 +106,8 @@ let { app, getMockApiApps } = createNudjApps({
   expressRouters,
   spoofLoggedIn,
   errorHandlers,
-  LoadingComponent
+  LoadingComponent,
+  helmetConfig
 })
 
 const server = http.createServer(app)
@@ -81,18 +115,6 @@ const server = http.createServer(app)
 server.listen(80, () => {
   logger.log('info', 'Application running')
 })
-
-if (process.env.USE_MOCKS === 'true') {
-  const { jsonServer, gqlServer } = getMockApiApps({ data: mockData })
-
-  jsonServer.listen(81, () => {
-    logger.log('info', 'JSONServer running')
-  })
-
-  gqlServer.listen(82, () => {
-    logger.log('info', 'Mock GQL running')
-  })
-}
 
 if (module.hot) {
   module.hot.accept([
@@ -145,7 +167,7 @@ if (module.hot) {
     }
 
     server.removeListener('request', app)
-    const { app: newApp } = createNudjApps({
+    const newApp = createNudjApps({
       App: updatedReactApp,
       reduxRoutes: updatedReduxRoutes,
       reduxReducers: updatedReduxReducers,
@@ -154,7 +176,8 @@ if (module.hot) {
       buildAssetPath,
       spoofLoggedIn,
       errorHandlers,
-      LoadingComponent: updatedLoadingPage
+      LoadingComponent: updatedLoadingPage,
+      helmetConfig
     })
 
     server.on('request', newApp)
