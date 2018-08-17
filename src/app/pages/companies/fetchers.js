@@ -1,36 +1,56 @@
-const { actionMapAssign } = require('@nudj/library')
-
-const companies = require('../../server/modules/companies')
-
-const pageData = {
-  companies: () => companies.getAll(),
-  clientCompanies: () => companies.getAllClients()
+const get = () => {
+  const gql = `
+    query getCompanies {
+      clientCompanies: companiesByFilters(filters: { client: true }) {
+        id
+        created
+        slug
+        name
+        industry
+        location
+      }
+    }
+  `
+  return { gql }
 }
 
-const get = ({
-  data,
-  params
-}) => actionMapAssign(
-  data,
-  pageData
-)
-
 const post = ({
-  data,
   body
-}) => actionMapAssign(
-  data,
-  {
-    newCompany: () => companies.post(body)
-  },
-  {
-    notification: data => ({
-      message: `${data.newCompany.name} added`,
-      type: 'success'
-    })
-  },
-  pageData
-)
+}) => {
+  const gql = `
+    mutation createCompany ($companyData: CompanyCreateInput!) {
+      newCompany: createCompany(company: $companyData) {
+        created
+        slug
+        name
+        industry
+        location
+      }
+      clientCompanies: companiesByFilters(filters: { client: true }) {
+        created
+        slug
+        name
+        industry
+        location
+      }
+      notification: setNotification(
+        type: "success",
+        message: "${body.name} added"
+      ) {
+        type
+        message
+      }
+    }
+  `
+  const variables = {
+    companyData: {
+      ...body,
+      client: true
+    }
+  }
+
+  return { gql, variables }
+}
 
 module.exports = {
   get,
