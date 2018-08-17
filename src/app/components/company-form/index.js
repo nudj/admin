@@ -1,7 +1,9 @@
 const React = require('react')
 const get = require('lodash/get')
 const merge = require('lodash/merge')
+
 const getStyle = require('./company-form.css')
+const CopyToClipboard = require('../copy-to-clipboard')
 
 module.exports = class CompanyForm extends React.Component {
   constructor (props) {
@@ -195,6 +197,8 @@ module.exports = class CompanyForm extends React.Component {
 
   render () {
     const company = get(this.state, 'company', {})
+    const existingCompany = !!(company.id)
+    const { invitationLink } = company
 
     const errorLabels = this.renderErrorLabels()
     const submitLabel = get(this.props, 'submitLabel', 'Add company')
@@ -260,6 +264,13 @@ module.exports = class CompanyForm extends React.Component {
             <label className={this.style.label} htmlFor='companyOnboarded'>Onboarded</label>
             <input type='checkbox' id='companyOnboarded' name='onboarded' onChange={this.onChangeGeneric.bind(this)} checked={company.onboarded} />
           </li>
+          {existingCompany && (
+            <li className={this.style.formListItem}>
+              <label className={this.style.label} htmlFor='companyOnboarded'>Invitation Link</label>
+              <input className={this.style.inputBoxUrl} type='url' id='invitation-link' name='invitation-link' value={invitationLink} disabled />
+              <CopyToClipboard className={this.style.secondaryButton} data-clipboard-text={invitationLink}>Copy invitation link</CopyToClipboard>
+            </li>
+          )}
         </ul>
         <div className={this.style.formButtons}>
           {submitButton}

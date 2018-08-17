@@ -19,6 +19,7 @@ const get = ({ params }) => {
         twitter
         linkedin
         onboarded
+        hash
         jobs {
           id
           created
@@ -57,7 +58,15 @@ const get = ({ params }) => {
   const variables = {
     slug: params.companySlug
   }
-  return { gql, variables }
+  const transformData = data => ({
+    ...data,
+    company: {
+      ...data.company,
+      invitationLink: `${process.env.PROTOCOL}://${process.env.HIRE_HOSTNAME}/invitation-accept/${data.company.hash}`
+    }
+  })
+
+  return { gql, variables, transformData }
 }
 
 function put ({
