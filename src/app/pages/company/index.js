@@ -163,7 +163,7 @@ module.exports = class CompanyPage extends React.Component {
           description: jobCreatedDate
         }, {
           term: 'Bonus',
-          description: `£${jobBonus}`
+          description: jobBonus
         }]}
         actions={[
           <Link className={this.style.nudj} to={`/companies/${companySlug}/jobs/${jobSlug}`}>See job</Link>
