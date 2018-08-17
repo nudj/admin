@@ -5,13 +5,13 @@ const fetchers = require('./fetchers')
 
 const Router = ({
   ensureLoggedIn,
-  respondWith
+  respondWithGql
 }) => {
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/', respondWith(fetchers.get))
-  router.postHandlers('/', respondWith(fetchers.post))
+  router.getHandlers('/', respondWithGql(fetchers.get))
+  router.postHandlers('/', respondWithGql(fetchers.post))
   router.getHandlers('/companies', (req, res, next) => {
     next(new LogThenRedirect('Cannot access this url directly', '/', req.originalUrl))
   })
