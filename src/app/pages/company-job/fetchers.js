@@ -25,20 +25,14 @@ const formatActivityStatistics = (data) => {
   return activity
 }
 
-const addActivities = ({ gql, variables }) => {
-  return {
-    gql,
-    variables,
-    transformData: (data) => {
-      const { applications, referrals } = data.company.job
-      const activities = {
-        applications: formatActivityStatistics(applications),
-        referrers: formatActivityStatistics(referrals)
-      }
-
-      return { ...data, activities }
-    }
+const addActivities = data => {
+  const { applications, referrals } = data.company.job
+  const activities = {
+    applications: formatActivityStatistics(applications),
+    referrers: formatActivityStatistics(referrals)
   }
+
+  return { ...data, activities }
 }
 
 function get ({ params }) {
@@ -118,13 +112,20 @@ function get ({ params }) {
       jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
     }
   `
+
   const variables = { companySlug, jobSlug }
-  return addActivities({ gql, variables })
+
+  return {
+    gql,
+    variables,
+    transformData: addActivities
+  }
 }
 
 function put ({
   params,
-  body
+  body,
+  analytics
 }) {
   const gql = `
     mutation GetCompanyJob (
@@ -139,6 +140,7 @@ function put ({
         job: updateJob(id: $jobId, data: $jobData) {
           id
           created
+          modified
           title
           type
           url
@@ -209,17 +211,43 @@ function put ({
       }
     }
   `
+
   const variables = {
     companySlug: params.companySlug,
     jobId: body.id,
     jobData: omit(body, ['id'])
   }
-  return addActivities({ gql, variables })
+
+  const transformData = response => {
+    const data = addActivities(response)
+    analytics.track({
+      object: analytics.objects.job,
+      action: analytics.actions.job.edited,
+      properties: {
+        jobTitle: data.company.job.title,
+        jobCreated: data.company.job.created,
+        jobModified: data.company.job.modified,
+        jobSlug: data.company.job.slug,
+        jobLocation: data.company.job.location,
+        jobBonus: data.company.job.bonus,
+        companyName: data.company.name
+      }
+    })
+
+    return data
+  }
+
+  return {
+    gql,
+    variables,
+    transformData
+  }
 }
 
 function postReferral ({
   params,
-  body
+  body,
+  analytics
 }) {
   const gql = `
     mutation GetCompanyJob (
@@ -307,12 +335,35 @@ function postReferral ({
       }
     }
   `
+
   const variables = {
     email: body.email,
     companySlug: params.companySlug,
     jobSlug: params.jobSlug
   }
-  return addActivities({ gql, variables })
+
+  const transformData = response => {
+    const data = addActivities(response)
+    analytics.track({
+      object: analytics.objects.job,
+      action: analytics.actions.job.referred,
+      properties: {
+        method: 'manual',
+        jobTitle: data.company.job.title,
+        companyName: data.company.name,
+        referralEmail: variables.email,
+        referralId: data.company.job.referral.id
+      }
+    })
+
+    return data
+  }
+
+  return {
+    gql,
+    variables,
+    transformData
+  }
 }
 
 module.exports = {
