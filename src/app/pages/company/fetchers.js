@@ -1,5 +1,4 @@
 const omit = require('lodash/omit')
-
 const { Redirect } = require('@nudj/framework/errors')
 
 const get = ({ params }) => {
@@ -95,7 +94,8 @@ function put ({
 
 function postJob ({
   params,
-  body
+  body,
+  analytics
 }) {
   const gql = `
     mutation CreateCompanyJob ($slug: String!, $jobData: JobCreateInput!) {
@@ -115,6 +115,39 @@ function postJob ({
         onboarded
         newJob: createJob(data: $jobData) {
           id
+          title
+          created
+          modified
+          slug
+          status
+          bonus
+          location
+          referrals {
+            id
+            created
+            parent {
+              id
+            }
+            person {
+              id
+              email
+              firstName
+              lastName
+            }
+          }
+          applications {
+            id
+            created
+            referral {
+              id
+            }
+            person {
+              id
+              email
+              firstName
+              lastName
+            }
+          }
         }
         jobs {
           id
@@ -159,7 +192,30 @@ function postJob ({
     jobData: body,
     slug: params.companySlug
   }
-  return { gql, variables }
+
+  const respond = (data) => {
+    analytics.track({
+      object: analytics.objects.job,
+      action: analytics.actions.job.created,
+      properties: {
+        jobTitle: data.company.newJob.title,
+        jobCreated: data.company.newJob.created,
+        jobModified: data.company.newJob.modified,
+        jobSlug: data.company.newJob.slug,
+        jobLocation: data.company.newJob.location,
+        jobBonus: data.company.newJob.bonus,
+        jobStatus: data.company.newJob.status,
+        companyName: data.company.name
+      }
+    })
+
+    throw new Redirect({
+      url: `/companies/${data.company.slug}/jobs/${data.company.newJob.slug}`,
+      notification: { type: 'success', message: 'Job created!' }
+    })
+  }
+
+  return { gql, variables, respond }
 }
 
 function postHirer ({
