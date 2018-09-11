@@ -17,7 +17,8 @@ function get ({ data }) {
 
 function post ({
   data,
-  body
+  body,
+  analytics
 }) {
   const gql = `
     mutation createPerson ($input: PersonCreateInput!) {
@@ -25,13 +26,25 @@ function post ({
         id
         firstName
         lastName
+        email
       }
     }
   `
+
   const variables = {
     input: body
   }
+
   const respond = ({ newPerson }) => {
+    analytics.track({
+      object: analytics.objects.user,
+      action: analytics.actions.user.created,
+      properties: {
+        name: `${newPerson.firstName} ${newPerson.lastName}`,
+        $email: newPerson.email
+      }
+    })
+
     throw new Redirect({
       url: '/people',
       notification: {
