@@ -14,9 +14,7 @@ const get = () => {
   return { gql }
 }
 
-const post = ({
-  body
-}) => {
+const post = ({ body, analytics }) => {
   const gql = `
     mutation createCompany ($companyData: CompanyCreateInput!) {
       newCompany: createCompany(company: $companyData) {
@@ -49,7 +47,19 @@ const post = ({
     }
   }
 
-  return { gql, variables }
+  const transformData = data => {
+    analytics.track({
+      object: analytics.objects.company,
+      action: analytics.actions.company.created,
+      properties: {
+        companyName: data.newCompany.name
+      }
+    })
+
+    return data
+  }
+
+  return { gql, variables, transformData }
 }
 
 module.exports = {
