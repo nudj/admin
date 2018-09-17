@@ -1,7 +1,12 @@
 const express = require('express')
 const passport = require('passport')
+const get = require('lodash/get')
 const { AppError } = require('@nudj/framework/errors')
-const people = require('../modules/people')
+const logger = require('@nudj/framework/logger')
+const { Analytics } = require('@nudj/library/server')
+const { omitUndefined } = require('@nudj/library')
+
+const requestGql = require('../../lib/requestGql')
 
 function cacheReturnTo (req, res, next) {
   if (!req.session.returnTo) {
@@ -10,13 +15,33 @@ function cacheReturnTo (req, res, next) {
   next()
 }
 
-function fetchPerson (email) {
-  return people
-    .getByEmail({}, email)
-    .then(data => {
-      if (!data.person || data.person.error) throw new AppError('Unable to fetch person')
-      return data.person
-    })
+async function fetchPerson (email) {
+  try {
+    const gql = `
+      query GetPerson ($email: String!) {
+        person: personByFilters(filters:{ email: $email }) {
+          id
+          firstName
+          lastName
+          email
+          hirer {
+            company {
+              name
+            }
+          }
+        }
+      }
+    `
+
+    const variables = { email }
+
+    const data = await requestGql(null, gql, variables)
+    if (!data.person) throw new Error('Error fetching person')
+    return data
+  } catch (error) {
+    logger.log('error', error.log || error)
+    throw error
+  }
 }
 
 const Router = ({
@@ -29,6 +54,8 @@ const Router = ({
   router.get('/logout', (req, res, next) => {
     req.logOut()
     delete req.session.data
+    delete req.session.userId
+    delete req.session.analyticsEventProperties
     req.session.logout = true
     req.session.returnTo = req.query.returnTo
     res.clearCookie('connect.sid', {path: '/'})
@@ -42,19 +69,43 @@ const Router = ({
 
   router.get('/callback',
     passport.authenticate('auth0', { failureRedirect: '/login' }),
-    (req, res, next) => {
+    async (req, res, next) => {
       if (!req.user) {
         return next(new AppError('User not returned from Auth0'))
       }
 
-      fetchPerson(req.user._json.email)
-        .then(person => {
-          req.session.data = { person }
-          res.redirect(req.session.returnTo || '/')
+      const analytics = new Analytics({ app: 'admin', distinctId: req.cookies.mixpanelDistinctId })
+
+      try {
+        const data = await fetchPerson(req.user._json.email)
+        const firstName = get(data, 'person.firstName')
+        const lastName = get(data, 'person.lastName')
+        const name = firstName && lastName ? `${firstName} ${lastName}` : undefined
+
+        req.session.userId = data.person.id
+        req.session.analyticsEventProperties = omitUndefined({
+          name,
+          $email: get(data, 'person.email'),
+          companyName: get(data, 'person.hirer.company.name')
         })
-        .catch(error => {
-          next(new AppError('Unable to login', req.user._json.email, error))
+
+        await analytics.identify(
+          { id: req.session.userId },
+          req.session.analyticsEventProperties,
+          {
+            preserveTraits: true
+          }
+        )
+
+        analytics.track({
+          object: analytics.objects.user,
+          action: analytics.actions.user.loggedIn
         })
+
+        res.redirect(req.session.returnTo || '/')
+      } catch (error) {
+        next(new AppError('Unable to login', req.user._json.email, error))
+      }
     }
   )
 
