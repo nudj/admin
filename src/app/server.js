@@ -24,6 +24,7 @@ const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
 const LoadingComponent = require('./components/loading')
 const mockData = require('./mock-data')
+const getAnalytics = require('./server/lib/getAnalytics')
 
 const useDevServer = process.env.USE_DEV_SERVER === 'true'
 
@@ -108,7 +109,8 @@ let app = createNudjApps({
   spoofLoggedIn,
   errorHandlers,
   LoadingComponent,
-  helmetConfig
+  helmetConfig,
+  getAnalytics
 })
 
 const server = http.createServer(app)
@@ -139,12 +141,14 @@ if (module.hot) {
     './pages/survey-question/router',
     './pages/company-job/router',
     './pages/company-survey-message/router',
-    './server/routers/catch-all'
+    './server/routers/catch-all',
+    './server/lib/getAnalytics'
   ], () => {
     const updatedReactApp = require('./redux')
     const updatedReduxRoutes = require('./redux/routes')
     const updatedReduxReducers = require('./redux/reducers')
     const updatedLoadingPage = require('./components/loading')
+    const updatedGetAnalytics = require('./server/lib/getAnalytics')
     const updatedExpressRouters = {
       insecure: [],
       secure: [
@@ -178,7 +182,8 @@ if (module.hot) {
       spoofLoggedIn,
       errorHandlers,
       LoadingComponent: updatedLoadingPage,
-      helmetConfig
+      helmetConfig,
+      getAnalytics: updatedGetAnalytics
     })
 
     server.on('request', newApp)
