@@ -1,6 +1,7 @@
 const React = require('react')
 const get = require('lodash/get')
 const merge = require('lodash/merge')
+const { omitUndefined } = require('@nudj/library')
 const getStyle = require('./person-form.css')
 
 module.exports = class PeoplePage extends React.Component {
@@ -137,12 +138,12 @@ module.exports = class PeoplePage extends React.Component {
     }
 
     const submit = get(this.props, 'onSubmit', () => {})
-    const data = {
+    const data = omitUndefined({
       ...get(this.state, 'person', {}),
-      hirer: get(this.state, 'hirer', null),
-      role: get(this.state, 'person.role.name', ''),
-      company: get(this.state, 'person.company.name', '')
-    }
+      hirer: get(this.state, 'hirer'),
+      role: get(this.state, 'person.role.name'),
+      company: get(this.state, 'person.company.name')
+    })
 
     submit(data)
   }
@@ -183,8 +184,7 @@ module.exports = class PeoplePage extends React.Component {
   }
 
   render () {
-    const person = get(this.state, 'person', {})
-    const hirer = get(this.state, 'hirer', {})
+    const { person, hirer } = this.state
 
     const errorLabels = this.renderErrorLabels()
     const submitLabel = get(this.props, 'submitLabel', 'Add person')
