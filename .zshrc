@@ -22,7 +22,9 @@ alias fdd='nodemon \
 	-x "flow --quiet || exit 1"'
 
 yank () {
-	cd ./@nudj/$1 && yarn link && cd ../.. && yarn link @nudj/$1
+  for package in "$@"; do
+    cd ./@nudj/$package && yarn link && cd ../.. && yarn link @nudj/$package
+  done
 }
 
 alias idev="yank framework && yank components && yank api && yank library && dev"
