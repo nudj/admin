@@ -50,6 +50,7 @@
     "flow-bin": "^0.59.0",
     "form-serialize": "^0.7.1",
     "intercom-client": "^2.8.7",
+    "js-cookie": "^2.2.0",
     "lodash": "^4.17.4",
     "mailgun-js": "^0.9.1",
     "passport": "^0.3.2",

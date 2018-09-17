@@ -12,7 +12,13 @@ const plugins = [
     context: '.',
     manifest: require('./vendors-manifest.json')
   }),
-  new webpack.EnvironmentPlugin(['NODE_ENV', 'USE_DEV_SERVER', 'DEV_SERVER_PATH']),
+  new webpack.EnvironmentPlugin([
+    'NODE_ENV',
+    'USE_DEV_SERVER',
+    'DEV_SERVER_PATH',
+    'ANALYTICS_ENABLED',
+    'MIXPANEL_API_TOKEN'
+  ]),
   process.env.USE_DEV_SERVER && new webpack.HotModuleReplacementPlugin(),
   process.env.USE_DEV_SERVER && new webpack.NamedModulesPlugin(),
   process.env.DEBUG !== 'true' && new UglifyJSPlugin()

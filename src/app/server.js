@@ -73,7 +73,8 @@ const helmetConfig = {
         'www.googletagmanager.com'
       ],
       connectSrc: [
-        "'self'"
+        "'self'",
+        'api.mixpanel.com'
       ],
       styleSrc: [
         "'self'",
