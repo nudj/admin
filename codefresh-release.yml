@@ -25,8 +25,10 @@ steps:
   push:
     title: Push
     type: push
-    candidate: '${{build}}'
+    candidate: ${{build}}
     tag: ${{CF_BRANCH}}
-    credentials:
-      username: '${{dockerUsername}}'
-      password: '${{dockerPassword}}'
+    provider: ecr
+    registry: ecr
+    accessKeyId: ${{AWS_ACCESS_KEY_ID}}
+    secretAccessKey: ${{AWS_SECRET_ACCESS_KEY}}
+    region: ${{AWS_DEFAULT_REGION}}
