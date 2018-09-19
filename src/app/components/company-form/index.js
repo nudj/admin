@@ -1,6 +1,7 @@
 const React = require('react')
 const get = require('lodash/get')
 const merge = require('lodash/merge')
+const omit = require('lodash/omit')
 
 const getStyle = require('./company-form.css')
 const CopyToClipboard = require('../copy-to-clipboard')
@@ -161,7 +162,10 @@ module.exports = class CompanyForm extends React.Component {
     const submit = get(this.props, 'onSubmit', () => {})
     const data = get(this.state, 'company', {})
 
-    submit(data)
+    submit(omit(data, [
+      'hash',
+      'invitationLink'
+    ]))
   }
 
   updateCompany (newStuff) {
