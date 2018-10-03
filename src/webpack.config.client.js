@@ -48,7 +48,7 @@ const config = {
         test: /\.js$/,
         include: [
           path.join(__dirname, 'app'),
-          path.join(__dirname, '@nudj'),
+          path.join(__dirname, 'yank', '@nudj'),
           path.join(__dirname, 'node_modules', '@nudj')
         ],
         exclude: /node_modules\/(?!@nudj)/,
@@ -93,7 +93,7 @@ if (process.env.USE_DEV_SERVER) {
   config.devServer = {
     contentBase: path.resolve(__dirname, 'app/server'),
     host: '0.0.0.0',
-    port: '83',
+    port: process.env.DEV_SERVER_PORT,
     publicPath: '/build/',
     public: process.env.DEV_SERVER_PATH,
     https: false,
