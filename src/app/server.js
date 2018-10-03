@@ -17,13 +17,11 @@ const http = require('http')
 const path = require('path')
 const createNudjApps = require('@nudj/framework/server')
 const logger = require('@nudj/framework/logger')
-const find = require('lodash/find')
 
 const reactApp = require('./redux')
 const reduxRoutes = require('./redux/routes')
 const reduxReducers = require('./redux/reducers')
 const LoadingComponent = require('./components/loading')
-const mockData = require('./mock-data')
 const getAnalytics = require('./server/lib/getAnalytics')
 
 const useDevServer = process.env.USE_DEV_SERVER === 'true'
@@ -50,20 +48,10 @@ const expressRouters = {
     require('./pages/survey-questions/router'),
     require('./pages/survey-question/router'),
     require('./pages/company-job/router'),
-    require('./pages/company-survey-message/router'),
     require('./server/routers/catch-all')
   ]
 }
-
-const spoofLoggedIn = (req, res, next) => {
-  req.session.data = req.session.data || {
-    hirer: find(mockData.hirers, { id: 'hirer1' }),
-    person: find(mockData.people, { id: 'person5' })
-  }
-  next()
-}
 const errorHandlers = {}
-
 const helmetConfig = {
   contentSecurityPolicy: {
     directives: {
@@ -102,11 +90,9 @@ let app = createNudjApps({
   App: reactApp,
   reduxRoutes,
   reduxReducers,
-  mockData,
   expressAssetPath,
   buildAssetPath,
   expressRouters,
-  spoofLoggedIn,
   errorHandlers,
   LoadingComponent,
   helmetConfig,
@@ -140,7 +126,6 @@ if (module.hot) {
     './pages/survey-questions/router',
     './pages/survey-question/router',
     './pages/company-job/router',
-    './pages/company-survey-message/router',
     './server/routers/catch-all',
     './server/lib/getAnalytics'
   ], () => {
@@ -166,7 +151,6 @@ if (module.hot) {
         require('./pages/survey-questions/router'),
         require('./pages/survey-question/router'),
         require('./pages/company-job/router'),
-        require('./pages/company-survey-message/router'),
         require('./server/routers/catch-all')
       ]
     }
@@ -179,7 +163,6 @@ if (module.hot) {
       expressRouters: updatedExpressRouters,
       expressAssetPath,
       buildAssetPath,
-      spoofLoggedIn,
       errorHandlers,
       LoadingComponent: updatedLoadingPage,
       helmetConfig,

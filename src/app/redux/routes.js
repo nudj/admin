@@ -14,6 +14,5 @@ module.exports = {
   '/survey-questions/:id': require('../pages/survey-question'),
   '/people/:personId': require('../pages/person'),
   '/companies/:companySlug': require('../pages/company'),
-  '/companies/:companySlug/jobs/:jobSlug': require('../pages/company-job'),
-  '/companies/:companySlug/messages/:surveyMessageId': require('../pages/company-survey-message')
+  '/companies/:companySlug/jobs/:jobSlug': require('../pages/company-job')
 }

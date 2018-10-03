@@ -35,9 +35,8 @@
   "dependencies": {
     "@nudj/api": "16.0.0",
     "@nudj/components": "2.12.0",
-    "@nudj/framework": "17.9.0",
+    "@nudj/framework": "17.11.0",
     "@nudj/library": "7.0.0",
-    "axios": "^0.16.1",
     "babel-preset-env": "^1.1.10",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.23.0",
@@ -45,7 +44,6 @@
     "classnames": "^2.2.5",
     "date-fns": "^1.28.3",
     "envkey": "^1.0.0",
-    "escape-html": "^1.0.3",
     "express": "^4.14.1",
     "flow-bin": "^0.59.0",
     "form-serialize": "^0.7.1",
