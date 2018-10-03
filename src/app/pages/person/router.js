@@ -12,7 +12,7 @@ const Router = ({
 
   router.getHandlers('/people/:personId', respondWithGql(fetchers.get))
   router.putHandlers('/people/:personId', respondWithGql(fetchers.put))
-  router.postHandlers('/people/:personId/referrals/:jobId', respondWith(fetchers.postReferral))
+  router.postHandlers('/people/:personId/referrals/:jobId', respondWithGql(fetchers.postReferral))
 
   return router
 }
