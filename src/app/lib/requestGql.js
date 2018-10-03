@@ -4,7 +4,7 @@ const logger = require('@nudj/framework/logger')
 
 async function request (userId, query, variables) {
   try {
-    const response = await libRequest(`http://${process.env.API_HOST}:82/`, {
+    const response = await libRequest(`http://${process.env.API_HOST}:${process.env.API_PORT}/`, {
       method: 'post',
       data: {
         userId,

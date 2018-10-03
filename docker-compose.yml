@@ -15,9 +15,10 @@ services:
       - ../admin/src/webpack.config.client.js:/usr/src/webpack.config.client.js
       - ../admin/src/webpack.config.server.js:/usr/src/webpack.config.server.js
       - ../admin/src/webpack.config.dll.js:/usr/src/webpack.config.dll.js
-      - ../framework/src:/usr/src/@nudj/framework
-      - ../api/src:/usr/src/@nudj/api
-      - ../library/src:/usr/src/@nudj/library
-      - ../components/src:/usr/src/@nudj/components
+      # yanks
+      - ../framework/src:/usr/src/yank/@nudj/framework
+      - ../library/src:/usr/src/yank/@nudj/library
+      - ../components/src:/usr/src/yank/@nudj/components
+      - ../api/src:/usr/src/yank/@nudj/api
     stdin_open: true
     command: /bin/zsh

@@ -23,12 +23,11 @@ alias fdd='nodemon \
 
 yank () {
   for package in "$@"; do
-    cd ./@nudj/$package && yarn link && cd ../.. && yarn link @nudj/$package
+    cd /usr/src/yank/$package && yarn link && cd /usr/src && yarn link $package
   done
 }
 
-alias idev="yank framework && yank components && yank api && yank library && dev"
-
+alias idev="yank @nudj/framework @nudj/components @nudj/api @nudj/library && dev"
 alias ll="ls -la"
 alias d="docker"
 alias dm="docker-machine"
