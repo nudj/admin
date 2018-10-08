@@ -240,6 +240,7 @@ module.exports = class JobForm extends React.Component {
 
   render () {
     const job = get(this.state, 'job', {})
+    const readOnly = get(this.props, 'readOnly', false)
 
     const errorLabels = this.renderErrorLabels()
     const submitLabel = get(this.props, 'submitLabel', 'Add job')
@@ -272,7 +273,7 @@ module.exports = class JobForm extends React.Component {
         <ul className={css(style.formList)}>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobTitle'>Title</label>
-            <input className={css(style.inputBox)} type='text' id='newJobTitle' name='title' required onChange={this.onChangeTitle.bind(this)} value={job.title} />
+            {readOnly ? <Text>{job.title}</Text> : <input className={css(style.inputBox)} type='text' id='newJobTitle' name='title' required onChange={this.onChangeTitle.bind(this)} value={job.title} />}
             {errorLabels.jobTitleNotUniqueLabel}
           </li>
           {job.slug && (
@@ -283,67 +284,69 @@ module.exports = class JobForm extends React.Component {
           )}
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobUrl'>URL</label>
-            <input className={css(style.inputBoxUrl)} type='uri' placeholder='eg: https://www.company.com/link-to-job' id='newJobUrl' name='url' onChange={this.onChangeGeneric.bind(this)} value={job.url} />
+            {readOnly ? <Text>{job.url}</Text> : <input className={css(style.inputBoxUrl)} type='uri' placeholder='eg: https://www.company.com/link-to-job' id='newJobUrl' name='url' onChange={this.onChangeGeneric.bind(this)} value={job.url} />}
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobBonus'>Bonus</label>
-            <input className={css(style.inputBox)} type='text' placeholder='eg: £200' id='newJobBonus' name='bonus' required onChange={this.onChangeGeneric.bind(this)} value={job.bonus} />
+            {readOnly ? <Text>{job.bonus}</Text> : <input className={css(style.inputBox)} type='text' placeholder='eg: £200' id='newJobBonus' name='bonus' required onChange={this.onChangeGeneric.bind(this)} value={job.bonus} />}
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobType'>Type</label>
-            <select className={css(style.selectBox)} id='newJobType' name='type' onChange={this.onChangeGeneric.bind(this)} value={job.type || types[0]}>
+            {readOnly ? <Text>{job.type || types[0]}</Text> : <select className={css(style.selectBox)} id='newJobType' name='type' onChange={this.onChangeGeneric.bind(this)} value={job.type || types[0]}>
               {types.map((type, index) => (<option key={index} value={type}>{type}</option>))}
-            </select>
+            </select>}
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobStatus'>Status</label>
-            <select className={css(style.selectBox)} id='newJobStatus' name='status' onChange={this.onChangeGeneric.bind(this)} value={job.status || statuses[0]}>
+            {readOnly ? <Text>{job.status || statuses[0]}</Text> : <select className={css(style.selectBox)} id='newJobStatus' name='status' onChange={this.onChangeGeneric.bind(this)} value={job.status || statuses[0]}>
               {statuses.map((status, index) => (<option key={index} value={status}>{status}</option>))}
-            </select>
+            </select>}
           </li>
           {!isNil(job.roleDescription) && (
             <li className={css(style.formListItem)}>
               <label className={css(style.label)} htmlFor='newJobRoleDescription'>Role Description (Old)</label>
-              <textarea className={css(style.inputTextarea)} id='newJobRoleDescription' name='roleDescription' required={!descriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.roleDescription} />
+              {readOnly ? <Text>{job.roleDescription}</Text> : <textarea className={css(style.inputTextarea)} id='newJobRoleDescription' name='roleDescription' required={!descriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.roleDescription} />}
             </li>
           )}
           {!isNil(job.candidateDescription) && (
             <li className={css(style.formListItem)}>
               <label className={css(style.label)} htmlFor='newJobDescription'>Candidate Description (Old)</label>
-              <textarea className={css(style.inputTextarea)} id='newJobCandidateDescription' name='candidateDescription' required={!descriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.candidateDescription} />
+              {readOnly ? <Text>{job.candidateDescription}</Text> : <textarea className={css(style.inputTextarea)} id='newJobCandidateDescription' name='candidateDescription' required={!descriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.candidateDescription} />}
             </li>
           )}
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='description'>Description</label>
-            <textarea className={css(style.inputTextarea)} id='description' name='description' required={descriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.description} />
+            {readOnly ? <Text>{job.description}</Text> : <textarea className={css(style.inputTextarea)} id='description' name='description' required={descriptionRequired} onChange={this.onChangeGeneric.bind(this)} value={job.description} />}
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobRemuneration'>Remuneration</label>
-            <textarea className={css(style.inputTextarea)} id='newJobRemuneration' name='remuneration' onChange={this.onChangeGeneric.bind(this)} value={job.remuneration} />
+            {readOnly ? <Text>{job.remuneration}</Text> : <textarea className={css(style.inputTextarea)} id='newJobRemuneration' name='remuneration' onChange={this.onChangeGeneric.bind(this)} value={job.remuneration} />}
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobLocation'>Location</label>
-            <input className={css(style.inputBox)} type='text' placeholder='eg: London' id='newJobLocation' required name='location' onChange={this.onChangeGeneric.bind(this)} value={job.location} />
+            {readOnly ? <Text>{job.location}</Text> : <input className={css(style.inputBox)} type='text' placeholder='eg: London' id='newJobLocation' required name='location' onChange={this.onChangeGeneric.bind(this)} value={job.location} />}
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobLabels'>Labels</label>
-            <input className={css(style.inputBox)} type='text' placeholder='eg: finance, tech' id='newJobLabels' name='labels' onChange={this.onChangeGeneric.bind(this)} value={job.labels} />
+            {readOnly ? <Text>{job.labels}</Text> : <input className={css(style.inputBox)} type='text' placeholder='eg: finance, tech' id='newJobLabels' name='labels' onChange={this.onChangeGeneric.bind(this)} value={job.labels} />}
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobTemplateTags'>Template tags</label>
-            <input className={css(style.inputBox)} type='text' placeholder='eg: food, movies' id='newJobTemplateTags' name='templateTags' onChange={this.onChangeTemplateTags.bind(this)} value={job.templateTags} />
+            {readOnly ? <Text>{job.templateTags}</Text> : <input className={css(style.inputBox)} type='text' placeholder='eg: food, movies' id='newJobTemplateTags' name='templateTags' onChange={this.onChangeTemplateTags.bind(this)} value={job.templateTags} />}
             {errorLabels.templateTagsInvalidLabel}
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='newJobRelatedJobs'>Related jobs</label>
-            <select className={css(style.selectBoxMultiple)} id='newJobRelatedJobs' name='relatedJobs' multiple onChange={this.onChangeMultiSelect.bind(this)} value={job.relatedJobs}>
-              {relatedJobs.map((relatedJob, index) => (<option key={index} value={relatedJob.id}>{relatedJob.title}</option>))}
-            </select>
-            <button type='button' className={css(style.secondaryButton)} onClick={this.clearRelatedJobs.bind(this)}>Clear all</button>
+            {readOnly ? relatedJobs.map(job => (<Text key={job.id} element='div'>{job.title}</Text>)) : [
+              <select key='select' className={css(style.selectBoxMultiple)} id='newJobRelatedJobs' name='relatedJobs' multiple onChange={this.onChangeMultiSelect.bind(this)} value={job.relatedJobs}>
+                {relatedJobs.map((relatedJob, index) => (<option key={index} value={relatedJob.id}>{relatedJob.title}</option>))}
+              </select>,
+              <button key='button' type='button' className={css(style.secondaryButton)} onClick={this.clearRelatedJobs.bind(this)}>Clear all</button>
+            ]}
           </li>
           <li className={css(style.formListItem)}>
             <label className={css(style.label)} htmlFor='tags'>Tags</label>
-            <CheckboxGroup
+            {readOnly ? <Text>{job.tags.map(tag => expertiseTags[tag]).join(', ')}</Text> : <CheckboxGroup
               id='tags'
               name='tags'
               onChange={this.onChangeTags.bind(this)}
@@ -358,12 +361,12 @@ module.exports = class JobForm extends React.Component {
                   label: expertiseTags[tag]
                 }))
               }
-            </CheckboxGroup>
+            </CheckboxGroup>}
           </li>
         </ul>
-        <div className={css(style.formButtons)}>
+        {!readOnly && <div className={css(style.formButtons)}>
           {submitButton}
-        </div>
+        </div>}
       </div>
     </form>)
   }

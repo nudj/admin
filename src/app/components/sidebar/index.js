@@ -29,17 +29,15 @@ const Sidebar = ({ styleSheet }) => {
             className={css(style.link)}
             to='/'
           >
-            <Icon name='briefcase' style={style.icon} />
             Companies
           </NavLink>
         </li>
         <li className={css(style.menuItem)}>
           <NavLink
             className={css(style.link)}
-            to='/surveys'
+            to='/jobs'
           >
-            <Icon name='chevron' style={style.icon} />
-            Surveys
+            Jobs
           </NavLink>
         </li>
         <li className={css(style.menuItem)}>
@@ -47,18 +45,16 @@ const Sidebar = ({ styleSheet }) => {
             className={css(style.link, style.candidatesLink)}
             to='/people'
           >
-            <Icon name='candidates' style={style.icon} />
             People
           </NavLink>
         </li>
         <li className={css(style.menuItem)}>
-          <a
-            className={css(style.link, style.help)}
-            href='http://help.nudj.co'
+          <NavLink
+            className={css(style.link)}
+            to='/surveys'
           >
-            <Icon name='questionMark' style={style.icon} />
-            Help
-          </a>
+            Surveys
+          </NavLink>
         </li>
         <li className={css(style.menuItem)}>
           <Link

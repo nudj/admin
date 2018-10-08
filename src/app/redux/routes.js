@@ -1,5 +1,16 @@
+require.context('../types/', true, /redux\.js$/)
+const types = require('../types')
+const typeRoutes = types.reduce((routes, type) => {
+  const typeRoutes = require(`../types/${type}/redux`)
+  return {
+    ...routes,
+    ...typeRoutes
+  }
+}, {})
+
 module.exports = {
   '/': require('../pages/companies'),
+  ...typeRoutes,
   '/people': require('../pages/people'),
   '/surveys': require('../pages/surveys'),
   '/surveys/new': require('../pages/survey'),

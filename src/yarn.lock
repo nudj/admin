@@ -113,9 +113,9 @@
     react-textarea-autosize "^5.2.1"
     warning "^3.0.0"
 
-"@nudj/framework@17.11.0":
-  version "17.11.0"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-17.11.0.tgz#81d62eade80385aaa5a4b15eae1696142e12b740"
+"@nudj/framework@17.11.1":
+  version "17.11.1"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-17.11.1.tgz#d26485301b201bbf66ac3a0ea56c197c208a94f1"
   dependencies:
     "@nudj/api" "14.0.0"
     "@nudj/components" "2.0.0"
@@ -201,9 +201,9 @@
     proxyquire "^2.0.1"
     shortid "^2.2.8"
 
-"@nudj/library@7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-7.0.0.tgz#d34e61cb59e9f84762586d18f93418b5ff8c620a"
+"@nudj/library@7.1.1":
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-7.1.1.tgz#f6751b2b3367f4d25c09292f9c2d6252fbe84282"
   dependencies:
     axios "^0.16.2"
     date-fns "^1.29.0"
@@ -9534,8 +9534,8 @@ webpack-sources@^1.0.1:
     source-map "~0.6.1"
 
 webpack@^3.10.0:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-3.11.0.tgz#77da451b1d7b4b117adaf41a1a93b5742f24d894"
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-3.12.0.tgz#3f9e34360370602fcf639e97939db486f4ec0d74"
   dependencies:
     acorn "^5.0.0"
     acorn-dynamic-import "^2.0.0"
