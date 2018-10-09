@@ -1,16 +1,19 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const format = require('date-fns/format')
-// const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 
 const Page = require('../../../components/page')
 const RowItem = require('../../../components/row-item')
+const Filters = require('../../../components/filters')
+const getStyle = require('../../../lib/item/style.css')
 
 const View = props => {
+  const style = getStyle()
   const {
     app: {
       applications = [],
+      allApplications = [],
       url: {
         query
       }
@@ -21,12 +24,13 @@ const View = props => {
   return (
     <Page
       {...props}
-      title={`Applications (${applications.length})`}
+      title={`Applications (${applications.length}/${allApplications.length})`}
     >
       <Helmet>
         <title>{`ADMIN - Applications (${applications.length})`}</title>
       </Helmet>
-      <ul>
+      <Filters {...props} />
+      <ul className={style.list}>
         {applications.map(application => (
           <RowItem
             key={get(application, 'id')}
@@ -44,9 +48,6 @@ const View = props => {
                 term: 'Referral',
                 description: `${get(application, 'referral.person.firstName')} ${get(application, 'referral.person.lastName')} (${get(application, 'referral.person.email')})`
               }
-            ].filter(Boolean)}
-            actions={[
-              // <Link to={`/applications/${application.id}`}>See application</Link>
             ]}
           />
         ))}

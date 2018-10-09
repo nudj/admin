@@ -4,8 +4,10 @@ const { Link } = require('react-router-dom')
 
 const Page = require('../../../components/page')
 const JobForm = require('../../../components/job-form')
+const getStyle = require('../../../lib/item/style.css')
 
 const View = props => {
+  const style = getStyle()
   const { app: { job = {}, jobs = [] } } = props
   return (
     <Page
@@ -16,15 +18,17 @@ const View = props => {
       <Helmet>
         <title>{`ADMIN - ${job.title}`}</title>
       </Helmet>
+      <ul className={style.relations}>
+        <Link to={`/referrals?job=${job.id}`} className={style.relationLink}>Referrals ({job.referrals.length})</Link>
+        <Link to={`/intros?job=${job.id}`} className={style.relationLink}>Intros ({job.intros.length})</Link>
+        <Link to={`/applications?job=${job.id}`} className={style.relationLink}>Applications ({job.applications.length})</Link>
+      </ul>
       <JobForm
         company={job.company}
         jobs={jobs}
         job={job}
         readOnly
       />
-      <div><Link to={`/referrals?job=${job.id}`}>Referrals ({job.referrals.length})</Link></div>
-      <div><Link to={`/intros?job=${job.id}`}>Intros ({job.intros.length})</Link></div>
-      <div><Link to={`/applications?job=${job.id}`}>Applications ({job.applications.length})</Link></div>
     </Page>
   )
 }

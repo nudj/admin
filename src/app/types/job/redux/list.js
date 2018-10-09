@@ -5,11 +5,15 @@ const { Link } = require('react-router-dom')
 
 const Page = require('../../../components/page')
 const RowItem = require('../../../components/row-item')
+const Filters = require('../../../components/filters')
+const getStyle = require('../../../lib/item/style.css')
 
 const View = props => {
+  const style = getStyle()
   const {
     app: {
       jobs = [],
+      allJobs = [],
       url: {
         query
       }
@@ -23,12 +27,13 @@ const View = props => {
   return (
     <Page
       {...props}
-      title={`Jobs (${jobs.length})`}
+      title={`Jobs (${jobs.length}/${allJobs.length})`}
     >
       <Helmet>
         <title>{`ADMIN - Jobs (${jobs.length})`}</title>
       </Helmet>
-      <ul>
+      <Filters {...props} />
+      <ul className={style.list}>
         {(jobs || []).map((job) => {
           const jobCreatedDate = format(job.created, 'DD.MM.YYYY')
           const company = job.company
@@ -52,9 +57,9 @@ const View = props => {
             }, {
               term: 'Bonus',
               description: job.bonus
-            }].filter(Boolean)}
+            }]}
             actions={[
-              <Link to={`/jobs/${job.id}`}>See job</Link>
+              <Link to={`/jobs/${job.id}`} className={style.button}>See job</Link>
             ]}
           />)
         })}

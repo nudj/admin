@@ -6,7 +6,8 @@ module.exports = StyleSheet.create({
   ...mixins.formStructure,
   ...mixins.formElements,
   formCard: mixins.cardStyle,
-  inputBox: { ...mixins.formElements.inputBox,
+  inputBox: {
+    ...mixins.formElements.inputBox,
     flexGrow: '1',
     width: '100%'
   },
