@@ -27,7 +27,9 @@ const View = props => {
   return (
     <Page
       {...props}
-      title={`Jobs (${jobs.length}/${allJobs.length})`}
+      title={`Jobs (${jobs.length}${
+        currentFilters.length || (jobs.length !== allJobs.length) ? `/${allJobs.length}` : ''
+      })`}
     >
       <Helmet>
         <title>{`ADMIN - Jobs (${jobs.length})`}</title>

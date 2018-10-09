@@ -18,5 +18,6 @@ module.exports = css({
   filter: {
     listStyle: 'none',
     marginLeft: '1rem'
-  }
+  },
+  filterButton: mixins.buttonSecondary
 })

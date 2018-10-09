@@ -2,6 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const format = require('date-fns/format')
 const get = require('lodash/get')
+const { Link } = require('react-router-dom')
 
 const Page = require('../../../components/page')
 const RowItem = require('../../../components/row-item')
@@ -48,6 +49,9 @@ const View = props => {
                 term: 'Referral',
                 description: `${get(application, 'referral.person.firstName')} ${get(application, 'referral.person.lastName')} (${get(application, 'referral.person.email')})`
               }
+            ].filter(Boolean)}
+            actions={[
+              <Link to={`/applications/${application.id}`} className={style.button}>See application</Link>
             ]}
           />
         ))}

@@ -14,6 +14,8 @@ const button = {
 }
 
 module.exports = css({
+  ...mixins.formStructure,
+  ...mixins.formElements,
   list,
   button,
   filters: {
