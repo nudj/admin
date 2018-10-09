@@ -1,16 +1,19 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const format = require('date-fns/format')
-// const { Link } = require('react-router-dom')
 const get = require('lodash/get')
 
 const Page = require('../../../components/page')
 const RowItem = require('../../../components/row-item')
+const Filters = require('../../../components/filters')
+const getStyle = require('../../../lib/item/style.css')
 
 const View = props => {
+  const style = getStyle()
   const {
     app: {
       referrals = [],
+      allReferrals = [],
       url: {
         query
       }
@@ -21,12 +24,13 @@ const View = props => {
   return (
     <Page
       {...props}
-      title={`Referrals (${referrals.length})`}
+      title={`Referrals (${referrals.length}/${allReferrals.length})`}
     >
       <Helmet>
         <title>{`ADMIN - Referrals (${referrals.length})`}</title>
       </Helmet>
-      <ul>
+      <Filters {...props} />
+      <ul className={style.list}>
         {referrals.map(referral => (
           <RowItem
             key={get(referral, 'id')}
@@ -44,9 +48,6 @@ const View = props => {
                 term: 'Parent',
                 description: `${get(referral, 'parent.person.firstName')} ${get(referral, 'parent.person.lastName')} (${get(referral, 'parent.person.email')})`
               }
-            ].filter(Boolean)}
-            actions={[
-              // <Link to={`/referrals/${referral.id}`}>See referral</Link>
             ]}
           />
         ))}

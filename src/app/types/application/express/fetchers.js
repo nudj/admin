@@ -2,6 +2,8 @@ function getMany ({ query }) {
   const gql = `
     query (
       $filters: ApplicationFilterInput!
+      $filteredByJob: Boolean!
+      $filteredJobId: ID
     ) {
       applications: applicationsByFilters (
         filters: $filters
@@ -31,10 +33,19 @@ function getMany ({ query }) {
           lastName
         }
       }
+      allApplications: applications {
+        id
+      }
+      job (id: $filteredJobId) @include(if: $filteredByJob) {
+        id
+        title
+      }
     }
   `
   const variables = {
-    filters: query
+    filters: query,
+    filteredByJob: !!query.job,
+    filteredJobId: query.job
   }
   return {
     gql,

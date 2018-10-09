@@ -23,6 +23,9 @@ function getMany ({ query }) {
           name
         }
       }
+      allJobs: jobs {
+        id
+      }
     }
   `
   const variables = {

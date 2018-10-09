@@ -24,7 +24,7 @@ const styleSheet = StyleSheet.create({
     width: `calc(100vw - ${sidebarWidth})`
   },
   body: {
-    marginTop: sizes.regular,
+    paddingTop: sizes.regular,
     paddingLeft: sizes.regular,
     paddingRight: sizes.regular,
     paddingBottom: sizes.regular

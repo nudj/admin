@@ -2,6 +2,8 @@ function getMany ({ query }) {
   const gql = `
     query (
       $filters: ReferralFilterInput!
+      $filteredByJob: Boolean!
+      $filteredJobId: ID
     ) {
       referrals: referralsByFilters (
         filters: $filters
@@ -31,10 +33,19 @@ function getMany ({ query }) {
           lastName
         }
       }
+      allReferrals: referrals {
+        id
+      }
+      job (id: $filteredJobId) @include(if: $filteredByJob) {
+        id
+        title
+      }
     }
   `
   const variables = {
-    filters: query
+    filters: query,
+    filteredByJob: !!query.job,
+    filteredJobId: query.job
   }
   return {
     gql,
