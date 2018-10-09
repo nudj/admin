@@ -2,6 +2,7 @@ const React = require('react')
 const { Helmet } = require('react-helmet')
 const format = require('date-fns/format')
 const get = require('lodash/get')
+const { Link } = require('react-router-dom')
 
 const Page = require('../../../components/page')
 const RowItem = require('../../../components/row-item')
@@ -24,7 +25,9 @@ const View = props => {
   return (
     <Page
       {...props}
-      title={`Intros (${intros.length}/${allIntros.length})`}
+      title={`Intros (${intros.length}${
+        currentFilters.length || (intros.length !== allIntros.length) ? `/${allIntros.length}` : ''
+      })`}
     >
       <Helmet>
         <title>{`ADMIN - Intros (${intros.length})`}</title>
@@ -48,6 +51,9 @@ const View = props => {
                 term: 'Added',
                 description: format(get(intro, 'created'), 'DD.MM.YYYY')
               }
+            ]}
+            actions={[
+              <Link to={`/intros/${intro.id}`} className={style.button}>See intro</Link>
             ]}
           />
         ))}

@@ -53,6 +53,52 @@ function getMany ({ query }) {
   }
 }
 
+function getOne ({ params }) {
+  const gql = `
+    query (
+      $id: ID
+    ) {
+      application (
+        id: $id
+      ) {
+        id
+        created
+        modified
+        job {
+          id
+          slug
+          title
+          company {
+            name
+          }
+        }
+        referral {
+          id
+          person {
+            email
+            firstName
+            lastName
+          }
+        }
+        person {
+          id
+          email
+          firstName
+          lastName
+        }
+      }
+    }
+  `
+  const variables = {
+    id: params.id
+  }
+  return {
+    gql,
+    variables
+  }
+}
+
 module.exports = {
-  getMany
+  getMany,
+  getOne
 }

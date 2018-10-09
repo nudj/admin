@@ -30,7 +30,7 @@ const Filters = props => {
 
             return (
               <li key={filterKey} className={style.filter}>
-                <Link className={style.button} to={`${path}${queryStringOmit(query, filterKey)}`}>{filterKey}: {filterLabel}</Link>
+                <Link className={style.filterButton} to={`${path}${queryStringOmit(query, filterKey)}`}>{filterKey}: {filterLabel}</Link>
               </li>
             )
           })}

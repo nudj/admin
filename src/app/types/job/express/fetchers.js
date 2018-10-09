@@ -81,6 +81,7 @@ function getOne ({ params }) {
       ) {
         id
         created
+        modified
         title
         type
         url
@@ -113,25 +114,6 @@ function getOne ({ params }) {
           id
         }
       }
-      jobs {
-        id
-        created
-        bonus
-        location
-        slug
-        status
-        title
-        company {
-          id
-        }
-      }
-      people {
-        id
-        email
-        firstName
-        lastName
-      }
-      jobTemplateTags: fetchTags(repo: "web", type: "jobdescription")
     }
   `
 
