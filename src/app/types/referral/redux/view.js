@@ -1,6 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const { Text } = require('@nudj/components')
+const { Text, Link } = require('@nudj/components')
 const format = require('date-fns/format')
 
 const Page = require('../../../components/page')
@@ -20,15 +20,15 @@ const View = props => {
       </Helmet>
       <p className={style.formListItem}>
         <label className={style.label}>Person</label>
-        <Text>{referral.person.firstName} {referral.person.lastName} ({referral.person.email})</Text>
+        <Link href={`/people/${referral.person.id}`} subtle>{referral.person.firstName} {referral.person.lastName} ({referral.person.email})</Link>
       </p>
       <p className={style.formListItem}>
         <label className={style.label}>Job</label>
-        <Text>{referral.job.title} ({referral.job.company.name})</Text>
+        <Link href={`/jobs/${referral.job.id}`} subtle>{referral.job.title} ({referral.job.company.name})</Link>
       </p>
       <p className={style.formListItem}>
         <label className={style.label}>Referred by</label>
-        <Text>{referral.parent ? `${referral.parent.person.firstName} ${referral.parent.person.lastName} (${referral.parent.person.email})` : <code>¯\_(ツ)_/¯</code>}</Text>
+        {referral.parent ? <Link href={`/referrals/${referral.parent.id}`} subtle>{referral.parent.person.firstName} {referral.parent.person.lastName} ({referral.parent.person.email})</Link> : <code>¯\_(ツ)_/¯</code>}
       </p>
       <p className={style.formListItem}>
         <label className={style.label}>Created</label>

@@ -1,6 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const { Text } = require('@nudj/components')
+const { Text, Link } = require('@nudj/components')
 const format = require('date-fns/format')
 
 const Page = require('../../../components/page')
@@ -20,15 +20,15 @@ const View = props => {
       </Helmet>
       <p className={style.formListItem}>
         <label className={style.label}>Applicant</label>
-        <Text>{application.person.firstName} {application.person.lastName} ({application.person.email})</Text>
+        <Link href={`/people/${application.person.id}`} subtle>{application.person.firstName} {application.person.lastName} ({application.person.email})</Link>
       </p>
       <p className={style.formListItem}>
         <label className={style.label}>Job</label>
-        <Text>{application.job.title} ({application.job.company.name})</Text>
+        <Link href={`/jobs/${application.job.id}`} subtle>{application.job.title} ({application.job.company.name})</Link>
       </p>
       <p className={style.formListItem}>
         <label className={style.label}>Referred by</label>
-        <Text>{application.referral ? `${application.referral.person.firstName} ${application.referral.person.lastName} (${application.referral.person.email})` : <code>¯\_(ツ)_/¯</code>}</Text>
+        {application.referral ? <Link href={`/referrals/${application.referral.id}`} subtle>{application.referral.person.firstName} {application.referral.person.lastName} ({application.referral.person.email})</Link> : <code>¯\_(ツ)_/¯</code>}
       </p>
       <p className={style.formListItem}>
         <label className={style.label}>Created</label>

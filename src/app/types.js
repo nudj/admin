@@ -2,5 +2,6 @@ module.exports = [
   'job',
   'intro',
   'referral',
-  'application'
+  'application',
+  'hirer'
 ]

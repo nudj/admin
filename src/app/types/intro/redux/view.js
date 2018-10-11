@@ -1,6 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const { Text } = require('@nudj/components')
+const { Text, Link } = require('@nudj/components')
 const format = require('date-fns/format')
 
 const Page = require('../../../components/page')
@@ -20,15 +20,15 @@ const View = props => {
       </Helmet>
       <p className={style.formListItem}>
         <label className={style.label}>Candidate</label>
-        <Text>{intro.candidate.firstName} {intro.candidate.lastName} ({intro.candidate.email})</Text>
+        <Link href={`/people/${intro.candidate.id}`} subtle>{intro.candidate.firstName} {intro.candidate.lastName} ({intro.candidate.email})</Link>
       </p>
       <p className={style.formListItem}>
         <label className={style.label}>Job</label>
-        <Text>{intro.job.title} ({intro.job.company.name})</Text>
+        <Link href={`/jobs/${intro.job.id}`} subtle>{intro.job.title} ({intro.job.company.name})</Link>
       </p>
       <p className={style.formListItem}>
         <label className={style.label}>From</label>
-        <Text>{intro.person.firstName} {intro.person.lastName} ({intro.person.email})</Text>
+        <Link href={`/people/${intro.person.id}`} subtle>{intro.person.firstName} {intro.person.lastName} ({intro.person.email})</Link>
       </p>
       <p className={style.formListItem}>
         <label className={style.label}>Notes</label>
