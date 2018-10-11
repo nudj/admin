@@ -132,48 +132,47 @@ module.exports = class CompanyPage extends React.Component {
 
   renderJobsList () {
     const jobs = get(this.props.app, 'company.jobs', [])
-    const companySlug = get(this.props.app, 'company.slug')
+    const company = get(this.props.app, 'company')
     const rightNow = new Date()
     const webHostname = get(this.props, 'web.hostname')
 
     const jobsList = jobs.map((job) => {
-      const jobBonus = get(job, 'bonus')
       const jobCreatedDate = format(get(job, 'created'), 'DD.MM.YYYY')
-      const jobLocation = get(job, 'location')
-      const jobSlug = get(job, 'slug')
-      const jobStatus = get(job, 'status')
-      const jobTitle = get(job, 'title')
-
       const minutes = differenceInMinutes(rightNow, get(job, 'created'))
       const rowClass = minutes < 10 ? 'rowHighlight' : 'row'
 
       return (<RowItem
-        key={jobSlug}
+        key={job.slug}
         rowClass={rowClass}
-        title={jobTitle}
-        uri={`//${webHostname}/jobs/${companySlug}+${jobSlug}`}
+        title={job.title}
+        uri={`//${webHostname}/companies/${company.slug}/jobs/${job.slug}`}
         details={[{
           term: 'Status',
-          description: jobStatus
+          description: job.status
         }, {
           term: 'Location',
-          description: jobLocation
+          description: job.socation
         }, {
           term: 'Added',
           description: jobCreatedDate
         }, {
           term: 'Bonus',
-          description: jobBonus
+          description: job.bonus
         }]}
         actions={[
-          <Link className={this.style.nudj} to={`/companies/${companySlug}/jobs/${jobSlug}`}>See job</Link>
+          <Link className={this.style.nudj} to={`/companies/${company.slug}/jobs/${job.slug}`}>See job</Link>
         ]}
       />)
     })
 
-    return (<ul className={this.style.jobs}>
-      {jobsList}
-    </ul>)
+    return (
+      <div>
+        <Link className={this.style.nudj} to={`/jobs?company=${company.id}`}>View all jobs</Link>
+        <ul className={this.style.jobs}>
+          {jobsList}
+        </ul>
+      </div>
+    )
   }
 
   renderHirerActions (value) {
@@ -212,6 +211,7 @@ module.exports = class CompanyPage extends React.Component {
 
   renderHirersList () {
     const hirers = get(this.props.app, 'company.hirers', [])
+    const company = get(this.props.app, 'company')
 
     const hirersList = hirers.map(hirer => {
       const id = get(hirer, 'id')
@@ -230,9 +230,14 @@ module.exports = class CompanyPage extends React.Component {
       />)
     })
 
-    return (<ul className={this.style.hirers}>
-      {hirersList}
-    </ul>)
+    return (
+      <div>
+        <Link className={this.style.nudj} to={`/hirers?company=${company.id}`}>View all hirers</Link>
+        <ul className={this.style.hirers}>
+          {hirersList}
+        </ul>
+      </div>
+    )
   }
 
   render () {

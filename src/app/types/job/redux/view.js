@@ -1,7 +1,7 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
-const { Text } = require('@nudj/components')
+const { Text, Link: NudjLink } = require('@nudj/components')
 const format = require('date-fns/format')
 
 const Page = require('../../../components/page')
@@ -18,11 +18,6 @@ const View = props => {
       <Helmet>
         <title>{`ADMIN - ${job.title}`}</title>
       </Helmet>
-      <ul className={style.relations}>
-        <Link to={`/referrals?job=${job.id}`} className={style.relationLink}>Referrals ({job.referrals.length})</Link>
-        <Link to={`/intros?job=${job.id}`} className={style.relationLink}>Intros ({job.intros.length})</Link>
-        <Link to={`/applications?job=${job.id}`} className={style.relationLink}>Applications ({job.applications.length})</Link>
-      </ul>
       <p className={style.formListItem}>
         <label className={style.label}>Title</label>
         <Text>{job.title}</Text>
@@ -33,7 +28,7 @@ const View = props => {
       </p>
       <p className={style.formListItem}>
         <label className={style.label}>Company</label>
-        <Text>{job.company.name}</Text>
+        <NudjLink href={`/companies/${job.company.slug}`} subtle>{job.company.name}</NudjLink>
       </p>
       <p className={style.formListItem}>
         <label className={style.label}>Bonus</label>
@@ -71,6 +66,11 @@ const View = props => {
         <label className={style.label}>Modified</label>
         <Text>{format(job.modified, 'DD/MM/YYYY HH:mm:ss')}</Text>
       </p>
+      <ul className={style.relations}>
+        <Link to={`/referrals?job=${job.id}`} className={style.relationLink}>Referrals ({job.referrals.length})</Link>
+        <Link to={`/intros?job=${job.id}`} className={style.relationLink}>Intros ({job.intros.length})</Link>
+        <Link to={`/applications?job=${job.id}`} className={style.relationLink}>Applications ({job.applications.length})</Link>
+      </ul>
     </Page>
   )
 }

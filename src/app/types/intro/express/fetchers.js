@@ -60,17 +60,21 @@ function getOne ({ params }) {
         created
         modified
         job {
+          id
           title
           company {
+            slug
             name
           }
         }
         person {
+          id
           email
           firstName
           lastName
         }
         candidate {
+          id
           email
           firstName
           lastName

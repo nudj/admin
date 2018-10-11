@@ -78,7 +78,7 @@ module.exports = class CompaniesPage extends React.Component {
                     description: format(get(company, 'created'), 'DD.MM.YYYY')
                   }]}
                   actions={[
-                    <Link className={this.style.nudj} to={`/companies/${get(company, 'slug')}`}>See jobs</Link>
+                    <Link className={this.style.nudj} to={`/companies/${get(company, 'slug')}`}>View Company</Link>
                   ]}
                 />)
               })}

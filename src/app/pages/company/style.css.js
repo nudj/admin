@@ -18,7 +18,11 @@ module.exports = css(merge(mixins.pageLayout, mixins.formStructure, mixins.formE
     display: 'flex',
     flexWrap: 'wrap'
   }),
-  nudj: mixins.button,
+  nudj: {
+    ...mixins.button,
+    display: 'inline-block',
+    marginBottom: '1rem'
+  },
   pageHeadlineHighlight: merge(mixins.pageLayout.pageHeadline, {
     color: mixins.secondaryColor,
     padding: '0'
