@@ -29,7 +29,6 @@ const useDevServer = process.env.USE_DEV_SERVER === 'true'
 const expressAssetPath = path.resolve('./app/server/assets')
 const buildAssetPath = !useDevServer && path.resolve('./app/server/build')
 const types = require('./types')
-require.context('./types/', true, /express\.js$/)
 
 const expressRouters = {
   insecure: [
@@ -37,7 +36,7 @@ const expressRouters = {
   ],
   secure: [
     require('./server/routers/auth'),
-    ...types.map(type => require(`./types/${type}/express`)),
+    ...types.map(type => require('./types/' + type + '/express')),
     require('./pages/companies/router'),
     require('./pages/people/router'),
     require('./pages/person/router'),
