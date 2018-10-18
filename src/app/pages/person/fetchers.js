@@ -86,9 +86,8 @@ function put ({
           firstName
           lastName
           hirer {
-            updateType(type: $type) {
-              id
-            }
+            id
+            type: updateType(type: $type)
             setOnboarded(onboard: $onboarded)
           }
         }
