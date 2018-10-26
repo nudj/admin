@@ -3,8 +3,8 @@ export PATH=$PATH:/usr/src/node_modules/.bin
 
 PROMPT='admin» '
 
-alias run="yarn start"
-alias dev="yarn run dev"
+alias run="yarn run build:dlls && yarn run build:client && node ."
+alias dev='yarn run build:dlls && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "yarn run build:client && node ."'
 alias test="standard && flow && mocha --recursive test/unit"
 alias tdd='nodemon \
 	--config ./nodemon-tdd.json \

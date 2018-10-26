@@ -13,7 +13,6 @@ services:
       - ../admin/src/nodemon.json:/usr/src/nodemon.json
       - ../admin/src/package.json:/usr/src/package.json
       - ../admin/src/webpack.config.client.js:/usr/src/webpack.config.client.js
-      - ../admin/src/webpack.config.server.js:/usr/src/webpack.config.server.js
       - ../admin/src/webpack.config.dll.js:/usr/src/webpack.config.dll.js
       # yanks
       - ../framework/src:/usr/src/yank/@nudj/framework
