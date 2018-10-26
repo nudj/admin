@@ -2,6 +2,7 @@ require('envkey')
 var path = require('path')
 var webpack = require('webpack')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 
 process.noDeprecation = true
 
@@ -21,19 +22,17 @@ const plugins = [
   ]),
   process.env.USE_DEV_SERVER && new webpack.HotModuleReplacementPlugin(),
   process.env.USE_DEV_SERVER && new webpack.NamedModulesPlugin(),
-  process.env.DEBUG !== 'true' && new UglifyJSPlugin()
+  process.env.DEBUG !== 'true' && new UglifyJSPlugin(),
+  new ProgressBarPlugin({
+    format: `\x1b[36mBuild\x1b[0m [:bar] \x1b[32m:percent\x1b[0m`,
+    clear: false
+  })
 ].filter(plugin => plugin)
 
 const config = {
   cache: true,
   entry: {
-    app: [
-      process.env.USE_DEV_SERVER && 'react-hot-loader/patch',
-      process.env.USE_DEV_SERVER && `webpack-dev-server/client?${process.env.DEV_SERVER_PATH}`,
-      process.env.USE_DEV_SERVER && 'webpack/hot/only-dev-server',
-      'babel-polyfill',
-      './app/client'
-    ].filter(entry => entry)
+    app: ['babel-polyfill', './app/client']
   },
   output: {
     path: path.resolve(__dirname, 'app/server/build'),
@@ -86,20 +85,6 @@ const config = {
     timings: false,
     version: false,
     warnings: false
-  }
-}
-
-if (process.env.USE_DEV_SERVER) {
-  config.devServer = {
-    contentBase: path.resolve(__dirname, 'app/server'),
-    host: '0.0.0.0',
-    port: process.env.DEV_SERVER_PORT,
-    publicPath: '/build/',
-    public: process.env.DEV_SERVER_PATH,
-    https: false,
-    hot: true,
-    headers: { 'Access-Control-Allow-Origin': '*' },
-    disableHostCheck: true
   }
 }
 
