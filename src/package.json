@@ -15,12 +15,10 @@
   "homepage": "https://github.com/nudj/admin#readme",
   "standard": {
     "parser": "babel-eslint",
-    "plugins": [ "flowtype" ],
     "ignore": [
       "app/server/assets",
       "app/server/build*",
       "app/node_modules",
-      "flow-typed",
       "webpack*"
     ]
   },
@@ -30,18 +28,16 @@
   },
   "dependencies": {
     "@nudj/api": "16.0.0",
-    "@nudj/components": "2.12.0",
+    "@nudj/components": "4.3.0",
     "@nudj/framework": "17.11.1",
     "@nudj/library": "7.1.1",
     "babel-preset-env": "^1.1.10",
-    "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.23.0",
     "babel-register": "^6.24.1",
     "classnames": "^2.2.5",
     "date-fns": "^1.28.3",
     "envkey": "^1.2.1",
     "express": "^4.14.1",
-    "flow-bin": "^0.59.0",
     "form-serialize": "^0.7.1",
     "intercom-client": "^2.8.7",
     "js-cookie": "^2.2.0",
@@ -76,7 +72,6 @@
     "chai-as-promised": "^7.1.1",
     "clean-webpack-plugin": "^0.1.19",
     "dirty-chai": "^1.2.2",
-    "eslint-plugin-flowtype": "2.39.1",
     "mocha": "^3.2.0",
     "nock": "^9.0.14",
     "nodemon": "^1.18.4",

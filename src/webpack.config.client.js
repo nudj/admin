@@ -56,7 +56,6 @@ const config = {
           babelrc: false,
           presets: [
             'react',
-            'flow',
             [
               'env',
               {

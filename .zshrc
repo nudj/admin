@@ -5,21 +5,13 @@ PROMPT='admin» '
 
 alias run="yarn run build:dlls && yarn run build:client && node ."
 alias dev='yarn run build:dlls && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "yarn run build:client && node ."'
-alias test="standard && flow && mocha --recursive test/unit"
+alias test="standard && mocha --recursive test/unit"
 alias tdd='nodemon \
 	--config ./nodemon-tdd.json \
 	--quiet \
 	--watch ./ \
 	--delay 250ms \
 	-x "standard && mocha --recursive test/unit || exit 1"'
-alias flow='flow --quiet'
-
-alias fdd='nodemon \
-	--config ./nodemon-tdd.json \
-	--quiet \
-	--watch ./ \
-	--delay 250ms \
-	-x "flow --quiet || exit 1"'
 
 yank () {
   for package in "$@"; do
