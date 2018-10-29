@@ -34,6 +34,5 @@ down:
 	@$(DOCKERCOMPOSE) rm -f -s $(APP)
 
 test:
-	@$(DOCKERCOMPOSE) exec $(APP) /bin/ssh -c './node_modules/.bin/standard --parser babel-eslint --plugin flowtype \
-		&& ./node_modules/.bin/flow --quiet \
+	@$(DOCKERCOMPOSE) exec $(APP) /bin/ssh -c './node_modules/.bin/standard \
 		&& ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/unit'

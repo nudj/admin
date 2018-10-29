@@ -1,18 +1,9 @@
-/* global State DraftAction */
-// @flow
 const { merge } = require('@nudj/library')
 const { SET_SURVEY_SECTION_DRAFT } = require('./actions')
 
 const ROUTER_LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
 
-type Actions = {
-  [key: typeof SET_SURVEY_SECTION_DRAFT]: (
-    state: State,
-    action: DraftAction
-  ) => State
-}
-
-const setSurveySectionDraft = (state: Object, action: DraftAction) =>
+const setSurveySectionDraft = (state, action) =>
   merge(state, { draft: action.draft })
 
 const handleLocationChange = () => {
@@ -28,9 +19,9 @@ const initialState = {
   draft: {}
 }
 
-const reducer = (initialState: State, actions: Actions) => (
-  state: Object = initialState,
-  action: Object
+const reducer = (initialState, actions) => (
+  state = initialState,
+  action
 ) => {
   const { type } = action
   const subreducer = actions[type]

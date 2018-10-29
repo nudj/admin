@@ -1,5 +1,3 @@
-/* global ID Draft Dispatch Company Location */
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
@@ -20,33 +18,9 @@ const {
 const { setSurveySectionDraft, createOrUpdateSurveySection } = require('./actions')
 const style = require('./style.css')
 const Page = require('../../components/page')
+const PropTypes = require('../../lib/prop-types')
 
-type PageSurvey = {
-  id: ID,
-  title: string,
-  company: Company
-}
-
-type SurveySectionPageProps = {
-  section: {
-    id: ID,
-    survey: {
-      id: ID,
-      title: string,
-      company: Company
-    },
-    title: string,
-    description: string
-  },
-  location: Location,
-  surveys: Array<PageSurvey>,
-  surveySectionPage: {
-    draft: Draft
-  },
-  dispatch: Dispatch
-}
-
-const SurveySectionPage = (props: SurveySectionPageProps) => {
+const SurveySectionPage = props => {
   const {
     section: existingSection,
     location,
@@ -187,6 +161,29 @@ const SurveySectionPage = (props: SurveySectionPageProps) => {
       </div>
     </Page>
   )
+}
+
+SurveySectionPage.propTypes = {
+  section: PropTypes.shape({
+    id: PropTypes.id,
+    survey: PropTypes.shape({
+      id: PropTypes.id,
+      title: PropTypes.string,
+      company: PropTypes.Company
+    }),
+    title: PropTypes.string,
+    description: PropTypes.string
+  }),
+  location: PropTypes.Location,
+  surveys: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.id,
+    title: PropTypes.string,
+    company: PropTypes.Company
+  })),
+  surveySectionPage: PropTypes.shape({
+    draft: PropTypes.Draft
+  }),
+  dispatch: PropTypes.function
 }
 
 SurveySectionPage.defaultProps = {

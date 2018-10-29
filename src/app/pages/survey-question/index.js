@@ -1,5 +1,3 @@
-/* global Dispatch Draft SurveySection SurveyQuestion Location */
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
@@ -27,18 +25,9 @@ const {
 const style = require('./style.css')
 const Page = require('../../components/page')
 const { questionTypes, expertiseTags } = require('../../lib/constants')
+const PropTypes = require('../../lib/prop-types')
 
-type SurveyQuestionPageProps = {
-  question: SurveyQuestion,
-  surveySections: Array<SurveySection>,
-  location: Location,
-  dispatch: Dispatch,
-  surveyQuestionPage: {
-    draft?: Draft
-  }
-}
-
-const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
+const SurveyQuestionPage = props => {
   const {
     question: existingQuestion,
     location,
@@ -252,6 +241,16 @@ const SurveyQuestionPage = (props: SurveyQuestionPageProps) => {
       </div>
     </Page>
   )
+}
+
+SurveyQuestionPage.propTypes = {
+  question: PropTypes.SurveyQuestion,
+  surveySections: PropTypes.arrayOf(PropTypes.SurveySection),
+  location: PropTypes.Location.isRequired,
+  dispatch: PropTypes.function.isRequired,
+  surveyQuestionPage: PropTypes.shape({
+    draft: PropTypes.Draft
+  })
 }
 
 SurveyQuestionPage.defaultProps = {

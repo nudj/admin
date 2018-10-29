@@ -1,5 +1,3 @@
-/* global Draft Survey Location */
-// @flow
 const React = require('react')
 const get = require('lodash/get')
 const filter = require('lodash/filter')
@@ -10,17 +8,10 @@ const { Link } = require('react-router-dom')
 const { Table } = require('@nudj/components')
 const { css } = require('@nudj/components/lib/css')
 
+const PropTypes = require('../../lib/prop-types')
 const style = require('./style.css')
 const Page = require('../../components/page')
 const { DEFAULT_SURVEY_SLUG } = require('../../lib/constants')
-
-type SurveyPageProps = {
-  surveys: Array<Survey>,
-  location: Location,
-  surveyPage: {
-    draft?: Draft
-  }
-}
 
 function ensureDefaultIsFirst (surveys) {
   const indexOfDefault = findIndex(surveys, { slug: DEFAULT_SURVEY_SLUG })
@@ -44,7 +35,7 @@ const createFilter = (filter) => {
   return filters
 }
 
-const SurveysPage = (props: SurveyPageProps) => {
+const SurveysPage = props => {
   const { surveys: unsortedSurveys, location } = props
   const surveys = ensureDefaultIsFirst(unsortedSurveys)
   const query = get(location, 'search', '')
@@ -87,6 +78,14 @@ const SurveysPage = (props: SurveyPageProps) => {
       </div>
     </Page>
   )
+}
+
+SurveysPage.propTypes = {
+  surveys: PropTypes.arrayOf(PropTypes.Survey),
+  location: PropTypes.Location,
+  surveyPage: PropTypes.shape({
+    draft: PropTypes.Draft
+  })
 }
 
 SurveysPage.defaultProps = {

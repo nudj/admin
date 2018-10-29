@@ -1,5 +1,3 @@
-/* global Draft Dispatch Survey Company Location */
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
@@ -20,19 +18,9 @@ const { merge } = require('@nudj/library')
 const { setSurveyDraft, submitSurvey } = require('./actions')
 const style = require('./style.css')
 const Page = require('../../components/page')
+const PropTypes = require('../../lib/prop-types')
 
-type SurveyPageProps = {
-  dispatch: Dispatch,
-  companies: Array<Company>,
-  surveys: Array<Survey>,
-  location: Location,
-  survey: Survey,
-  surveyPage: {
-    draft?: Draft
-  }
-}
-
-const SurveyPage = (props: SurveyPageProps) => {
+const SurveyPage = props => {
   const {
     survey: existingSurvey,
     location,
@@ -214,6 +202,17 @@ const SurveyPage = (props: SurveyPageProps) => {
       </div>
     </Page>
   )
+}
+
+SurveyPage.propTypes = {
+  dispatch: PropTypes.function,
+  companies: PropTypes.arrayOf(PropTypes.Company),
+  surveys: PropTypes.arrayOf(PropTypes.Survey),
+  location: PropTypes.Location,
+  survey: PropTypes.Survey,
+  surveyPage: PropTypes.shape({
+    draft: PropTypes.Draft
+  })
 }
 
 SurveyPage.defaultProps = {

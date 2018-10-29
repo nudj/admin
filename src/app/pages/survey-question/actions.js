@@ -1,36 +1,26 @@
-/* global Dispatch Draft GetState */
-// @flow
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
 const { quickDispatch } = require('@nudj/library')
 
 const SET_SURVEY_QUESTION_DRAFT = 'SET_SURVEY_QUESTION_DRAFT'
-module.exports.SET_SURVEY_QUESTION_DRAFT = SET_SURVEY_QUESTION_DRAFT
 const SET_SURVEY_QUESTION_TAGS = 'SET_SURVEY_QUESTION_TAGS'
-module.exports.SET_SURVEY_QUESTION_TAGS = SET_SURVEY_QUESTION_TAGS
 
-function setSurveyQuestionDraft (draft: Draft) {
-  return {
+function setSurveyQuestionDraft (draft) {
+  return quickDispatch({
     type: SET_SURVEY_QUESTION_DRAFT,
     draft
-  }
+  })
 }
-module.exports.setSurveyQuestionDraft = (draft: Draft) => (
-  quickDispatch(setSurveyQuestionDraft(draft))
-)
 
 function setSurveyQuestionTags (tags) {
-  return {
+  return quickDispatch({
     type: SET_SURVEY_QUESTION_TAGS,
     tags
-  }
+  })
 }
-module.exports.setSurveyQuestionTags = (tags) => (
-  quickDispatch(setSurveyQuestionTags(tags))
-)
 
 function createOrUpdateSurveyQuestion () {
-  return (dispatch: Dispatch, getState: GetState) => {
+  return (dispatch, getState) => {
     const state = getState()
     const existingId = get(state, 'app.question.id')
     const data = get(state, 'surveyQuestionPage.draft', {})
@@ -60,4 +50,13 @@ function createOrUpdateSurveyQuestion () {
     }))
   }
 }
-module.exports.createOrUpdateSurveyQuestion = createOrUpdateSurveyQuestion
+
+module.exports = {
+  // actions
+  setSurveyQuestionDraft,
+  setSurveyQuestionTags,
+  createOrUpdateSurveyQuestion,
+  // constants
+  SET_SURVEY_QUESTION_DRAFT,
+  SET_SURVEY_QUESTION_TAGS
+}

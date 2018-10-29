@@ -1,23 +1,15 @@
-/* global SurveyQuestion */
-// @flow
 const React = require('react')
 const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
+const { Link } = require('react-router-dom')
 
 const { css } = require('@nudj/components/lib/css')
 const { Table } = require('@nudj/components')
 const style = require('./style.css')
 const Page = require('../../components/page')
-const { Link } = require('react-router-dom')
+const PropTypes = require('../../lib/prop-types')
 
-type SurveyQuestionPageType = {
-  questions?: Array<SurveyQuestion>,
-  section: {
-    questions: Array<SurveyQuestion>
-  }
-}
-
-const SurveyQuestionsPage = (props: SurveyQuestionPageType) => {
+const SurveyQuestionsPage = props => {
   const { questions, section } = props
   const data = questions || section.questions
   const query = section ? `?survey=${get(section, 'id', '')}` : ''
@@ -67,6 +59,13 @@ const SurveyQuestionsPage = (props: SurveyQuestionPageType) => {
       </div>
     </Page>
   )
+}
+
+SurveyQuestionsPage.propTypes = {
+  questions: PropTypes.arrayOf(PropTypes.SurveyQuestion),
+  section: PropTypes.shape({
+    questions: PropTypes.arrayOf(PropTypes.SurveyQuestion)
+  })
 }
 
 module.exports = SurveyQuestionsPage

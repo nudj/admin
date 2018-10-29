@@ -1,5 +1,3 @@
-/* global Dispatch SurveyQuestion ID */
-// @flow
 const React = require('react')
 const { Helmet } = require('react-helmet')
 const { Link } = require('react-router-dom')
@@ -12,23 +10,9 @@ const { merge } = require('@nudj/library')
 const style = require('./style.css')
 const Page = require('../../components/page')
 const { setListOrder, saveListOrder } = require('./actions')
+const PropTypes = require('../../lib/prop-types')
 
-type SectionRelationsProps = {
-  dispatch: Dispatch,
-  section: {
-    id: ID,
-    title: string,
-    questions: Array<SurveyQuestion>,
-    survey: {
-      id: ID,
-    }
-  },
-  surveySectionRelationsPage: {
-    order: Object
-  }
-}
-
-const SurveySectionRelationsPage = (props: SectionRelationsProps) => {
+const SurveySectionRelationsPage = props => {
   const {
     section,
     section: { questions },
@@ -109,6 +93,21 @@ const SurveySectionRelationsPage = (props: SectionRelationsProps) => {
       </div>
     </Page>
   )
+}
+
+SurveySectionRelationsPage.propTypes = {
+  dispatch: PropTypes.function,
+  section: PropTypes.shape({
+    id: PropTypes.id,
+    title: PropTypes.string,
+    questions: PropTypes.arrayOf(PropTypes.SurveyQuestion),
+    survey: PropTypes.shape({
+      id: PropTypes.id
+    })
+  }),
+  surveySectionRelationsPage: PropTypes.shape({
+    order: PropTypes.object
+  })
 }
 
 SurveySectionRelationsPage.defaultProps = {

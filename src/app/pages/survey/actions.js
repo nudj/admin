@@ -1,22 +1,18 @@
-/* global Draft Dispatch GetState */
-// @flow
 const get = require('lodash/get')
 const actions = require('@nudj/framework/actions')
 const { merge, quickDispatch } = require('@nudj/library')
 
 const SET_SURVEY_DRAFT = 'SET_SURVEY_DRAFT'
-module.exports.SET_SURVEY_DRAFT = SET_SURVEY_DRAFT
 
-function setSurveyDraft (draft: Draft) {
-  return {
+function setSurveyDraft (draft) {
+  return quickDispatch({
     type: SET_SURVEY_DRAFT,
     draft
-  }
+  })
 }
-module.exports.setSurveyDraft = (draft: Draft) => quickDispatch(setSurveyDraft(draft))
 
 function submitSurvey () {
-  return (dispatch: Dispatch, getState: GetState) => {
+  return (dispatch, getState) => {
     const state = getState()
     const existingId = get(state.app, 'survey.id')
     const draft = get(state, 'surveyPage.draft', {})
@@ -34,4 +30,11 @@ function submitSurvey () {
     return dispatch(actions.app.postData({ data, url, method }))
   }
 }
-module.exports.submitSurvey = submitSurvey
+
+module.exports = {
+  // actions
+  submitSurvey,
+  setSurveyDraft,
+  // constants
+  SET_SURVEY_DRAFT
+}
