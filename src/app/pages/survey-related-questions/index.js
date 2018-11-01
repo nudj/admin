@@ -1,29 +1,30 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const { Link } = require('react-router-dom')
+const { Link: RRLink } = require('react-router-dom')
 const isNil = require('lodash/isNil')
 const isEmpty = require('lodash/isEmpty')
 
-const { Table, Input, Button } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { Table, Input, Button, Link } = require('@nudj/components')
+const { css, mss } = require('@nudj/components/styles')
 const { merge } = require('@nudj/library')
 const style = require('./style.css')
 const Page = require('../../components/page')
+const Breadcrumb = require('../../components/breadcrumb')
 const { setListOrder, saveListOrder } = require('./actions')
 const PropTypes = require('../../lib/prop-types')
 
-const SurveySectionRelationsPage = props => {
+const SurveyRelatedQuestionsPage = props => {
   const {
-    section,
-    section: { questions },
-    surveySectionRelationsPage: { order: newOrder }
+    survey,
+    survey: { questions },
+    surveyRelatedQuestionsPage: { order: newOrder }
   } = props
 
-  const data = questions.map((section, order) => merge(section, { order }))
+  const data = questions.map((question, order) => merge(question, { order }))
 
   const columns = [
     { heading: 'Title', name: 'title' },
-    { heading: 'Description', name: 'description' },
+    { heading: 'Description', name: 'introDescription' },
     { heading: 'Type', name: 'type' },
     { heading: 'List order', name: 'order' },
     { name: 'link' }
@@ -40,7 +41,7 @@ const SurveySectionRelationsPage = props => {
 
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
-      return <Link className={css(style.link)} to={`/survey-questions/${row.id}`}>View/Edit</Link>
+      return <RRLink className={css(style.link)} to={`/surveys/${survey.id}/questions/${row.id}`}>View/Edit</RRLink>
     } else if (column.name === 'order') {
       const order = newOrder[row.id]
       return (
@@ -58,20 +59,20 @@ const SurveySectionRelationsPage = props => {
     <Page
       {...props}
       title='Surveys'
-      actions={[
-        <Link
-          key='survey-section'
-          className={css(style.link)}
-          to={`/survey-sections/${section.id}`}
-        >
-          Section
-        </Link>
-      ]}
     >
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
-      <h3 className={css(style.pageHeadline)}>{section.title}</h3>
+      <Breadcrumb>
+        <Link subtle inline volume='yell' href='/surveys'>
+          All Surveys
+        </Link>
+        <Link subtle inline volume='yell' href={`/surveys/${survey.id}`}>
+          Survey
+        </Link>
+        <span style={mss.bold}>Questions</span>
+      </Breadcrumb>
+      <h3 className={css(style.pageHeadline)}>{survey.title}</h3>
       <h3 className={css(style.pageHeadline)}>Questions <span className={css(style.textHighlight)}>({questions.length})</span></h3>
       <div className={css(style.pageContent)}>
         <div className={css(style.pageMain)}>
@@ -79,44 +80,36 @@ const SurveySectionRelationsPage = props => {
             <Table cellRenderer={cellRenderer} data={data} columns={columns} />
             { !isEmpty(newOrder) && (
               <Button volume='yell' type='submit'>
-                Reorder sections
+                Reorder questions
               </Button>
             ) }
           </form>
-          <Link
+          <RRLink
             className={css(style.addButton)}
-            to={`/survey-questions/new?section=${section.id}`}
+            to={`/surveys/${survey.id}/questions/new`}
           >
             Add Question
-          </Link>
+          </RRLink>
         </div>
       </div>
     </Page>
   )
 }
 
-SurveySectionRelationsPage.propTypes = {
+SurveyRelatedQuestionsPage.propTypes = {
   dispatch: PropTypes.function,
-  section: PropTypes.shape({
-    id: PropTypes.id,
-    title: PropTypes.string,
-    questions: PropTypes.arrayOf(PropTypes.SurveyQuestion),
-    survey: PropTypes.shape({
-      id: PropTypes.id
-    })
-  }),
-  surveySectionRelationsPage: PropTypes.shape({
+  surveyRelatedQuestionsPage: PropTypes.shape({
     order: PropTypes.object
   })
 }
 
-SurveySectionRelationsPage.defaultProps = {
-  section: {
-    questions: [],
-    surveySectionRelationsPage: {
-      order: {}
-    }
+SurveyRelatedQuestionsPage.defaultProps = {
+  survey: {
+    questions: []
+  },
+  surveyRelatedQuestionsPage: {
+    order: {}
   }
 }
 
-module.exports = SurveySectionRelationsPage
+module.exports = SurveyRelatedQuestionsPage

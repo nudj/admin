@@ -1,14 +1,12 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const { Link } = require('react-router-dom')
 const get = require('lodash/get')
-const find = require('lodash/find')
-const { parse } = require('query-string')
 
 const { merge } = require('@nudj/library')
-const { css } = require('@nudj/components/lib/css')
-const CheckboxGroup = require('@nudj/components/lib/components/checkbox-group')
+const { css, mss } = require('@nudj/components/styles')
 const {
+  CheckboxGroup,
+  Link,
   Input,
   InputField,
   Card,
@@ -24,23 +22,20 @@ const {
 } = require('./actions')
 const style = require('./style.css')
 const Page = require('../../components/page')
+const Breadcrumb = require('../../components/breadcrumb')
 const { questionTypes, expertiseTags } = require('../../lib/constants')
 const PropTypes = require('../../lib/prop-types')
 
 const SurveyQuestionPage = props => {
   const {
     question: existingQuestion,
-    location,
-    surveySections,
-    surveyQuestionPage
+    surveyQuestionPage,
+    survey
   } = props
 
-  const query = get(location, 'search', '')
   const draft = get(surveyQuestionPage, 'draft', {})
   const tagsUpdated = get(surveyQuestionPage, 'tagsUpdated', false)
   const tags = get(surveyQuestionPage, 'tags', [])
-  const filters = parse(query)
-  const section = find(surveySections, { id: filters.section })
   const fieldStyles = { root: style.field }
 
   const onChangeTags = event => {
@@ -48,13 +43,9 @@ const SurveyQuestionPage = props => {
   }
 
   const onChange = event => {
-    const data = merge(
-      { section: get(section, 'id') },
-      draft,
-      {
-        [event.name]: event.value
-      }
-    )
+    const data = merge(draft, {
+      [event.name]: event.value
+    })
     props.dispatch(setSurveyQuestionDraft(data))
   }
 
@@ -68,50 +59,28 @@ const SurveyQuestionPage = props => {
     props.dispatch(createOrUpdateSurveyQuestion())
   }
 
-  const renderSectionList = () => (
-    section ? (
-      `${section.title}`
-    ) : (
-      <Select
-        id='select'
-        name='section'
-        value={get(draft, 'section', '')}
-        onChange={onChange}
-        required
-      >
-        <option value=''>Choose a section</option>
-        {
-          surveySections.map((section, index) => (
-            <option key={index} value={section.id}>
-              {section.title}
-            </option>
-          ))
-        }
-      </Select>
-    )
-  )
-
-  const sectionId = get(existingQuestion, 'section.id')
+  const breadcrumbSurveyId = get(existingQuestion, 'survey.id') || get(survey, 'id')
 
   return (
     <Page
       {...props}
       title='Surveys'
-      actions={[
-        existingQuestion.id && (
-          <Link
-            key='section-question'
-            className={css(style.link)}
-            to={`/survey-sections/${sectionId}/questions`}
-          >
-            Section Questions
-          </Link>
-        )
-      ].filter(Boolean)}
     >
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
+      <Breadcrumb>
+        <Link subtle inline volume='yell' href='/surveys'>
+          All Surveys
+        </Link>
+        <Link subtle inline volume='yell' href={`/surveys/${breadcrumbSurveyId}`}>
+          Survey
+        </Link>
+        <Link subtle inline volume='yell' href={`/surveys/${breadcrumbSurveyId}/questions`}>
+          Questions
+        </Link>
+        <span style={mss.bold}>{get(existingQuestion, 'title', 'New question')}</span>
+      </Breadcrumb>
       <h3 className={css(style.pageHeadline)}>
         {existingQuestion.id ? 'Edit question' : 'Create question'}
       </h3>
@@ -186,18 +155,6 @@ const SurveyQuestionPage = props => {
               </InputField>
               <InputField
                 styleSheet={fieldStyles}
-                label='Section'
-                htmlFor='section'
-                required
-              >
-                {existingQuestion.id ? (
-                  `${existingQuestion.section.title}`
-                ) : (
-                  renderSectionList()
-                )}
-              </InputField>
-              <InputField
-                styleSheet={fieldStyles}
                 label='Required?'
                 htmlFor='required'
               >
@@ -245,8 +202,6 @@ const SurveyQuestionPage = props => {
 
 SurveyQuestionPage.propTypes = {
   question: PropTypes.SurveyQuestion,
-  surveySections: PropTypes.arrayOf(PropTypes.SurveySection),
-  location: PropTypes.Location.isRequired,
   dispatch: PropTypes.function.isRequired,
   surveyQuestionPage: PropTypes.shape({
     draft: PropTypes.Draft
@@ -255,10 +210,10 @@ SurveyQuestionPage.propTypes = {
 
 SurveyQuestionPage.defaultProps = {
   question: {
+    survey: {},
     tags: []
   },
-  location: {},
-  surveySections: [],
+  survey: {},
   surveyQuestionPage: {}
 }
 

@@ -23,6 +23,7 @@ function createOrUpdateSurveyQuestion () {
   return (dispatch, getState) => {
     const state = getState()
     const existingId = get(state, 'app.question.id')
+    const survey = get(state, 'app.survey') || get(state, 'app.question.survey')
     const data = get(state, 'surveyQuestionPage.draft', {})
     const tags = get(state, 'surveyQuestionPage.tags', [])
     const questions = get(state, 'app.surveyQuestions', [])
@@ -34,12 +35,13 @@ function createOrUpdateSurveyQuestion () {
     }
 
     let method = 'post'
-    let url = '/survey-questions/new'
+    let url = `/surveys/${survey.id}/questions/new`
 
     if (existingId) {
       method = 'patch'
-      url = `/survey-questions/${existingId}`
+      url = `/surveys/${survey.id}/questions/${existingId}`
     }
+
     return dispatch(actions.app.postData({
       data: {
         ...data,

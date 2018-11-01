@@ -16,11 +16,11 @@ function setListOrder (order) {
 function saveListOrder () {
   return (dispatch, getState) => {
     const state = getState()
-    const questions = get(state, 'app.section.questions', [])
+    const questions = get(state, 'app.survey.questions', [])
     const defaultOrder = questions.map((question, index) => ({
       [question.id]: index + 1
     }))
-    const userOrder = get(state, 'surveySectionRelationsPage.order', {})
+    const userOrder = get(state, 'surveyRelatedQuestionsPage.order', {})
     const order = merge(...defaultOrder, userOrder)
     const indicies = values(order).sort()
     const keys = invert(order)
@@ -31,7 +31,7 @@ function saveListOrder () {
     }
 
     const data = { surveyQuestions: indicies.map(index => keys[index]) }
-    const url = `/survey-sections/${state.app.section.id}/questions`
+    const url = `/surveys/${state.app.survey.id}/questions`
     const method = 'patch'
     return dispatch(actions.app.postData({ data, url, method }))
   }

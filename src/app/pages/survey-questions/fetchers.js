@@ -1,6 +1,6 @@
 function get ({ query }) {
   let gql = `
-    query surveySectionsPage {
+    query surveyQuestionsPage {
       questions: surveyQuestions {
         id
         name
@@ -14,10 +14,10 @@ function get ({ query }) {
 
   if (query.survey) {
     gql = `
-      query surveyQuestionsPage ($sectionId: ID!) {
-        section: surveySection (id: $sectionId) {
+      query surveyQuestionsPage ($surveyId: ID!) {
+        survey (id: $surveyId) {
           id
-          questions: surveySections {
+          questions: surveyQuestions {
             id
             name
             title
@@ -28,7 +28,7 @@ function get ({ query }) {
       }
     `
     variables = {
-      sectionId: query.survey
+      surveyId: query.survey
     }
   }
 

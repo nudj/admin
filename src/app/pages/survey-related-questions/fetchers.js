@@ -1,20 +1,15 @@
 function get ({ params }) {
   const gql = `
-    query surveyPage ($id: ID) {
+    query surveyRelatedQuestionsPage ($id: ID) {
       survey (id: $id) {
         id
-        introTitle
+        title: introTitle
         introDescription
-        outroTitle
-        outroDescription
-        sections: surveySections {
+        questions: surveyQuestions {
           id
           title
+          type
           description
-        }
-        company {
-          id
-          name
         }
       }
     }
@@ -27,7 +22,7 @@ function get ({ params }) {
 
 function patch ({ body, params }) {
   const gql = `
-    mutation UpdateSectionOrder (
+    mutation UpdateQuestionOrder (
       $id: ID!
       $data: SurveyUpdateInput!
     ) {
@@ -36,23 +31,18 @@ function patch ({ body, params }) {
         data: $data
       ) {
         id
-        introTitle
+        title: introTitle
         introDescription
-        outroTitle
-        outroDescription
-        sections: surveySections {
+        questions: surveyQuestions {
           id
           title
+          type
           description
-        }
-        company {
-          id
-          name
         }
       }
       notification: setNotification (
         type: "success"
-        message: "Section order updated!"
+        message: "Survey questions reordered!"
       ) {
         type
         message

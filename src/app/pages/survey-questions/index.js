@@ -1,18 +1,19 @@
 const React = require('react')
 const get = require('lodash/get')
 const { Helmet } = require('react-helmet')
-const { Link } = require('react-router-dom')
+const { Link: RRLink } = require('react-router-dom')
 
-const { css } = require('@nudj/components/lib/css')
-const { Table } = require('@nudj/components')
+const { css, mss } = require('@nudj/components/styles')
+const { Table, Link } = require('@nudj/components')
 const style = require('./style.css')
 const Page = require('../../components/page')
+const Breadcrumb = require('../../components/breadcrumb')
 const PropTypes = require('../../lib/prop-types')
 
 const SurveyQuestionsPage = props => {
-  const { questions, section } = props
-  const data = questions || section.questions
-  const query = section ? `?survey=${get(section, 'id', '')}` : ''
+  const { survey, questions } = props
+  const data = questions || get(survey, 'questions', [])
+  const query = survey ? `?survey=${get(survey, 'id', '')}` : ''
 
   const columns = [
     { heading: 'Title', name: 'title' },
@@ -25,9 +26,9 @@ const SurveyQuestionsPage = props => {
   const cellRenderer = (column, row, defaultRender) => {
     if (column.name === 'link') {
       return (
-        <Link className={css(style.link)} to={`/survey-questions/${row.id}`}>
+        <RRLink className={css(style.link)} to={`/survey-questions/${row.id}`}>
           View/Edit
-        </Link>
+        </RRLink>
       )
     }
     return defaultRender
@@ -38,17 +39,28 @@ const SurveyQuestionsPage = props => {
       {...props}
       title='Questions'
       actions={(
-        <Link
+        <RRLink
           className={css(style.link)}
           to={`/survey-questions/new${query}`}
         >
           New Question
-        </Link>
+        </RRLink>
       )}
     >
       <Helmet>
         <title>ADMIN - Questions</title>
       </Helmet>
+      {survey && (
+        <Breadcrumb>
+          <Link subtle inline volume='yell' href='/surveys'>
+            All Surveys
+          </Link>
+          <Link subtle inline volume='yell' href={`/surveys/${survey.id}`}>
+            Survey
+          </Link>
+          <span style={mss.bold}>Questions</span>
+        </Breadcrumb>
+      )}
       <h3 className={css(style.pageHeadline)}>
         Questions <span className={css(style.textHighlight)}>({data.length})</span>
       </h3>
@@ -62,10 +74,7 @@ const SurveyQuestionsPage = props => {
 }
 
 SurveyQuestionsPage.propTypes = {
-  questions: PropTypes.arrayOf(PropTypes.SurveyQuestion),
-  section: PropTypes.shape({
-    questions: PropTypes.arrayOf(PropTypes.SurveyQuestion)
-  })
+  questions: PropTypes.arrayOf(PropTypes.SurveyQuestion)
 }
 
 module.exports = SurveyQuestionsPage

@@ -2,30 +2,44 @@ const omit = require('lodash/omit')
 
 const { Redirect } = require('@nudj/framework/errors')
 
-function getNew () {
+function getNew ({ params }) {
   const gql = `
-    query NewQuestion {
-      surveySections {
+    query NewQuestion ($surveyId: ID!) {
+      surveys {
         id
-        title
+        title: introTitle
       }
       surveyQuestions {
         name
       }
+      survey (id: $surveyId) {
+        id
+      }
     }
   `
+  const variables = {
+    surveyId: params.surveyId
+  }
 
-  return { gql }
+  return { gql, variables }
 }
 
-function postQuestion ({ body }) {
+function postQuestion ({ body, params }) {
+  const {
+    title,
+    description,
+    name,
+    type,
+    tags,
+    required = false
+  } = body
   const gql = `
     mutation CreateSurveyQuestion (
-      $section: ID!,
+      $survey: ID!,
       $data: SurveyQuestionCreateInput!
     ) {
       question: createSurveyQuestion (
-        surveySection: $section
+        survey: $survey
         data: $data
       ) {
         id
@@ -39,29 +53,28 @@ function postQuestion ({ body }) {
           name
           type
         }
-        section: surveySection {
+        survey {
           id
-          title
+          title: introTitle
         }
       }
     }
   `
-
   const variables = {
-    section: body.section,
+    survey: params.surveyId,
     data: {
-      title: body.title,
-      description: body.description,
-      name: body.name,
-      type: body.type,
-      tags: body.tags,
-      required: body.required || false
+      title,
+      description,
+      name,
+      type,
+      tags,
+      required
     }
   }
 
   const respond = (data) => {
     throw new Redirect({
-      url: `/survey-questions/${data.question.id}`,
+      url: `/surveys/${data.question.survey.id}/questions`,
       notification: { type: 'success', message: 'Question created!' }
     })
   }
@@ -90,9 +103,9 @@ function patchQuestion ({ body, params }) {
           name
           type
         }
-        section: surveySection {
+        survey {
           id
-          title
+          title: introTitle
         }
       }
       notification: setNotification (
@@ -107,7 +120,7 @@ function patchQuestion ({ body, params }) {
 
   const variables = {
     id: params.id,
-    data: omit(body, ['section'])
+    data: omit(body, ['survey'])
   }
 
   return { gql, variables }
@@ -115,7 +128,7 @@ function patchQuestion ({ body, params }) {
 
 function getOne ({ params }) {
   const gql = `
-    query SectionPage ($id: ID) {
+    query SurveyQuestionPage ($id: ID) {
       question: surveyQuestion (id: $id) {
         id
         description
@@ -128,9 +141,9 @@ function getOne ({ params }) {
           name
           type
         }
-        section: surveySection {
+        survey {
           id
-          title
+          title: introTitle
         }
       }
     }
