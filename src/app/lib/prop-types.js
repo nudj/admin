@@ -20,30 +20,13 @@ const Survey = PropTypes.shape({
   outroDescription: PropTypes.string,
   introDescription: PropTypes.string,
   slug: PropTypes.string,
-  company: Company,
-  surveySections: PropTypes.arrayOf(PropTypes.id)
-})
-
-const SurveySection = PropTypes.shape({
-  id: PropTypes.id,
-  created: PropTypes.date,
-  modified: PropTypes.date,
-  survey: Survey,
-  title: PropTypes.string,
-  description: PropTypes.string,
-  questions: PropTypes.arrayOf(PropTypes.id),
-  surveyQuestions: PropTypes.arrayOf(PropTypes.id)
+  company: Company
 })
 
 const SurveyQuestion = PropTypes.shape({
   id: PropTypes.id,
   created: PropTypes.date,
   modified: PropTypes.date,
-  surveySection: SurveySection,
-  section: PropTypes.shape({
-    id: PropTypes.string,
-    title: PropTypes.string
-  }),
   title: PropTypes.string,
   description: PropTypes.string,
   name: PropTypes.string,
@@ -71,7 +54,7 @@ const AppState = PropTypes.shape({
   surveyRelationsPage: PropTypes.shape({
     order: PropTypes.object
   }),
-  surveySectionRelationsPage: PropTypes.shape({
+  surveyRelatedQuestionsPage: PropTypes.shape({
     order: PropTypes.object
   })
 })
@@ -86,7 +69,6 @@ module.exports = {
   Company,
   Draft,
   Survey,
-  SurveySection,
   SurveyQuestion,
   Location,
   AppState,

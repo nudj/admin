@@ -39,6 +39,13 @@ function getOne ({ params }) {
 }
 
 function postSurvey ({ data, body }) {
+  const {
+    slug,
+    introTitle,
+    outroTitle,
+    introDescription,
+    outroDescription
+  } = body
   const gql = `
     mutation CreateSurvey (
       $company: ID
@@ -55,17 +62,17 @@ function postSurvey ({ data, body }) {
   const variables = {
     company: body.company,
     data: {
-      slug: body.slug,
-      introTitle: body.introTitle,
-      outroTitle: body.outroTitle,
-      introDescription: body.introDescription,
-      outroDescription: body.outroDescription
+      slug,
+      introTitle,
+      outroTitle,
+      introDescription,
+      outroDescription
     }
   }
 
   const respond = (data) => {
     throw new Redirect({
-      url: `/surveys/${data.survey.id}`,
+      url: `/surveys/${data.survey.id}/questions`,
       notification: { type: 'success', message: 'Survey created!' }
     })
   }

@@ -9,11 +9,11 @@ const Router = ({
   const router = createRouter()
   router.use(ensureLoggedIn)
 
-  router.getHandlers('/survey-questions/new', respondWithGql(fetchers.getNew))
-  router.getHandlers('/survey-questions/:id', respondWithGql(fetchers.getOne))
+  router.getHandlers('/surveys/:surveyId/questions/new', respondWithGql(fetchers.getNew))
+  router.getHandlers('/surveys/:surveyId/questions/:id', respondWithGql(fetchers.getOne))
 
-  router.postHandlers('/survey-questions/new', respondWithGql(fetchers.postQuestion))
-  router.patchHandlers('/survey-questions/:id', respondWithGql(fetchers.patchQuestion))
+  router.postHandlers('/surveys/:surveyId/questions/new', respondWithGql(fetchers.postQuestion))
+  router.patchHandlers('/surveys/:surveyId/questions/:id', respondWithGql(fetchers.patchQuestion))
 
   return router
 }

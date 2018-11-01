@@ -1,6 +1,6 @@
 const React = require('react')
 const { Helmet } = require('react-helmet')
-const { Link } = require('react-router-dom')
+const { Link: RRLink } = require('react-router-dom')
 const get = require('lodash/get')
 const find = require('lodash/find')
 const { parse } = require('query-string')
@@ -10,14 +10,16 @@ const {
   InputField,
   Card,
   Button,
-  Select
+  Select,
+  Link
 } = require('@nudj/components')
-const { css } = require('@nudj/components/lib/css')
+const { css, mss } = require('@nudj/components/styles')
 const { merge } = require('@nudj/library')
 
 const { setSurveyDraft, submitSurvey } = require('./actions')
 const style = require('./style.css')
 const Page = require('../../components/page')
+const Breadcrumb = require('../../components/breadcrumb')
 const PropTypes = require('../../lib/prop-types')
 
 const SurveyPage = props => {
@@ -86,24 +88,16 @@ const SurveyPage = props => {
   }
 
   return (
-    <Page
-      {...props}
-      title='Surveys'
-      actions={[
-        existingSurvey.id && (
-          <Link
-            key='surveys'
-            className={css(style.link)}
-            to='/surveys'
-          >
-            Surveys
-          </Link>
-        )
-      ].filter(Boolean)}
-    >
+    <Page {...props} title='Surveys'>
       <Helmet>
         <title>ADMIN - Surveys</title>
       </Helmet>
+      <Breadcrumb>
+        <Link subtle inline volume='yell' href='/surveys'>
+          All Surveys
+        </Link>
+        <span style={mss.bold}>Survey</span>
+      </Breadcrumb>
       <h3 className={css(style.pageHeadline)}>
         {existingSurvey.id ? 'Edit survey' : 'Create survey'}
       </h3>
@@ -191,12 +185,12 @@ const SurveyPage = props => {
             </form>
           </Card>
           {existingSurvey.id && (
-            <Link
+            <RRLink
               className={css(style.childrenButton)}
-              to={`/surveys/${existingSurvey.id}/sections`}
+              to={`/surveys/${existingSurvey.id}/questions`}
             >
-              Survey Sections
-            </Link>
+              Survey Questions
+            </RRLink>
           )}
         </div>
       </div>
