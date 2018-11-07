@@ -20,7 +20,7 @@ steps:
     dockerfile: Dockerfile
     build_arguments:
       - NPM_TOKEN=${{NPM_TOKEN}}
-      - ENVKEY=${{ENVKEY_PRODUCTION}}
+      - ENVKEY=${{ENVKEY_STAGING}}
 
   push:
     title: Push
