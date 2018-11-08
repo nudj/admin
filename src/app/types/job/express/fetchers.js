@@ -91,7 +91,6 @@ function getOne ({ params }) {
         created
         modified
         title
-        type
         url
         slug
         status
@@ -105,7 +104,6 @@ function getOne ({ params }) {
         remuneration
         requirements
         roleDescription
-        templateTags
         tags
         company {
           id

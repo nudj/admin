@@ -268,12 +268,6 @@ module.exports = class JobForm extends React.Component {
           {readOnly ? <Text>{job.bonus}</Text> : <input className={css(style.inputBox)} type='text' placeholder='eg: £200' id='newJobBonus' name='bonus' required onChange={this.onChangeGeneric.bind(this)} value={job.bonus} />}
         </li>
         <li className={css(style.formListItem)}>
-          <label className={css(style.label)} htmlFor='newJobType'>Type</label>
-          {readOnly ? <Text>{job.type || types[0]}</Text> : <select className={css(style.selectBox)} id='newJobType' name='type' onChange={this.onChangeGeneric.bind(this)} value={job.type || types[0]}>
-            {types.map((type, index) => (<option key={index} value={type}>{type}</option>))}
-          </select>}
-        </li>
-        <li className={css(style.formListItem)}>
           <label className={css(style.label)} htmlFor='newJobStatus'>Status</label>
           {readOnly ? <Text>{job.status || statuses[0]}</Text> : <select className={css(style.selectBox)} id='newJobStatus' name='status' onChange={this.onChangeGeneric.bind(this)} value={job.status || statuses[0]}>
             {statuses.map((status, index) => (<option key={index} value={status}>{status}</option>))}
@@ -306,11 +300,6 @@ module.exports = class JobForm extends React.Component {
         <li className={css(style.formListItem)}>
           <label className={css(style.label)} htmlFor='newJobLabels'>Labels</label>
           {readOnly ? <Text>{job.labels}</Text> : <input className={css(style.inputBox)} type='text' placeholder='eg: finance, tech' id='newJobLabels' name='labels' onChange={this.onChangeGeneric.bind(this)} value={job.labels} />}
-        </li>
-        <li className={css(style.formListItem)}>
-          <label className={css(style.label)} htmlFor='newJobTemplateTags'>Template tags</label>
-          {readOnly ? <Text>{job.templateTags}</Text> : <input className={css(style.inputBox)} type='text' placeholder='eg: food, movies' id='newJobTemplateTags' name='templateTags' onChange={this.onChangeTemplateTags.bind(this)} value={job.templateTags} />}
-          {errorLabels.templateTagsInvalidLabel}
         </li>
         <li className={css(style.formListItem)}>
           <label className={css(style.label)} htmlFor='newJobRelatedJobs'>Related jobs</label>
