@@ -47,10 +47,6 @@ const View = props => {
         <Text>{job.status}</Text>
       </p>
       <p className={style.formListItem}>
-        <label className={style.label}>Type</label>
-        <Text>{job.type}</Text>
-      </p>
-      <p className={style.formListItem}>
         <label className={style.label}>Description</label>
         <Text>{job.description}</Text>
       </p>
