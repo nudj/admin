@@ -74,7 +74,7 @@
     "dirty-chai": "^1.2.2",
     "mocha": "^3.2.0",
     "nock": "^9.0.14",
-    "nodemon": "^1.18.4",
+    "nodemon": "^1.18.7",
     "progress-bar-webpack-plugin": "^1.11.0",
     "proxyquire": "^1.8.0",
     "react-hot-loader": "^4.0.0",
