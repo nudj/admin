@@ -119,20 +119,6 @@ const SurveyQuestionPage = props => {
               </InputField>
               <InputField
                 styleSheet={fieldStyles}
-                label='Name'
-                htmlFor='name'
-              >
-                <Input
-                  required
-                  type='text'
-                  id='name'
-                  name='name'
-                  value={get(draft, 'name', existingQuestion.name)}
-                  onChange={onChange}
-                />
-              </InputField>
-              <InputField
-                styleSheet={fieldStyles}
                 label='Type'
                 htmlFor='type'
               >
@@ -141,7 +127,6 @@ const SurveyQuestionPage = props => {
                   name='type'
                   value={get(draft, 'type', existingQuestion.type)}
                   onChange={onChange}
-                  required
                 >
                   <option value=''>Choose a type</option>
                   {

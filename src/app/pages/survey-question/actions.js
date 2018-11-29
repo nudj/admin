@@ -26,13 +26,6 @@ function createOrUpdateSurveyQuestion () {
     const survey = get(state, 'app.survey') || get(state, 'app.question.survey')
     const data = get(state, 'surveyQuestionPage.draft', {})
     const tags = get(state, 'surveyQuestionPage.tags', [])
-    const questions = get(state, 'app.surveyQuestions', [])
-    const names = questions.map(question => question.name)
-
-    if (names.includes(data.name) && !existingId) {
-      const notification = { type: 'error', message: 'Please choose a unique name' }
-      return dispatch(actions.app.showNotification(notification))
-    }
 
     let method = 'post'
     let url = `/surveys/${survey.id}/questions/new`
