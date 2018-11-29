@@ -5,13 +5,6 @@ const { Redirect } = require('@nudj/framework/errors')
 function getNew ({ params }) {
   const gql = `
     query NewQuestion ($surveyId: ID!) {
-      surveys {
-        id
-        title: introTitle
-      }
-      surveyQuestions {
-        name
-      }
       survey (id: $surveyId) {
         id
       }
@@ -28,7 +21,6 @@ function postQuestion ({ body, params }) {
   const {
     title,
     description,
-    name,
     type,
     tags,
     required = false
@@ -45,7 +37,6 @@ function postQuestion ({ body, params }) {
         id
         description
         title
-        name
         required
         type
         tags {
@@ -65,7 +56,6 @@ function postQuestion ({ body, params }) {
     data: {
       title,
       description,
-      name,
       type,
       tags,
       required
@@ -95,7 +85,6 @@ function patchQuestion ({ body, params }) {
         id
         description
         title
-        name
         required
         type
         tags {
@@ -133,7 +122,6 @@ function getOne ({ params }) {
         id
         description
         title
-        name
         required
         type
         tags {
