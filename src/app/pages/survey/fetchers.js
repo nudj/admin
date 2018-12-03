@@ -3,9 +3,6 @@ const { Redirect } = require('@nudj/framework/errors')
 function getNew () {
   const gql = `
     query NewSurvey {
-      surveys {
-        slug
-      }
       companies {
         id
         name
@@ -40,7 +37,6 @@ function getOne ({ params }) {
 
 function postSurvey ({ data, body }) {
   const {
-    slug,
     introTitle,
     outroTitle,
     introDescription,
@@ -62,7 +58,6 @@ function postSurvey ({ data, body }) {
   const variables = {
     company: body.company,
     data: {
-      slug,
       introTitle,
       outroTitle,
       introDescription,
