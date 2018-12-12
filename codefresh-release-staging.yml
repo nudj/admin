@@ -1,0 +1,37 @@
+version: '1.0'
+
+steps:
+
+  build_staging:
+    title: Build
+    type: build
+    image_name: nudj/admin
+    tag: staging
+    dockerfile: Dockerfile
+    build_arguments:
+      - NPM_TOKEN=${{NPM_TOKEN}}
+      - ENVKEY=${{ENVKEY_STAGING}}
+
+  push_staging:
+    title: Push
+    type: push
+    candidate: ${{build_staging}}
+    tag: ${{CF_BRANCH}}-staging
+    registry: ecr
+
+  build_demo:
+    title: Build
+    type: build
+    image_name: nudj/admin
+    tag: demo
+    dockerfile: Dockerfile
+    build_arguments:
+      - NPM_TOKEN=${{NPM_TOKEN}}
+      - ENVKEY=${{ENVKEY_DEMO}}
+
+  push_demo:
+    title: Push
+    type: push
+    candidate: ${{build_demo}}
+    tag: ${{CF_BRANCH}}-demo
+    registry: ecr

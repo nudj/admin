@@ -1,0 +1,37 @@
+version: '1.0'
+
+steps:
+
+  build_production:
+    title: Build
+    type: build
+    image_name: nudj/admin
+    tag: production
+    dockerfile: Dockerfile
+    build_arguments:
+      - NPM_TOKEN=${{NPM_TOKEN}}
+      - ENVKEY=${{ENVKEY_PRODUCTION}}
+
+  push_production:
+    title: Push
+    type: push
+    candidate: ${{build_production}}
+    tag: ${{CF_BRANCH}}
+    registry: ecr
+
+  build_demo:
+    title: Build
+    type: build
+    image_name: nudj/admin
+    tag: demo
+    dockerfile: Dockerfile
+    build_arguments:
+      - NPM_TOKEN=${{NPM_TOKEN}}
+      - ENVKEY=${{ENVKEY_DEMO}}
+
+  push_demo:
+    title: Push
+    type: push
+    candidate: ${{build_demo}}
+    tag: ${{CF_BRANCH}}-demo
+    registry: ecr
