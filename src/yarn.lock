@@ -114,9 +114,10 @@
     react-textarea-autosize "^5.2.1"
     warning "^3.0.0"
 
-"@nudj/framework@17.12.1":
-  version "17.12.1"
-  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-17.12.1.tgz#a6626307494ecb0dc30f3abfafcb9ff9542088e8"
+"@nudj/framework@18.0.0":
+  version "18.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/framework/-/framework-18.0.0.tgz#148047b06992fc302ad17a73b548fdb1ecbfb1d9"
+  integrity sha512-DsX36A6vFTWb42xuPFy63X0zWi09t8Jq/zKkMEboneDIoXqu2bA98Z+624LHUxb5oGfpTJtPmIZrDkb/2sP1Pw==
   dependencies:
     "@nudj/api" "14.0.0"
     "@nudj/components" "2.0.0"
@@ -202,9 +203,9 @@
     proxyquire "^2.0.1"
     shortid "^2.2.8"
 
-"@nudj/library@7.1.1":
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-7.1.1.tgz#f6751b2b3367f4d25c09292f9c2d6252fbe84282"
+"@nudj/library@7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-7.2.0.tgz#a5d4876af8a2b487bfbaec352035e4c7fa546bc6"
   dependencies:
     axios "^0.16.2"
     date-fns "^1.29.0"
@@ -218,9 +219,10 @@
     proxyquire "^2.0.1"
     shortid "^2.2.8"
 
-"@nudj/library@7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-7.2.0.tgz#a5d4876af8a2b487bfbaec352035e4c7fa546bc6"
+"@nudj/library@8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@nudj/library/-/library-8.0.0.tgz#8c99aada658bb157b24ae5deca1496ad88661d2b"
+  integrity sha512-CGEepXA6FRKO54dcRx9JufQbebQdmcfGeOulluE3mF983JtQhOuFEj55O7F9upLIvtO+QgSXV+1zqTZg2EgQPA==
   dependencies:
     axios "^0.16.2"
     date-fns "^1.29.0"

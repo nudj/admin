@@ -59,7 +59,6 @@ function get ({ params }) {
           remuneration
           requirements
           roleDescription
-          template
           tags
           relatedJobs {
             id
@@ -157,7 +156,6 @@ function put ({
           remuneration
           requirements
           roleDescription
-          template
           tags
           relatedJobs {
             id
@@ -295,7 +293,6 @@ function postReferral ({
           remuneration
           requirements
           roleDescription
-          template
           tags
           relatedJobs {
             id
